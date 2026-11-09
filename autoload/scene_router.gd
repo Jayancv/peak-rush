@@ -1,0 +1,67 @@
+extends CanvasLayer
+## Changes scenes behind a short fade. Every screen change goes through here so
+## transitions look the same everywhere and double taps can't start two changes.
+
+signal transition_finished(path: String)
+
+const MAIN_MENU: String = "res://scenes/main_menu/main_menu.tscn"
+const TRAIL_RUNNER: String = "res://scenes/trail_runner/trail_runner.tscn"
+
+## UI timing, not gameplay tuning, so it stays here instead of balance.tres.
+const FADE_SECONDS: float = 0.25
+const FADE_COLOR: Color = Color("#2B2D42")
+
+var _fade: ColorRect
+var _busy: bool = false
+
+
+func _ready() -> void:
+	# Above every gameplay and HUD layer.
+	layer = 100
+	# Must keep running while the tree is paused (e.g. quitting from a pause menu).
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	_fade = ColorRect.new()
+	_fade.name = "Fade"
+	_fade.color = Color(FADE_COLOR, 0.0)
+	_fade.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_fade)
+
+
+func is_busy() -> bool:
+	return _busy
+
+
+## Starts a faded change to the scene at `path`. Returns false (and changes nothing)
+## if a transition is already running or the scene doesn't exist.
+func go_to(path: String) -> bool:
+	if _busy:
+		return false
+	if not ResourceLoader.exists(path):
+		push_error("SceneRouter: scene not found: %s" % path)
+		return false
+	_transition(path)
+	return true
+
+
+func _transition(path: String) -> void:
+	_busy = true
+	# Swallow taps during the fade so the old scene's buttons can't fire again.
+	_fade.mouse_filter = Control.MOUSE_FILTER_STOP
+	await _fade_to(1.0)
+	get_tree().paused = false
+	var err: Error = get_tree().change_scene_to_file(path)
+	if err != OK:
+		push_error("SceneRouter: failed to change to %s (error %d)" % [path, err])
+	# The new scene is added at the end of this frame.
+	await get_tree().process_frame
+	await _fade_to(0.0)
+	_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_busy = false
+	transition_finished.emit(path)
+
+
+func _fade_to(alpha: float) -> void:
+	var tween: Tween = create_tween()
+	tween.tween_property(_fade, "color:a", alpha, FADE_SECONDS)
+	await tween.finished

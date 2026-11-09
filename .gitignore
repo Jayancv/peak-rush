@@ -1,0 +1,22 @@
+# Godot 4
+.godot/
+/android/
+
+# Build output
+export/
+*.apk
+*.aab
+*.ipa
+
+# Signing secrets: never commit
+*.keystore
+*.jks
+export_credentials.cfg
+
+# Generated from translations/strings.csv on import
+*.translation
+
+# Misc
+*.tmp
+.DS_Store
+Thumbs.db

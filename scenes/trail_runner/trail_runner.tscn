@@ -1,0 +1,45 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/trail_runner/trail_runner.gd" id="1_runner"]
+[ext_resource type="Script" path="res://scenes/ui/safe_area_margin.gd" id="2_safe"]
+[ext_resource type="PackedScene" path="res://content/_dev/test_hills/trail.tscn" id="3_trail"]
+[ext_resource type="PackedScene" path="res://actors/hiker/hiker.tscn" id="4_hiker"]
+[ext_resource type="Script" path="res://actors/hiker/hiker_camera.gd" id="5_camera"]
+[ext_resource type="PackedScene" path="res://scenes/ui/touch_controls.tscn" id="6_touch"]
+
+[node name="TrailRunner" type="Node2D" node_paths=PackedStringArray("world", "camera", "back_button")]
+script = ExtResource("1_runner")
+trail_scene = ExtResource("3_trail")
+hiker_scene = ExtResource("4_hiker")
+world = NodePath("World")
+camera = NodePath("Camera")
+back_button = NodePath("UI/SafeArea/Top/BackButton")
+
+[node name="World" type="Node2D" parent="."]
+
+[node name="Camera" type="Camera2D" parent="."]
+process_callback = 0
+script = ExtResource("5_camera")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="TouchControls" parent="UI" instance=ExtResource("6_touch")]
+
+[node name="SafeArea" type="MarginContainer" parent="UI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_safe")
+
+[node name="Top" type="HBoxContainer" parent="UI/SafeArea"]
+layout_mode = 2
+size_flags_vertical = 0
+mouse_filter = 2
+
+[node name="BackButton" type="Button" parent="UI/SafeArea/Top" groups=["touch_blocker"]]
+custom_minimum_size = Vector2(160, 72)
+layout_mode = 2
+text = "COMMON_BACK"

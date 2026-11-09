@@ -1,0 +1,71 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/touch_controls.gd" id="1_touch"]
+[ext_resource type="Script" path="res://scenes/ui/safe_area_margin.gd" id="2_safe"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hint"]
+content_margin_left = 24.0
+content_margin_top = 12.0
+content_margin_right = 24.0
+content_margin_bottom = 12.0
+bg_color = Color(1, 0.964706, 0.898039, 0.9)
+corner_radius_top_left = 28
+corner_radius_top_right = 28
+corner_radius_bottom_right = 28
+corner_radius_bottom_left = 28
+
+[node name="TouchControls" type="Control" node_paths=PackedStringArray("left_hint", "left_hint_label", "right_hint", "right_hint_label")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_touch")
+left_hint = NodePath("SafeArea/Hints/LeftHint")
+left_hint_label = NodePath("SafeArea/Hints/LeftHint/Label")
+right_hint = NodePath("SafeArea/Hints/RightHint")
+right_hint_label = NodePath("SafeArea/Hints/RightHint/Label")
+
+[node name="SafeArea" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_safe")
+
+[node name="Hints" type="HBoxContainer" parent="SafeArea"]
+layout_mode = 2
+size_flags_vertical = 8
+mouse_filter = 2
+
+[node name="LeftHint" type="PanelContainer" parent="SafeArea/Hints"]
+modulate = Color(1, 1, 1, 0.35)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hint")
+
+[node name="Label" type="Label" parent="SafeArea/Hints/LeftHint"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "TOUCH_HINT_WALK"
+
+[node name="Spacer" type="Control" parent="SafeArea/Hints"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="RightHint" type="PanelContainer" parent="SafeArea/Hints"]
+modulate = Color(1, 1, 1, 0.35)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hint")
+
+[node name="Label" type="Label" parent="SafeArea/Hints/RightHint"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "TOUCH_HINT_JUMP"

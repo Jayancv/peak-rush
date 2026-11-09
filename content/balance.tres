@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="Balance" format=3]
+
+[ext_resource type="Script" path="res://data/balance.gd" id="1_balance"]
+
+[resource]
+script = ExtResource("1_balance")
+walk_speed = 140.0
+walk_accel = 600.0
+walk_decel = 900.0
+uphill_speed_per_grade = 0.5
+min_uphill_speed_mult = 0.5
+downhill_bonus_per_grade = 0.3
+max_downhill_bonus = 0.15
+uphill_drain_per_grade = 2.0
+max_floor_angle_deg = 50.0
+floor_snap_px = 16.0
+gravity = 1600.0
+jump_velocity = 540.0
+max_fall_speed = 1400.0
+air_accel = 400.0
+air_decel = 150.0
+coyote_seconds = 0.1
+jump_buffer_seconds = 0.12
+rest_delay_seconds = 0.5
+stumble_seconds = 0.6
+exhausted_rest_seconds = 2.0
+camera_look_ahead_px = 220.0
+camera_height_px = 110.0
+camera_smoothing_speed = 4.0
+camera_look_ahead_speed = 1.5
+jump_stretch = Vector2(0.85, 1.15)
+land_squash = Vector2(1.2, 0.8)
+squash_recover_rate = 12.0
+walk_bob_px = 3.0
+walk_bob_hz = 2.2
+rest_breath_amount = 0.025
+rest_breath_hz = 0.4
