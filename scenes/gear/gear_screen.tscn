@@ -117,10 +117,11 @@ text = "GEAR_SLOTS"
 [node name="Scroll" type="ScrollContainer" parent="SafeArea/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
+mouse_filter = 1
 vertical_scroll_mode = 0
 
 [node name="Cards" type="HBoxContainer" parent="SafeArea/VBox/Scroll"]
 layout_mode = 2
 size_flags_vertical = 4
-mouse_filter = 2
+mouse_filter = 1
 theme_override_constants/separation = 20

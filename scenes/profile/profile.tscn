@@ -1,0 +1,167 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/profile/profile.gd" id="1_gear"]
+[ext_resource type="Script" path="res://scenes/ui/safe_area_margin.gd" id="2_safe"]
+[ext_resource type="PackedScene" path="res://world/backdrop/backdrop.tscn" id="3_backdrop"]
+[ext_resource type="Script" path="res://scenes/ui/ui_icon.gd" id="4_icon"]
+[ext_resource type="FontVariation" path="res://shared_art/title_font.tres" id="5_title"]
+[ext_resource type="Script" path="res://world/terrain_strip.gd" id="6_strip"]
+[ext_resource type="PackedScene" path="res://actors/hiker/hiker.tscn" id="7_hiker"]
+
+[node name="Profile" type="Control" node_paths=PackedStringArray("back_button", "name_edit", "tabs", "content", "preview")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_gear")
+back_button = NodePath("SafeArea/VBox/Header/BackButton")
+name_edit = NodePath("SafeArea/VBox/Body/LeftCard/VBox/NameEdit")
+tabs = NodePath("SafeArea/VBox/Body/RightCard/VBox/Tabs")
+content = NodePath("SafeArea/VBox/Body/RightCard/VBox/Scroll/Content")
+preview = NodePath("SafeArea/VBox/Body/LeftCard/VBox/Stage/Viewport/Hiker")
+
+[node name="Backdrop" parent="." instance=ExtResource("3_backdrop")]
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.168627, 0.176471, 0.258824, 0.25)
+
+[node name="SafeArea" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_safe")
+
+[node name="VBox" type="VBoxContainer" parent="SafeArea"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Header" type="HBoxContainer" parent="SafeArea/VBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+
+[node name="BackButton" type="Button" parent="SafeArea/VBox/Header"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+tooltip_text = "COMMON_BACK"
+theme_type_variation = &"IconButton"
+
+[node name="Icon" type="Control" parent="SafeArea/VBox/Header/BackButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_top = 16.0
+offset_right = -18.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_icon")
+kind = 3
+stroke = 0.16
+
+[node name="Title" type="Label" parent="SafeArea/VBox/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0.964706, 0.898039, 1)
+theme_override_colors/font_shadow_color = Color(0.168627, 0.176471, 0.258824, 0.5)
+theme_override_constants/shadow_offset_y = 3
+theme_override_fonts/font = ExtResource("5_title")
+theme_override_font_sizes/font_size = 52
+text = "PROFILE_TITLE"
+
+[node name="Body" type="HBoxContainer" parent="SafeArea/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_constants/separation = 18
+
+[node name="LeftCard" type="PanelContainer" parent="SafeArea/VBox/Body"]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+theme_type_variation = &"CardPanel"
+
+[node name="VBox" type="VBoxContainer" parent="SafeArea/VBox/Body/LeftCard"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Stage" type="SubViewportContainer" parent="SafeArea/VBox/Body/LeftCard/VBox"]
+custom_minimum_size = Vector2(320, 300)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+stretch = true
+
+[node name="Viewport" type="SubViewport" parent="SafeArea/VBox/Body/LeftCard/VBox/Stage"]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(320, 300)
+render_target_update_mode = 4
+
+[node name="Ground" type="Line2D" parent="SafeArea/VBox/Body/LeftCard/VBox/Stage/Viewport"]
+points = PackedVector2Array(-90, 2, -40, -1, 0, -2, 40, -1, 90, 2)
+width = 14.0
+default_color = Color(0.788235, 0.698039, 0.560784, 1)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("6_strip")
+fill_depth = 60.0
+decor_seed = 7
+
+[node name="Hiker" parent="SafeArea/VBox/Body/LeftCard/VBox/Stage/Viewport" instance=ExtResource("7_hiker")]
+position = Vector2(0, -4)
+input_enabled = false
+
+[node name="Camera" type="Camera2D" parent="SafeArea/VBox/Body/LeftCard/VBox/Stage/Viewport"]
+process_callback = 0
+position = Vector2(0, -26)
+zoom = Vector2(3.4, 3.4)
+
+[node name="NameEdit" type="LineEdit" parent="SafeArea/VBox/Body/LeftCard/VBox"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+placeholder_text = "PROFILE_NAME_HINT"
+alignment = 1
+max_length = 16
+
+[node name="RightCard" type="PanelContainer" parent="SafeArea/VBox/Body"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CardPanel"
+
+[node name="VBox" type="VBoxContainer" parent="SafeArea/VBox/Body/RightCard"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Tabs" type="HBoxContainer" parent="SafeArea/VBox/Body/RightCard/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Scroll" type="ScrollContainer" parent="SafeArea/VBox/Body/RightCard/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Content" type="VBoxContainer" parent="SafeArea/VBox/Body/RightCard/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 14

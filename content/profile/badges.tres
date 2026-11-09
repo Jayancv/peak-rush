@@ -1,0 +1,108 @@
+[gd_resource type="Resource" script_class="BadgeCatalog" format=3]
+
+[ext_resource type="Script" path="res://data/badge_catalog.gd" id="1_catalog"]
+[ext_resource type="Script" path="res://data/badge_data.gd" id="2_badge"]
+
+[sub_resource type="Resource" id="first_summit"]
+script = ExtResource("2_badge")
+id = &"first_summit"
+name_key = "BADGE_FIRST_SUMMIT"
+description_key = "BADGE_FIRST_SUMMIT_DESC"
+rule = 0
+amount = 1
+art = 0
+color = Color(0.9098, 0.3647, 0.2471, 1)
+
+[sub_resource type="Resource" id="seasoned"]
+script = ExtResource("2_badge")
+id = &"seasoned"
+name_key = "BADGE_SEASONED"
+description_key = "BADGE_SEASONED_DESC"
+rule = 0
+amount = 5
+art = 0
+color = Color(0.2431, 0.4196, 0.3098, 1)
+
+[sub_resource type="Resource" id="star_gazer"]
+script = ExtResource("2_badge")
+id = &"star_gazer"
+name_key = "BADGE_STAR_GAZER"
+description_key = "BADGE_STAR_GAZER_DESC"
+rule = 1
+amount = 6
+art = 1
+color = Color(0.8784, 0.6627, 0.2314, 1)
+
+[sub_resource type="Resource" id="shining_trail"]
+script = ExtResource("2_badge")
+id = &"shining_trail"
+name_key = "BADGE_SHINING_TRAIL"
+description_key = "BADGE_SHINING_TRAIL_DESC"
+rule = 1
+amount = 15
+art = 1
+color = Color(0.8510, 0.5412, 0.1176, 1)
+
+[sub_resource type="Resource" id="shutterbug"]
+script = ExtResource("2_badge")
+id = &"shutterbug"
+name_key = "BADGE_SHUTTERBUG"
+description_key = "BADGE_SHUTTERBUG_DESC"
+rule = 2
+amount = 5
+art = 2
+color = Color(0.2000, 0.4157, 0.6275, 1)
+
+[sub_resource type="Resource" id="perfect_shot"]
+script = ExtResource("2_badge")
+id = &"perfect_shot"
+name_key = "BADGE_PERFECT_SHOT"
+description_key = "BADGE_PERFECT_SHOT_DESC"
+rule = 3
+amount = 1
+art = 2
+color = Color(0.4314, 0.2471, 0.4510, 1)
+
+[sub_resource type="Resource" id="night_owl"]
+script = ExtResource("2_badge")
+id = &"night_owl"
+name_key = "BADGE_NIGHT_OWL"
+description_key = "BADGE_NIGHT_OWL_DESC"
+rule = 5
+amount = 1
+art = 4
+color = Color(0.1843, 0.2941, 0.4784, 1)
+
+[sub_resource type="Resource" id="regular"]
+script = ExtResource("2_badge")
+id = &"regular"
+name_key = "BADGE_REGULAR"
+description_key = "BADGE_REGULAR_DESC"
+rule = 4
+amount = 10
+art = 3
+color = Color(0.5490, 0.2902, 0.1961, 1)
+
+[sub_resource type="Resource" id="kitted_out"]
+script = ExtResource("2_badge")
+id = &"kitted_out"
+name_key = "BADGE_KITTED_OUT"
+description_key = "BADGE_KITTED_OUT_DESC"
+rule = 6
+amount = 3
+art = 5
+color = Color(0.1647, 0.5490, 0.5490, 1)
+
+[sub_resource type="Resource" id="long_haul"]
+script = ExtResource("2_badge")
+id = &"long_haul"
+name_key = "BADGE_LONG_HAUL"
+description_key = "BADGE_LONG_HAUL_DESC"
+rule = 7
+amount = 30
+art = 6
+color = Color(0.6588, 0.1961, 0.1765, 1)
+
+[resource]
+script = ExtResource("1_catalog")
+badges = Array[ExtResource("2_badge")]([SubResource("first_summit"), SubResource("seasoned"), SubResource("star_gazer"), SubResource("shining_trail"), SubResource("shutterbug"), SubResource("perfect_shot"), SubResource("night_owl"), SubResource("regular"), SubResource("kitted_out"), SubResource("long_haul")])

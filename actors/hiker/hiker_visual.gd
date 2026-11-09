@@ -46,6 +46,33 @@ var _phase: float = 0.0
 var _time: float = 0.0
 
 
+## Outfit pieces per CosmeticData.Slot: [node path, shade]. Shade < 0 darkens the
+## slot colour, > 0 lightens it (sleeves sit in shadow, the pom catches light...).
+const LOOK_PARTS: Dictionary = {
+	CosmeticData.Slot.HAT: [["Beanie", 0.0], ["Pom", 0.3]],
+	CosmeticData.Slot.JACKET: [["Torso", 0.0], ["Arm/Sleeve", -0.16]],
+	CosmeticData.Slot.PACK: [["Backpack", 0.0], ["Pocket", -0.14], ["Strap", -0.2]],
+	CosmeticData.Slot.PANTS: [["FrontLeg/Leg", 0.0], ["BackLeg/Leg", -0.25]],
+	CosmeticData.Slot.SKIN: [["Head", 0.0], ["Arm/Hand", 0.0]],
+}
+
+
+func _ready() -> void:
+	apply_look(GameState.look_colors())
+
+
+## Paints the outfit: CosmeticData.Slot -> Color (slots left out keep their colour).
+func apply_look(colors: Dictionary) -> void:
+	for slot: Variant in colors:
+		var base: Color = colors[slot]
+		for part: Array in LOOK_PARTS.get(int(slot), []):
+			var poly: Polygon2D = get_node_or_null(NodePath(part[0])) as Polygon2D
+			if poly == null:
+				continue
+			var shade: float = float(part[1])
+			poly.color = base.lightened(shade) if shade > 0.0 else base.darkened(-shade)
+
+
 func setup(balance: Balance) -> void:
 	_balance = balance
 

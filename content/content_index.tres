@@ -9,8 +9,12 @@
 [ext_resource type="Resource" path="res://content/gear/rain_shell.tres" id="g_rain_shell"]
 [ext_resource type="Resource" path="res://content/gear/thermos.tres" id="g_thermos"]
 [ext_resource type="Resource" path="res://content/gear/bright_headlamp.tres" id="g_bright_headlamp"]
+[ext_resource type="Resource" path="res://content/profile/cosmetics.tres" id="p_cosmetics"]
+[ext_resource type="Resource" path="res://content/profile/badges.tres" id="p_badges"]
 
 [resource]
 script = ExtResource("1_index")
 seasons = Array[ExtResource("2_season_script")]([ExtResource("3_s01")])
 gear = Array[ExtResource("gear_script")]([ExtResource("g_grip_boots"), ExtResource("g_hiking_poles"), ExtResource("g_rain_shell"), ExtResource("g_thermos"), ExtResource("g_bright_headlamp")])
+cosmetics = ExtResource("p_cosmetics")
+badges = ExtResource("p_badges")

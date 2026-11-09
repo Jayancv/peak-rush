@@ -113,3 +113,50 @@ VP_CABIN,Snowy cabin
 TUT_STONES,Hop from stone to stone - or get wet feet
 SETTINGS_LEFT_HANDED,Left-handed controls
 SETTINGS_VIBRATION,Vibration
+BADGE_FIRST_SUMMIT,First Summit
+BADGE_FIRST_SUMMIT_DESC,Finish your first trail
+BADGE_SEASONED,Seasoned Hiker
+BADGE_SEASONED_DESC,Finish 5 different trails
+BADGE_STAR_GAZER,Star Gazer
+BADGE_STAR_GAZER_DESC,Earn 6 stars
+BADGE_SHINING_TRAIL,Shining Trail
+BADGE_SHINING_TRAIL_DESC,Earn 15 stars
+BADGE_SHUTTERBUG,Shutterbug
+BADGE_SHUTTERBUG_DESC,Collect 5 postcards
+BADGE_PERFECT_SHOT,Perfect Shot
+BADGE_PERFECT_SHOT_DESC,Take a perfect photo
+BADGE_NIGHT_OWL,Night Owl
+BADGE_NIGHT_OWL_DESC,Finish a night trail
+BADGE_REGULAR,Trail Regular
+BADGE_REGULAR_DESC,Go on 10 hikes
+BADGE_KITTED_OUT,Kitted Out
+BADGE_KITTED_OUT_DESC,Own 3 pieces of gear
+BADGE_LONG_HAUL,Long Haul
+BADGE_LONG_HAUL_DESC,Spend 30 minutes on the trail
+MENU_PROFILE,Profile
+PROFILE_TITLE,Profile
+PROFILE_NAME_HINT,Your hiker's name
+PROFILE_DEFAULT_NAME,Hiker
+PROFILE_TAB_LOOK,Look
+PROFILE_TAB_STATS,Stats
+PROFILE_TAB_BADGES,Badges
+PROFILE_SLOT_HAT,Hat
+PROFILE_SLOT_JACKET,Jacket
+PROFILE_SLOT_PACK,Backpack
+PROFILE_SLOT_PANTS,Trousers
+PROFILE_SLOT_SKIN,Skin
+PROFILE_LOCKED,Earn %d stars to unlock
+STAT_TRAILS,Trails finished
+STAT_STARS,Stars
+STAT_POSTCARDS,Postcards
+STAT_PERFECT,Perfect photos
+STAT_HIKES,Hikes
+STAT_TIME,Time on the trail
+STAT_TP,Trail points (TP)
+STAT_BADGES,Badges
+PROFILE_BADGES_COUNT,%d of %d earned
+RESULTS_NEW_BADGE,Badge earned: %s
+TIME_MINUTES,%d min
+TIME_HOURS_MINUTES,%d h %02d min
+GEAR_TAG_EQUIPPED,Equipped
+GEAR_TAG_OWNED,Owned

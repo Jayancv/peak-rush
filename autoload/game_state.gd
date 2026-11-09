@@ -22,6 +22,8 @@ var owned_gear: Array[String] = []
 var equipped_gear: Array[String] = []
 ## Last app version whose "What's new" the player saw (M8).
 var seen_version: String = ""
+## Name, outfit, hike totals and badges (saved under "profile").
+var profile: PlayerProfile = PlayerProfile.new()
 
 ## Not saved: which trail the runner should load next, and the last results for the results screen.
 var current_trail_id: StringName = &""
@@ -35,6 +37,7 @@ func reset() -> void:
 	owned_gear = []
 	equipped_gear = []
 	seen_version = ""
+	profile = PlayerProfile.new()
 	last_result = {}
 
 
@@ -92,6 +95,7 @@ func buy(gear_id: StringName) -> bool:
 		return false
 	tp -= g.cost
 	owned_gear.append(String(gear_id))
+	refresh_badges()
 	progress_changed.emit()
 	return true
 
@@ -125,6 +129,76 @@ func next_trail_to_play() -> TrailData:
 	return ContentDB.next_unfinished_trail(is_unlocked, is_completed)
 
 
+# --- Profile ---
+
+func hiker_display_name() -> String:
+	return profile.hiker_name if not profile.hiker_name.is_empty() else tr("PROFILE_DEFAULT_NAME")
+
+
+func set_hiker_name(raw: String) -> void:
+	profile.hiker_name = PlayerProfile.clean_name(raw)
+	progress_changed.emit()
+
+
+## What the hiker wears in a slot; unknown or still-locked choices fall back to the default.
+func worn(slot: CosmeticData.Slot) -> CosmeticData:
+	var item: CosmeticData = ContentDB.get_cosmetic(profile.worn_id(slot))
+	if item == null or item.slot != slot or not PlayerProfile.is_unlocked(item, total_stars()):
+		return ContentDB.default_cosmetic(slot)
+	return item
+
+
+## False (and nothing changes) if the item is still locked.
+func wear(item: CosmeticData) -> bool:
+	if not PlayerProfile.is_unlocked(item, total_stars()):
+		return false
+	profile.wear(item)
+	progress_changed.emit()
+	return true
+
+
+## CosmeticData.Slot -> Color for every slot (what HikerVisual paints).
+func look_colors() -> Dictionary:
+	var out: Dictionary = {}
+	for slot: int in CosmeticData.Slot.values():
+		var item: CosmeticData = worn(slot)
+		if item != null:
+			out[slot] = item.color
+	return out
+
+
+## Totals the badges are judged on (see BadgeRules).
+func profile_facts() -> Dictionary:
+	var finished: int = 0
+	var night: int = 0
+	var photos: int = 0
+	var perfect: int = 0
+	for id: String in trails:
+		var rec: Dictionary = trails[id]
+		if int(rec.stars) & StarRating.STAR_SUMMIT != 0:
+			finished += 1
+			var trail: TrailData = ContentDB.get_trail(StringName(id))
+			if trail != null and trail.night:
+				night += 1
+		for vp: Variant in rec.photos:
+			var q: int = int(rec.photos[vp])
+			photos += 1 if q > StarRating.PhotoQuality.NONE else 0
+			perfect += 1 if q == StarRating.PhotoQuality.PERFECT else 0
+	return {
+		"trails_finished": finished, "stars": total_stars(), "photos": photos, "perfect_photos": perfect,
+		"hikes": profile.hikes, "night_trails": night, "gear_owned": owned_gear.size(),
+		"hike_minutes": int(profile.hike_seconds / 60.0),
+	}
+
+
+## Adds any badges earned since the last check and returns them.
+func refresh_badges() -> Array[BadgeData]:
+	var earned: Array[BadgeData] = BadgeRules.newly_earned(ContentDB.badge_list(), profile_facts(), profile.badges)
+	for badge: BadgeData in earned:
+		profile.badges.append(String(badge.id))
+	return earned
+
+
 # --- Recording a hike ---
 
 ## Merges a finished hike into the trail's record and pays out TP.
@@ -145,6 +219,10 @@ func record_result(result: TrailResult) -> Dictionary:
 		rec.completions = int(rec.completions) + 1
 		trails[key] = rec
 		tp += int(award.total)
+	profile.add_hike(result.time_seconds)
+	var new_badges: Array[String] = []
+	for badge: BadgeData in refresh_badges():
+		new_badges.append(String(badge.id))
 	last_result = award.duplicate()
 	last_result.merge({
 		"trail_id": result.trail_id,
@@ -154,6 +232,7 @@ func record_result(result: TrailResult) -> Dictionary:
 		"previous_best": previous_best,
 		"new_best": result.finished and (previous_best <= 0.0 or result.time_seconds < previous_best),
 		"first_completion": result.finished and int(rec.completions) == 1,
+		"new_badges": new_badges,
 	})
 	progress_changed.emit()
 	return last_result
@@ -169,6 +248,7 @@ func to_dict() -> Dictionary:
 		"owned_gear": owned_gear.duplicate(),
 		"equipped_gear": equipped_gear.duplicate(),
 		"seen_version": seen_version,
+		"profile": profile.to_dict(),
 	}
 
 
@@ -194,6 +274,11 @@ func from_dict(data: Dictionary) -> void:
 	owned_gear = _string_list(data.get("owned_gear", []))
 	equipped_gear = _string_list(data.get("equipped_gear", []))
 	seen_version = str(data.get("seen_version", ""))
+	var saved_profile: Variant = data.get("profile", {})
+	if saved_profile is Dictionary:
+		profile.from_dict(saved_profile)
+	# Saves from before badges existed get what they've already earned, quietly.
+	refresh_badges()
 
 
 static func _string_list(value: Variant) -> Array[String]:

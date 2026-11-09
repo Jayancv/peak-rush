@@ -59,15 +59,26 @@ func test_corrupt_file_is_moved_aside_not_overwritten() -> void:
 func test_migrates_v0_prototype_save() -> void:
 	var v0: Dictionary = {"points": 40, "stars": {"t01_forest_lake": 2}}
 	var out: Dictionary = SaveService.migrate(v0)
-	assert_eq(int(out.save_version), 1)
+	assert_eq(int(out.save_version), SaveService.SAVE_VERSION)
 	assert_eq(int(out.tp), 40)
 	assert_false(out.has("points"))
 	assert_eq(int(out.trails.t01_forest_lake.stars), StarRating.STAR_SUMMIT | StarRating.STAR_PHOTOS)
 
 
 func test_current_version_passes_through_unchanged() -> void:
-	var v1: Dictionary = {"save_version": 1, "tp": 5}
-	assert_eq(SaveService.migrate(v1), v1)
+	var current: Dictionary = {"save_version": SaveService.SAVE_VERSION, "tp": 5, "profile": {"name": "Aino"}}
+	assert_eq(SaveService.migrate(current), current)
+
+
+func test_migrates_v1_save_to_v2_with_an_empty_profile() -> void:
+	var v1: Dictionary = {"save_version": 1, "tp": 5, "trails": {"t01_forest_lake": {"stars": 1}}}
+	var out: Dictionary = SaveService.migrate(v1)
+	assert_eq(int(out.save_version), 2)
+	assert_eq(int(out.tp), 5)
+	assert_true(out.profile is Dictionary)
+	assert_eq(str(out.profile.name), "")
+	assert_eq((out.profile.badges as Array).size(), 0)
+	assert_eq(int(out.trails.t01_forest_lake.stars), 1, "progress is untouched")
 
 
 func test_newer_save_is_loaded_not_destroyed() -> void:

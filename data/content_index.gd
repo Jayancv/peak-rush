@@ -6,3 +6,7 @@ extends Resource
 @export var seasons: Array[SeasonData] = []
 ## Everything the gear shop sells.
 @export var gear: Array[GearData] = []
+## Outfit colours for the hiker (profile screen).
+@export var cosmetics: CosmeticCatalog
+## Achievements shown on the profile.
+@export var badges: BadgeCatalog

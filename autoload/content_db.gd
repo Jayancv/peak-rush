@@ -12,6 +12,7 @@ var index: ContentIndex
 var _seasons: Dictionary = {}
 var _trails: Dictionary = {}
 var _gear: Dictionary = {}
+var _cosmetics: Dictionary = {}
 
 
 func _ready() -> void:
@@ -32,6 +33,11 @@ func use_index(new_index: ContentIndex) -> void:
 	_seasons.clear()
 	_trails.clear()
 	_gear.clear()
+	_cosmetics.clear()
+	if index.cosmetics != null:
+		for c: CosmeticData in index.cosmetics.items:
+			if c != null:
+				_cosmetics[c.id] = c
 	for g: GearData in index.gear:
 		if g != null:
 			_gear[g.id] = g
@@ -74,6 +80,39 @@ func gear_list() -> Array[GearData]:
 
 func get_gear(id: StringName) -> GearData:
 	return _gear.get(id) as GearData
+
+
+# --- Profile content ---
+
+## Outfit colours for one slot, in catalog order (free ones first by convention).
+func cosmetics(slot: CosmeticData.Slot) -> Array[CosmeticData]:
+	var out: Array[CosmeticData] = []
+	if index.cosmetics != null:
+		for c: CosmeticData in index.cosmetics.items:
+			if c != null and c.slot == slot:
+				out.append(c)
+	return out
+
+
+func get_cosmetic(id: StringName) -> CosmeticData:
+	return _cosmetics.get(id) as CosmeticData
+
+
+## The first free item of a slot: what a new hiker wears.
+func default_cosmetic(slot: CosmeticData.Slot) -> CosmeticData:
+	for c: CosmeticData in cosmetics(slot):
+		if c.stars_required <= 0:
+			return c
+	return null
+
+
+func badge_list() -> Array[BadgeData]:
+	var out: Array[BadgeData] = []
+	if index.badges != null:
+		for b: BadgeData in index.badges.badges:
+			if b != null:
+				out.append(b)
+	return out
 
 
 ## The first unlocked trail not finished yet, newest season first (what "Continue"

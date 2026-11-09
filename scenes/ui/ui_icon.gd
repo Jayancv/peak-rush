@@ -7,7 +7,7 @@ extends Control
 ## BOOTS..HEADLAMP follow GearData.Icon order (kind = BOOTS + icon).
 ## New kinds go at the end: scenes store the number.
 enum Kind { MOUNTAIN, WALK, JUMP, BACK, PAUSE, CAMERA, STAR, STAR_EMPTY, LOCK, GEAR, BOOTS, POLES, SHELL, THERMOS, HEADLAMP,
-	MUSIC, SOUND, NATURE, SWAP, VIBRATE }
+	MUSIC, SOUND, NATURE, SWAP, VIBRATE, PERSON, CLOCK }
 
 @export var kind: Kind = Kind.WALK:
 	set(v):
@@ -16,6 +16,12 @@ enum Kind { MOUNTAIN, WALK, JUMP, BACK, PAUSE, CAMERA, STAR, STAR_EMPTY, LOCK, G
 @export var color: Color = Color("#2B2D42"):
 	set(v):
 		color = v
+		queue_redraw()
+## Colour of holes and details cut into the icon (lens, keyhole, zip...). Set it to
+## whatever is behind the icon when that isn't the usual cream.
+@export var cutout: Color = Color("#FFF6E5"):
+	set(v):
+		cutout = v
 		queue_redraw()
 ## Stroke width as a fraction of the icon's size.
 @export_range(0.04, 0.3) var stroke: float = 0.12:
@@ -63,7 +69,7 @@ func _draw() -> void:
 			var body: Rect2 = Rect2(c + Vector2(-s * 0.32, -s * 0.06), Vector2(s * 0.64, s * 0.46))
 			draw_rect(body, color, true)
 			draw_arc(c + Vector2(0, -s * 0.08), s * 0.2, PI, TAU, 12, color, maxf(s * 0.1, 2.0), true)
-			draw_circle(c + Vector2(0, s * 0.14), s * 0.06, SNOW, true, -1.0, true)
+			draw_circle(c + Vector2(0, s * 0.14), s * 0.06, cutout, true, -1.0, true)
 		Kind.GEAR:
 			# A cog: eight flat-topped teeth on a round body, with a hole in the middle.
 			var teeth: int = 8
@@ -79,7 +85,7 @@ func _draw() -> void:
 					var b: float = a + 0.3 + (TAU / float(teeth) - 0.6) * float(k) / 3.0
 					cog.append(c + Vector2.from_angle(b) * inner)
 			draw_colored_polygon(cog, color)
-			draw_circle(c, s * 0.15, SNOW, true, -1.0, true)
+			draw_circle(c, s * 0.15, cutout, true, -1.0, true)
 		Kind.BOOTS:
 			# A hiking boot: shaft, foot and a chunky sole.
 			draw_colored_polygon(PackedVector2Array([c + Vector2(-s * 0.3, -s * 0.38), c + Vector2(-s * 0.02, -s * 0.38), c + Vector2(0, s * 0.02), c + Vector2(s * 0.38, s * 0.1), c + Vector2(s * 0.4, s * 0.26), c + Vector2(-s * 0.3, s * 0.26)]), color)
@@ -91,11 +97,11 @@ func _draw() -> void:
 		Kind.SHELL:
 			# A rain jacket with a hood.
 			draw_colored_polygon(PackedVector2Array([c + Vector2(-s * 0.12, -s * 0.36), c + Vector2(s * 0.12, -s * 0.36), c + Vector2(s * 0.42, -s * 0.1), c + Vector2(s * 0.32, s * 0.04), c + Vector2(s * 0.24, -s * 0.02), c + Vector2(s * 0.24, s * 0.4), c + Vector2(-s * 0.24, s * 0.4), c + Vector2(-s * 0.24, -s * 0.02), c + Vector2(-s * 0.32, s * 0.04), c + Vector2(-s * 0.42, -s * 0.1)]), color)
-			draw_line(c + Vector2(0, -s * 0.3), c + Vector2(0, s * 0.38), SNOW, maxf(s * 0.04, 1.5), true)
+			draw_line(c + Vector2(0, -s * 0.3), c + Vector2(0, s * 0.38), cutout, maxf(s * 0.04, 1.5), true)
 		Kind.THERMOS:
 			draw_rect(Rect2(c + Vector2(-s * 0.18, -s * 0.28), Vector2(s * 0.36, s * 0.7)), color, true)
 			draw_rect(Rect2(c + Vector2(-s * 0.14, -s * 0.42), Vector2(s * 0.28, s * 0.14)), ACCENT, true)
-			draw_rect(Rect2(c + Vector2(-s * 0.18, -s * 0.02), Vector2(s * 0.36, s * 0.08)), SNOW, true)
+			draw_rect(Rect2(c + Vector2(-s * 0.18, -s * 0.02), Vector2(s * 0.36, s * 0.08)), cutout, true)
 		Kind.HEADLAMP:
 			draw_arc(c + Vector2(0, s * 0.06), s * 0.3, PI, TAU, 16, color, maxf(s * 0.08, 2.0), true)
 			draw_circle(c + Vector2(0, -s * 0.24), s * 0.13, color, true, -1.0, true)
@@ -123,7 +129,7 @@ func _draw() -> void:
 				var t: float = float(i) / 16.0
 				leaf.append(c + Vector2(lerpf(-s * 0.46, s * 0.46, t), sin(t * PI) * s * 0.26).rotated(-0.6))
 			draw_colored_polygon(leaf, color)
-			draw_line(c + Vector2(-s * 0.5, 0).rotated(-0.6), c + Vector2(s * 0.34, 0).rotated(-0.6), SNOW, maxf(w * 0.5, 1.5), true)
+			draw_line(c + Vector2(-s * 0.5, 0).rotated(-0.6), c + Vector2(s * 0.34, 0).rotated(-0.6), cutout, maxf(w * 0.5, 1.5), true)
 		Kind.SWAP:
 			# Arrows pointing both ways: which side walks and which side jumps.
 			for row: float in [-1.0, 1.0]:
@@ -139,11 +145,22 @@ func _draw() -> void:
 			for side: float in [-1.0, 1.0]:
 				var x: float = c.x + side * s * 0.3
 				draw_polyline(PackedVector2Array([Vector2(x, c.y - s * 0.22), Vector2(x + side * s * 0.07, c.y - s * 0.11), Vector2(x, c.y), Vector2(x + side * s * 0.07, c.y + s * 0.11), Vector2(x, c.y + s * 0.22)]), color, maxf(w * 0.8, 1.5), true)
+		Kind.PERSON:
+			draw_circle(c + Vector2(0, -s * 0.16), s * 0.19, color, true, -1.0, true)
+			var shoulders: PackedVector2Array = PackedVector2Array()
+			for i: int in 13:
+				var a: float = PI + PI * float(i) / 12.0
+				shoulders.append(c + Vector2(cos(a) * s * 0.36, s * 0.42 + sin(a) * s * 0.34))
+			draw_colored_polygon(shoulders, color)
+		Kind.CLOCK:
+			draw_arc(c, s * 0.38, 0.0, TAU, 32, color, w, true)
+			draw_line(c, c + Vector2(0, -s * 0.24), color, w, true)
+			draw_line(c, c + Vector2(s * 0.17, s * 0.08), color, w, true)
 		Kind.CAMERA:
 			var body: Rect2 = Rect2(c + Vector2(-s * 0.42, -s * 0.24), Vector2(s * 0.84, s * 0.58))
 			draw_rect(body, color, true)
 			draw_rect(Rect2(c + Vector2(-s * 0.16, -s * 0.36), Vector2(s * 0.32, s * 0.14)), color, true)
-			draw_circle(c + Vector2(0, s * 0.05), s * 0.17, SNOW, true, -1.0, true)
+			draw_circle(c + Vector2(0, s * 0.05), s * 0.17, cutout, true, -1.0, true)
 			draw_circle(c + Vector2(0, s * 0.05), s * 0.1, color, true, -1.0, true)
 
 

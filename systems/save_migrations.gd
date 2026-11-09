@@ -8,6 +8,8 @@ static func step(from_version: int, data: Dictionary) -> Dictionary:
 	match from_version:
 		0:
 			return _v0_to_v1(data)
+		1:
+			return _v1_to_v2(data)
 	push_error("SaveMigrations: no step from version %d" % from_version)
 	return data
 
@@ -31,4 +33,13 @@ static func _v0_to_v1(data: Dictionary) -> Dictionary:
 			trails[id] = rec
 	out.erase("stars")
 	out["trails"] = trails
+	return out
+
+
+## v2 adds the player profile (name, outfit, hike totals, badges). Old saves start
+## with an empty one; badges they already qualify for are awarded on the next check.
+static func _v1_to_v2(data: Dictionary) -> Dictionary:
+	var out: Dictionary = data.duplicate(true)
+	if not (out.get("profile") is Dictionary):
+		out["profile"] = {"name": "", "look": {}, "hikes": 0, "hike_seconds": 0.0, "badges": []}
 	return out

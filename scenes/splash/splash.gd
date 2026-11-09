@@ -11,7 +11,7 @@ const TITLE_FONT: Font = preload("res://shared_art/title_font.tres")
 const SKY_TOP: Color = Color("#3D8ED0")
 const SKY_MID: Color = Color("#8EC6E6")
 const SKY_LOW: Color = Color("#F3C38E")
-const GLOW: Color = Color(1.0, 0.88, 0.66, 0.42)
+const GLOW: Color = Color(1.0, 0.88, 0.66, 0.6)
 const CREAM: Color = Color("#FFF6E5")
 const INK: Color = Color("#2B2D42")
 const ICON_SIZE: float = 300.0
@@ -54,9 +54,10 @@ func _build() -> void:
 	sky.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	add_child(sky)
 	_glow = TextureRect.new()
-	_glow.texture = _gradient([GLOW, Color(GLOW, 0.0)], PackedFloat32Array([0.0, 1.0]), true)
+	_glow.texture = SoftGlow.texture()
+	_glow.self_modulate = GLOW
 	_glow.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	_glow.size = Vector2.ONE * ICON_SIZE * 2.6
+	_glow.size = Vector2.ONE * ICON_SIZE * 3.0
 	# Added light, so the warm glow brightens the blue sky instead of greying it.
 	var add: CanvasItemMaterial = CanvasItemMaterial.new()
 	add.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
@@ -170,8 +171,9 @@ static func _gradient(colors: Array[Color], offsets: PackedFloat32Array, radial:
 	gradient.offsets = offsets
 	var tex: GradientTexture2D = GradientTexture2D.new()
 	tex.gradient = gradient
-	tex.width = 256
-	tex.height = 256
+	# Tall enough that the sky gradient has no visible steps on a phone.
+	tex.width = 8 if not radial else 256
+	tex.height = 1024 if not radial else 256
 	if radial:
 		tex.fill = GradientTexture2D.FILL_RADIAL
 		tex.fill_from = Vector2(0.5, 0.5)

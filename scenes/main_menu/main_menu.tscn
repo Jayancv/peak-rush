@@ -10,7 +10,7 @@
 [ext_resource type="Texture2D" path="res://shared_art/icons/icon_512.png" id="8_appicon"]
 [ext_resource type="Script" path="res://scenes/ui/shaded_badge.gd" id="9_badge"]
 
-[node name="MainMenu" type="Control" node_paths=PackedStringArray("play_button", "journal_button", "settings_button", "continue_button", "gear_button", "banner", "banner_label", "backdrop")]
+[node name="MainMenu" type="Control" node_paths=PackedStringArray("profile_button", "play_button", "journal_button", "settings_button", "continue_button", "gear_button", "banner", "banner_label", "backdrop")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -26,6 +26,7 @@ gear_button = NodePath("SafeArea/VBox/Row/GearButton")
 banner = NodePath("SafeArea/VBox/Banner")
 banner_label = NodePath("SafeArea/VBox/Banner/Label")
 settings_button = NodePath("SafeArea/Corner/SettingsButton")
+profile_button = NodePath("SafeArea/CornerLeft/ProfileButton")
 backdrop = NodePath("Backdrop")
 
 [node name="Backdrop" parent="." instance=ExtResource("3_backdrop")]
@@ -189,3 +190,29 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("6_icon")
 kind = 9
+
+[node name="CornerLeft" type="HBoxContainer" parent="SafeArea"]
+layout_mode = 2
+size_flags_vertical = 0
+mouse_filter = 2
+
+[node name="ProfileButton" type="Button" parent="SafeArea/CornerLeft"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+tooltip_text = "MENU_PROFILE"
+theme_type_variation = &"IconButton"
+
+[node name="Icon" type="Control" parent="SafeArea/CornerLeft/ProfileButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_top = 15.0
+offset_right = -18.0
+offset_bottom = -19.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("6_icon")
+kind = 20

@@ -35,7 +35,6 @@ extends Control
 		queue_redraw()
 
 const SHADOW: Color = Color(0.168627, 0.176471, 0.258824, 0.22)
-const STEPS: int = 6
 
 
 func _ready() -> void:
@@ -46,11 +45,8 @@ func _draw() -> void:
 	var rect: Rect2 = Rect2(Vector2.ZERO, size)
 	var r: float = minf(size.x, size.y) * corner
 	if glow_color.a > 0.0:
-		# Rings of fading colour; cheap and smooth enough at this size.
-		for i: int in STEPS:
-			var t: float = float(STEPS - i) / float(STEPS)
-			var grow: float = minf(size.x, size.y) * 0.45 * t
-			_box(rect.grow(grow), r + grow, Color(glow_color, glow_color.a * (1.0 - t) * 0.5), 0.0)
+		var reach: float = minf(size.x, size.y) * 0.95
+		SoftGlow.draw(self, size * 0.5, Vector2(reach, reach), glow_color)
 	_box(rect, r, Color.TRANSPARENT, shadow_size)
 	if frame_width > 0.0:
 		_box(rect, r, frame_color, 0.0)

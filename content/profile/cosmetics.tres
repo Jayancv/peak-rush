@@ -1,0 +1,246 @@
+[gd_resource type="Resource" script_class="CosmeticCatalog" format=3]
+
+[ext_resource type="Script" path="res://data/cosmetic_catalog.gd" id="1_catalog"]
+[ext_resource type="Script" path="res://data/cosmetic_data.gd" id="2_item"]
+
+[sub_resource type="Resource" id="hat_sunflower"]
+script = ExtResource("2_item")
+id = &"hat_sunflower"
+slot = 0
+color = Color(0.9490, 0.7020, 0.2392, 1)
+stars_required = 0
+
+[sub_resource type="Resource" id="hat_berry"]
+script = ExtResource("2_item")
+id = &"hat_berry"
+slot = 0
+color = Color(0.7843, 0.2588, 0.2314, 1)
+stars_required = 0
+
+[sub_resource type="Resource" id="hat_forest"]
+script = ExtResource("2_item")
+id = &"hat_forest"
+slot = 0
+color = Color(0.2471, 0.4902, 0.3529, 1)
+stars_required = 0
+
+[sub_resource type="Resource" id="hat_sky"]
+script = ExtResource("2_item")
+id = &"hat_sky"
+slot = 0
+color = Color(0.2902, 0.5647, 0.7843, 1)
+stars_required = 3
+
+[sub_resource type="Resource" id="hat_lilac"]
+script = ExtResource("2_item")
+id = &"hat_lilac"
+slot = 0
+color = Color(0.6078, 0.4824, 0.7843, 1)
+stars_required = 6
+
+[sub_resource type="Resource" id="hat_snow"]
+script = ExtResource("2_item")
+id = &"hat_snow"
+slot = 0
+color = Color(0.9451, 0.9333, 0.9020, 1)
+stars_required = 9
+
+[sub_resource type="Resource" id="hat_midnight"]
+script = ExtResource("2_item")
+id = &"hat_midnight"
+slot = 0
+color = Color(0.1686, 0.1765, 0.2588, 1)
+stars_required = 12
+
+[sub_resource type="Resource" id="jacket_lake"]
+script = ExtResource("2_item")
+id = &"jacket_lake"
+slot = 1
+color = Color(0.2000, 0.4157, 0.6275, 1)
+stars_required = 0
+
+[sub_resource type="Resource" id="jacket_pine"]
+script = ExtResource("2_item")
+id = &"jacket_pine"
+slot = 1
+color = Color(0.2431, 0.4196, 0.3098, 1)
+stars_required = 0
+
+[sub_resource type="Resource" id="jacket_charcoal"]
+script = ExtResource("2_item")
+id = &"jacket_charcoal"
+slot = 1
+color = Color(0.2902, 0.3059, 0.3765, 1)
+stars_required = 0
+
+[sub_resource type="Resource" id="jacket_ember"]
+script = ExtResource("2_item")
+id = &"jacket_ember"
+slot = 1
+color = Color(0.8510, 0.3843, 0.1686, 1)
+stars_required = 3
+
+[sub_resource type="Resource" id="jacket_teal"]
+script = ExtResource("2_item")
+id = &"jacket_teal"
+slot = 1
+color = Color(0.1647, 0.5490, 0.5490, 1)
+stars_required = 6
+
+[sub_resource type="Resource" id="jacket_plum"]
+script = ExtResource("2_item")
+id = &"jacket_plum"
+slot = 1
+color = Color(0.4314, 0.2471, 0.4510, 1)
+stars_required = 9
+
+[sub_resource type="Resource" id="jacket_ruska"]
+script = ExtResource("2_item")
+id = &"jacket_ruska"
+slot = 1
+color = Color(0.6588, 0.1961, 0.1765, 1)
+stars_required = 12
+
+[sub_resource type="Resource" id="jacket_aurora"]
+script = ExtResource("2_item")
+id = &"jacket_aurora"
+slot = 1
+color = Color(0.2471, 0.7098, 0.6039, 1)
+stars_required = 15
+
+[sub_resource type="Resource" id="pack_coral"]
+script = ExtResource("2_item")
+id = &"pack_coral"
+slot = 2
+color = Color(0.9098, 0.3647, 0.2471, 1)
+stars_required = 0
+
+[sub_resource type="Resource" id="pack_mustard"]
+script = ExtResource("2_item")
+id = &"pack_mustard"
+slot = 2
+color = Color(0.8510, 0.6431, 0.2549, 1)
+stars_required = 0
+
+[sub_resource type="Resource" id="pack_olive"]
+script = ExtResource("2_item")
+id = &"pack_olive"
+slot = 2
+color = Color(0.4196, 0.4784, 0.2275, 1)
+stars_required = 0
+
+[sub_resource type="Resource" id="pack_navy"]
+script = ExtResource("2_item")
+id = &"pack_navy"
+slot = 2
+color = Color(0.1843, 0.2941, 0.4784, 1)
+stars_required = 3
+
+[sub_resource type="Resource" id="pack_turquoise"]
+script = ExtResource("2_item")
+id = &"pack_turquoise"
+slot = 2
+color = Color(0.1843, 0.6392, 0.6392, 1)
+stars_required = 6
+
+[sub_resource type="Resource" id="pack_rose"]
+script = ExtResource("2_item")
+id = &"pack_rose"
+slot = 2
+color = Color(0.8510, 0.4235, 0.5569, 1)
+stars_required = 9
+
+[sub_resource type="Resource" id="pack_stone"]
+script = ExtResource("2_item")
+id = &"pack_stone"
+slot = 2
+color = Color(0.5412, 0.5608, 0.6000, 1)
+stars_required = 12
+
+[sub_resource type="Resource" id="pants_navy"]
+script = ExtResource("2_item")
+id = &"pants_navy"
+slot = 3
+color = Color(0.2275, 0.2471, 0.3608, 1)
+stars_required = 0
+
+[sub_resource type="Resource" id="pants_khaki"]
+script = ExtResource("2_item")
+id = &"pants_khaki"
+slot = 3
+color = Color(0.4784, 0.4314, 0.3059, 1)
+stars_required = 0
+
+[sub_resource type="Resource" id="pants_black"]
+script = ExtResource("2_item")
+id = &"pants_black"
+slot = 3
+color = Color(0.1686, 0.1765, 0.2588, 1)
+stars_required = 0
+
+[sub_resource type="Resource" id="pants_forest"]
+script = ExtResource("2_item")
+id = &"pants_forest"
+slot = 3
+color = Color(0.2314, 0.3569, 0.2902, 1)
+stars_required = 6
+
+[sub_resource type="Resource" id="pants_denim"]
+script = ExtResource("2_item")
+id = &"pants_denim"
+slot = 3
+color = Color(0.2902, 0.4157, 0.6039, 1)
+stars_required = 9
+
+[sub_resource type="Resource" id="pants_rust"]
+script = ExtResource("2_item")
+id = &"pants_rust"
+slot = 3
+color = Color(0.5490, 0.2902, 0.1961, 1)
+stars_required = 12
+
+[sub_resource type="Resource" id="skin_1"]
+script = ExtResource("2_item")
+id = &"skin_1"
+slot = 4
+color = Color(0.9569, 0.7882, 0.6392, 1)
+stars_required = 0
+
+[sub_resource type="Resource" id="skin_2"]
+script = ExtResource("2_item")
+id = &"skin_2"
+slot = 4
+color = Color(0.9765, 0.8627, 0.7686, 1)
+stars_required = 0
+
+[sub_resource type="Resource" id="skin_3"]
+script = ExtResource("2_item")
+id = &"skin_3"
+slot = 4
+color = Color(0.9098, 0.7059, 0.5412, 1)
+stars_required = 0
+
+[sub_resource type="Resource" id="skin_4"]
+script = ExtResource("2_item")
+id = &"skin_4"
+slot = 4
+color = Color(0.7765, 0.5451, 0.3686, 1)
+stars_required = 0
+
+[sub_resource type="Resource" id="skin_5"]
+script = ExtResource("2_item")
+id = &"skin_5"
+slot = 4
+color = Color(0.6275, 0.4157, 0.2588, 1)
+stars_required = 0
+
+[sub_resource type="Resource" id="skin_6"]
+script = ExtResource("2_item")
+id = &"skin_6"
+slot = 4
+color = Color(0.4314, 0.2745, 0.1882, 1)
+stars_required = 0
+
+[resource]
+script = ExtResource("1_catalog")
+items = Array[ExtResource("2_item")]([SubResource("hat_sunflower"), SubResource("hat_berry"), SubResource("hat_forest"), SubResource("hat_sky"), SubResource("hat_lilac"), SubResource("hat_snow"), SubResource("hat_midnight"), SubResource("jacket_lake"), SubResource("jacket_pine"), SubResource("jacket_charcoal"), SubResource("jacket_ember"), SubResource("jacket_teal"), SubResource("jacket_plum"), SubResource("jacket_ruska"), SubResource("jacket_aurora"), SubResource("pack_coral"), SubResource("pack_mustard"), SubResource("pack_olive"), SubResource("pack_navy"), SubResource("pack_turquoise"), SubResource("pack_rose"), SubResource("pack_stone"), SubResource("pants_navy"), SubResource("pants_khaki"), SubResource("pants_black"), SubResource("pants_forest"), SubResource("pants_denim"), SubResource("pants_rust"), SubResource("skin_1"), SubResource("skin_2"), SubResource("skin_3"), SubResource("skin_4"), SubResource("skin_5"), SubResource("skin_6")])

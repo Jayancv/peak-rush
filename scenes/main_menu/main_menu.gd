@@ -10,6 +10,7 @@ const BANNER_RADIUS: int = 22
 @export var play_button: Button
 @export var journal_button: Button
 @export var settings_button: Button
+@export var profile_button: Button
 @export var continue_button: Button
 @export var gear_button: Button
 @export var banner: PanelContainer
@@ -26,13 +27,14 @@ func _ready() -> void:
 	journal_button.pressed.connect(func() -> void: SceneRouter.go_to(SceneRouter.JOURNAL))
 	settings_button.pressed.connect(func() -> void: SceneRouter.go_to(SceneRouter.SETTINGS))
 	gear_button.pressed.connect(func() -> void: SceneRouter.go_to(SceneRouter.GEAR))
+	profile_button.pressed.connect(func() -> void: SceneRouter.go_to(SceneRouter.PROFILE))
 	continue_button.pressed.connect(_on_continue)
 	_setup_banner()
 	_setup_continue()
 	if not DisplayServer.is_touchscreen_available():
 		(continue_button if continue_button.visible else play_button).grab_focus()
 	_start_panning()
-	UiMotion.intro([$SafeArea/VBox/Card, banner, continue_button, play_button, journal_button, gear_button, settings_button], 0.1)
+	UiMotion.intro([$SafeArea/VBox/Card, banner, continue_button, play_button, journal_button, gear_button, settings_button, profile_button], 0.1)
 	if OS.is_debug_build() and not _startup_logged:
 		_startup_logged = true
 		print("PERF startup_to_menu_ms=%d" % Time.get_ticks_msec())
