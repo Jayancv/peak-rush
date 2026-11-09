@@ -85,7 +85,7 @@ docs/                GAME_DESIGN.md, PLAN.md
 - At the end of each session, update **Current status** below and tick the boxes in `docs/PLAN.md`.
 
 ## Current status
-- Milestone: **M4 – built, 143 tests green, on Pixel 7 Pro; awaiting user playtest of photo timing**. M0–M3 done. Next: M5 (vertical slice).
+- Milestone: **M5 – built, 164 tests green, on Pixel 7 Pro; playtest with 3–5 people is the user's step (template in docs/PLAYTEST_NOTES.md)**. M0–M4 done. Don't start M6 until the slice feels good.
 - Godot 4.7.2-stable (not on PATH; ask the user for the executable path if unknown); GUT 9.7.1.
 - Notes: Autoloads are stubs except SceneRouter (fade + `go_to`, scene path consts `MAIN_MENU`/`TRAIL_RUNNER`).
   `scenes/ui/safe_area_margin.gd` (`SafeAreaMargin`) wraps screen UI. Global theme: `shared_art/ui_theme.tres`.
@@ -118,7 +118,15 @@ docs/                GAME_DESIGN.md, PLAN.md
   Shots are scored against the *screen* centre, so keep viewpoint frames away from trail ends (camera limits would
   stop the camera centring). `PhotoScoring` = grading + film roll; quality colours live in `Postcard.border_color`.
   Placeholder postcards/stamps are drawn in code (`Postcard`, `PassportStamp`); a ViewpointData.postcard texture replaces the art.
-  AudioManager synthesises a shutter click (no audio assets yet). In .tscn, PackedColorArray is a flat list of floats.
+  In .tscn, PackedColorArray is a flat list of floats.
+  M5: Audio = buses Music/SFX/Ambience (default_bus_layout.tres); `audio/synth_sounds.gd` builds placeholder sounds on first
+  use (footsteps per surface, shutter, summit, 4 ambience loops, menu pad). Screens call `AudioManager.enter_menu()`;
+  trails call `play_ambience(trail.ambience_kind())`. Swap in real AudioStreams later without touching callers.
+  Weather: `WeatherEffects` (seeded gusts) -> `hiker.condition.wind_push` (applied only walking/airborne = resting braces).
+  `WeatherFx` CanvasLayer (layer 1, UI is layer 2) does rain/snow/gust streaks + a faint veil; thick fog is a `FogBank`
+  inserted into the level right after the Backdrop so the path stays clear.
+  Per-trail looks: inherit `world/backdrop/backdrop.tscn` (see backdrop_ruska.tscn); RidgeLayer.tree_style PINE/BIRCH/MIXED;
+  TerrainStrip.tuft_color. Game feel lives in HikerVisual (footstep sound + dust per step, landing puffs, celebrate()).
   `.tres` typed arrays of custom resources use `Array[ExtResource("<script id>")]([...])`.
   Buttons over the play area must join group `touch_blocker`. Physics interpolation is on: use `Hiker.teleport()` to move instantly.
   On this machine, git over HTTPS needs `-c http.sslBackend=schannel`.

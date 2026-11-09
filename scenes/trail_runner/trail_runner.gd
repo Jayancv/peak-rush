@@ -12,6 +12,7 @@ extends Node2D
 @export var touch_controls: TouchControls
 @export var pause_menu: PauseMenu
 @export var photo_mode: PhotoMode
+@export var weather_fx: WeatherFx
 
 ## How far below the lowest ground the hiker can drop before it counts as a fall,
 ## a safety net in case a gap has no KillZone.
@@ -23,6 +24,7 @@ const SUMMIT_PAUSE: float = 1.2
 var trail: TrailData
 var hiker: Hiker
 var daylight: Daylight
+var weather: WeatherEffects
 var finished: bool = false
 ## Best photo this hike per viewpoint id (String -> StarRating.PhotoQuality).
 var photos: Dictionary = {}
@@ -34,6 +36,7 @@ var _fall_limit_y: float = INF
 var _respawning: bool = false
 var _bench_explained: bool = false
 var _near_viewpoint: Viewpoint
+var _gust_explained: bool = false
 
 
 func _ready() -> void:
@@ -45,6 +48,11 @@ func _ready() -> void:
 		GameState.current_trail_id = trail.id
 	daylight = Daylight.new(_balance, trail.daylight_seconds)
 	daylight.phase_changed.connect(_on_phase_changed)
+	weather = WeatherEffects.new(trail.weather, hash(trail.id))
+	weather.gust_started.connect(_on_gust_started)
+	weather_fx.apply(trail.weather)
+	AudioManager.stop_music()
+	AudioManager.play_ambience(trail.ambience_kind())
 	hud.pause_pressed.connect(pause)
 	hud.set_low_fraction(_balance.low_stamina_fraction)
 	pause_menu.resume_pressed.connect(resume)
@@ -67,6 +75,7 @@ func _load_trail() -> void:
 	for node: Node in get_tree().get_nodes_in_group(Backdrop.GROUP):
 		if level.is_ancestor_of(node):
 			_backdrop = node as Backdrop
+	weather_fx.add_world_fog(trail.weather, level, _backdrop, camera)
 	hiker = hiker_scene.instantiate() as Hiker
 	world.add_child(hiker)
 	hiker.teleport(trailhead.global_position)
@@ -74,7 +83,7 @@ func _load_trail() -> void:
 	_respawn_point = trailhead.global_position
 	hiker.stamina_changed.connect(_on_stamina_changed)
 	hiker.exhausted.connect(func() -> void: hud.show_toast("TOAST_EXHAUSTED"))
-	hiker.stumbled.connect(func() -> void: _vibrate(_balance.stumble_vibrate_ms))
+	hiker.stumbled.connect(_on_stumbled)
 	hiker.fell.connect(_on_hiker_fell)
 	hiker.checkpoint_reached.connect(_on_checkpoint_reached)
 	hiker.reached_finish.connect(_on_reached_finish)
@@ -98,6 +107,9 @@ func _process(delta: float) -> void:
 	if finished or hiker == null:
 		return
 	daylight.advance(delta)
+	weather.advance(delta)
+	hiker.condition.wind_push = weather.wind_push()
+	weather_fx.set_gusting(weather.is_gusting())
 	_apply_daylight()
 	if hiker.global_position.y > _fall_limit_y:
 		_on_hiker_fell()
@@ -155,6 +167,7 @@ func _notification(what: int) -> void:
 func _apply_daylight() -> void:
 	var tint: Color = daylight.tint()
 	world_tint.color = tint
+	weather_fx.set_tint(tint)
 	if _backdrop != null:
 		_backdrop.set_daylight(daylight.sun_progress(), tint)
 	hud.set_daylight(daylight.sun_progress(), daylight.phase())
@@ -188,6 +201,7 @@ func _on_hiker_fell() -> void:
 		return
 	_respawning = true
 	_vibrate(_balance.fall_vibrate_ms)
+	camera.shake(_balance.shake_fall_px)
 	SceneRouter.cover(func() -> void:
 		hiker.respawn(_respawn_point)
 		camera.snap_to_target()
@@ -198,6 +212,7 @@ func _on_hiker_fell() -> void:
 func _on_reached_finish() -> void:
 	finished = true
 	touch_controls.release_all()
+	hiker.visual.celebrate()
 	var result: TrailResult = TrailResult.new(trail.id)
 	result.finished = true
 	result.time_seconds = daylight.elapsed
@@ -209,6 +224,18 @@ func _on_reached_finish() -> void:
 	GameState.record_result(result)
 	await get_tree().create_timer(SUMMIT_PAUSE).timeout
 	SceneRouter.go_to(SceneRouter.RESULTS)
+
+
+func _on_stumbled() -> void:
+	_vibrate(_balance.stumble_vibrate_ms)
+	camera.shake(_balance.shake_stumble_px)
+
+
+func _on_gust_started() -> void:
+	# Explain wind once; afterwards the streaks and the push say it.
+	if not _gust_explained:
+		_gust_explained = true
+		hud.show_toast("TOAST_GUST")
 
 
 func _on_viewpoint_entered(vp: Viewpoint) -> void:

@@ -12,6 +12,7 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"vibration": true,
 	"music_volume": 0.8,
 	"sfx_volume": 0.8,
+	"ambience_volume": 0.8,
 }
 
 var settings: Dictionary = DEFAULT_SETTINGS.duplicate()

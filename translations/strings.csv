@@ -60,3 +60,17 @@ JOURNAL_PASSPORT,Passport
 JOURNAL_POSTCARDS,Postcards
 JOURNAL_TAP_TO_CLOSE,Tap to close
 JOURNAL_COLLECTED,%d / %d collected
+TRAIL_T03_NAME,Lapland Fell
+VP_REINDEER,Reindeer herd
+VP_FELL_TOP,Fell top
+WEATHER_FOG,Fog
+WEATHER_RAIN,Rain
+WEATHER_SNOW,Snow
+TOAST_GUST,Wind gust! Stand still to brace
+MENU_SETTINGS,Settings
+SETTINGS_TITLE,Settings
+SETTINGS_MUSIC,Music
+SETTINGS_SFX,Sound effects
+SETTINGS_AMBIENCE,Ambience
+SETTING_LEFT_HANDED_ON,Left-handed controls: On
+SETTING_LEFT_HANDED_OFF,Left-handed controls: Off

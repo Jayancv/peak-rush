@@ -15,6 +15,8 @@ extends Resource
 ## A good time for this trail, shown on the results screen.
 @export var par_time: float = 90.0
 @export var weather: WeatherProfile
+## Background loop. "Auto" picks one from the weather.
+@export_enum("Auto", "Forest", "Coast", "Fell", "Rain") var ambience: int = 0
 @export var viewpoints: Array[ViewpointData] = []
 @export var postcard: Texture2D
 ## Trails unlock in this order within their season; the first is always open.
@@ -26,6 +28,11 @@ func viewpoint_ids() -> Array[StringName]:
 	for v: ViewpointData in viewpoints:
 		ids.append(v.id)
 	return ids
+
+
+## The ambience to play (AudioManager.Ambience value).
+func ambience_kind() -> int:
+	return ambience if ambience > 0 else AudioManager.ambience_for(weather)
 
 
 func weather_drain() -> float:

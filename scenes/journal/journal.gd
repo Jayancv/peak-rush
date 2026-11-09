@@ -22,6 +22,7 @@ var _season: SeasonData
 
 func _ready() -> void:
 	back_button.pressed.connect(_go_back)
+	AudioManager.enter_menu()
 	enlarged.visible = false
 	enlarged.gui_input.connect(_on_enlarged_input)
 	for season: SeasonData in ContentDB.seasons():

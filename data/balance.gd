@@ -115,6 +115,10 @@ extends Resource
 @export var camera_height_px: float = 110.0
 @export var camera_smoothing_speed: float = 4.0
 @export var camera_look_ahead_speed: float = 1.5
+## Shake on a stumble / fall: peak offset (px) and how long it lasts.
+@export var shake_stumble_px: float = 7.0
+@export var shake_fall_px: float = 12.0
+@export var shake_seconds: float = 0.3
 
 @export_group("Feel")
 @export var jump_stretch: Vector2 = Vector2(0.85, 1.15)

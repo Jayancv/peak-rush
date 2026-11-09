@@ -8,3 +8,7 @@ id = &"windy"
 name_key = "WEATHER_WINDY"
 drain_multiplier = 1.1
 wind = true
+wind_base = 6.0
+gust_strength = 75.0
+gust_interval = Vector2(5, 9)
+gust_seconds = 1.8

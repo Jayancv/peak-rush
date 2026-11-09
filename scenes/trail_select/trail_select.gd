@@ -16,6 +16,7 @@ var _season: SeasonData
 
 func _ready() -> void:
 	back_button.pressed.connect(_go_back)
+	AudioManager.enter_menu()
 	tp_label.text = tr("HUD_TP") % GameState.tp
 	stars_label.text = str(GameState.total_stars())
 	var current: TrailData = ContentDB.get_trail(GameState.current_trail_id)

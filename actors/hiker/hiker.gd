@@ -199,7 +199,7 @@ func grounded_transition() -> int:
 
 
 func walk_target_speed() -> float:
-	return balance.walk_speed * speed_multiplier * FACING
+	return balance.walk_speed * speed_multiplier * FACING + condition.wind_push
 
 
 func move_horizontal(target: float, accel: float, delta: float) -> void:
@@ -221,9 +221,9 @@ func ground_stop(decel: float, delta: float) -> void:
 
 func air_control(delta: float) -> void:
 	if wants_walk():
-		move_horizontal(balance.walk_speed * speed_multiplier * FACING, balance.air_accel, delta)
+		move_horizontal(balance.walk_speed * speed_multiplier * FACING + condition.wind_push, balance.air_accel, delta)
 	else:
-		stop_horizontal(balance.air_decel, delta)
+		move_horizontal(condition.wind_push, balance.air_decel, delta)
 
 
 func apply_gravity(delta: float) -> void:

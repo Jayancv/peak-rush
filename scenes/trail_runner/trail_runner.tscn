@@ -7,8 +7,9 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="7_hud"]
 [ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="8_pause"]
 [ext_resource type="PackedScene" path="res://scenes/photo_mode/photo_mode.tscn" id="9_photo"]
+[ext_resource type="PackedScene" path="res://scenes/trail_runner/weather_fx.tscn" id="10_weather"]
 
-[node name="TrailRunner" type="Node2D" node_paths=PackedStringArray("world", "camera", "world_tint", "hud", "touch_controls", "pause_menu", "photo_mode")]
+[node name="TrailRunner" type="Node2D" node_paths=PackedStringArray("world", "camera", "world_tint", "hud", "touch_controls", "pause_menu", "photo_mode", "weather_fx")]
 script = ExtResource("1_runner")
 hiker_scene = ExtResource("4_hiker")
 world = NodePath("World")
@@ -18,6 +19,7 @@ hud = NodePath("UI/Hud")
 touch_controls = NodePath("UI/TouchControls")
 pause_menu = NodePath("UI/PauseMenu")
 photo_mode = NodePath("UI/PhotoMode")
+weather_fx = NodePath("WeatherFx")
 
 [node name="World" type="Node2D" parent="."]
 
@@ -27,7 +29,10 @@ photo_mode = NodePath("UI/PhotoMode")
 process_callback = 0
 script = ExtResource("5_camera")
 
+[node name="WeatherFx" parent="." instance=ExtResource("10_weather")]
+
 [node name="UI" type="CanvasLayer" parent="."]
+layer = 2
 
 [node name="TouchControls" parent="UI" instance=ExtResource("6_touch")]
 

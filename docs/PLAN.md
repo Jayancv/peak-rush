@@ -116,13 +116,13 @@ Claude Code ticks `[x]` as tasks finish and updates "Current status" in `CLAUDE.
 
 ## M5 — Vertical slice: "Lapland Fell" ⭐
 Make one trail feel like the finished game before building more.
-- [ ] Build Trail 3 *Lapland Fell* from the template: a full-length climb with benches and two checkpoints
-- [ ] `Parallax2D` background with 4 layers in the ruska autumn palette, plus drifting clouds
-- [ ] Weather system: `WeatherProfile` applies drain multipliers and visuals (fog overlay first, then rain, snow and wind)
-- [ ] Reindeer viewpoint subject with a simple walk animation
-- [ ] `AudioManager`: buses (Master, Music, SFX, Ambience), ambience loop, footsteps by surface, shutter, summit sting
-- [ ] Game feel: footstep dust particles, a small camera shake on stumble, a smooth day-tint transition, a summit celebration
-- [ ] Settings screen: volumes, left-handed controls, vibration
+- [x] Build Trail 3 *Lapland Fell* from the template: a full-length climb with benches and two checkpoints
+- [x] `Parallax2D` background with 4 layers in the ruska autumn palette, plus drifting clouds
+- [x] Weather system: `WeatherProfile` applies drain multipliers and visuals (fog overlay first, then rain, snow and wind)
+- [x] Reindeer viewpoint subject with a simple walk animation
+- [x] `AudioManager`: buses (Master, Music, SFX, Ambience), ambience loop, footsteps by surface, shutter, summit sting
+- [x] Game feel: footstep dust particles, a small camera shake on stumble, a smooth day-tint transition, a summit celebration
+- [x] Settings screen: volumes, left-handed controls, vibration
 - [ ] **Playtest with 3–5 people** on their phones. Write the feedback into `docs/PLAYTEST_NOTES.md` and tune `balance.tres`.
 
 **Done when:** you'd happily show this trail to friends. Don't start M6 until it feels good.

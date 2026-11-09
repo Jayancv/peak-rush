@@ -13,8 +13,11 @@ var stamina: Stamina
 var regen: Regen = Regen.NONE
 var modifiers: HikeModifiers
 var is_dusk: bool = false
-## Multiplier from weather (M5); gear (M6) plugs in the same way.
+## Multiplier from weather; gear (M6) plugs in the same way.
 var weather_drain_mult: float = 1.0
+## Wind pushing back (px/s, negative = towards the trailhead). Only applied while
+## walking or airborne: standing still braces the hiker against it.
+var wind_push: float = 0.0
 var wet_feet_left: float = 0.0
 
 var _balance: Balance

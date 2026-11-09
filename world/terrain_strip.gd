@@ -32,6 +32,11 @@ const SURFACE_COLORS: Array[Color] = [
 	set(value):
 		fill_bottom_color = value
 		_rebuild()
+## Colour of the grass tufts (golden for autumn trails).
+@export var tuft_color: Color = Color("#6F9C5F"):
+	set(value):
+		tuft_color = value
+		_rebuild()
 ## Grass tufts along the path and pebbles in the ground (placeholder art).
 @export var decorate: bool = true:
 	set(value):
@@ -47,7 +52,6 @@ const SURFACE_COLORS: Array[Color] = [
 		fill_depth = value
 		_rebuild()
 
-const TUFT_COLOR: Color = Color("#6F9C5F")
 const PEBBLE_COLOR: Color = Color("#6C8E73")
 const BOULDER_COLOR: Color = Color("#8C8B84")
 const BOULDER_SHADE: Color = Color("#6F6E68")
@@ -197,7 +201,7 @@ func _build_decor() -> void:
 			for b: int in 3:
 				var bx: float = x + (b - 1) * 4.0
 				var h: float = rng.randf_range(9.0, 17.0) * (1.25 if b == 1 else 0.8)
-				_add_tri(Vector2(bx - 2.2, y), Vector2(bx + 2.2, y), Vector2(bx + (b - 1) * 3.0, y - h), TUFT_COLOR, pts, cols, polys)
+				_add_tri(Vector2(bx - 2.2, y), Vector2(bx + 2.2, y), Vector2(bx + (b - 1) * 3.0, y - h), tuft_color, pts, cols, polys)
 			x += rng.randf_range(28.0, 95.0)
 		x = start_x + rng.randf_range(20.0, 60.0)
 		while surface == Surface.ROCK and x < end_x - 10.0:

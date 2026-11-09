@@ -57,5 +57,23 @@ func test_journal_shows_every_postcard_slot() -> void:
 	assert_eq(int(journal.call("postcard_count")), expected)
 
 
+func test_settings_toggles_write_to_game_state() -> void:
+	var before: bool = bool(GameState.settings.get("left_handed", false))
+	var settings: Node = add_child_autofree((load(SceneRouter.SETTINGS) as PackedScene).instantiate())
+	var toggle: Button = settings.get("left_handed_toggle") as Button
+	toggle.toggled.emit(not before)
+	assert_eq(bool(GameState.settings.left_handed), not before)
+	assert_eq(toggle.text, tr("SETTING_LEFT_HANDED_ON" if not before else "SETTING_LEFT_HANDED_OFF"))
+	GameState.set_setting("left_handed", before)
+
+
+func test_lapland_fell_runs_with_fog() -> void:
+	GameState.current_trail_id = &"t03_lapland_fell"
+	var runner: Node = add_child_autofree((load(SceneRouter.TRAIL_RUNNER) as PackedScene).instantiate())
+	assert_eq((runner.get("trail") as TrailData).id, &"t03_lapland_fell")
+	assert_true((runner.get("weather_fx") as WeatherFx).fog_veil.visible)
+	GameState.current_trail_id = &""
+
+
 func test_translations_resolve() -> void:
 	assert_eq(tr("MENU_PLAY"), "Play", "strings.csv not imported or not registered")

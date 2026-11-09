@@ -3,6 +3,8 @@ extends Node2D
 ## The hiker's look: a procedural walk cycle, poses per state, squash/stretch and
 ## breathing. Pure presentation; Hiker calls update_pose() every frame and
 ## squash() on jump/land. The origin is at the feet so scaling keeps them planted.
+## Also does the feel: a footstep sound and dust puff each step (by surface), puffs
+## on landing, and the summit celebration.
 
 @export var front_leg: Node2D
 @export var back_leg: Node2D
@@ -11,6 +13,10 @@ extends Node2D
 @export var headlamp: Node2D
 ## Green sparkles while recovering: a trickle when resting, a stream at a bench.
 @export var regen_particles: CPUParticles2D
+## Two one-shot puff emitters used alternately (one per foot), so a new step's puff
+## doesn't cut the previous one short.
+@export var dust: Array[CPUParticles2D] = []
+@export var confetti: CPUParticles2D
 
 ## Sitting on a bench: hips drop onto the seat, legs stick out, pole rests on the knee.
 const SIT_DROP: float = 6.0
@@ -24,7 +30,17 @@ const BENCH_SPARKLE_SPEED: float = 1.5
 const REST_SPARKLE_COLOR: Color = Color(0.7, 1.0, 0.65, 0.85)
 const BENCH_SPARKLE_COLOR: Color = Color(0.45, 1.0, 0.4, 1.0)
 
+## Dust colour per TerrainStrip.Surface.
+const DUST_COLORS: Array[Color] = [Color("#C9B28F"), Color("#B5B3AA"), Color("#6E5440"), Color("#E6F5FA"), Color("#FFFFFF")]
+const CELEBRATE_SECONDS: float = 1.6
+const CELEBRATE_HOP_PX: float = 9.0
+const CELEBRATE_HOP_HZ: float = 2.4
+
 var _balance: Balance
+var _last_step: int = 0
+var _next_dust: int = 0
+var _was_on_floor: bool = true
+var _celebrate_left: float = 0.0
 var _squash: Vector2 = Vector2.ONE
 var _phase: float = 0.0
 var _time: float = 0.0
@@ -51,6 +67,14 @@ func set_regen(mode: HikerCondition.Regen) -> void:
 	regen_particles.color = BENCH_SPARKLE_COLOR if bench else REST_SPARKLE_COLOR
 
 
+## Arms up, little hops and confetti at the summit.
+func celebrate() -> void:
+	_celebrate_left = CELEBRATE_SECONDS
+	if confetti != null:
+		confetti.restart()
+	AudioManager.play_summit()
+
+
 func squash(amount: Vector2) -> void:
 	_squash = amount
 
@@ -73,6 +97,10 @@ func update_pose(delta: float, hiker: Hiker) -> void:
 		Hiker.State.WALK:
 			var speed_ratio: float = clampf(absf(hiker.velocity.x) / _balance.walk_speed, 0.0, 1.3)
 			_phase += delta * TAU * _balance.walk_bob_hz * 0.5 * speed_ratio
+			var step: int = floori(_phase / PI)
+			if step != _last_step and hiker.is_on_floor():
+				_footstep(hiker.effective_surface())
+			_last_step = step
 			var swing: float = sin(_phase)
 			front = -swing * _balance.walk_leg_swing
 			back = swing * _balance.walk_leg_swing
@@ -106,6 +134,18 @@ func update_pose(delta: float, hiker: Hiker) -> void:
 		Hiker.State.REST, Hiker.State.IDLE, Hiker.State.PHOTO:
 			breath = sin(_time * TAU * _balance.rest_breath_hz) * _balance.rest_breath_amount
 
+	if _celebrate_left > 0.0:
+		_celebrate_left -= delta
+		arm_angle = -2.8
+		front = 0.0
+		back = 0.0
+		bob = -absf(sin(_time * TAU * CELEBRATE_HOP_HZ)) * CELEBRATE_HOP_PX
+	var on_floor: bool = hiker.is_on_floor()
+	if on_floor and not _was_on_floor:
+		_footstep(hiker.effective_surface())
+		_footstep(hiker.effective_surface(), false)
+	_was_on_floor = on_floor
+
 	if hiker.state != Hiker.State.WALK:
 		# Let the stride settle back to standing instead of freezing mid-step.
 		_phase = lerpf(_phase, roundf(_phase / PI) * PI, blend)
@@ -116,3 +156,14 @@ func update_pose(delta: float, hiker: Hiker) -> void:
 	scale = Vector2(_squash.x, _squash.y * (1.0 + breath))
 	# Ease the height too, so sitting down and standing up don't snap.
 	position.y = bob if hiker.state == Hiker.State.WALK else lerpf(position.y, bob, blend)
+
+
+func _footstep(surface: TerrainStrip.Surface, with_sound: bool = true) -> void:
+	if with_sound:
+		AudioManager.play_footstep(surface)
+	if dust.is_empty():
+		return
+	var puff: CPUParticles2D = dust[_next_dust]
+	_next_dust = (_next_dust + 1) % dust.size()
+	puff.color = DUST_COLORS[clampi(surface, 0, DUST_COLORS.size() - 1)]
+	puff.restart()

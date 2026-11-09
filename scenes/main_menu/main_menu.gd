@@ -7,15 +7,18 @@ const PAN_SPEED: float = 22.0
 
 @export var play_button: Button
 @export var journal_button: Button
+@export var settings_button: Button
 @export var backdrop: Node
 
 
 func _ready() -> void:
 	play_button.pressed.connect(_on_play_pressed)
 	journal_button.pressed.connect(func() -> void: SceneRouter.go_to(SceneRouter.JOURNAL))
+	settings_button.pressed.connect(func() -> void: SceneRouter.go_to(SceneRouter.SETTINGS))
 	if not DisplayServer.is_touchscreen_available():
 		play_button.grab_focus()
 	_start_panning()
+	AudioManager.enter_menu()
 
 
 func _start_panning() -> void:

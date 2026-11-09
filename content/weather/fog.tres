@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="WeatherProfile" format=3]
+
+[ext_resource type="Script" path="res://data/weather_profile.gd" id="1_weather"]
+
+[resource]
+script = ExtResource("1_weather")
+id = &"fog"
+name_key = "WEATHER_FOG"
+drain_multiplier = 1.05
+fog = true
+fog_density = 0.5
+fog_color = Color(0.92, 0.91, 0.9, 1)

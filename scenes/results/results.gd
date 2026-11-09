@@ -28,6 +28,7 @@ var _next: TrailData
 
 func _ready() -> void:
 	_result = GameState.last_result
+	AudioManager.enter_menu()
 	_trail = ContentDB.get_trail(StringName(_result.get("trail_id", GameState.current_trail_id)))
 	if _trail == null:
 		_trail = ContentDB.first_trail()

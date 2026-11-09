@@ -48,6 +48,17 @@ extends Polygon2D
 		_queue()
 
 @export_group("Trees")
+## Pines for evergreen forest, birches (round crowns) for ruska autumn, or a mix.
+enum TreeStyle { PINE, BIRCH, MIXED }
+@export var tree_style: TreeStyle = TreeStyle.PINE:
+	set(v):
+		tree_style = v
+		_queue()
+## Second colour, used for birch crowns in MIXED.
+@export var tree_color_alt: Color = Color("#D9A441"):
+	set(v):
+		tree_color_alt = v
+		_queue()
 @export var tree_count: int = 0:
 	set(v):
 		tree_count = v
@@ -141,6 +152,7 @@ func _rebuild() -> void:
 
 func _build_trees() -> void:
 	var pts: PackedVector2Array = PackedVector2Array()
+	var cols: PackedColorArray = PackedColorArray()
 	var polys: Array = []
 	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 	rng.seed = seed_value * 7919 + 13
@@ -149,20 +161,38 @@ func _build_trees() -> void:
 		var h: float = rng.randf_range(tree_height.x, tree_height.y)
 		var w: float = h * 0.42
 		var ground: float = height_at(tx) + h * 0.08
-		# A pine: three stacked triangles, each narrower and higher.
-		for tier: int in 3:
-			var t: float = float(tier)
-			var tier_w: float = w * (1.0 - t * 0.22)
-			var tier_base: float = ground - h * t * 0.28
-			var tier_top: float = tier_base - h * 0.46
-			var start: int = pts.size()
-			pts.append(Vector2(tx - tier_w * 0.5, tier_base))
-			pts.append(Vector2(tx + tier_w * 0.5, tier_base))
-			pts.append(Vector2(tx, tier_top))
-			polys.append(PackedInt32Array([start, start + 1, start + 2]))
+		var birch: bool = tree_style == TreeStyle.BIRCH or (tree_style == TreeStyle.MIXED and i % 2 == 1)
+		if birch:
+			# A birch: a thin stem and a round crown.
+			var crown: Color = tree_color_alt if tree_style == TreeStyle.MIXED else tree_color
+			var stem_w: float = maxf(h * 0.05, 1.5)
+			_add_shape(PackedVector2Array([Vector2(tx - stem_w, ground), Vector2(tx + stem_w, ground), Vector2(tx + stem_w, ground - h * 0.7), Vector2(tx - stem_w, ground - h * 0.7)]), tree_color.darkened(0.3), pts, cols, polys)
+			var ring: PackedVector2Array = PackedVector2Array()
+			for k: int in 10:
+				var a: float = TAU * float(k) / 10.0
+				ring.append(Vector2(tx, ground - h * 0.62) + Vector2(cos(a) * w * 0.55, sin(a) * h * 0.36))
+			_add_shape(ring, crown, pts, cols, polys)
+		else:
+			# A pine: three stacked triangles, each narrower and higher.
+			for tier: int in 3:
+				var t: float = float(tier)
+				var tier_w: float = w * (1.0 - t * 0.22)
+				var tier_base: float = ground - h * t * 0.28
+				var tier_top: float = tier_base - h * 0.46
+				_add_shape(PackedVector2Array([Vector2(tx - tier_w * 0.5, tier_base), Vector2(tx + tier_w * 0.5, tier_base), Vector2(tx, tier_top)]), tree_color, pts, cols, polys)
 	_trees.polygon = pts
+	_trees.vertex_colors = cols
 	_trees.polygons = polys
 	_trees.color = tree_color
+
+
+func _add_shape(shape: PackedVector2Array, col: Color, pts: PackedVector2Array, cols: PackedColorArray, polys: Array) -> void:
+	var idx: PackedInt32Array = PackedInt32Array()
+	for p: Vector2 in shape:
+		idx.append(pts.size())
+		pts.append(p)
+		cols.append(col)
+	polys.append(idx)
 
 
 func _build_snow() -> void:

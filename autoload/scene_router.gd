@@ -9,6 +9,7 @@ const TRAIL_SELECT: String = "res://scenes/trail_select/trail_select.tscn"
 const TRAIL_RUNNER: String = "res://scenes/trail_runner/trail_runner.tscn"
 const RESULTS: String = "res://scenes/results/results.tscn"
 const JOURNAL: String = "res://scenes/journal/journal.tscn"
+const SETTINGS: String = "res://scenes/settings/settings.tscn"
 
 ## UI timing, not gameplay tuning, so it stays here instead of balance.tres.
 const FADE_SECONDS: float = 0.25

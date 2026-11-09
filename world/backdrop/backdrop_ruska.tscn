@@ -1,0 +1,54 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://world/backdrop/backdrop.tscn" id="1_base"]
+
+[sub_resource type="Gradient" id="Gradient_ruska_sky"]
+offsets = PackedFloat32Array(0, 0.65, 1)
+colors = PackedColorArray(0.5569, 0.7020, 0.7882, 1.0, 0.7608, 0.8353, 0.8588, 1.0, 0.9216, 0.8667, 0.7843, 1.0)
+
+[sub_resource type="GradientTexture2D" id="Texture_ruska_sky"]
+gradient = SubResource("Gradient_ruska_sky")
+width = 8
+height = 256
+fill_to = Vector2(0, 1)
+
+[node name="BackdropRuska" instance=ExtResource("1_base")]
+
+[node name="Gradient" parent="Sky" index="0"]
+texture = SubResource("Texture_ruska_sky")
+
+[node name="Shape" parent="Clouds" index="0"]
+color = Color(0.97, 0.95, 0.92, 1)
+
+[node name="Shape" parent="Mountains" index="0"]
+color = Color(0.6039, 0.5686, 0.6588, 1.0)
+ridged = false
+amplitude = 190.0
+base_y = 430.0
+octaves = 2
+base_frequency = 2
+haze_amount = 0.45
+snow_line_y = 0.0
+seed_value = 17
+
+[node name="Shape" parent="FarHills" index="0"]
+color = Color(0.7255, 0.5255, 0.3608, 1.0)
+tree_style = 1
+tree_color = Color(0.7882, 0.6275, 0.2902, 1.0)
+tree_count = 45
+tree_height = Vector2(12, 22)
+
+[node name="Shape" parent="MidHills" index="0"]
+color = Color(0.7098, 0.3373, 0.1843, 1.0)
+tree_style = 2
+tree_color = Color(0.2902, 0.3686, 0.2745, 1.0)
+tree_color_alt = Color(0.8784, 0.6627, 0.2314, 1.0)
+tree_count = 50
+tree_height = Vector2(26, 52)
+
+[node name="Shape" parent="Treeline" index="0"]
+color = Color(0.4941, 0.2471, 0.1647, 1.0)
+tree_style = 1
+tree_color = Color(0.8471, 0.5412, 0.1686, 1.0)
+tree_count = 60
+tree_height = Vector2(48, 90)

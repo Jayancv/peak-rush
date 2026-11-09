@@ -1,15 +1,22 @@
 @tool
 class_name PhotoSubject
 extends Node2D
-## The thing worth photographing at a viewpoint: a placeholder bird or boat that
-## moves back and forth along a path. Always moving, so it's visible (and timing
+## The thing worth photographing at a viewpoint: a placeholder bird, boat or
+## walking reindeer that moves back and forth along a path. Always moving, so it's visible (and timing
 ## matters) before the player even opens photo mode.
 
-enum Kind { BIRD, BOAT }
+enum Kind { BIRD, BOAT, REINDEER }
 
 const INK: Color = Color("#2B2D42")
 const BOAT_HULL: Color = Color("#8C3B2A")
 const SAIL: Color = Color("#FFF6E5")
+const FUR: Color = Color("#7A5A43")
+const FUR_DARK: Color = Color("#5C4332")
+const FUR_LIGHT: Color = Color("#D9C7A3")
+const ANTLER: Color = Color("#E8DCC0")
+## Reindeer stride: leg swing (radians) and steps per second at speed 60 px/s.
+const STRIDE: float = 0.5
+const STRIDE_HZ_PER_SPEED: float = 1.6 / 60.0
 const FLAP_HZ: float = 3.0
 const BOB_HZ: float = 0.8
 const BOB_PX: float = 2.0
@@ -38,6 +45,7 @@ var _forward: bool = true
 var _segment: int = 0
 var _body: Node2D
 var _wings: Polygon2D
+var _legs: Array[Node2D] = []
 var _time: float = 0.0
 
 
@@ -56,6 +64,11 @@ func _process(delta: float) -> void:
 		_wings.scale.y = cos(_time * TAU * FLAP_HZ)
 	if kind == Kind.BOAT and _body != null:
 		_body.position.y = sin(_time * TAU * BOB_HZ) * BOB_PX
+	if not _legs.is_empty():
+		# Diagonal pairs move together, like a real walk.
+		var swing: float = sin(_time * TAU * speed * STRIDE_HZ_PER_SPEED) * STRIDE
+		for i: int in _legs.size():
+			_legs[i].rotation = swing if i % 3 == 0 else -swing
 
 
 ## Ping-pongs along the path at constant speed.
@@ -94,6 +107,7 @@ func _rebuild() -> void:
 		return
 	ShapeUtil.clear_internal(self)
 	_wings = null
+	_legs.clear()
 	_body = Node2D.new()
 	_body.scale = Vector2(size, size)
 	add_child(_body, false, Node.INTERNAL_MODE_BACK)
@@ -104,11 +118,39 @@ func _rebuild() -> void:
 			ShapeUtil.add_poly(_body, PackedVector2Array([Vector2(-11, 0), Vector2(-20, -5), Vector2(-20, 5)]), color)
 			_wings = ShapeUtil.add_poly(_body, PackedVector2Array([Vector2(-4, 0), Vector2(6, 0), Vector2(-2, -18)]), color.darkened(0.25))
 			ShapeUtil.add_poly(_body, ShapeUtil.ellipse(Vector2(7, -2), Vector2(4, 3.5), 8), Color("#D9483B") if color != INK else INK)
+		Kind.REINDEER:
+			_build_reindeer()
 		Kind.BOAT:
 			ShapeUtil.add_poly(_body, PackedVector2Array([Vector2(-30, 0), Vector2(30, 0), Vector2(22, 12), Vector2(-24, 12)]), BOAT_HULL)
 			ShapeUtil.add_poly(_body, PackedVector2Array([Vector2(-2, -4), Vector2(-2, -58), Vector2(24, -8)]), SAIL)
 			ShapeUtil.add_poly(_body, PackedVector2Array([Vector2(-6, -4), Vector2(-6, -44), Vector2(-26, -6)]), SAIL)
 			ShapeUtil.add_poly(_body, PackedVector2Array([Vector2(-3, 0), Vector2(-1, 0), Vector2(-1, -60), Vector2(-3, -60)]), INK)
+
+
+## Origin at the hooves; faces right. Legs are pivots so they can swing.
+func _build_reindeer() -> void:
+	for x: float in [16.0, 11.0, -12.0, -17.0]:
+		var leg: Node2D = Node2D.new()
+		leg.position = Vector2(x, -24)
+		_body.add_child(leg, false, Node.INTERNAL_MODE_BACK)
+		ShapeUtil.add_poly(leg, PackedVector2Array([Vector2(-2, 0), Vector2(2, 0), Vector2(1.6, 24), Vector2(-1.6, 24)]), FUR_DARK)
+		_legs.append(leg)
+	ShapeUtil.add_poly(_body, ShapeUtil.ellipse(Vector2(0, -32), Vector2(25, 11), 16), FUR)
+	ShapeUtil.add_poly(_body, ShapeUtil.ellipse(Vector2(2, -25), Vector2(17, 4), 12), FUR_LIGHT)
+	ShapeUtil.add_poly(_body, ShapeUtil.ellipse(Vector2(-24, -36), Vector2(4, 3), 8), FUR_LIGHT)
+	ShapeUtil.add_poly(_body, PackedVector2Array([Vector2(13, -38), Vector2(22, -40), Vector2(30, -56), Vector2(21, -58)]), FUR)
+	ShapeUtil.add_poly(_body, PackedVector2Array([Vector2(15, -36), Vector2(21, -38), Vector2(24, -46), Vector2(18, -44)]), FUR_LIGHT)
+	ShapeUtil.add_poly(_body, ShapeUtil.ellipse(Vector2(31, -57), Vector2(9, 5), 12), FUR)
+	ShapeUtil.add_poly(_body, ShapeUtil.ellipse(Vector2(39, -56), Vector2(2.5, 2), 8), INK)
+	# Antlers: a main beam each side with a couple of tines.
+	for side: float in [0.0, -5.0]:
+		var base: Vector2 = Vector2(28 + side, -61)
+		for seg: PackedVector2Array in [
+			PackedVector2Array([base, base + Vector2(-6, -16), base + Vector2(-4, -17), base + Vector2(2, -1)]),
+			PackedVector2Array([base + Vector2(-3, -8), base + Vector2(4, -14), base + Vector2(5, -12), base + Vector2(-2, -6)]),
+			PackedVector2Array([base + Vector2(-5, -14), base + Vector2(-1, -24), base + Vector2(1, -23), base + Vector2(-3, -13)]),
+		]:
+			ShapeUtil.add_poly(_body, seg, ANTLER)
 
 
 func _notification(what: int) -> void:

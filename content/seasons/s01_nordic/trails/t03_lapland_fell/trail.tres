@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="TrailData" format=3]
+
+[ext_resource type="Script" path="res://data/trail_data.gd" id="1_trail"]
+[ext_resource type="Script" path="res://data/viewpoint_data.gd" id="3_vp"]
+[ext_resource type="Resource" path="res://content/weather/fog.tres" id="2_weather"]
+
+[sub_resource type="Resource" id="Viewpoint_1"]
+script = ExtResource("3_vp")
+id = &"reindeer_herd"
+name_key = "VP_REINDEER"
+
+[sub_resource type="Resource" id="Viewpoint_2"]
+script = ExtResource("3_vp")
+id = &"fell_top"
+name_key = "VP_FELL_TOP"
+
+[resource]
+script = ExtResource("1_trail")
+id = &"t03_lapland_fell"
+name_key = "TRAIL_T03_NAME"
+season_id = &"s01_nordic"
+scene_path = "res://content/seasons/s01_nordic/trails/t03_lapland_fell/trail.tscn"
+length_m = 2400
+daylight_seconds = 130.0
+par_time = 95.0
+weather = ExtResource("2_weather")
+ambience = 3
+viewpoints = Array[ExtResource("3_vp")]([SubResource("Viewpoint_1"), SubResource("Viewpoint_2")])
+unlock_order = 2

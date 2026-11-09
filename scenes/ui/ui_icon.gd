@@ -4,7 +4,7 @@ extends Control
 ## Small vector icons drawn in code, so they look crisp at any size and don't depend
 ## on a font having arrow glyphs (many phone fonts don't).
 
-enum Kind { MOUNTAIN, WALK, JUMP, BACK, PAUSE, CAMERA, STAR, STAR_EMPTY, LOCK }
+enum Kind { MOUNTAIN, WALK, JUMP, BACK, PAUSE, CAMERA, STAR, STAR_EMPTY, LOCK, GEAR }
 
 @export var kind: Kind = Kind.WALK:
 	set(v):
@@ -61,6 +61,14 @@ func _draw() -> void:
 			draw_rect(body, color, true)
 			draw_arc(c + Vector2(0, -s * 0.08), s * 0.2, PI, TAU, 12, color, maxf(s * 0.1, 2.0), true)
 			draw_circle(c + Vector2(0, s * 0.14), s * 0.06, SNOW, true, -1.0, true)
+		Kind.GEAR:
+			var teeth: PackedVector2Array = PackedVector2Array()
+			for i: int in 16:
+				var r: float = s * (0.44 if i % 2 == 0 else 0.32)
+				var a: float = TAU * float(i) / 16.0
+				teeth.append(c + Vector2(cos(a), sin(a)) * r)
+			draw_colored_polygon(teeth, color)
+			draw_circle(c, s * 0.14, SNOW, true, -1.0, true)
 		Kind.CAMERA:
 			var body: Rect2 = Rect2(c + Vector2(-s * 0.42, -s * 0.24), Vector2(s * 0.84, s * 0.58))
 			draw_rect(body, color, true)

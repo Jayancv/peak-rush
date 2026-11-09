@@ -8,7 +8,7 @@
 [ext_resource type="Script" path="res://scenes/ui/ui_icon.gd" id="6_icon"]
 [ext_resource type="FontVariation" path="res://shared_art/title_font.tres" id="7_title"]
 
-[node name="MainMenu" type="Control" node_paths=PackedStringArray("play_button", "journal_button", "backdrop")]
+[node name="MainMenu" type="Control" node_paths=PackedStringArray("play_button", "journal_button", "settings_button", "backdrop")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,6 +19,7 @@ mouse_filter = 2
 script = ExtResource("1_menu")
 play_button = NodePath("SafeArea/VBox/PlayButton")
 journal_button = NodePath("SafeArea/VBox/JournalButton")
+settings_button = NodePath("SafeArea/Corner/SettingsButton")
 backdrop = NodePath("Backdrop")
 
 [node name="Backdrop" parent="." instance=ExtResource("3_backdrop")]
@@ -106,3 +107,30 @@ text = "MENU_JOURNAL"
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 mouse_filter = 2
+
+[node name="Corner" type="HBoxContainer" parent="SafeArea"]
+layout_mode = 2
+size_flags_vertical = 0
+mouse_filter = 2
+alignment = 2
+
+[node name="SettingsButton" type="Button" parent="SafeArea/Corner"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+tooltip_text = "MENU_SETTINGS"
+theme_type_variation = &"IconButton"
+
+[node name="Icon" type="Control" parent="SafeArea/Corner/SettingsButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 14.0
+offset_right = -16.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("6_icon")
+kind = 9
