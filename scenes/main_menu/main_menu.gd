@@ -1,6 +1,6 @@
 extends Control
 ## Title screen: a postcard-style title card over a slowly panning panorama,
-## with the hiker resting on a hill.
+## with the hiker resting on a hill. Play opens trail select.
 
 ## Gentle pan of the scenery behind the menu (px/s at full parallax depth). UI motion, not gameplay.
 const PAN_SPEED: float = 22.0
@@ -11,7 +11,8 @@ const PAN_SPEED: float = 22.0
 
 func _ready() -> void:
 	play_button.pressed.connect(_on_play_pressed)
-	play_button.grab_focus()
+	if not DisplayServer.is_touchscreen_available():
+		play_button.grab_focus()
 	_start_panning()
 
 
@@ -26,7 +27,7 @@ func _start_panning() -> void:
 
 
 func _on_play_pressed() -> void:
-	SceneRouter.go_to(SceneRouter.TRAIL_RUNNER)
+	SceneRouter.go_to(SceneRouter.TRAIL_SELECT)
 
 
 func _notification(what: int) -> void:

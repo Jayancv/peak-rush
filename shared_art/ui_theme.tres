@@ -157,6 +157,48 @@ shadow_color = Color(0.168627, 0.176471, 0.258824, 0.2)
 shadow_size = 18
 shadow_offset = Vector2(0, 8)
 
+[sub_resource type="StyleBoxFlat" id="CardButton_pressed"]
+content_margin_left = 28.0
+content_margin_top = 24.0
+content_margin_right = 28.0
+content_margin_bottom = 24.0
+bg_color = Color(0.94902, 0.909804, 0.823529, 1)
+border_width_top = 4
+border_color = Color(0.878431, 0.811765, 0.686275, 1)
+corner_radius_top_left = 28
+corner_radius_top_right = 28
+corner_radius_bottom_right = 28
+corner_radius_bottom_left = 28
+
+[sub_resource type="StyleBoxFlat" id="CardButton_normal"]
+content_margin_left = 28.0
+content_margin_top = 24.0
+content_margin_right = 28.0
+content_margin_bottom = 28.0
+bg_color = Color(1, 0.964706, 0.898039, 1)
+border_width_bottom = 8
+border_color = Color(0.878431, 0.811765, 0.686275, 1)
+corner_radius_top_left = 28
+corner_radius_top_right = 28
+corner_radius_bottom_right = 28
+corner_radius_bottom_left = 28
+shadow_color = Color(0.168627, 0.176471, 0.258824, 0.2)
+shadow_size = 14
+shadow_offset = Vector2(0, 6)
+
+[sub_resource type="StyleBoxFlat" id="CardButton_disabled"]
+content_margin_left = 28.0
+content_margin_top = 24.0
+content_margin_right = 28.0
+content_margin_bottom = 28.0
+bg_color = Color(0.878431, 0.85098, 0.8, 0.92)
+border_width_bottom = 8
+border_color = Color(0.756863, 0.721569, 0.65098, 1)
+corner_radius_top_left = 28
+corner_radius_top_right = 28
+corner_radius_bottom_right = 28
+corner_radius_bottom_left = 28
+
 [sub_resource type="StyleBoxEmpty" id="Empty"]
 
 [resource]
@@ -169,6 +211,12 @@ Button/styles/normal = SubResource("Button_normal")
 Button/styles/hover = SubResource("Button_hover")
 Button/styles/pressed = SubResource("Button_pressed")
 Button/styles/focus = SubResource("Button_focus")
+CardButton/base_type = &"Button"
+CardButton/styles/disabled = SubResource("CardButton_disabled")
+CardButton/styles/focus = SubResource("Button_focus")
+CardButton/styles/hover = SubResource("CardButton_normal")
+CardButton/styles/normal = SubResource("CardButton_normal")
+CardButton/styles/pressed = SubResource("CardButton_pressed")
 CardPanel/base_type = &"PanelContainer"
 CardPanel/styles/panel = SubResource("Card_panel")
 IconButton/base_type = &"Button"

@@ -85,20 +85,35 @@ docs/                GAME_DESIGN.md, PLAN.md
 - At the end of each session, update **Current status** below and tick the boxes in `docs/PLAN.md`.
 
 ## Current status
-- Milestone: **M1 – built, tests green, running on Pixel 7 Pro; awaiting user playtest (60 fps / feel)**. M0 done. Next: M2.
+- Milestone: **M3 – built, 124 tests green, on Pixel 7 Pro; awaiting user check that progress survives an app restart on the phone**. M0–M2 done. Next: M4.
 - Godot 4.7.2-stable (not on PATH; ask the user for the executable path if unknown); GUT 9.7.1.
 - Notes: Autoloads are stubs except SceneRouter (fade + `go_to`, scene path consts `MAIN_MENU`/`TRAIL_RUNNER`).
   `scenes/ui/safe_area_margin.gd` (`SafeAreaMargin`) wraps screen UI. Global theme: `shared_art/ui_theme.tres`.
   `quit_on_go_back=false`: each screen handles `NOTIFICATION_WM_GO_BACK_REQUEST` itself.
   Trail runner's Esc/back returns to the menu until the M2 pause menu exists.
   M1: `Balance` resource started early (movement/camera/feel numbers only; M2 adds stamina etc.), loaded as `ContentDB.balance`.
-  Dev level `content/_dev/test_hills/trail.tscn` is wired into trail_runner via an exported PackedScene (M3 replaces with TrailData).
   TerrainStrip extends Line2D (edit points in the 2D editor); generated fill/body are INTERNAL children (not saved).
   Hiker states are RefCounted classes in actors/hiker/states/, returning Hiker.STAY or the next state.
   Visual pass (after M1): `world/backdrop/backdrop.tscn` (sky CanvasLayer + Parallax2D layers built by @tool RidgeLayer/CloudLayer,
   repeat_size.x must equal the layer `width`); each trail scene instances its own Backdrop (M5 makes per-trail palettes).
   Hiker art/animation lives in `actors/hiker/hiker_visual.gd` (HikerVisual). UI icons are drawn in code by `scenes/ui/ui_icon.gd`
   (phone fonts may lack arrow glyphs). Theme variations: PrimaryButton, IconButton, CardPanel. Title font: `shared_art/title_font.tres`.
+  M2: Hiker owns a `HikerCondition` (stamina + wet feet/bench/patch effects + dusk); obstacles call Hiker methods
+  (stumble, fall_out, touch_checkpoint, reach_finish, condition.enter_patch...), Hiker emits signals, TrailRunner listens.
+  Obstacles/interactables extend `HikerArea` (@tool, build() makes art + shapes as INTERNAL children via `ShapeUtil`).
+  No stamina regen during the forced EXHAUSTED rest (else the 50%-speed recovery never happens).
+  Hiker ignores input on its first physics tick (a same-frame tap still reads as just_pressed).
+  `SceneRouter.cover(callable)` = fade for in-scene jumps (respawn); it does not block touches.
+  Day tint: CanvasModulate for the world; the sky (own CanvasLayer) takes a softened tint + horizon glow via `Backdrop.set_daylight`.
+  Trail runner pauses on app focus-out.
+  M3: flow = menu -> trail_select -> trail_runner (reads `GameState.current_trail_id`, falls back to first trail) -> results.
+  Season 1 has t01 Forest Lake Loop (the old dev test level) and t02 Archipelago Rocks (placeholders until M6).
+  TrailData.scene_path is a path string (not PackedScene) so menus don't load levels and the validator can report missing files.
+  `ContentValidator` (systems/) instantiates levels; tests run it over the whole index + the template.
+  Saves: `SaveService` writes via .tmp + .bak swap; bad JSON is moved to `save.corrupt-<time>.json`; under GUT it uses
+  `user://save_test.json` and autosave is off. Format changes: bump SAVE_VERSION + add a step in `systems/save_migrations.gd` + a test.
+  Stars are a bitmask (StarRating.STAR_*); a trail with 0 viewpoints grants the photo star until M4 adds viewpoints.
+  `.tres` typed arrays of custom resources use `Array[ExtResource("<script id>")]([...])`.
   Buttons over the play area must join group `touch_blocker`. Physics interpolation is on: use `Hiker.teleport()` to move instantly.
   On this machine, git over HTTPS needs `-c http.sslBackend=schannel`.
   Android: SDK at `%LOCALAPPDATA%\Android\Sdk` (installed with the new `android sdk install pkg/ver` CLI; `sdkmanager` is deprecated),

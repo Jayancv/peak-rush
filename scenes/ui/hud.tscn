@@ -1,0 +1,180 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/hud.gd" id="1_hud"]
+[ext_resource type="Script" path="res://scenes/ui/safe_area_margin.gd" id="2_safe"]
+[ext_resource type="Script" path="res://scenes/ui/ui_icon.gd" id="3_icon"]
+[ext_resource type="Script" path="res://scenes/ui/stamina_bar.gd" id="4_bar"]
+[ext_resource type="Script" path="res://scenes/ui/sun_arc.gd" id="5_sun"]
+
+[sub_resource type="StyleBoxFlat" id="Badge"]
+content_margin_left = 10.0
+content_margin_top = 2.0
+content_margin_right = 10.0
+content_margin_bottom = 2.0
+bg_color = Color(0.486275, 0.768627, 0.498039, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="Pill"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 18.0
+content_margin_bottom = 10.0
+bg_color = Color(1, 0.964706, 0.898039, 0.88)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+shadow_color = Color(0.168627, 0.176471, 0.258824, 0.12)
+shadow_size = 6
+shadow_offset = Vector2(0, 3)
+
+[node name="Hud" type="Control" node_paths=PackedStringArray("stamina_bar", "sun_arc", "photo_label", "pause_button", "toast", "toast_label", "boost_badge")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_hud")
+stamina_bar = NodePath("SafeArea/Column/Top/StaminaPill/Row/Bar")
+sun_arc = NodePath("SafeArea/Column/Top/SunPill/Arc")
+photo_label = NodePath("SafeArea/Column/Top/PhotoPill/Row/Count")
+pause_button = NodePath("SafeArea/Column/Top/PauseButton")
+toast = NodePath("SafeArea/Column/Toast")
+toast_label = NodePath("SafeArea/Column/Toast/Label")
+boost_badge = NodePath("SafeArea/Column/Top/StaminaPill/Row/Boost")
+
+[node name="SafeArea" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_safe")
+
+[node name="Column" type="VBoxContainer" parent="SafeArea"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 18
+
+[node name="Top" type="HBoxContainer" parent="SafeArea/Column"]
+layout_mode = 2
+size_flags_vertical = 0
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="PauseButton" type="Button" parent="SafeArea/Column/Top" groups=["touch_blocker"]]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+tooltip_text = "HUD_PAUSE"
+theme_type_variation = &"IconButton"
+
+[node name="Icon" type="Control" parent="SafeArea/Column/Top/PauseButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 18.0
+offset_right = -20.0
+offset_bottom = -22.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("3_icon")
+kind = 4
+
+[node name="StaminaPill" type="PanelContainer" parent="SafeArea/Column/Top"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Pill")
+
+[node name="Row" type="HBoxContainer" parent="SafeArea/Column/Top/StaminaPill"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="SafeArea/Column/Top/StaminaPill/Row"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "HUD_STAMINA"
+
+[node name="Bar" type="Control" parent="SafeArea/Column/Top/StaminaPill/Row"]
+custom_minimum_size = Vector2(240, 26)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("4_bar")
+
+[node name="Boost" type="PanelContainer" parent="SafeArea/Column/Top/StaminaPill/Row"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Badge")
+
+[node name="Label" type="Label" parent="SafeArea/Column/Top/StaminaPill/Row/Boost"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "HUD_BOOST"
+
+[node name="Spacer" type="Control" parent="SafeArea/Column/Top"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="PhotoPill" type="PanelContainer" parent="SafeArea/Column/Top"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Pill")
+
+[node name="Row" type="HBoxContainer" parent="SafeArea/Column/Top/PhotoPill"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="Icon" type="Control" parent="SafeArea/Column/Top/PhotoPill/Row"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("3_icon")
+kind = 5
+
+[node name="Count" type="Label" parent="SafeArea/Column/Top/PhotoPill/Row"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "0/0"
+
+[node name="SunPill" type="PanelContainer" parent="SafeArea/Column/Top"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Pill")
+
+[node name="Arc" type="Control" parent="SafeArea/Column/Top/SunPill"]
+custom_minimum_size = Vector2(104, 52)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("5_sun")
+
+[node name="Toast" type="PanelContainer" parent="SafeArea/Column"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Pill")
+
+[node name="Label" type="Label" parent="SafeArea/Column/Toast"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "TOAST_CHECKPOINT"
+horizontal_alignment = 1

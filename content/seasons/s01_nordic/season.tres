@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SeasonData" format=3]
+
+[ext_resource type="Script" path="res://data/season_data.gd" id="1_season"]
+[ext_resource type="Script" path="res://data/trail_data.gd" id="2_trail_script"]
+[ext_resource type="Resource" path="res://content/seasons/s01_nordic/trails/t01_forest_lake/trail.tres" id="3_t01"]
+[ext_resource type="Resource" path="res://content/seasons/s01_nordic/trails/t02_archipelago_rocks/trail.tres" id="4_t02"]
+
+[resource]
+script = ExtResource("1_season")
+id = &"s01_nordic"
+title_key = "SEASON_S01_TITLE"
+theme_color = Color(0.368627, 0.54902, 0.478431, 1)
+release_version = "1.0.0"
+trails = Array[ExtResource("2_trail_script")]([ExtResource("3_t01"), ExtResource("4_t02")])

@@ -5,3 +5,42 @@ MENU_PLAY,Play
 TOUCH_HINT_WALK,Hold to walk
 TOUCH_HINT_JUMP,Tap to jump
 COMMON_BACK,Back
+HUD_PAUSE,Pause
+HUD_STAMINA,Energy
+TOAST_CHECKPOINT,Checkpoint reached
+TOAST_BENCH,Bench! Rest here to recover twice as fast
+BENCH_HINT,Rest ×2
+HUD_BOOST,×2
+TOAST_EXHAUSTED,Exhausted! Rest to recover
+TOAST_DUSK,Dusk falls - headlamp on
+PAUSE_TITLE,Paused
+PAUSE_RESUME,Resume
+PAUSE_RESTART,Restart trail
+PAUSE_QUIT,Quit to menu
+SETTING_VIBRATION_ON,Vibration: On
+SETTING_VIBRATION_OFF,Vibration: Off
+SEASON_S01_TITLE,Nordic Trails
+TRAIL_T01_NAME,Forest Lake Loop
+TRAIL_T02_NAME,Archipelago Rocks
+TRAIL_TEMPLATE_NAME,Template Trail
+WEATHER_CLEAR,Clear
+WEATHER_WINDY,Windy
+HUD_TP,%d TP
+SELECT_TITLE,Choose a trail
+SELECT_LOCKED,Finish %s first
+SELECT_BEST,Best %s
+SELECT_NOT_HIKED,Not hiked yet
+RESULTS_TITLE,Summit!
+RESULTS_STAR_SUMMIT,Summit
+RESULTS_STAR_PHOTOS,Every photo
+RESULTS_STAR_DUSK,Before dusk
+RESULTS_NEW,New!
+RESULTS_TIME,Time %s
+RESULTS_PAR,Par %s
+RESULTS_NEW_BEST,New best!
+RESULTS_TP_FINISH,Finish +%d
+RESULTS_TP_STARS,New stars +%d
+RESULTS_TP_PHOTOS,Photos +%d
+RESULTS_NEXT,Next trail
+RESULTS_REPLAY,Replay
+RESULTS_TRAILS,Trails

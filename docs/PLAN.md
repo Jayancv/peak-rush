@@ -70,35 +70,35 @@ Claude Code ticks `[x]` as tasks finish and updates "Current status" in `CLAUDE.
 ---
 
 ## M2 — Hiking systems
-- [ ] `content/balance.tres` (`Balance` resource) holding every number from GAME_DESIGN §5
-- [ ] `systems/stamina.gd`: drain, regen, exhaustion and recovery threshold, with tests
-- [ ] `systems/daylight.gd`: timer, day phase (morning, midday, golden, dusk) and tint colour, with tests
-- [ ] Hook both into the hiker: exhausted state, dusk headlamp (a simple light-cone sprite), speed penalties
-- [ ] Obstacles as scenes in `world/obstacles/`: root, rock, mud patch, ice patch, gap plus `KillZone`, stepping stones
-- [ ] Interactables: bench, checkpoint (trail marker), finish (summit cairn)
-- [ ] Respawn at the last checkpoint after a fall (−15 stamina, short fade)
-- [ ] **HUD:** stamina bar (pulses when low), sun arc, photo counter, pause button, all inside the safe area
-- [ ] Pause menu (resume, restart, quit to menu); the Android back button opens it
-- [ ] Vibration on stumble (`Input.vibrate_handheld`), with a setting to turn it off
+- [x] `content/balance.tres` (`Balance` resource) holding every number from GAME_DESIGN §5
+- [x] `systems/stamina.gd`: drain, regen, exhaustion and recovery threshold, with tests
+- [x] `systems/daylight.gd`: timer, day phase (morning, midday, golden, dusk) and tint colour, with tests
+- [x] Hook both into the hiker: exhausted state, dusk headlamp (a simple light-cone sprite), speed penalties
+- [x] Obstacles as scenes in `world/obstacles/`: root, rock, mud patch, ice patch, gap plus `KillZone`, stepping stones
+- [x] Interactables: bench, checkpoint (trail marker), finish (summit cairn)
+- [x] Respawn at the last checkpoint after a fall (−15 stamina, short fade)
+- [x] **HUD:** stamina bar (pulses when low), sun arc, photo counter, pause button, all inside the safe area
+- [x] Pause menu (resume, restart, quit to menu); the Android back button opens it
+- [x] Vibration on stumble (`Input.vibrate_handheld`), with a setting to turn it off
 
 **Done when:** a 2–3 minute test trail can be completed, and choosing when to rest feels like a real decision.
 
 ---
 
 ## M3 — Data-driven trails, game flow and saving
-- [ ] Resource classes in `data/`:
+- [x] Resource classes in `data/`:
   - `TrailData` (id, name_key, season_id, scene, length_m, daylight_seconds, par_time, weather, viewpoints[], postcard art, unlock order)
   - `SeasonData` (id, title_key, theme colour, banner, release_version, trails[])
   - `ViewpointData`, `WeatherProfile`, `GearData`, `ContentIndex`
-- [ ] `ContentDB` autoload: loads `content_index.tres` and offers lookup helpers
-- [ ] **Content validator** (`ContentDB.validate() -> Array[String]` errors): unique IDs, trail scenes exist, every scene has a Trailhead and a Finish, viewpoint IDs in the scene match the data. It's run by a test, so broken content can never ship.
-- [ ] `content/_templates/trail_template/` (a minimal valid trail to copy)
-- [ ] `scenes/trail_runner/`: loads a trail scene, spawns the hiker at the `Trailhead` marker, applies weather and daylight, handles finish and respawn
-- [ ] `systems/star_rating.gd` and TP calculation, with tests
-- [ ] **Results screen:** stars animate in, TP counts up, the stamp lands
-- [ ] `SaveService`: JSON at `user://save.json`, `save_version`, migration chain, corrupt-file fallback (back up the bad file and start fresh), with tests
-- [ ] `GameState`: unlocked trails, stars, best times, best photo quality, TP, owned and equipped gear, settings
-- [ ] **Trail select:** a tab per season, trail cards with stars and lock state
+- [x] `ContentDB` autoload: loads `content_index.tres` and offers lookup helpers
+- [x] **Content validator** (`ContentDB.validate() -> Array[String]` errors): unique IDs, trail scenes exist, every scene has a Trailhead and a Finish, viewpoint IDs in the scene match the data. It's run by a test, so broken content can never ship.
+- [x] `content/_templates/trail_template/` (a minimal valid trail to copy)
+- [x] `scenes/trail_runner/`: loads a trail scene, spawns the hiker at the `Trailhead` marker, applies weather and daylight, handles finish and respawn
+- [x] `systems/star_rating.gd` and TP calculation, with tests
+- [x] **Results screen:** stars animate in, TP counts up, the stamp lands
+- [x] `SaveService`: JSON at `user://save.json`, `save_version`, migration chain, corrupt-file fallback (back up the bad file and start fresh), with tests
+- [x] `GameState`: unlocked trails, stars, best times, best photo quality, TP, owned and equipped gear, settings
+- [x] **Trail select:** a tab per season, trail cards with stars and lock state
 
 **Done when:** you can go menu → choose trail → hike → results, and progress survives closing and reopening the app.
 

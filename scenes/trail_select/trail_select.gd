@@ -1,0 +1,93 @@
+extends Control
+## Pick a trail: one tab per season, a scrolling row of trail cards per tab.
+## Everything is built from ContentDB, so a new season shows up here without code changes.
+
+const CARD_SCENE: PackedScene = preload("res://scenes/trail_select/trail_card.tscn")
+
+@export var tabs: HBoxContainer
+@export var cards: HBoxContainer
+@export var scroll: ScrollContainer
+@export var back_button: Button
+@export var tp_label: Label
+@export var stars_label: Label
+
+var _season: SeasonData
+
+
+func _ready() -> void:
+	back_button.pressed.connect(_go_back)
+	tp_label.text = tr("HUD_TP") % GameState.tp
+	stars_label.text = str(GameState.total_stars())
+	var current: TrailData = ContentDB.get_trail(GameState.current_trail_id)
+	var start: SeasonData = ContentDB.get_season(current.season_id) if current != null else null
+	if start == null and not ContentDB.seasons().is_empty():
+		start = ContentDB.seasons()[0]
+	_build_tabs()
+	if start != null:
+		show_season(start)
+
+
+func show_season(season: SeasonData) -> void:
+	_season = season
+	for tab: Node in tabs.get_children():
+		var button: Button = tab as Button
+		var active: bool = button.get_meta("season_id") == season.id
+		button.theme_type_variation = &"PrimaryButton" if active else &""
+	for old: Node in cards.get_children():
+		old.queue_free()
+	var focus_card: TrailCard = null
+	var list: Array[TrailData] = season.ordered_trails()
+	for i: int in list.size():
+		var trail: TrailData = list[i]
+		var card: TrailCard = CARD_SCENE.instantiate() as TrailCard
+		cards.add_child(card)
+		var previous: TrailData = ContentDB.previous_trail(trail.id)
+		var hint: String = tr("SELECT_LOCKED") % tr(previous.name_key) if previous != null else ""
+		var unlocked: bool = GameState.is_unlocked(trail)
+		card.setup(i + 1, trail, GameState.record(trail.id), unlocked, season.theme_color, hint)
+		card.pressed.connect(_start.bind(trail))
+		# Scroll to the first open trail not finished yet (where the player left off).
+		if focus_card == null and unlocked and not GameState.is_completed(trail.id):
+			focus_card = card
+	if focus_card != null:
+		_scroll_to.call_deferred(focus_card)
+
+
+## Number of trail cards shown (for tests).
+func card_count() -> int:
+	return cards.get_child_count()
+
+
+func _build_tabs() -> void:
+	for season: SeasonData in ContentDB.seasons():
+		var tab: Button = Button.new()
+		tab.text = tr(season.title_key)
+		tab.custom_minimum_size = Vector2(0, 68)
+		tab.add_theme_font_size_override("font_size", 26)
+		tab.set_meta("season_id", season.id)
+		tab.pressed.connect(show_season.bind(season))
+		tabs.add_child(tab)
+
+
+func _scroll_to(card: Control) -> void:
+	scroll.ensure_control_visible(card)
+
+
+func _start(trail: TrailData) -> void:
+	GameState.current_trail_id = trail.id
+	SceneRouter.go_to(SceneRouter.TRAIL_RUNNER)
+
+
+func _go_back() -> void:
+	SceneRouter.go_to(SceneRouter.MAIN_MENU)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("pause"):
+		get_viewport().set_input_as_handled()
+		_go_back()
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_GO_BACK_REQUEST:
+		_go_back()

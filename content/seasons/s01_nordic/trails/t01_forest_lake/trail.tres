@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="TrailData" format=3]
+
+[ext_resource type="Script" path="res://data/trail_data.gd" id="1_trail"]
+[ext_resource type="Resource" path="res://content/weather/clear.tres" id="2_weather"]
+
+[resource]
+script = ExtResource("1_trail")
+id = &"t01_forest_lake"
+name_key = "TRAIL_T01_NAME"
+season_id = &"s01_nordic"
+scene_path = "res://content/seasons/s01_nordic/trails/t01_forest_lake/trail.tscn"
+length_m = 3200
+daylight_seconds = 110.0
+par_time = 80.0
+weather = ExtResource("2_weather")
+unlock_order = 0

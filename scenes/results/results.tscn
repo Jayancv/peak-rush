@@ -1,0 +1,268 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/results/results.gd" id="1_results"]
+[ext_resource type="PackedScene" path="res://world/backdrop/backdrop.tscn" id="2_backdrop"]
+[ext_resource type="Script" path="res://scenes/results/stamp.gd" id="3_stamp"]
+[ext_resource type="Script" path="res://scenes/ui/ui_icon.gd" id="4_icon"]
+[ext_resource type="FontVariation" path="res://shared_art/title_font.tres" id="5_title"]
+
+[sub_resource type="StyleBoxFlat" id="BestTag"]
+content_margin_left = 12.0
+content_margin_top = 2.0
+content_margin_right = 12.0
+content_margin_bottom = 4.0
+bg_color = Color(0.486275, 0.768627, 0.498039, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[node name="Results" type="Control" node_paths=PackedStringArray("trail_label", "stars", "star_tags", "time_label", "best_tag", "par_label", "tp_breakdown", "tp_total", "stamp", "card", "next_button", "replay_button", "trails_button")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_results")
+trail_label = NodePath("Layer/Center/Card/VBox/Trail")
+stars = [NodePath("Layer/Center/Card/VBox/Stars/Slot1/Star"), NodePath("Layer/Center/Card/VBox/Stars/Slot2/Star"), NodePath("Layer/Center/Card/VBox/Stars/Slot3/Star")]
+star_tags = [NodePath("Layer/Center/Card/VBox/Stars/Slot1/New"), NodePath("Layer/Center/Card/VBox/Stars/Slot2/New"), NodePath("Layer/Center/Card/VBox/Stars/Slot3/New")]
+time_label = NodePath("Layer/Center/Card/VBox/Stats/Time")
+best_tag = NodePath("Layer/Center/Card/VBox/Stats/Best")
+par_label = NodePath("Layer/Center/Card/VBox/Stats/Par")
+tp_breakdown = NodePath("Layer/Center/Card/VBox/Points/Breakdown")
+tp_total = NodePath("Layer/Center/Card/VBox/Points/Total")
+stamp = NodePath("Layer/Stamp")
+card = NodePath("Layer")
+next_button = NodePath("Layer/Center/Card/VBox/Buttons/Next")
+replay_button = NodePath("Layer/Center/Card/VBox/Buttons/Replay")
+trails_button = NodePath("Layer/Center/Card/VBox/Buttons/Trails")
+
+[node name="Backdrop" parent="." instance=ExtResource("2_backdrop")]
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.168627, 0.176471, 0.258824, 0.3)
+
+[node name="Layer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Center" type="CenterContainer" parent="Layer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Card" type="PanelContainer" parent="Layer/Center"]
+custom_minimum_size = Vector2(720, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"CardPanel"
+
+[node name="VBox" type="VBoxContainer" parent="Layer/Center/Card"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="Layer/Center/Card/VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_title")
+theme_override_font_sizes/font_size = 60
+text = "RESULTS_TITLE"
+horizontal_alignment = 1
+
+[node name="Trail" type="Label" parent="Layer/Center/Card/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.721569, 0.262745, 0.172549, 1)
+theme_override_font_sizes/font_size = 28
+text = "TRAIL_T01_NAME"
+horizontal_alignment = 1
+
+[node name="Stars" type="HBoxContainer" parent="Layer/Center/Card/VBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 36
+alignment = 1
+
+[node name="Slot1" type="VBoxContainer" parent="Layer/Center/Card/VBox/Stars"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Star" type="Control" parent="Layer/Center/Card/VBox/Stars/Slot1"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+script = ExtResource("4_icon")
+kind = 7
+
+[node name="Caption" type="Label" parent="Layer/Center/Card/VBox/Stars/Slot1"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "RESULTS_STAR_SUMMIT"
+horizontal_alignment = 1
+
+[node name="New" type="Label" parent="Layer/Center/Card/VBox/Stars/Slot1"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.180392, 0.490196, 0.309804, 1)
+theme_override_font_sizes/font_size = 20
+text = "RESULTS_NEW"
+horizontal_alignment = 1
+
+[node name="Slot2" type="VBoxContainer" parent="Layer/Center/Card/VBox/Stars"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Star" type="Control" parent="Layer/Center/Card/VBox/Stars/Slot2"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+script = ExtResource("4_icon")
+kind = 7
+
+[node name="Caption" type="Label" parent="Layer/Center/Card/VBox/Stars/Slot2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "RESULTS_STAR_PHOTOS"
+horizontal_alignment = 1
+
+[node name="New" type="Label" parent="Layer/Center/Card/VBox/Stars/Slot2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.180392, 0.490196, 0.309804, 1)
+theme_override_font_sizes/font_size = 20
+text = "RESULTS_NEW"
+horizontal_alignment = 1
+
+[node name="Slot3" type="VBoxContainer" parent="Layer/Center/Card/VBox/Stars"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Star" type="Control" parent="Layer/Center/Card/VBox/Stars/Slot3"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+script = ExtResource("4_icon")
+kind = 7
+
+[node name="Caption" type="Label" parent="Layer/Center/Card/VBox/Stars/Slot3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "RESULTS_STAR_DUSK"
+horizontal_alignment = 1
+
+[node name="New" type="Label" parent="Layer/Center/Card/VBox/Stars/Slot3"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.180392, 0.490196, 0.309804, 1)
+theme_override_font_sizes/font_size = 20
+text = "RESULTS_NEW"
+horizontal_alignment = 1
+
+[node name="Stats" type="HBoxContainer" parent="Layer/Center/Card/VBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 18
+alignment = 1
+
+[node name="Time" type="Label" parent="Layer/Center/Card/VBox/Stats"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "RESULTS_TIME"
+
+[node name="Best" type="PanelContainer" parent="Layer/Center/Card/VBox/Stats"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("BestTag")
+
+[node name="Label" type="Label" parent="Layer/Center/Card/VBox/Stats/Best"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "RESULTS_NEW_BEST"
+
+[node name="Par" type="Label" parent="Layer/Center/Card/VBox/Stats"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.168627, 0.176471, 0.258824, 0.6)
+theme_override_font_sizes/font_size = 24
+text = "RESULTS_PAR"
+
+[node name="Points" type="HBoxContainer" parent="Layer/Center/Card/VBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 40
+alignment = 1
+
+[node name="Breakdown" type="Label" parent="Layer/Center/Card/VBox/Points"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0.168627, 0.176471, 0.258824, 0.75)
+theme_override_font_sizes/font_size = 22
+text = "RESULTS_TP_FINISH"
+horizontal_alignment = 2
+
+[node name="Total" type="Label" parent="Layer/Center/Card/VBox/Points"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0.721569, 0.262745, 0.172549, 1)
+theme_override_fonts/font = ExtResource("5_title")
+theme_override_font_sizes/font_size = 48
+text = "HUD_TP"
+
+[node name="Buttons" type="HBoxContainer" parent="Layer/Center/Card/VBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Trails" type="Button" parent="Layer/Center/Card/VBox/Buttons"]
+custom_minimum_size = Vector2(180, 80)
+layout_mode = 2
+text = "RESULTS_TRAILS"
+
+[node name="Replay" type="Button" parent="Layer/Center/Card/VBox/Buttons"]
+custom_minimum_size = Vector2(180, 80)
+layout_mode = 2
+text = "RESULTS_REPLAY"
+
+[node name="Next" type="Button" parent="Layer/Center/Card/VBox/Buttons"]
+custom_minimum_size = Vector2(240, 80)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+theme_override_fonts/font = ExtResource("5_title")
+text = "RESULTS_NEXT"
+
+[node name="Stamp" type="Control" parent="Layer"]
+layout_mode = 1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 230.0
+offset_top = -320.0
+offset_right = 420.0
+offset_bottom = -130.0
+rotation = -0.21
+mouse_filter = 2
+script = ExtResource("3_stamp")

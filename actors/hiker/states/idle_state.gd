@@ -1,10 +1,10 @@
 class_name HikerIdleState
 extends HikerState
-## Just stopped. After a short pause this becomes Rest (where stamina will refill in M2).
+## Just stopped (stamina already refills). After a short pause this becomes Rest.
 
 
 func physics_update(delta: float) -> int:
-	hiker.stop_horizontal(hiker.balance.walk_decel, delta)
+	hiker.ground_stop(hiker.balance.walk_decel, delta)
 	hiker.apply_gravity(delta)
 	var common: int = hiker.grounded_transition()
 	if common != Hiker.STAY:

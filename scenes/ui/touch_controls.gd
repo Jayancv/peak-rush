@@ -13,7 +13,7 @@ const HINT_ACTIVE_ALPHA: float = 0.8
 @export var left_handed: bool = false:
 	set(value):
 		left_handed = value
-		_release_all()
+		release_all()
 		_update_hints()
 @export var left_hint: Control
 @export var left_hint_label: Label
@@ -34,13 +34,13 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
-	_release_all()
+	release_all()
 
 
 func _notification(what: int) -> void:
 	# A finger lifted while the app was in the background would otherwise leave walk stuck on.
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT or what == NOTIFICATION_APPLICATION_PAUSED:
-		_release_all()
+		release_all()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -78,7 +78,8 @@ func _is_over_blocker(pos: Vector2) -> bool:
 	return false
 
 
-func _release_all() -> void:
+## Lets go of every held action, e.g. when a menu opens over the game.
+func release_all() -> void:
 	for action: StringName in _fingers.values():
 		Input.action_release(action)
 	_fingers.clear()

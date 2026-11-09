@@ -2,10 +2,21 @@
 
 [ext_resource type="Script" path="res://world/backdrop/ridge_layer.gd" id="1_ridge"]
 [ext_resource type="Script" path="res://world/backdrop/cloud_layer.gd" id="2_cloud"]
+[ext_resource type="Script" path="res://world/backdrop/backdrop.gd" id="3_backdrop"]
 
 [sub_resource type="Gradient" id="Gradient_sky"]
 offsets = PackedFloat32Array(0, 0.65, 1)
 colors = PackedColorArray(0.4588, 0.7255, 0.8667, 1, 0.6588, 0.8471, 0.9176, 1, 0.8667, 0.9373, 0.9451, 1)
+
+[sub_resource type="Gradient" id="Gradient_glow"]
+offsets = PackedFloat32Array(0, 0.55, 1)
+colors = PackedColorArray(1, 0.72, 0.45, 0, 1, 0.66, 0.42, 0.45, 1, 0.58, 0.4, 0.8)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_glow"]
+gradient = SubResource("Gradient_glow")
+width = 8
+height = 256
+fill_to = Vector2(0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_sky"]
 gradient = SubResource("Gradient_sky")
@@ -13,7 +24,11 @@ width = 8
 height = 256
 fill_to = Vector2(0, 1)
 
-[node name="Backdrop" type="Node2D"]
+[node name="Backdrop" type="Node2D" node_paths=PackedStringArray("sky", "sun_anchor", "horizon_glow")]
+script = ExtResource("3_backdrop")
+sky = NodePath("Sky/Gradient")
+sun_anchor = NodePath("Sky/SunAnchor")
+horizon_glow = NodePath("Sky/Glow")
 
 [node name="Sky" type="CanvasLayer" parent="."]
 layer = -100
@@ -26,6 +41,17 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_sky")
+expand_mode = 1
+
+[node name="Glow" type="TextureRect" parent="Sky"]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_glow")
 expand_mode = 1
 
 [node name="SunAnchor" type="Control" parent="Sky"]

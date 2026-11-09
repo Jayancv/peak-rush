@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="TrailData" format=3]
+
+[ext_resource type="Script" path="res://data/trail_data.gd" id="1_trail"]
+[ext_resource type="Resource" path="res://content/weather/windy.tres" id="2_weather"]
+
+[resource]
+script = ExtResource("1_trail")
+id = &"t02_archipelago_rocks"
+name_key = "TRAIL_T02_NAME"
+season_id = &"s01_nordic"
+scene_path = "res://content/seasons/s01_nordic/trails/t02_archipelago_rocks/trail.tscn"
+length_m = 1600
+daylight_seconds = 70.0
+par_time = 45.0
+weather = ExtResource("2_weather")
+unlock_order = 1

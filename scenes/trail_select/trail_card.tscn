@@ -1,0 +1,117 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/trail_select/trail_card.gd" id="1_card"]
+[ext_resource type="Script" path="res://scenes/ui/ui_icon.gd" id="2_icon"]
+[ext_resource type="FontVariation" path="res://shared_art/title_font.tres" id="3_title"]
+
+[node name="TrailCard" type="Button" node_paths=PackedStringArray("number_label", "name_label", "detail_label", "stars", "lock_row", "lock_label", "theme_strip")]
+custom_minimum_size = Vector2(300, 340)
+theme_type_variation = &"CardButton"
+script = ExtResource("1_card")
+number_label = NodePath("VBox/Top/Number")
+name_label = NodePath("VBox/Name")
+detail_label = NodePath("VBox/Detail")
+stars = [NodePath("VBox/Stars/Star1"), NodePath("VBox/Stars/Star2"), NodePath("VBox/Stars/Star3")]
+lock_row = NodePath("VBox/Lock")
+lock_label = NodePath("VBox/Lock/Label")
+theme_strip = NodePath("VBox/Top/Strip")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 26.0
+offset_top = 22.0
+offset_right = -26.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="Top" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="Number" type="Label" parent="VBox/Top"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.721569, 0.262745, 0.172549, 1)
+theme_override_fonts/font = ExtResource("3_title")
+theme_override_font_sizes/font_size = 44
+text = "1"
+
+[node name="Strip" type="ColorRect" parent="VBox/Top"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 2
+color = Color(0.368627, 0.54902, 0.478431, 1)
+
+[node name="Name" type="Label" parent="VBox"]
+custom_minimum_size = Vector2(0, 92)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_title")
+theme_override_font_sizes/font_size = 34
+text = "TRAIL_T01_NAME"
+autowrap_mode = 2
+
+[node name="Stars" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Star1" type="Control" parent="VBox/Stars"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_icon")
+kind = 7
+
+[node name="Star2" type="Control" parent="VBox/Stars"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_icon")
+kind = 7
+
+[node name="Star3" type="Control" parent="VBox/Stars"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_icon")
+kind = 7
+
+[node name="Spacer" type="Control" parent="VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="Detail" type="Label" parent="VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.168627, 0.176471, 0.258824, 0.7)
+theme_override_font_sizes/font_size = 24
+text = "SELECT_NOT_HIKED"
+
+[node name="Lock" type="HBoxContainer" parent="VBox"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="Icon" type="Control" parent="VBox/Lock"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("2_icon")
+kind = 8
+
+[node name="Label" type="Label" parent="VBox/Lock"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+text = "SELECT_LOCKED"
+autowrap_mode = 2

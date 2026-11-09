@@ -1,0 +1,68 @@
+class_name Daylight
+extends RefCounted
+## The trail's clock. `daylight_seconds` is the time until dusk; the day runs
+## morning -> midday -> golden hour -> dusk and the world tint follows it.
+## Dusk is not a fail: the hike continues (slower, by headlamp) and ★3 is lost.
+
+signal phase_changed(phase: Phase)
+
+enum Phase { MORNING, MIDDAY, GOLDEN, DUSK }
+
+var elapsed: float = 0.0
+var daylight_seconds: float
+
+var _balance: Balance
+var _phase: Phase = Phase.MORNING
+
+
+func _init(balance: Balance, seconds_of_daylight: float) -> void:
+	_balance = balance
+	daylight_seconds = maxf(seconds_of_daylight, 1.0)
+
+
+func advance(delta: float) -> void:
+	elapsed += delta
+	var now: Phase = phase()
+	if now != _phase:
+		_phase = now
+		phase_changed.emit(now)
+
+
+## 0 at the start, 1 when dusk begins; keeps growing after dusk.
+func fraction() -> float:
+	return elapsed / daylight_seconds
+
+
+## Where the sun is on its arc, 0 (rising) to 1 (setting).
+func sun_progress() -> float:
+	return clampf(fraction(), 0.0, 1.0)
+
+
+func phase() -> Phase:
+	var f: float = fraction()
+	if f >= 1.0:
+		return Phase.DUSK
+	if f >= _balance.golden_start:
+		return Phase.GOLDEN
+	if f >= _balance.midday_start:
+		return Phase.MIDDAY
+	return Phase.MORNING
+
+
+func is_dusk() -> bool:
+	return fraction() >= 1.0
+
+
+## World tint for CanvasModulate. Blends smoothly between the phase colours:
+## morning warms up to clear midday, which warms into golden hour, then dusk falls.
+func tint() -> Color:
+	var f: float = fraction()
+	var b: Balance = _balance
+	if f < b.midday_start:
+		return b.tint_morning.lerp(b.tint_midday, smoothstep(0.0, b.midday_start, f))
+	if f < b.golden_start:
+		return b.tint_midday
+	var dusk_begin: float = 1.0 - b.dusk_fade
+	if f < dusk_begin:
+		return b.tint_midday.lerp(b.tint_golden, smoothstep(b.golden_start, dusk_begin, f))
+	return b.tint_golden.lerp(b.tint_dusk, smoothstep(dusk_begin, 1.0, f))

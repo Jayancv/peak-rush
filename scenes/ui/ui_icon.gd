@@ -4,7 +4,7 @@ extends Control
 ## Small vector icons drawn in code, so they look crisp at any size and don't depend
 ## on a font having arrow glyphs (many phone fonts don't).
 
-enum Kind { MOUNTAIN, WALK, JUMP, BACK }
+enum Kind { MOUNTAIN, WALK, JUMP, BACK, PAUSE, CAMERA, STAR, STAR_EMPTY, LOCK }
 
 @export var kind: Kind = Kind.WALK:
 	set(v):
@@ -45,6 +45,38 @@ func _draw() -> void:
 			_chevron(c + Vector2(-s * 0.06, 0), s * 0.3, Vector2.LEFT, w)
 		Kind.MOUNTAIN:
 			_mountain_badge(c, s)
+		Kind.PAUSE:
+			var bar: Vector2 = Vector2(s * 0.16, s * 0.56)
+			for side: float in [-1.0, 1.0]:
+				var r: Rect2 = Rect2(c + Vector2(side * s * 0.15 - bar.x * 0.5, -bar.y * 0.5), bar)
+				draw_rect(r, color, true)
+		Kind.STAR:
+			draw_colored_polygon(_star_points(c, s * 0.48), color)
+		Kind.STAR_EMPTY:
+			var pts: PackedVector2Array = _star_points(c, s * 0.44)
+			pts.append(pts[0])
+			draw_polyline(pts, color, maxf(s * 0.07, 1.5), true)
+		Kind.LOCK:
+			var body: Rect2 = Rect2(c + Vector2(-s * 0.32, -s * 0.06), Vector2(s * 0.64, s * 0.46))
+			draw_rect(body, color, true)
+			draw_arc(c + Vector2(0, -s * 0.08), s * 0.2, PI, TAU, 12, color, maxf(s * 0.1, 2.0), true)
+			draw_circle(c + Vector2(0, s * 0.14), s * 0.06, SNOW, true, -1.0, true)
+		Kind.CAMERA:
+			var body: Rect2 = Rect2(c + Vector2(-s * 0.42, -s * 0.24), Vector2(s * 0.84, s * 0.58))
+			draw_rect(body, color, true)
+			draw_rect(Rect2(c + Vector2(-s * 0.16, -s * 0.36), Vector2(s * 0.32, s * 0.14)), color, true)
+			draw_circle(c + Vector2(0, s * 0.05), s * 0.17, SNOW, true, -1.0, true)
+			draw_circle(c + Vector2(0, s * 0.05), s * 0.1, color, true, -1.0, true)
+
+
+## Five-pointed star, point up.
+func _star_points(c: Vector2, outer: float) -> PackedVector2Array:
+	var pts: PackedVector2Array = PackedVector2Array()
+	for i: int in 10:
+		var r: float = outer if i % 2 == 0 else outer * 0.45
+		var a: float = -PI * 0.5 + PI * float(i) / 5.0
+		pts.append(c + Vector2(cos(a), sin(a)) * r)
+	return pts
 
 
 ## An open arrowhead pointing in `dir`.

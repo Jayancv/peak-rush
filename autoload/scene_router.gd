@@ -5,7 +5,9 @@ extends CanvasLayer
 signal transition_finished(path: String)
 
 const MAIN_MENU: String = "res://scenes/main_menu/main_menu.tscn"
+const TRAIL_SELECT: String = "res://scenes/trail_select/trail_select.tscn"
 const TRAIL_RUNNER: String = "res://scenes/trail_runner/trail_runner.tscn"
+const RESULTS: String = "res://scenes/results/results.tscn"
 
 ## UI timing, not gameplay tuning, so it stays here instead of balance.tres.
 const FADE_SECONDS: float = 0.25
@@ -42,6 +44,25 @@ func go_to(path: String) -> bool:
 		return false
 	_transition(path)
 	return true
+
+
+## Fades to dark, runs `midpoint` while the screen is covered, then fades back.
+## Used for in-scene jumps like respawning after a fall.
+func cover(midpoint: Callable) -> bool:
+	if _busy:
+		return false
+	_cover(midpoint)
+	return true
+
+
+func _cover(midpoint: Callable) -> void:
+	# Touches stay unblocked here: swallowing a finger-lift mid-fade would leave walk held.
+	_busy = true
+	await _fade_to(1.0)
+	midpoint.call()
+	await get_tree().process_frame
+	await _fade_to(0.0)
+	_busy = false
 
 
 func _transition(path: String) -> void:

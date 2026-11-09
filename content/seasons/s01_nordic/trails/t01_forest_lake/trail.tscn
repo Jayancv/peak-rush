@@ -1,0 +1,115 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/terrain_strip.gd" id="1_strip"]
+[ext_resource type="PackedScene" path="res://world/backdrop/backdrop.tscn" id="2_backdrop"]
+[ext_resource type="PackedScene" path="res://world/obstacles/root.tscn" id="3_root"]
+[ext_resource type="PackedScene" path="res://world/obstacles/rock.tscn" id="4_rock"]
+[ext_resource type="PackedScene" path="res://world/obstacles/mud_patch.tscn" id="5_mud"]
+[ext_resource type="PackedScene" path="res://world/obstacles/ice_patch.tscn" id="6_ice"]
+[ext_resource type="PackedScene" path="res://world/obstacles/kill_zone.tscn" id="7_kill"]
+[ext_resource type="PackedScene" path="res://world/obstacles/stepping_stones.tscn" id="8_stones"]
+[ext_resource type="PackedScene" path="res://world/interactables/bench.tscn" id="9_bench"]
+[ext_resource type="PackedScene" path="res://world/interactables/checkpoint.tscn" id="10_checkpoint"]
+[ext_resource type="PackedScene" path="res://world/interactables/finish.tscn" id="11_finish"]
+
+[node name="ForestLakeLoop" type="Node2D"]
+
+[node name="Backdrop" parent="." instance=ExtResource("2_backdrop")]
+
+[node name="Trailhead" type="Marker2D" parent="."]
+position = Vector2(160, 550)
+
+[node name="Ground" type="Node2D" parent="."]
+
+[node name="Meadow" type="Line2D" parent="Ground"]
+points = PackedVector2Array(-300, 560, 500, 560, 550, 558.1, 600, 552.6, 650, 544.1, 700, 533.6, 750, 522.1, 800, 510.9, 850, 501.3, 900, 494.2, 950, 490.5, 1000, 490.5, 1050, 494.2, 1100, 501.3, 1150, 510.9, 1200, 522.1, 1250, 533.6, 1300, 544.1, 1350, 552.6, 1400, 558.1, 1450, 560, 1500, 558.1, 1550, 552.6, 1600, 544.1, 1650, 533.6, 1700, 522.1, 1750, 510.9, 1800, 501.3, 1850, 494.2, 1900, 490.5, 1950, 490.5, 2000, 494.2, 2050, 501.3, 2100, 510.9, 2150, 522.1, 2200, 533.6, 2250, 544.1, 2300, 552.6, 2350, 558.1, 2400, 560, 2600, 560, 2604, 520, 3000, 520)
+width = 14.0
+default_color = Color(0.788235, 0.698039, 0.560784, 1)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("1_strip")
+
+[node name="Climb" type="Line2D" parent="Ground"]
+points = PackedVector2Array(3000, 520, 3100, 500, 3600, 250, 3800, 80, 3900, 60, 4300, 60)
+width = 14.0
+default_color = Color(0.611765, 0.603922, 0.564706, 1)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("1_strip")
+surface = 1
+decor_seed = 2
+
+[node name="Descent" type="Line2D" parent="Ground"]
+points = PackedVector2Array(4300, 60, 4400, 80, 5200, 500, 5300, 530, 5600, 530)
+width = 14.0
+default_color = Color(0.788235, 0.698039, 0.560784, 1)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("1_strip")
+decor_seed = 3
+
+[node name="Lakeside" type="Line2D" parent="Ground"]
+points = PackedVector2Array(5680, 530, 6000, 530)
+width = 14.0
+default_color = Color(0.788235, 0.698039, 0.560784, 1)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("1_strip")
+decor_seed = 4
+
+[node name="Knoll" type="Line2D" parent="Ground"]
+points = PackedVector2Array(6420, 530, 6800, 530, 7000, 470, 7150, 440, 7500, 440)
+width = 14.0
+default_color = Color(0.788235, 0.698039, 0.560784, 1)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("1_strip")
+decor_seed = 5
+
+[node name="Pieces" type="Node2D" parent="."]
+
+[node name="Root1" parent="Pieces" instance=ExtResource("3_root")]
+position = Vector2(430, 560)
+
+[node name="Root2" parent="Pieces" instance=ExtResource("3_root")]
+position = Vector2(1450, 560)
+
+[node name="Rock" parent="Pieces" instance=ExtResource("4_rock")]
+position = Vector2(2470, 560)
+
+[node name="Mud" parent="Pieces" instance=ExtResource("5_mud")]
+position = Vector2(2700, 520)
+width = 130.0
+
+[node name="Bench1" parent="Pieces" instance=ExtResource("9_bench")]
+position = Vector2(2860, 520)
+
+[node name="Checkpoint1" parent="Pieces" instance=ExtResource("10_checkpoint")]
+position = Vector2(2960, 520)
+
+[node name="Checkpoint2" parent="Pieces" instance=ExtResource("10_checkpoint")]
+position = Vector2(3930, 60)
+
+[node name="Ice" parent="Pieces" instance=ExtResource("6_ice")]
+position = Vector2(4120, 60)
+
+[node name="Checkpoint3" parent="Pieces" instance=ExtResource("10_checkpoint")]
+position = Vector2(5450, 530)
+
+[node name="GapKillZone" parent="Pieces" instance=ExtResource("7_kill")]
+position = Vector2(5640, 760)
+size = Vector2(140, 200)
+
+[node name="Stream" parent="Pieces" instance=ExtResource("8_stones")]
+position = Vector2(6000, 530)
+
+[node name="Bench2" parent="Pieces" instance=ExtResource("9_bench")]
+position = Vector2(6620, 530)
+
+[node name="Finish" parent="Pieces" instance=ExtResource("11_finish")]
+position = Vector2(7300, 440)

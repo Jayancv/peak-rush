@@ -35,5 +35,19 @@ func test_trail_runner_instantiates() -> void:
 	assert_not_null(runner.find_child("Trailhead", true, false), "test trail has no Trailhead marker")
 
 
+func test_trail_select_lists_trails() -> void:
+	var scene: PackedScene = load(SceneRouter.TRAIL_SELECT) as PackedScene
+	var select: Node = add_child_autofree(scene.instantiate())
+	assert_gt(int(select.call("card_count")), 0)
+
+
+func test_results_screen_instantiates_without_a_result() -> void:
+	var saved: Dictionary = GameState.last_result
+	GameState.last_result = {}
+	var scene: PackedScene = load(SceneRouter.RESULTS) as PackedScene
+	assert_not_null(add_child_autofree(scene.instantiate()))
+	GameState.last_result = saved
+
+
 func test_translations_resolve() -> void:
 	assert_eq(tr("MENU_PLAY"), "Play", "strings.csv not imported or not registered")

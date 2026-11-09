@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ContentIndex" format=3]
+
+[ext_resource type="Script" path="res://data/content_index.gd" id="1_index"]
+[ext_resource type="Script" path="res://data/season_data.gd" id="2_season_script"]
+[ext_resource type="Resource" path="res://content/seasons/s01_nordic/season.tres" id="3_s01"]
+
+[resource]
+script = ExtResource("1_index")
+seasons = Array[ExtResource("2_season_script")]([ExtResource("3_s01")])

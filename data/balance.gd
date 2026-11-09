@@ -45,6 +45,58 @@ extends Resource
 ## Forced rest when stamina hits 0.
 @export var exhausted_rest_seconds: float = 2.0
 
+@export_group("Stamina")
+@export var max_stamina: float = 100.0
+## Walking drain per second before slope, terrain, weather and gear multipliers.
+@export var walk_drain: float = 4.0
+## Regen per second standing still, and sitting at a bench.
+@export var rest_regen: float = 15.0
+@export var bench_regen: float = 30.0
+## After hitting 0: walk speed multiplier until stamina climbs back above recovery_threshold.
+@export var exhausted_speed_mult: float = 0.5
+@export var recovery_threshold: float = 30.0
+@export var stumble_cost: float = 10.0
+@export var fall_cost: float = 15.0
+## Below this fraction of max the HUD bar pulses.
+@export var low_stamina_fraction: float = 0.25
+
+@export_group("Terrain effects")
+@export var mud_speed_mult: float = 0.6
+@export var mud_drain_mult: float = 2.0
+@export var ice_speed_mult: float = 0.85
+@export var snow_speed_mult: float = 0.85
+## On ice the hiker stops slowly, and slides back down uphill ice when not walking.
+@export var ice_decel: float = 120.0
+@export var ice_slip_speed: float = 45.0
+## Missing a stepping stone: extra drain fraction and how long it lasts.
+@export var wet_feet_drain_bonus: float = 0.2
+@export var wet_feet_seconds: float = 10.0
+
+@export_group("Daylight")
+## Phase boundaries as a fraction of the trail's daylight_seconds. Dusk starts at 1.0.
+@export var midday_start: float = 0.2
+@export var golden_start: float = 0.6
+## Fraction of daylight over which golden hour fades into dusk.
+@export var dusk_fade: float = 0.12
+@export var dusk_speed_mult: float = 0.7
+@export var tint_morning: Color = Color("#FFE6D2")
+@export var tint_midday: Color = Color("#FFFFFF")
+@export var tint_golden: Color = Color("#FFDDB5")
+@export var tint_dusk: Color = Color("#6C74A6")
+
+@export_group("Feedback")
+@export var stumble_vibrate_ms: int = 60
+@export var fall_vibrate_ms: int = 120
+
+@export_group("Rewards")
+## Trail Points (GAME_DESIGN §5.6): every finish, each star the first time it's
+## earned, and photos by quality (only improvements on the best shot count).
+@export var tp_finish: int = 50
+@export var tp_per_new_star: int = 25
+@export var tp_photo_good: int = 10
+@export var tp_photo_great: int = 20
+@export var tp_photo_perfect: int = 30
+
 @export_group("Camera")
 @export var camera_look_ahead_px: float = 220.0
 ## Keeps the hiker below the screen centre so the climb ahead is visible.

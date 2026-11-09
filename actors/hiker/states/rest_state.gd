@@ -1,10 +1,10 @@
 class_name HikerRestState
 extends HikerState
-## Standing still on purpose. M2 hooks stamina regen to this state.
+## Standing still on purpose; stamina refills (faster at a bench).
 
 
 func physics_update(delta: float) -> int:
-	hiker.stop_horizontal(hiker.balance.walk_decel, delta)
+	hiker.ground_stop(hiker.balance.walk_decel, delta)
 	hiker.apply_gravity(delta)
 	var common: int = hiker.grounded_transition()
 	if common != Hiker.STAY:

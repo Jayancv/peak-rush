@@ -1,22 +1,25 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scenes/trail_runner/trail_runner.gd" id="1_runner"]
-[ext_resource type="Script" path="res://scenes/ui/safe_area_margin.gd" id="2_safe"]
-[ext_resource type="PackedScene" path="res://content/_dev/test_hills/trail.tscn" id="3_trail"]
 [ext_resource type="PackedScene" path="res://actors/hiker/hiker.tscn" id="4_hiker"]
 [ext_resource type="Script" path="res://actors/hiker/hiker_camera.gd" id="5_camera"]
 [ext_resource type="PackedScene" path="res://scenes/ui/touch_controls.tscn" id="6_touch"]
-[ext_resource type="Script" path="res://scenes/ui/ui_icon.gd" id="7_icon"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="7_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="8_pause"]
 
-[node name="TrailRunner" type="Node2D" node_paths=PackedStringArray("world", "camera", "back_button")]
+[node name="TrailRunner" type="Node2D" node_paths=PackedStringArray("world", "camera", "world_tint", "hud", "touch_controls", "pause_menu")]
 script = ExtResource("1_runner")
-trail_scene = ExtResource("3_trail")
 hiker_scene = ExtResource("4_hiker")
 world = NodePath("World")
 camera = NodePath("Camera")
-back_button = NodePath("UI/SafeArea/Top/BackButton")
+world_tint = NodePath("WorldTint")
+hud = NodePath("UI/Hud")
+touch_controls = NodePath("UI/TouchControls")
+pause_menu = NodePath("UI/PauseMenu")
 
 [node name="World" type="Node2D" parent="."]
+
+[node name="WorldTint" type="CanvasModulate" parent="."]
 
 [node name="Camera" type="Camera2D" parent="."]
 process_callback = 0
@@ -26,38 +29,6 @@ script = ExtResource("5_camera")
 
 [node name="TouchControls" parent="UI" instance=ExtResource("6_touch")]
 
-[node name="SafeArea" type="MarginContainer" parent="UI"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-script = ExtResource("2_safe")
+[node name="Hud" parent="UI" instance=ExtResource("7_hud")]
 
-[node name="Top" type="HBoxContainer" parent="UI/SafeArea"]
-layout_mode = 2
-size_flags_vertical = 0
-mouse_filter = 2
-
-[node name="BackButton" type="Button" parent="UI/SafeArea/Top" groups=["touch_blocker"]]
-custom_minimum_size = Vector2(84, 84)
-layout_mode = 2
-tooltip_text = "COMMON_BACK"
-theme_type_variation = &"IconButton"
-
-[node name="Icon" type="Control" parent="UI/SafeArea/Top/BackButton"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 18.0
-offset_top = 16.0
-offset_right = -18.0
-offset_bottom = -20.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-script = ExtResource("7_icon")
-kind = 3
-stroke = 0.16
+[node name="PauseMenu" parent="UI" instance=ExtResource("8_pause")]
