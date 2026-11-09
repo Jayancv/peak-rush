@@ -32,6 +32,7 @@ func _ready() -> void:
 	if not DisplayServer.is_touchscreen_available():
 		(continue_button if continue_button.visible else play_button).grab_focus()
 	_start_panning()
+	UiMotion.intro([$SafeArea/VBox/Card, banner, continue_button, play_button, journal_button, gear_button, settings_button], 0.1)
 	if OS.is_debug_build() and not _startup_logged:
 		_startup_logged = true
 		print("PERF startup_to_menu_ms=%d" % Time.get_ticks_msec())

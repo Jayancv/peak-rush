@@ -31,6 +31,7 @@ func _ready() -> void:
 	_fade.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_fade)
+	UiMotion.watch(get_tree())
 
 
 func is_busy() -> bool:
@@ -87,5 +88,6 @@ func _transition(path: String) -> void:
 
 func _fade_to(alpha: float) -> void:
 	var tween: Tween = create_tween()
-	tween.tween_property(_fade, "color:a", alpha, FADE_SECONDS)
+	# Eased both ways so the fade glides instead of starting and stopping abruptly.
+	tween.tween_property(_fade, "color:a", alpha, FADE_SECONDS).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	await tween.finished

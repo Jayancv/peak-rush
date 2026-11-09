@@ -145,6 +145,12 @@ docs/                GAME_DESIGN.md, PLAN.md
   AudioManager synthesises all sounds on a WorkerThreadPool task at boot; loops asked for early start when ready.
   SynthSounds pads every buffer (TAIL_PAD) because the Android mixer reads past the end (it crashed the AudioTrack thread).
   `SafeAreaMargin.debug_insets` fakes notches on desktop for layout checks.
+  Splash: main scene is `scenes/splash/splash.tscn` (~2 s, tap skips) -> main menu. Its first frame IS the boot image
+  (`shared_art/icons/boot_splash.png`, 2560x1080, stretch Keep Height); re-render with `godot --path . -s tools/make_boot_splash.gd` (not headless)
+  after changing the splash or icon. "PERF startup_to_menu_ms" now includes the splash.
   Icons: painted source `shared_art/icons/source/icon_source.png` (.gdignore, not exported) -> `tools/raster_icons.gd` makes the PNGs the export preset (launcher_icons/*) and
   boot splash use (adaptive = painting as background, framed by ADAPTIVE_VIEW/CENTRE so the hiker fits any mask, + empty foreground; themed icon from adaptive_monochrome.svg). Android 12+ shows its own system splash (adaptive icon on dark) first.
   Pixel 7 Pro (debug): 60 fps, worst frame 16.7 ms, startup ~0.8 s, ~84 MB static memory.
+  UI motion: `UiMotion` (scenes/ui/ui_motion.gd, static). SceneRouter calls `UiMotion.watch()` so every BaseButton squishes on press
+  (opt out with meta `no_press_motion`); screens call `UiMotion.intro([...])` for staggered ease-in (scale + alpha only, safe in containers).
+  Water: SteppingStones uses `world/obstacles/water.gdshader` (waves/depth/glints in local px). GroundPatch art follows the TerrainStrip slope.

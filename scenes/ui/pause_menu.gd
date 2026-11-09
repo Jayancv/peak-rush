@@ -14,6 +14,9 @@ signal quit_pressed
 @export var vibration_toggle: Button
 @export var card: Control
 
+var _tween: Tween
+var _closing: bool = false
+
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -35,28 +38,49 @@ func open_pause(subtitle: String = "") -> void:
 
 
 func close() -> void:
-	visible = false
+	if not visible or _closing:
+		return
+	# Fade and shrink away instead of vanishing; it counts as closed straight away.
+	_closing = true
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_kill_tween()
+	_tween = create_tween().set_parallel()
+	_tween.tween_property(card, "scale", Vector2(0.94, 0.94), 0.14).set_ease(Tween.EASE_IN)
+	_tween.tween_property(self, "modulate:a", 0.0, 0.14)
+	_tween.chain().tween_callback(func() -> void:
+		visible = false
+		_closing = false
+	)
 
 
 func is_open() -> bool:
-	return visible
+	return visible and not _closing
+
+
+func _kill_tween() -> void:
+	if _tween != null and _tween.is_valid():
+		_tween.kill()
 
 
 func _show() -> void:
 	vibration_toggle.set_pressed_no_signal(bool(GameState.settings.get("vibration", true)))
 	_update_vibration_text()
+	_kill_tween()
+	_closing = false
+	mouse_filter = Control.MOUSE_FILTER_STOP
 	visible = true
+	# The dim fades in with the card rather than snapping on.
+	modulate.a = 0.0
 	card.pivot_offset = card.size * 0.5
 	card.scale = Vector2(0.92, 0.92)
-	card.modulate.a = 0.0
-	var tween: Tween = create_tween().set_parallel()
-	tween.tween_property(card, "scale", Vector2.ONE, 0.22).set_trans(Tween.TRANS_BACK)
-	tween.tween_property(card, "modulate:a", 1.0, 0.15)
+	_tween = create_tween().set_parallel()
+	_tween.tween_property(card, "scale", Vector2.ONE, 0.26).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_tween.tween_property(self, "modulate:a", 1.0, 0.16)
 
 
 func _unhandled_input(event: InputEvent) -> void:
 	# Esc closes the pause card (the trail runner is paused and can't hear it).
-	if visible and event.is_action_pressed("pause"):
+	if is_open() and event.is_action_pressed("pause"):
 		get_viewport().set_input_as_handled()
 		resume_pressed.emit()
 

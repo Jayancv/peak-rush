@@ -18,6 +18,8 @@ func _ready() -> void:
 	AudioManager.enter_menu()
 	back_button.pressed.connect(_go_back)
 	refresh()
+	# Only on arrival: refresh() also runs after every buy/equip, where cards should stay put.
+	UiMotion.intro(cards.get_children(), 0.08)
 
 
 func refresh() -> void:

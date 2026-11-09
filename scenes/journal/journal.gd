@@ -61,6 +61,7 @@ func show_season(season: SeasonData) -> void:
 				collected += 1
 			postcards.add_child(_make_postcard(trail, vp, q, season, i))
 	count_label.text = tr("JOURNAL_COLLECTED") % [collected, total]
+	UiMotion.intro(stamps.get_children() + postcards.get_children(), 0.08)
 
 
 func _fit_columns(width: float) -> void:

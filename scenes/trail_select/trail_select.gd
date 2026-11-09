@@ -52,6 +52,7 @@ func show_season(season: SeasonData) -> void:
 		# Scroll to the first open trail not finished yet (where the player left off).
 		if focus_card == null and unlocked and not GameState.is_completed(trail.id):
 			focus_card = card
+	UiMotion.intro(cards.get_children(), 0.08)
 	if focus_card != null:
 		_scroll_to.call_deferred(focus_card)
 

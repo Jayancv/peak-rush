@@ -21,6 +21,7 @@ func _ready() -> void:
 	_bind_toggle(vibration_toggle, "vibration", "SETTING_VIBRATION")
 	# A sample sound while dragging the effects slider, so the level can be judged.
 	sfx_slider.drag_ended.connect(func(_changed: bool) -> void: AudioManager.play_footstep(TerrainStrip.Surface.ROCK))
+	UiMotion.intro($Center/Card/VBox.get_children(), 0.08)
 
 
 func _bind_slider(slider: HSlider, key: String) -> void:

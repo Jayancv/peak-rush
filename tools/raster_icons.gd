@@ -29,7 +29,6 @@ func _initialize() -> void:
 	_save(Image.create_empty(432, 432, false, Image.FORMAT_RGBA8), "adaptive_foreground_432.png")
 	_save(_masked(_scaled(src, 192), 192 * CORNER_FRACTION), "icon_192.png")
 	_save(_masked(_scaled(src, 512), 512 * CORNER_FRACTION), "icon_512.png")
-	_save(_masked(_scaled(src, 360), 180.0), "splash.png")
 	var mono := Image.new()
 	if mono.load_svg_from_string(FileAccess.get_file_as_string(DIR + "adaptive_monochrome.svg")) == OK:
 		_save(mono, "adaptive_monochrome_432.png")

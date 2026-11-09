@@ -24,15 +24,27 @@ extends Node2D
 		depth = v
 		_rebuild()
 
-const WATER: Color = Color("#5FA8C8")
-const WATER_LIGHT: Color = Color("#A8D8EA")
-const STONE: Color = Color("#8C8B84")
-const STONE_TOP: Color = Color("#C4C2BA")
-const BED: Color = Color("#4A7359")
+const WATER_SHADER: Shader = preload("res://world/obstacles/water.gdshader")
+const BANK: Color = Color("#6A5440")
+const BANK_DARK: Color = Color("#2E261E")
+const BED_PEBBLES: Array[Color] = [Color("#7E7A6E"), Color("#9B9079"), Color("#676B62"), Color("#8A8170")]
+const STONE_LIGHT: Color = Color("#B9B6AC")
+const STONE: Color = Color("#8C8A82")
+const STONE_DARK: Color = Color("#55544F")
+const MOSS: Color = Color("#6F8D4A")
+const MOSS_LIGHT: Color = Color("#93AE5E")
+const FOAM: Color = Color(1, 1, 1, 0.75)
+const REED: Color = Color("#6E8B4C")
+const REED_LIGHT: Color = Color("#8FA75B")
+const CATTAIL: Color = Color("#6B4A2F")
 ## Stone tops stand this far above the banks so they read as stepping stones.
 const STONE_RISE: float = 10.0
 ## The water surface sits this far below the banks.
 const WATER_DROP: float = 16.0
+## How far the sloping banks reach into the stream at the bottom.
+const BANK_REACH: float = 22.0
+## The banks overlap the ends of the terrain a little so there's no seam.
+const BANK_OVERLAP: float = 8.0
 
 var _ready_done: bool = false
 
@@ -51,32 +63,155 @@ func _rebuild() -> void:
 		return
 	ShapeUtil.clear_internal(self)
 	var w: float = total_width()
+	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+	rng.seed = hash(Vector2i(roundi(position.x), roundi(position.y)))
 	# Stream bed: solid ground under the water so a miss means wet feet, not a fall.
 	var bed: StaticBody2D = StaticBody2D.new()
 	add_child(bed, false, Node.INTERNAL_MODE_BACK)
-	ShapeUtil.add_poly(bed, PackedVector2Array([Vector2(0, depth), Vector2(w, depth), Vector2(w, depth + 400), Vector2(0, depth + 400)]), BED)
+	# Ground under the stream in the banks' own colours, then a thin earthy lining.
+	var bank: TerrainStrip = _bank_strip()
+	var fill_top: Color = bank.fill_color if bank != null else Color("#4A7359")
+	var fill_bottom: Color = bank.fill_bottom_color if bank != null else Color("#22372C")
+	# Reach as deep as the bank's fill so the colour gradient lines up with it.
+	var ground_bottom: float = to_local(bank.get_global_bounds().end).y if bank != null else depth + 400.0
+	ground_bottom = maxf(ground_bottom, depth + 60.0)
+	var ground: Polygon2D = ShapeUtil.add_poly(bed, _channel(w, 3.0, ground_bottom), fill_top)
+	ground.vertex_colors = _gradient(ground.polygon, fill_top, fill_bottom, ground_bottom)
+	var lining: Polygon2D = ShapeUtil.add_poly(bed, _channel(w, 3.0, depth + 9.0), BANK)
+	lining.vertex_colors = _gradient(lining.polygon, BANK, BANK_DARK, depth + 9.0)
 	ShapeUtil.add_rect_shape(bed, Rect2(0, depth, w, 60))
+	_add_bed_pebbles(w, rng)
 	for i: int in stone_count:
-		var x: float = gap + float(i) * (stone_width + gap)
-		var stone: StaticBody2D = StaticBody2D.new()
-		add_child(stone, false, Node.INTERNAL_MODE_BACK)
-		var body_rect: Rect2 = Rect2(x, -STONE_RISE, stone_width, depth + STONE_RISE)
-		ShapeUtil.add_poly(stone, ShapeUtil.rounded_rect(body_rect, 12.0), STONE, 2)
-		ShapeUtil.add_poly(stone, ShapeUtil.rounded_rect(Rect2(x + 5, -STONE_RISE + 2.0, stone_width - 10, 8), 4.0), STONE_TOP, 2)
-		ShapeUtil.add_rect_shape(stone, body_rect)
+		_add_stone(gap + float(i) * (stone_width + gap), rng)
 	# Water draws over the hiker (z 1) so wading looks like wading.
-	var water_rect: PackedVector2Array = PackedVector2Array([Vector2(0, WATER_DROP), Vector2(w, WATER_DROP), Vector2(w, depth), Vector2(0, depth)])
-	var water_poly: Polygon2D = ShapeUtil.add_poly(self, water_rect, Color(WATER, 0.85), 1)
-	water_poly.vertex_colors = PackedColorArray([Color(WATER, 0.8), Color(WATER, 0.8), Color(WATER.darkened(0.3), 0.95), Color(WATER.darkened(0.3), 0.95)])
-	ShapeUtil.add_poly(self, PackedVector2Array([Vector2(0, WATER_DROP - 1), Vector2(w, WATER_DROP - 1), Vector2(w, WATER_DROP + 2), Vector2(0, WATER_DROP + 2)]), WATER_LIGHT, 1)
-	var water: Area2D = Area2D.new()
-	water.collision_layer = 0
-	water.collision_mask = HikerArea.HIKER_LAYER
-	water.monitorable = false
-	add_child(water, false, Node.INTERNAL_MODE_BACK)
-	ShapeUtil.add_rect_shape(water, Rect2(0, WATER_DROP + 6.0, w, depth - WATER_DROP))
+	var water: Polygon2D = ShapeUtil.add_poly(self, _channel(w, WATER_DROP - 3.0, 0.0), Color.WHITE, 1)
+	var mat: ShaderMaterial = ShaderMaterial.new()
+	mat.shader = WATER_SHADER
+	mat.set_shader_parameter("surface_y", WATER_DROP)
+	mat.set_shader_parameter("depth", depth)
+	water.material = mat
+	for i: int in stone_count:
+		_add_foam(gap + float(i) * (stone_width + gap), rng)
+	_add_reeds(-2.0, -1.0, rng)
+	_add_reeds(w + 2.0, 1.0, rng)
+	var area: Area2D = Area2D.new()
+	area.collision_layer = 0
+	area.collision_mask = HikerArea.HIKER_LAYER
+	area.monitorable = false
+	add_child(area, false, Node.INTERNAL_MODE_BACK)
+	ShapeUtil.add_rect_shape(area, Rect2(0, WATER_DROP + 6.0, w, depth - WATER_DROP))
 	if not Engine.is_editor_hint():
-		water.body_entered.connect(_on_water_entered)
+		area.body_entered.connect(_on_water_entered)
+
+
+## U-shaped stream channel from y = top: steep banks that flatten out into the bed.
+## With bottom > depth it's the earth around and under the channel (closed down to
+## `bottom`); otherwise it's the inside of the U, closed across at `top` (the water).
+func _channel(w: float, top: float, bottom: float) -> PackedVector2Array:
+	var left: PackedVector2Array = PackedVector2Array()
+	var steps: int = 8
+	for i: int in steps + 1:
+		var a: float = PI * 0.5 * float(i) / float(steps)
+		var p: Vector2 = Vector2(-BANK_OVERLAP + (BANK_REACH + BANK_OVERLAP) * (1.0 - cos(a)), 3.0 + (depth - 3.0) * sin(a))
+		if p.y >= top:
+			if left.is_empty() and i > 0:
+				# Start exactly at `top` so the water surface meets the bank cleanly.
+				var prev_a: float = PI * 0.5 * float(i - 1) / float(steps)
+				var prev: Vector2 = Vector2(-BANK_OVERLAP + (BANK_REACH + BANK_OVERLAP) * (1.0 - cos(prev_a)), 3.0 + (depth - 3.0) * sin(prev_a))
+				left.append(prev.lerp(p, (top - prev.y) / maxf(p.y - prev.y, 0.001)))
+			left.append(p)
+	var pts: PackedVector2Array = left.duplicate()
+	for i: int in range(left.size() - 1, -1, -1):
+		pts.append(Vector2(w - left[i].x, left[i].y))
+	if bottom > depth:
+		pts.append(Vector2(w + BANK_OVERLAP, bottom))
+		pts.append(Vector2(-BANK_OVERLAP, bottom))
+	return pts
+
+
+func _gradient(pts: PackedVector2Array, top: Color, bottom: Color, bottom_y: float) -> PackedColorArray:
+	var cols: PackedColorArray = PackedColorArray()
+	for p: Vector2 in pts:
+		cols.append(top.lerp(bottom, clampf(p.y / bottom_y, 0.0, 1.0)))
+	return cols
+
+
+## The terrain strip that ends at the left bank, so the ground under the stream matches it.
+func _bank_strip() -> TerrainStrip:
+	if not is_inside_tree():
+		return null
+	for node: Node in get_tree().get_nodes_in_group(TerrainStrip.GROUP):
+		var strip: TerrainStrip = node as TerrainStrip
+		if strip != null and strip.points.size() >= 2:
+			var end: Vector2 = strip.to_global(strip.points[strip.points.size() - 1])
+			if end.distance_to(global_position) < 40.0:
+				return strip
+	return null
+
+
+func _add_bed_pebbles(w: float, rng: RandomNumberGenerator) -> void:
+	var x: float = BANK_REACH * 0.6
+	while x < w - BANK_REACH * 0.6:
+		var r: float = rng.randf_range(3.0, 7.0)
+		var col: Color = BED_PEBBLES[rng.randi() % BED_PEBBLES.size()]
+		ShapeUtil.add_poly(self, ShapeUtil.ellipse(Vector2(x, depth - r * 0.45), Vector2(r * 1.4, r * 0.75), 10), col)
+		x += rng.randf_range(9.0, 26.0)
+
+
+func _add_stone(x: float, rng: RandomNumberGenerator) -> void:
+	var stone: StaticBody2D = StaticBody2D.new()
+	add_child(stone, false, Node.INTERNAL_MODE_BACK)
+	var top: float = -STONE_RISE
+	var bottom: float = depth + 4.0
+	var centre: Vector2 = Vector2(x + stone_width * 0.5, (top + bottom) * 0.5)
+	var radii: Vector2 = Vector2(stone_width * 0.5, (bottom - top) * 0.5)
+	# A squarish boulder: flat enough on top to stand on, bulging and wider at the base.
+	var pts: PackedVector2Array = PackedVector2Array()
+	var cols: PackedColorArray = PackedColorArray()
+	var segments: int = 22
+	for i: int in segments:
+		var a: float = TAU * float(i) / float(segments)
+		var c: float = cos(a)
+		var s: float = sin(a)
+		var sx: float = signf(c) * pow(absf(c), 0.55) * radii.x * (1.0 + 0.16 * maxf(s, 0.0))
+		var sy: float = signf(s) * pow(absf(s), 0.55) * radii.y
+		var p: Vector2 = centre + Vector2(sx, sy)
+		if s > -0.5:
+			p.x += rng.randf_range(-1.6, 1.6)
+		p.y = maxf(p.y, top)
+		pts.append(p)
+		var shade: float = clampf((p.y - top) / (bottom - top), 0.0, 1.0)
+		cols.append(STONE_LIGHT.lerp(STONE, minf(shade * 3.0, 1.0)).lerp(STONE_DARK, maxf(shade - 0.35, 0.0) * 1.4 + maxf(c, 0.0) * 0.15))
+	var body: Polygon2D = ShapeUtil.add_poly(stone, pts, STONE)
+	body.vertex_colors = cols
+	# Wet band just above the water, moss and a highlight on top.
+	ShapeUtil.add_poly(stone, ShapeUtil.rounded_rect(Rect2(x + 1.0, WATER_DROP - 5.0, stone_width - 2.0, 5.0), 2.0), Color(STONE_DARK, 0.45))
+	var moss_x: float = x + stone_width * rng.randf_range(0.28, 0.45)
+	ShapeUtil.add_poly(stone, ShapeUtil.ellipse(Vector2(moss_x, top + 2.5), Vector2(stone_width * 0.3, 3.4), 12), MOSS)
+	ShapeUtil.add_poly(stone, ShapeUtil.ellipse(Vector2(moss_x - 2.0, top + 1.6), Vector2(stone_width * 0.16, 1.5), 10), MOSS_LIGHT)
+	ShapeUtil.add_poly(stone, ShapeUtil.ellipse(Vector2(x + stone_width * 0.72, top + 3.0), Vector2(stone_width * 0.12, 1.4), 8), Color(1, 1, 1, 0.35))
+	ShapeUtil.add_rect_shape(stone, Rect2(x, top, stone_width, depth + STONE_RISE))
+
+
+## Foam where the water parts around a stone (more on the downstream side).
+func _add_foam(x: float, rng: RandomNumberGenerator) -> void:
+	var y: float = WATER_DROP + 1.0
+	ShapeUtil.add_poly(self, ShapeUtil.ellipse(Vector2(x - 2.0, y), Vector2(6.0, 1.8), 10), FOAM, 1)
+	ShapeUtil.add_poly(self, ShapeUtil.ellipse(Vector2(x + stone_width + 4.0, y + 0.5), Vector2(10.0, 2.2), 12), FOAM, 1)
+	ShapeUtil.add_poly(self, ShapeUtil.ellipse(Vector2(x + stone_width + 15.0 + rng.randf_range(0, 6), y + 2.0), Vector2(4.0, 1.2), 8), Color(FOAM, 0.5), 1)
+
+
+## A clump of reeds on a bank; `side` -1 leans them left (left bank), +1 right.
+func _add_reeds(x: float, side: float, rng: RandomNumberGenerator) -> void:
+	for i: int in 5:
+		var bx: float = x + side * rng.randf_range(-4.0, 10.0)
+		var h: float = rng.randf_range(16.0, 30.0)
+		var lean: float = side * rng.randf_range(2.0, 9.0)
+		var col: Color = REED if i % 2 == 0 else REED_LIGHT
+		ShapeUtil.add_poly(self, PackedVector2Array([Vector2(bx - 1.6, 4.0), Vector2(bx + 1.6, 4.0), Vector2(bx + lean, 4.0 - h)]), col)
+		if i == 1 or i == 3:
+			var tip: Vector2 = Vector2(bx + lean * 0.8, 4.0 - h * 0.8)
+			ShapeUtil.add_poly(self, ShapeUtil.ellipse(tip, Vector2(2.0, 4.5), 8), CATTAIL)
 
 
 func _on_water_entered(body: Node2D) -> void:

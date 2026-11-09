@@ -85,7 +85,11 @@ func set_daylight(sun_progress: float, phase: Daylight.Phase, night: bool = fals
 
 
 func set_photos(taken: int, total: int) -> void:
-	photo_label.text = "%d/%d" % [taken, total]
+	var text: String = "%d/%d" % [taken, total]
+	# Bounce the counter when a new photo lands (not when it's first filled in).
+	if photo_label.text != text and not photo_label.text.is_empty() and taken > 0:
+		UiMotion.bump(photo_label.get_parent() as Control)
+	photo_label.text = text
 
 
 ## Short message under the top bar ("Checkpoint", "Dusk falls"...). `key` is a translation key.
