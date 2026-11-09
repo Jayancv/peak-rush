@@ -31,9 +31,10 @@ func walk(delta: float, multiplier: float) -> void:
 	_set_value(value - drain_rate(multiplier) * delta)
 
 
-func rest(delta: float, on_bench: bool) -> void:
+## `scale` is gear (the thermos) on top of the rest/bench rate.
+func rest(delta: float, on_bench: bool, scale: float = 1.0) -> void:
 	var rate: float = _balance.bench_regen if on_bench else _balance.rest_regen
-	_set_value(value + rate * delta)
+	_set_value(value + rate * scale * delta)
 
 
 ## One-off costs: stumbling, falling.

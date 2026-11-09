@@ -1,0 +1,63 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://world/backdrop/backdrop.tscn" id="1_base"]
+[ext_resource type="Script" path="res://world/backdrop/aurora_sky.gd" id="2_aurora"]
+
+[sub_resource type="Gradient" id="Gradient_sky"]
+offsets = PackedFloat32Array(0, 0.65, 1)
+colors = PackedColorArray(0.0431, 0.0784, 0.1882, 1.0, 0.1098, 0.1843, 0.3529, 1.0, 0.2353, 0.3529, 0.5098, 1.0)
+
+[sub_resource type="GradientTexture2D" id="Texture_sky"]
+gradient = SubResource("Gradient_sky")
+width = 8
+height = 256
+fill_to = Vector2(0, 1)
+
+[node name="BackdropAurora" instance=ExtResource("1_base")]
+sky_tint_strength = 0.15
+
+[node name="Gradient" parent="Sky" index="0"]
+texture = SubResource("Texture_sky")
+
+[node name="Shape" parent="Clouds" index="0"]
+color = Color(0.5, 0.56, 0.7, 0.6)
+cloud_count = 4
+
+[node name="Shape" parent="Mountains" index="0"]
+color = Color(0.7882, 0.8392, 0.9020, 1.0)
+ridged = true
+amplitude = 260.0
+base_y = 430.0
+octaves = 3
+seed_value = 29
+haze_amount = 0.35
+haze_color = Color(0.2353, 0.3529, 0.5098, 1.0)
+snow_line_y = 300.0
+snow_color = Color(0.9569, 0.9725, 0.9882, 1.0)
+
+[node name="Shape" parent="FarHills" index="0"]
+color = Color(0.6235, 0.6980, 0.7843, 1.0)
+tree_count = 50
+tree_height = Vector2(12, 22)
+tree_color = Color(0.3725, 0.4588, 0.5647, 1.0)
+haze_color = Color(0.2353, 0.3529, 0.5098, 1.0)
+
+[node name="Shape" parent="MidHills" index="0"]
+color = Color(0.4941, 0.5765, 0.6824, 1.0)
+tree_count = 45
+tree_height = Vector2(28, 56)
+tree_color = Color(0.2471, 0.3255, 0.4196, 1.0)
+haze_color = Color(0.2353, 0.3529, 0.5098, 1.0)
+
+[node name="Shape" parent="Treeline" index="0"]
+color = Color(0.3686, 0.4471, 0.5647, 1.0)
+tree_count = 70
+tree_height = Vector2(50, 100)
+tree_color = Color(0.1725, 0.2314, 0.3137, 1.0)
+haze_color = Color(0.2353, 0.3529, 0.5098, 1.0)
+
+[node name="SunAnchor" parent="Sky" index="2"]
+visible = false
+
+[node name="AuroraSky" type="Node2D" parent="Sky"]
+script = ExtResource("2_aurora")

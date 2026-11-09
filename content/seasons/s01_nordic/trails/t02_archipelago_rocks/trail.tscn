@@ -1,87 +1,324 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://world/terrain_strip.gd" id="1_strip"]
-[ext_resource type="PackedScene" path="res://world/backdrop/backdrop.tscn" id="2_backdrop"]
-[ext_resource type="PackedScene" path="res://world/obstacles/rock.tscn" id="3_rock"]
-[ext_resource type="PackedScene" path="res://world/obstacles/root.tscn" id="4_root"]
-[ext_resource type="PackedScene" path="res://world/obstacles/stepping_stones.tscn" id="5_stones"]
-[ext_resource type="PackedScene" path="res://world/obstacles/kill_zone.tscn" id="6_kill"]
-[ext_resource type="PackedScene" path="res://world/interactables/bench.tscn" id="7_bench"]
-[ext_resource type="PackedScene" path="res://world/interactables/checkpoint.tscn" id="8_checkpoint"]
-[ext_resource type="PackedScene" path="res://world/interactables/finish.tscn" id="9_finish"]
-[ext_resource type="PackedScene" path="res://world/interactables/viewpoint.tscn" id="vp_scene"]
+[ext_resource type="Script" path="res://world/terrain_strip.gd" id="strip"]
+[ext_resource type="PackedScene" path="res://world/obstacles/root.tscn" id="root"]
+[ext_resource type="PackedScene" path="res://world/obstacles/rock.tscn" id="rock"]
+[ext_resource type="PackedScene" path="res://world/obstacles/mud_patch.tscn" id="mud"]
+[ext_resource type="PackedScene" path="res://world/obstacles/ice_patch.tscn" id="ice"]
+[ext_resource type="PackedScene" path="res://world/obstacles/kill_zone.tscn" id="kill"]
+[ext_resource type="PackedScene" path="res://world/obstacles/stepping_stones.tscn" id="stones"]
+[ext_resource type="PackedScene" path="res://world/interactables/bench.tscn" id="bench"]
+[ext_resource type="PackedScene" path="res://world/interactables/checkpoint.tscn" id="checkpoint"]
+[ext_resource type="PackedScene" path="res://world/interactables/finish.tscn" id="finish"]
+[ext_resource type="PackedScene" path="res://world/interactables/viewpoint.tscn" id="vp"]
+[ext_resource type="PackedScene" path="res://world/interactables/tutorial_trigger.tscn" id="tut"]
+[ext_resource type="PackedScene" path="res://world/backdrop/backdrop.tscn" id="backdrop"]
 
 [node name="ArchipelagoRocks" type="Node2D"]
 
-[node name="Backdrop" parent="." instance=ExtResource("2_backdrop")]
+[node name="Backdrop" parent="." instance=ExtResource("backdrop")]
 
 [node name="Scenery" type="Node2D" parent="."]
 
 [node name="Sea" type="Node2D" parent="Scenery"]
 
-[node name="Water" type="Polygon2D" parent="Scenery/Sea"]
+[node name="Body" type="Polygon2D" parent="Scenery/Sea"]
 color = Color(0.4706, 0.7373, 0.8392, 1.0)
 antialiased = true
-polygon = PackedVector2Array(1320, 422, 3600, 422, 3600, 2022, 1320, 2022)
-vertex_colors = PackedColorArray(0.6235, 0.8275, 0.9020, 1.0, 0.6235, 0.8275, 0.9020, 1.0, 0.3059, 0.5608, 0.6588, 1.0, 0.3059, 0.5608, 0.6588, 1.0)
+polygon = PackedVector2Array(-300, 452, -240, 422, 10488, 422, 10548, 452, 10548, 2022, -300, 2022)
 
 [node name="Ripple0" type="Polygon2D" parent="Scenery/Sea"]
 color = Color(0.9020, 0.9608, 0.9804, 0.8)
 antialiased = true
-polygon = PackedVector2Array(1360, 447, 1410, 447, 1410, 450, 1360, 450)
+polygon = PackedVector2Array(-230, 430, -180, 430, -180, 433, -230, 433)
 
 [node name="Ripple1" type="Polygon2D" parent="Scenery/Sea"]
 color = Color(0.9020, 0.9608, 0.9804, 0.8)
 antialiased = true
-polygon = PackedVector2Array(1505, 436, 1555, 436, 1555, 439, 1505, 439)
+polygon = PackedVector2Array(-90, 437, -40, 437, -40, 440, -90, 440)
 
 [node name="Ripple2" type="Polygon2D" parent="Scenery/Sea"]
 color = Color(0.9020, 0.9608, 0.9804, 0.8)
 antialiased = true
-polygon = PackedVector2Array(1687, 443, 1737, 443, 1737, 446, 1687, 446)
+polygon = PackedVector2Array(87, 444, 137, 444, 137, 447, 87, 447)
 
 [node name="Ripple3" type="Polygon2D" parent="Scenery/Sea"]
 color = Color(0.9020, 0.9608, 0.9804, 0.8)
 antialiased = true
-polygon = PackedVector2Array(1906, 432, 1956, 432, 1956, 435, 1906, 435)
+polygon = PackedVector2Array(301, 433, 351, 433, 351, 436, 301, 436)
 
 [node name="Ripple4" type="Polygon2D" parent="Scenery/Sea"]
 color = Color(0.9020, 0.9608, 0.9804, 0.8)
 antialiased = true
-polygon = PackedVector2Array(2072, 439, 2122, 439, 2122, 442, 2072, 442)
+polygon = PackedVector2Array(462, 440, 512, 440, 512, 443, 462, 443)
 
 [node name="Ripple5" type="Polygon2D" parent="Scenery/Sea"]
 color = Color(0.9020, 0.9608, 0.9804, 0.8)
 antialiased = true
-polygon = PackedVector2Array(2275, 446, 2325, 446, 2325, 449, 2275, 449)
+polygon = PackedVector2Array(660, 447, 710, 447, 710, 450, 660, 450)
 
 [node name="Ripple6" type="Polygon2D" parent="Scenery/Sea"]
 color = Color(0.9020, 0.9608, 0.9804, 0.8)
 antialiased = true
-polygon = PackedVector2Array(2425, 435, 2475, 435, 2475, 438, 2425, 438)
+polygon = PackedVector2Array(805, 436, 855, 436, 855, 439, 805, 439)
 
 [node name="Ripple7" type="Polygon2D" parent="Scenery/Sea"]
 color = Color(0.9020, 0.9608, 0.9804, 0.8)
 antialiased = true
-polygon = PackedVector2Array(2612, 442, 2662, 442, 2662, 445, 2612, 445)
+polygon = PackedVector2Array(987, 443, 1037, 443, 1037, 446, 987, 446)
 
 [node name="Ripple8" type="Polygon2D" parent="Scenery/Sea"]
 color = Color(0.9020, 0.9608, 0.9804, 0.8)
 antialiased = true
-polygon = PackedVector2Array(2836, 431, 2886, 431, 2886, 434, 2836, 434)
+polygon = PackedVector2Array(1206, 432, 1256, 432, 1256, 435, 1206, 435)
 
 [node name="Ripple9" type="Polygon2D" parent="Scenery/Sea"]
 color = Color(0.9020, 0.9608, 0.9804, 0.8)
 antialiased = true
-polygon = PackedVector2Array(3007, 438, 3057, 438, 3057, 441, 3007, 441)
+polygon = PackedVector2Array(1372, 439, 1422, 439, 1422, 442, 1372, 442)
 
 [node name="Ripple10" type="Polygon2D" parent="Scenery/Sea"]
 color = Color(0.9020, 0.9608, 0.9804, 0.8)
 antialiased = true
-polygon = PackedVector2Array(3215, 445, 3265, 445, 3265, 448, 3215, 448)
+polygon = PackedVector2Array(1575, 446, 1625, 446, 1625, 449, 1575, 449)
+
+[node name="Ripple11" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(1725, 435, 1775, 435, 1775, 438, 1725, 438)
+
+[node name="Ripple12" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(1912, 442, 1962, 442, 1962, 445, 1912, 445)
+
+[node name="Ripple13" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(2136, 431, 2186, 431, 2186, 434, 2136, 434)
+
+[node name="Ripple14" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(2307, 438, 2357, 438, 2357, 441, 2307, 441)
+
+[node name="Ripple15" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(2515, 445, 2565, 445, 2565, 448, 2515, 448)
+
+[node name="Ripple16" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(2670, 434, 2720, 434, 2720, 437, 2670, 437)
+
+[node name="Ripple17" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(2862, 441, 2912, 441, 2912, 444, 2862, 444)
+
+[node name="Ripple18" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(3091, 430, 3141, 430, 3141, 433, 3091, 433)
+
+[node name="Ripple19" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(3267, 437, 3317, 437, 3317, 440, 3267, 440)
+
+[node name="Ripple20" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(3480, 444, 3530, 444, 3530, 447, 3480, 447)
+
+[node name="Ripple21" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(3640, 433, 3690, 433, 3690, 436, 3640, 436)
+
+[node name="Ripple22" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(3837, 440, 3887, 440, 3887, 443, 3837, 443)
+
+[node name="Ripple23" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(3981, 447, 4031, 447, 4031, 450, 3981, 450)
+
+[node name="Ripple24" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(4162, 436, 4212, 436, 4212, 439, 4162, 439)
+
+[node name="Ripple25" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(4380, 443, 4430, 443, 4430, 446, 4380, 446)
+
+[node name="Ripple26" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(4545, 432, 4595, 432, 4595, 435, 4545, 435)
+
+[node name="Ripple27" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(4747, 439, 4797, 439, 4797, 442, 4747, 442)
+
+[node name="Ripple28" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(4896, 446, 4946, 446, 4946, 449, 4896, 449)
+
+[node name="Ripple29" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(5082, 435, 5132, 435, 5132, 438, 5082, 438)
+
+[node name="Ripple30" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(5305, 442, 5355, 442, 5355, 445, 5305, 445)
+
+[node name="Ripple31" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(5475, 431, 5525, 431, 5525, 434, 5475, 434)
+
+[node name="Ripple32" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(5682, 438, 5732, 438, 5732, 441, 5682, 441)
+
+[node name="Ripple33" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(5836, 445, 5886, 445, 5886, 448, 5836, 448)
+
+[node name="Ripple34" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(6027, 434, 6077, 434, 6077, 437, 6027, 437)
+
+[node name="Ripple35" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(6255, 441, 6305, 441, 6305, 444, 6255, 444)
+
+[node name="Ripple36" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(6430, 430, 6480, 430, 6480, 433, 6430, 433)
+
+[node name="Ripple37" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(6642, 437, 6692, 437, 6692, 440, 6642, 440)
+
+[node name="Ripple38" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(6801, 444, 6851, 444, 6851, 447, 6801, 447)
+
+[node name="Ripple39" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(6997, 433, 7047, 433, 7047, 436, 6997, 436)
+
+[node name="Ripple40" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(7140, 440, 7190, 440, 7190, 443, 7140, 443)
+
+[node name="Ripple41" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(7320, 447, 7370, 447, 7370, 450, 7320, 450)
+
+[node name="Ripple42" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(7537, 436, 7587, 436, 7587, 439, 7537, 439)
+
+[node name="Ripple43" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(7701, 443, 7751, 443, 7751, 446, 7701, 446)
+
+[node name="Ripple44" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(7902, 432, 7952, 432, 7952, 435, 7902, 435)
+
+[node name="Ripple45" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(8050, 439, 8100, 439, 8100, 442, 8050, 442)
+
+[node name="Ripple46" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(8235, 446, 8285, 446, 8285, 449, 8235, 449)
+
+[node name="Ripple47" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(8457, 435, 8507, 435, 8507, 438, 8457, 438)
+
+[node name="Ripple48" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(8626, 442, 8676, 442, 8676, 445, 8626, 445)
+
+[node name="Ripple49" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(8832, 431, 8882, 431, 8882, 434, 8832, 434)
+
+[node name="Ripple50" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(8985, 438, 9035, 438, 9035, 441, 8985, 441)
+
+[node name="Ripple51" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(9175, 445, 9225, 445, 9225, 448, 9175, 448)
+
+[node name="Ripple52" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(9402, 434, 9452, 434, 9452, 437, 9402, 437)
+
+[node name="Ripple53" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(9576, 441, 9626, 441, 9626, 444, 9576, 444)
+
+[node name="Ripple54" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(9787, 430, 9837, 430, 9837, 433, 9787, 433)
+
+[node name="Ripple55" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(9945, 437, 9995, 437, 9995, 440, 9945, 440)
+
+[node name="Ripple56" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(10140, 444, 10190, 444, 10190, 447, 10140, 447)
+
+[node name="Ripple57" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(10282, 433, 10332, 433, 10332, 436, 10282, 436)
 
 [node name="Lighthouse" type="Node2D" parent="Scenery"]
-position = Vector2(2960, 440)
+position = Vector2(8498, 350)
 
 [node name="Band0" type="Polygon2D" parent="Scenery/Lighthouse"]
 color = Color(0.9098, 0.3647, 0.2471, 1.0)
@@ -128,68 +365,126 @@ position = Vector2(160, 550)
 
 [node name="Ground" type="Node2D" parent="."]
 
-[node name="Shore" type="Line2D" parent="Ground"]
-points = PackedVector2Array(-300, 560, 500, 560, 700, 540, 900, 540)
+[node name="Strip1" type="Line2D" parent="Ground"]
+points = PackedVector2Array(-300, 560, 800, 560)
 width = 14.0
-default_color = Color(0.788235, 0.698039, 0.560784, 1)
 joint_mode = 2
 begin_cap_mode = 2
 end_cap_mode = 2
-script = ExtResource("1_strip")
+script = ExtResource("strip")
+surface = 0
+fill_color = Color(0.2902, 0.4510, 0.3490, 1.0)
+fill_bottom_color = Color(0.1333, 0.2157, 0.1725, 1.0)
+tuft_color = Color(0.4353, 0.6118, 0.3725, 1.0)
+decor_seed = 3
+
+[node name="Strip3" type="Line2D" parent="Ground"]
+points = PackedVector2Array(1212, 560, 1262, 557.1, 1312, 549.2, 1362, 538, 1412, 526.1, 1462, 516.3, 1512, 510.7, 1562, 510.7, 1612, 516.3, 1662, 526.1, 1712, 538, 1762, 549.2, 1812, 557.1, 1862, 560, 1912, 557.1, 1962, 549.2, 2012, 538, 2062, 526.1, 2112, 516.3, 2162, 510.7, 2212, 510.7, 2262, 516.3, 2312, 526.1, 2362, 538, 2412, 549.2, 2462, 557.1, 2512, 560, 2712, 560)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("strip")
+surface = 1
+fill_color = Color(0.2902, 0.4510, 0.3490, 1.0)
+fill_bottom_color = Color(0.1333, 0.2157, 0.1725, 1.0)
+tuft_color = Color(0.4353, 0.6118, 0.3725, 1.0)
+decor_seed = 5
+
+[node name="Strip4" type="Line2D" parent="Ground"]
+points = PackedVector2Array(2792, 560, 2855.6, 558.2, 2919.3, 552.9, 2982.9, 544.5, 3046.5, 533.7, 3110.2, 521.4, 3173.8, 508.6, 3237.5, 496.3, 3301.1, 485.5, 3364.7, 477.1, 3428.4, 471.8, 3492, 470, 3992, 470, 4242, 470)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("strip")
+surface = 1
+fill_color = Color(0.2902, 0.4510, 0.3490, 1.0)
+fill_bottom_color = Color(0.1333, 0.2157, 0.1725, 1.0)
+tuft_color = Color(0.4353, 0.6118, 0.3725, 1.0)
+decor_seed = 6
+
+[node name="Strip5" type="Line2D" parent="Ground"]
+points = PackedVector2Array(4778, 470, 4828, 466, 4878, 455, 4928, 440, 4978, 425, 5028, 414, 5078, 410, 5128, 414, 5178, 425, 5228, 440, 5278, 455, 5328, 466, 5378, 470, 5428, 466, 5478, 455, 5528, 440, 5578, 425, 5628, 414, 5678, 410, 5728, 414, 5778, 425, 5828, 440, 5878, 455, 5928, 466, 5978, 470, 6128, 470)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("strip")
+surface = 1
+fill_color = Color(0.2902, 0.4510, 0.3490, 1.0)
+fill_bottom_color = Color(0.1333, 0.2157, 0.1725, 1.0)
+tuft_color = Color(0.4353, 0.6118, 0.3725, 1.0)
 decor_seed = 7
 
-[node name="Granite" type="Line2D" parent="Ground"]
-points = PackedVector2Array(1320, 540, 1500, 530, 1800, 470, 2000, 470, 2200, 480)
+[node name="Strip6" type="Line2D" parent="Ground"]
+points = PackedVector2Array(6212, 470, 6272, 468.7, 6332, 464.8, 6392, 458.5, 6452, 450.1, 6512, 440, 6572, 428.5, 6632, 416.3, 6692, 403.7, 6752, 391.5, 6812, 380, 6872, 369.9, 6932, 361.5, 6992, 355.2, 7052, 351.3, 7112, 350, 7412, 350)
 width = 14.0
-default_color = Color(0.611765, 0.603922, 0.564706, 1)
 joint_mode = 2
 begin_cap_mode = 2
 end_cap_mode = 2
-script = ExtResource("1_strip")
+script = ExtResource("strip")
 surface = 1
+fill_color = Color(0.2902, 0.4510, 0.3490, 1.0)
+fill_bottom_color = Color(0.1333, 0.2157, 0.1725, 1.0)
+tuft_color = Color(0.4353, 0.6118, 0.3725, 1.0)
 decor_seed = 8
 
-[node name="Point" type="Line2D" parent="Ground"]
-points = PackedVector2Array(2280, 480, 2500, 480, 2700, 440, 3500, 440)
+[node name="Strip7" type="Line2D" parent="Ground"]
+points = PackedVector2Array(7848, 350, 8348, 350, 8598, 350, 8664.7, 347.3, 8731.3, 340, 8798, 330, 8864.7, 320, 8931.3, 312.7, 8998, 310, 9248, 310, 9948, 310)
 width = 14.0
-default_color = Color(0.611765, 0.603922, 0.564706, 1)
 joint_mode = 2
 begin_cap_mode = 2
 end_cap_mode = 2
-script = ExtResource("1_strip")
+script = ExtResource("strip")
 surface = 1
+fill_color = Color(0.2902, 0.4510, 0.3490, 1.0)
+fill_bottom_color = Color(0.1333, 0.2157, 0.1725, 1.0)
+tuft_color = Color(0.4353, 0.6118, 0.3725, 1.0)
 decor_seed = 9
 
 [node name="Pieces" type="Node2D" parent="."]
 
-[node name="Rock1" parent="Pieces" instance=ExtResource("3_rock")]
-position = Vector2(400, 560)
+[node name="Stones1" parent="Pieces" instance=ExtResource("stones")]
+position = Vector2(800, 560)
+stone_count = 3
+gap = 70
 
-[node name="Stream" parent="Pieces" instance=ExtResource("5_stones")]
-position = Vector2(900, 540)
+[node name="Kill1" parent="Pieces" instance=ExtResource("kill")]
+position = Vector2(2752, 820)
+size = Vector2(120, 300)
 
-[node name="Root1" parent="Pieces" instance=ExtResource("4_root")]
-position = Vector2(1600, 510)
+[node name="Stones2" parent="Pieces" instance=ExtResource("stones")]
+position = Vector2(4242, 470)
+stone_count = 4
+gap = 72
 
-[node name="Bench" parent="Pieces" instance=ExtResource("7_bench")]
-position = Vector2(1900, 470)
+[node name="Kill2" parent="Pieces" instance=ExtResource("kill")]
+position = Vector2(6170, 730)
+size = Vector2(124, 300)
 
-[node name="Checkpoint" parent="Pieces" instance=ExtResource("8_checkpoint")]
-position = Vector2(2040, 470)
+[node name="Stones3" parent="Pieces" instance=ExtResource("stones")]
+position = Vector2(7412, 350)
+stone_count = 3
+gap = 76
 
-[node name="GapKillZone" parent="Pieces" instance=ExtResource("6_kill")]
-position = Vector2(2240, 700)
-size = Vector2(140, 200)
+[node name="Rock1" parent="Pieces" instance=ExtResource("rock")]
+position = Vector2(350, 560)
 
-[node name="Rock2" parent="Pieces" instance=ExtResource("3_rock")]
-position = Vector2(2420, 480)
-size = Vector2(64, 46)
+[node name="Root1" parent="Pieces" instance=ExtResource("root")]
+position = Vector2(1612, 516.3)
 
-[node name="Finish" parent="Pieces" instance=ExtResource("9_finish")]
-position = Vector2(2850, 440)
+[node name="Rock2" parent="Pieces" instance=ExtResource("rock")]
+position = Vector2(2212, 510.7)
 
-[node name="Seabirds" parent="Pieces" instance=ExtResource("vp_scene")]
-position = Vector2(1760, 478)
+[node name="Bench1" parent="Pieces" instance=ExtResource("bench")]
+position = Vector2(3542, 470)
+
+[node name="Checkpoint1" parent="Pieces" instance=ExtResource("checkpoint")]
+position = Vector2(3742, 470)
+
+[node name="Vp1" parent="Pieces" instance=ExtResource("vp")]
+position = Vector2(3912, 470)
 viewpoint_id = &"seabirds"
 frame_offset = Vector2(260, -200)
 subject_kind = 0
@@ -197,11 +492,21 @@ subject_path = PackedVector2Array(-300, 10, -60, -60, 120, -10, 300, -70)
 subject_speed = 120
 subject_size = 1.1
 
-[node name="LighthouseView" parent="Pieces" instance=ExtResource("vp_scene")]
-position = Vector2(2560, 480)
+[node name="Rock3" parent="Pieces" instance=ExtResource("rock")]
+position = Vector2(5478, 455)
+size = Vector2(64, 46)
+
+[node name="Checkpoint2" parent="Pieces" instance=ExtResource("checkpoint")]
+position = Vector2(7262, 350)
+
+[node name="Vp2" parent="Pieces" instance=ExtResource("vp")]
+position = Vector2(8098, 350)
 viewpoint_id = &"lighthouse"
 frame_offset = Vector2(330, -72)
 subject_kind = 1
 subject_path = PackedVector2Array(-260, 0, 260, 0)
 subject_speed = 55
 subject_size = 1.0
+
+[node name="Finish1" parent="Pieces" instance=ExtResource("finish")]
+position = Vector2(9098, 310)

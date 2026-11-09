@@ -79,7 +79,8 @@ func set_low_fraction(low: float) -> void:
 	stamina_bar.low_fraction = low
 
 
-func set_daylight(sun_progress: float, phase: Daylight.Phase) -> void:
+func set_daylight(sun_progress: float, phase: Daylight.Phase, night: bool = false) -> void:
+	sun_arc.night = night
 	sun_arc.set_daylight(sun_progress, phase)
 
 
@@ -88,7 +89,7 @@ func set_photos(taken: int, total: int) -> void:
 
 
 ## Short message under the top bar ("Checkpoint", "Dusk falls"...). `key` is a translation key.
-func show_toast(key: String) -> void:
+func show_toast(key: String, seconds: float = TOAST_SECONDS) -> void:
 	toast_label.text = tr(key)
 	if _toast_tween != null:
 		_toast_tween.kill()
@@ -98,5 +99,5 @@ func show_toast(key: String) -> void:
 	_toast_tween = create_tween()
 	_toast_tween.tween_property(toast, "modulate:a", 1.0, 0.15)
 	_toast_tween.parallel().tween_property(toast, "scale", Vector2.ONE, 0.25).set_trans(Tween.TRANS_BACK)
-	_toast_tween.tween_interval(TOAST_SECONDS)
+	_toast_tween.tween_interval(seconds)
 	_toast_tween.tween_property(toast, "modulate:a", 0.0, 0.4)

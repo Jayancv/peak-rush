@@ -75,6 +75,56 @@ func total_stars() -> int:
 	return n
 
 
+# --- Gear ---
+
+func is_owned(gear_id: StringName) -> bool:
+	return owned_gear.has(String(gear_id))
+
+
+func is_equipped(gear_id: StringName) -> bool:
+	return equipped_gear.has(String(gear_id))
+
+
+## Spends TP on `gear_id`. False if unknown, already owned, or not enough TP.
+func buy(gear_id: StringName) -> bool:
+	var g: GearData = ContentDB.get_gear(gear_id)
+	if g == null or is_owned(gear_id) or tp < g.cost:
+		return false
+	tp -= g.cost
+	owned_gear.append(String(gear_id))
+	progress_changed.emit()
+	return true
+
+
+## Equips owned gear. False if not owned or both slots are full.
+func equip(gear_id: StringName) -> bool:
+	if not is_owned(gear_id) or is_equipped(gear_id) or equipped_gear.size() >= ContentDB.balance.gear_slots:
+		return false
+	equipped_gear.append(String(gear_id))
+	progress_changed.emit()
+	return true
+
+
+func unequip(gear_id: StringName) -> void:
+	if is_equipped(gear_id):
+		equipped_gear.erase(String(gear_id))
+		progress_changed.emit()
+
+
+func equipped_items() -> Array[GearData]:
+	var out: Array[GearData] = []
+	for id: String in equipped_gear:
+		var g: GearData = ContentDB.get_gear(StringName(id))
+		if g != null:
+			out.append(g)
+	return out
+
+
+## The trail "Continue" should open: the next unlocked, unfinished one (newest season first).
+func next_trail_to_play() -> TrailData:
+	return ContentDB.next_unfinished_trail(is_unlocked, is_completed)
+
+
 # --- Recording a hike ---
 
 ## Merges a finished hike into the trail's record and pays out TP.

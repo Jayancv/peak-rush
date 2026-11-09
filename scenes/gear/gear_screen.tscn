@@ -1,0 +1,126 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/gear/gear_screen.gd" id="1_gear"]
+[ext_resource type="Script" path="res://scenes/ui/safe_area_margin.gd" id="2_safe"]
+[ext_resource type="PackedScene" path="res://world/backdrop/backdrop.tscn" id="3_backdrop"]
+[ext_resource type="Script" path="res://scenes/ui/ui_icon.gd" id="4_icon"]
+[ext_resource type="FontVariation" path="res://shared_art/title_font.tres" id="5_title"]
+
+[sub_resource type="StyleBoxFlat" id="Pill"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 18.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 0.964706, 0.898039, 0.92)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[node name="GearScreen" type="Control" node_paths=PackedStringArray("cards", "tp_label", "slots_label", "back_button")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_gear")
+cards = NodePath("SafeArea/VBox/Scroll/Cards")
+tp_label = NodePath("SafeArea/VBox/Header/TpPill/Label")
+slots_label = NodePath("SafeArea/VBox/Slots")
+back_button = NodePath("SafeArea/VBox/Header/BackButton")
+
+[node name="Backdrop" parent="." instance=ExtResource("3_backdrop")]
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.168627, 0.176471, 0.258824, 0.25)
+
+[node name="SafeArea" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_safe")
+
+[node name="VBox" type="VBoxContainer" parent="SafeArea"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Header" type="HBoxContainer" parent="SafeArea/VBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+
+[node name="BackButton" type="Button" parent="SafeArea/VBox/Header"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+tooltip_text = "COMMON_BACK"
+theme_type_variation = &"IconButton"
+
+[node name="Icon" type="Control" parent="SafeArea/VBox/Header/BackButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_top = 16.0
+offset_right = -18.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_icon")
+kind = 3
+stroke = 0.16
+
+[node name="Title" type="Label" parent="SafeArea/VBox/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0.964706, 0.898039, 1)
+theme_override_colors/font_shadow_color = Color(0.168627, 0.176471, 0.258824, 0.5)
+theme_override_constants/shadow_offset_y = 3
+theme_override_fonts/font = ExtResource("5_title")
+theme_override_font_sizes/font_size = 52
+text = "GEAR_TITLE"
+
+[node name="TpPill" type="PanelContainer" parent="SafeArea/VBox/Header"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Pill")
+
+[node name="Label" type="Label" parent="SafeArea/VBox/Header/TpPill"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "HUD_TP"
+
+[node name="Slots" type="Label" parent="SafeArea/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.964706, 0.898039, 1)
+theme_override_colors/font_shadow_color = Color(0.168627, 0.176471, 0.258824, 0.5)
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 26
+text = "GEAR_SLOTS"
+
+[node name="Scroll" type="ScrollContainer" parent="SafeArea/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+vertical_scroll_mode = 0
+
+[node name="Cards" type="HBoxContainer" parent="SafeArea/VBox/Scroll"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_constants/separation = 20

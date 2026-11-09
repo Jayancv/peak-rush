@@ -17,7 +17,7 @@ corner_radius_top_right = 30
 corner_radius_bottom_right = 30
 corner_radius_bottom_left = 30
 
-[node name="TrailSelect" type="Control" node_paths=PackedStringArray("tabs", "cards", "scroll", "back_button", "tp_label", "stars_label")]
+[node name="TrailSelect" type="Control" node_paths=PackedStringArray("tabs", "cards", "scroll", "back_button", "tp_label", "stars_label", "gear_button")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -32,6 +32,7 @@ scroll = NodePath("SafeArea/VBox/Scroll")
 back_button = NodePath("SafeArea/VBox/Header/BackButton")
 tp_label = NodePath("SafeArea/VBox/Header/TpPill/Row/Label")
 stars_label = NodePath("SafeArea/VBox/Header/StarsPill/Row/Label")
+gear_button = NodePath("SafeArea/VBox/Header/GearButton")
 
 [node name="Backdrop" parent="." instance=ExtResource("3_backdrop")]
 
@@ -96,6 +97,27 @@ theme_override_constants/shadow_offset_y = 3
 theme_override_fonts/font = ExtResource("5_title")
 theme_override_font_sizes/font_size = 52
 text = "SELECT_TITLE"
+
+[node name="GearButton" type="Button" parent="SafeArea/VBox/Header"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+tooltip_text = "GEAR_TITLE"
+theme_type_variation = &"IconButton"
+
+[node name="Icon" type="Control" parent="SafeArea/VBox/Header/GearButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 14.0
+offset_right = -16.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_icon")
+kind = 10
 
 [node name="StarsPill" type="PanelContainer" parent="SafeArea/VBox/Header"]
 layout_mode = 2

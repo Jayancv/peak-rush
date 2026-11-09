@@ -21,6 +21,13 @@ extends Resource
 @export var postcard: Texture2D
 ## Trails unlock in this order within their season; the first is always open.
 @export var unlock_order: int = 0
+## Shows the level's TutorialTrigger hints (until the trail has been finished once).
+@export var tutorial: bool = false
+## Night trail: dark from the start, headlamp on; `daylight_seconds` is then the
+## window (e.g. the aurora) to summit within for the third star.
+@export var night: bool = false
+## Caption of the third star on the results screen.
+@export var star3_key: String = "RESULTS_STAR_DUSK"
 
 
 func viewpoint_ids() -> Array[StringName]:

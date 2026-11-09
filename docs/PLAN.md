@@ -23,6 +23,7 @@ Claude Code ticks `[x]` as tasks finish and updates "Current status" in `CLAUDE.
 | M6 | Full Season 1 and gear | 4–6 days |
 | M7 | Mobile polish and store release | 3–5 days |
 | M8 | Live seasons pipeline | ongoing |
+| M9 | Real-world step rewards (Health Connect / HealthKit) | 4–6 days |
 *Focused working days. Expect about 2–3× that if you work part-time and are learning Godot along the way.
 
 ---
@@ -130,14 +131,14 @@ Make one trail feel like the finished game before building more.
 ---
 
 ## M6 — Season 1 content and meta
-- [ ] Trail 1 *Forest Lake Loop* with tutorial prompts (walk → rest → jump → photo)
-- [ ] Trail 2 *Archipelago Rocks* (wind, stepping stones)
-- [ ] Trail 4 *Fjord Ridge* (rain, mud, ledges)
-- [ ] Trail 5 *Aurora Summit* (night, ice, aurora window)
-- [ ] **Gear screen:** buy and equip (2 slots); the effects plug into the stamina and slope systems via modifiers, with tests
-- [ ] Main menu polish: a season banner and a "Continue" button that resumes the next unfinished trail
-- [ ] Every string goes through `translations/strings.csv`
-- [ ] Balance pass: a full season run takes about 30–45 minutes for a new player
+- [x] Trail 1 *Forest Lake Loop* with tutorial prompts (walk → rest → jump → photo)
+- [x] Trail 2 *Archipelago Rocks* (wind, stepping stones)
+- [x] Trail 4 *Fjord Ridge* (rain, mud, ledges)
+- [x] Trail 5 *Aurora Summit* (night, ice, aurora window)
+- [x] **Gear screen:** buy and equip (2 slots); the effects plug into the stamina and slope systems via modifiers, with tests
+- [x] Main menu polish: a season banner and a "Continue" button that resumes the next unfinished trail
+- [x] Every string goes through `translations/strings.csv`
+- [x] Balance pass: a full season run takes about 30–45 minutes for a new player
 
 **Done when:** Season 1 can be completed from start to finish on the phone without bugs.
 
@@ -172,6 +173,26 @@ Make one trail feel like the finished game before building more.
 - [ ] **Season 2 – Tea Country** (see GAME_DESIGN §7)
 - [ ] Decide on monetisation (paid vs free with season in-app purchases). If IAP, use Godot's official Google Play Billing plugin and an iOS StoreKit plugin.
 - [ ] *(Advanced, optional)* Download new seasons as `.pck` resource packs (`ProjectSettings.load_resource_pack`) without an app update
+
+---
+
+## M9 — Real-world step rewards (after launch)
+Turn the player's real steps into a small TP bonus (GAME_DESIGN §5.10). Start only after 1.0 has shipped.
+Android comes first because it can be built on Windows; iOS needs a Mac.
+- [ ] `systems/step_rewards.gd` (`StepRewards`): steps → TP per day, daily cap, 7-day claim window, no steps from before opt-in, with tests (including clock moved backwards and duplicate syncs)
+- [ ] `balance.tres`: `steps_per_tp` (500), `step_tp_daily_cap` (40), `step_claim_window_days` (7), `step_length_m` (0.75)
+- [ ] Save format: `steps_opt_in_time`, `steps_last_sync`, claimed steps per day and lifetime steps; bump `SAVE_VERSION`, add a migration step and a test
+- [ ] A step bridge that uses the native plugin through `Engine.has_singleton()` and does nothing on desktop and under GUT, so the editor and tests keep working. Put it inside an existing autoload, or **ask the user** before adding a sixth one
+- [ ] **Android plugin** (Godot Android plugin v2, Kotlin): Health Connect availability check, `READ_STEPS` permission request, daily step totals for a date range; added to the Android export preset
+- [ ] Settings: a "Connect step counter" toggle with a short explanation, and a way to disconnect
+- [ ] Main menu: a "Steps walked today → +N TP" claim card (with the TP count-up from the results screen); it hides itself when not connected
+- [ ] Journal: a "Real km walked" stat
+- [ ] Strings in `translations/strings.csv`
+- [ ] Store paperwork: update the privacy policy (step data stays on the device), the Google Play data-safety form and the **Health Connect permission declaration**
+- [ ] **iOS plugin** (Swift, HealthKit) with the entitlement and `NSHealthShareUsageDescription`; needs a Mac with Xcode, so postpone if there isn't one
+- [ ] Test on the Pixel 7 Pro: connect, walk around, claim TP, deny the permission, revoke it in system settings, and make sure the game still works
+
+**Done when:** on the phone, real steps turn into TP up to the daily cap, the game works normally when the permission is denied or revoked, and all tests pass.
 
 ---
 

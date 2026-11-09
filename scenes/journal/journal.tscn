@@ -28,7 +28,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_journal")
 tabs = NodePath("SafeArea/VBox/Tabs")
-stamps = NodePath("SafeArea/VBox/Pages/Passport/VBox/Stamps")
+stamps = NodePath("SafeArea/VBox/Pages/Passport/VBox/Scroll/Stamps")
 postcards = NodePath("SafeArea/VBox/Pages/Postcards/VBox/Scroll/Grid")
 count_label = NodePath("SafeArea/VBox/Header/CountPill/Label")
 back_button = NodePath("SafeArea/VBox/Header/BackButton")
@@ -122,7 +122,7 @@ mouse_filter = 2
 theme_override_constants/separation = 20
 
 [node name="Passport" type="PanelContainer" parent="SafeArea/VBox/Pages"]
-custom_minimum_size = Vector2(400, 0)
+custom_minimum_size = Vector2(470, 0)
 layout_mode = 2
 mouse_filter = 2
 theme_type_variation = &"CardPanel"
@@ -138,12 +138,18 @@ theme_override_fonts/font = ExtResource("5_title")
 theme_override_font_sizes/font_size = 32
 text = "JOURNAL_PASSPORT"
 
-[node name="Stamps" type="GridContainer" parent="SafeArea/VBox/Pages/Passport/VBox"]
+[node name="Scroll" type="ScrollContainer" parent="SafeArea/VBox/Pages/Passport/VBox"]
 layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Stamps" type="GridContainer" parent="SafeArea/VBox/Pages/Passport/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
 mouse_filter = 2
-theme_override_constants/h_separation = 24
-theme_override_constants/v_separation = 18
-columns = 2
+theme_override_constants/h_separation = 14
+theme_override_constants/v_separation = 12
+columns = 3
 
 [node name="Postcards" type="PanelContainer" parent="SafeArea/VBox/Pages"]
 layout_mode = 2

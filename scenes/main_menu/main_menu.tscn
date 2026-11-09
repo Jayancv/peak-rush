@@ -8,7 +8,7 @@
 [ext_resource type="Script" path="res://scenes/ui/ui_icon.gd" id="6_icon"]
 [ext_resource type="FontVariation" path="res://shared_art/title_font.tres" id="7_title"]
 
-[node name="MainMenu" type="Control" node_paths=PackedStringArray("play_button", "journal_button", "settings_button", "backdrop")]
+[node name="MainMenu" type="Control" node_paths=PackedStringArray("play_button", "journal_button", "settings_button", "continue_button", "gear_button", "banner", "banner_label", "backdrop")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -17,8 +17,12 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_menu")
-play_button = NodePath("SafeArea/VBox/PlayButton")
-journal_button = NodePath("SafeArea/VBox/JournalButton")
+play_button = NodePath("SafeArea/VBox/Row/PlayButton")
+journal_button = NodePath("SafeArea/VBox/Row/JournalButton")
+continue_button = NodePath("SafeArea/VBox/ContinueButton")
+gear_button = NodePath("SafeArea/VBox/Row/GearButton")
+banner = NodePath("SafeArea/VBox/Banner")
+banner_label = NodePath("SafeArea/VBox/Banner/Label")
 settings_button = NodePath("SafeArea/Corner/SettingsButton")
 backdrop = NodePath("Backdrop")
 
@@ -51,7 +55,7 @@ script = ExtResource("2_safe")
 [node name="VBox" type="VBoxContainer" parent="SafeArea"]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/separation = 24
+theme_override_constants/separation = 18
 alignment = 1
 
 [node name="Card" type="PanelContainer" parent="SafeArea/VBox"]
@@ -87,21 +91,50 @@ theme_override_font_sizes/font_size = 28
 text = "MENU_SUBTITLE"
 horizontal_alignment = 1
 
-[node name="PlayButton" type="Button" parent="SafeArea/VBox"]
-custom_minimum_size = Vector2(340, 104)
+[node name="Banner" type="PanelContainer" parent="SafeArea/VBox"]
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="SafeArea/VBox/Banner"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.964706, 0.898039, 1)
+theme_override_font_sizes/font_size = 24
+text = "MENU_SEASON"
+horizontal_alignment = 1
+
+[node name="ContinueButton" type="Button" parent="SafeArea/VBox"]
+custom_minimum_size = Vector2(420, 96)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_type_variation = &"PrimaryButton"
 theme_override_fonts/font = ExtResource("7_title")
-theme_override_font_sizes/font_size = 44
-text = "MENU_PLAY"
+theme_override_font_sizes/font_size = 34
+text = "MENU_CONTINUE"
 
-[node name="JournalButton" type="Button" parent="SafeArea/VBox"]
-custom_minimum_size = Vector2(260, 76)
+[node name="Row" type="HBoxContainer" parent="SafeArea/VBox"]
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 30
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="PlayButton" type="Button" parent="SafeArea/VBox/Row"]
+custom_minimum_size = Vector2(220, 72)
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "MENU_TRAILS"
+
+[node name="JournalButton" type="Button" parent="SafeArea/VBox/Row"]
+custom_minimum_size = Vector2(200, 72)
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
 text = "MENU_JOURNAL"
+
+[node name="GearButton" type="Button" parent="SafeArea/VBox/Row"]
+custom_minimum_size = Vector2(180, 72)
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "GEAR_TITLE"
 
 [node name="BottomSpacer" type="Control" parent="SafeArea/VBox"]
 custom_minimum_size = Vector2(0, 30)

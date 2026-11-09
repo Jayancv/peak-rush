@@ -213,8 +213,10 @@ func stop_horizontal(decel: float, delta: float) -> void:
 ## Standing still: stops quickly on grip, slides on ice (and back down uphill ice).
 func ground_stop(decel: float, delta: float) -> void:
 	if is_on_floor() and HikeModifiers.is_slippery(effective_surface()):
-		var slide: float = -balance.ice_slip_speed * FACING if signed_grade > 0.05 else 0.0
-		move_horizontal(slide, balance.ice_decel, delta)
+		# Grip boots shrink both the slide back and the long stop.
+		var grip: float = condition.modifiers.gear.slip_scale
+		var slide: float = -balance.ice_slip_speed * grip * FACING if signed_grade > 0.05 else 0.0
+		move_horizontal(slide, lerpf(decel, balance.ice_decel, grip), delta)
 	else:
 		stop_horizontal(decel, delta)
 

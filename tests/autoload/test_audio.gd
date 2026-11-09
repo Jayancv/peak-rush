@@ -20,6 +20,18 @@ func test_ambiences_loop() -> void:
 		assert_gt(wav.loop_end, SynthSounds.LOOP_RATE, "loop should be longer than a second")
 
 
+func test_every_sound_has_read_ahead_padding() -> void:
+	# Regression: the mixer reads past the play position; unpadded buffers crashed on Android.
+	for key: StringName in [&"shutter", &"summit", &"menu_pad", &"step_0", &"step_4", &"ambience_1", &"ambience_3"]:
+		var wav: AudioStreamWAV = SynthSounds.make(key)
+		var frames: int = wav.data.size() / 2
+		if wav.loop_mode == AudioStreamWAV.LOOP_FORWARD:
+			assert_gte(frames - wav.loop_end, SynthSounds.TAIL_PAD, "%s loop has no padding" % key)
+		else:
+			# Last frames of a one-shot must be silence.
+			assert_eq(wav.data.decode_s16(wav.data.size() - 2), 0, "%s doesn't end in silence" % key)
+
+
 func test_sfx_volume_setting_moves_the_bus() -> void:
 	var before: float = float(GameState.settings.get("sfx_volume", 0.8))
 	GameState.set_setting("sfx_volume", 0.25)

@@ -16,6 +16,11 @@ const DOT_COUNT: int = 11
 	set(v):
 		progress = clampf(v, 0.0, 1.0)
 		queue_redraw()
+## Night trails show the moon the whole way.
+@export var night: bool = false:
+	set(v):
+		night = v
+		queue_redraw()
 @export var phase: Daylight.Phase = Daylight.Phase.MORNING:
 	set(v):
 		phase = v
@@ -41,7 +46,7 @@ func _draw() -> void:
 		var a: float = PI + PI * float(i) / float(DOT_COUNT - 1)
 		draw_circle(center + Vector2(cos(a), sin(a)) * radius, 2.0, DOTS, true, -1.0, true)
 	var pos: Vector2 = center + Vector2(cos(PI + PI * progress), sin(PI + PI * progress)) * radius
-	if phase == Daylight.Phase.DUSK:
+	if phase == Daylight.Phase.DUSK or night:
 		draw_circle(pos, 8.0, MOON, true, -1.0, true)
 		draw_circle(pos + Vector2(3.5, -2.5), 6.5, MOON_SHADOW, true, -1.0, true)
 	else:

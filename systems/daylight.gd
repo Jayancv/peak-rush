@@ -10,14 +10,17 @@ enum Phase { MORNING, MIDDAY, GOLDEN, DUSK }
 
 var elapsed: float = 0.0
 var daylight_seconds: float
+## Night trails stay dark; "dusk" then means the window (e.g. the aurora) has closed.
+var night: bool = false
 
 var _balance: Balance
 var _phase: Phase = Phase.MORNING
 
 
-func _init(balance: Balance, seconds_of_daylight: float) -> void:
+func _init(balance: Balance, seconds_of_daylight: float, is_night: bool = false) -> void:
 	_balance = balance
 	daylight_seconds = maxf(seconds_of_daylight, 1.0)
+	night = is_night
 
 
 func advance(delta: float) -> void:
@@ -58,6 +61,8 @@ func is_dusk() -> bool:
 func tint() -> Color:
 	var f: float = fraction()
 	var b: Balance = _balance
+	if night:
+		return b.tint_night.lerp(b.tint_night_late, smoothstep(1.0 - b.dusk_fade, 1.0, f))
 	if f < b.midday_start:
 		return b.tint_morning.lerp(b.tint_midday, smoothstep(0.0, b.midday_start, f))
 	if f < b.golden_start:

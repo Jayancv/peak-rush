@@ -10,6 +10,8 @@ const COUNT_SECONDS: float = 1.0
 @export var trail_label: Label
 @export var stars: Array[UiIcon] = []
 @export var star_tags: Array[Label] = []
+## Caption under the third star (dusk, or e.g. the aurora window on night trails).
+@export var star3_caption: Label
 @export var time_label: Label
 @export var best_tag: Control
 @export var par_label: Label
@@ -45,6 +47,7 @@ func _ready() -> void:
 
 func _fill() -> void:
 	trail_label.text = tr(_trail.name_key)
+	star3_caption.text = tr(_trail.star3_key)
 	time_label.text = tr("RESULTS_TIME") % TimeFormat.mmss(float(_result.get("time", 0.0)))
 	par_label.text = tr("RESULTS_PAR") % TimeFormat.mmss(_trail.par_time)
 	best_tag.visible = bool(_result.get("new_best", false))

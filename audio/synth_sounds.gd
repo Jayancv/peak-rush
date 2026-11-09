@@ -201,11 +201,26 @@ static func _seamless(samples: PackedFloat32Array, rate: int) -> PackedFloat32Ar
 	return samples
 
 
+## Extra frames after the sound. The mixer reads a frame or two past the play
+## position to interpolate (pitch != 1, loop wrap); without real data there it
+## over-reads the buffer, which hardened Android allocators kill the app for.
+const TAIL_PAD: int = 32
+
+
 static func _wav(samples: PackedFloat32Array, rate: int, loop: bool) -> AudioStreamWAV:
+	var length: int = samples.size()
+	var total: int = length + TAIL_PAD
 	var data: PackedByteArray = PackedByteArray()
-	data.resize(samples.size() * 2)
-	for i: int in samples.size():
-		data.encode_s16(i * 2, clampi(int(samples[i] * 32767.0), -32768, 32767))
+	data.resize(total * 2)
+	for i: int in total:
+		# Loops continue into a copy of their start (so the wrap is seamless too);
+		# one-shots trail off into silence.
+		var s: float = 0.0
+		if i < length:
+			s = samples[i]
+		elif loop and length > 0:
+			s = samples[(i - length) % length]
+		data.encode_s16(i * 2, clampi(int(s * 32767.0), -32768, 32767))
 	var wav: AudioStreamWAV = AudioStreamWAV.new()
 	wav.format = AudioStreamWAV.FORMAT_16_BITS
 	wav.mix_rate = rate
@@ -214,7 +229,8 @@ static func _wav(samples: PackedFloat32Array, rate: int, loop: bool) -> AudioStr
 	if loop:
 		wav.loop_mode = AudioStreamWAV.LOOP_FORWARD
 		wav.loop_begin = 0
-		wav.loop_end = samples.size()
+		# The loop ends where the real sound ends; the padding is only ever read ahead.
+		wav.loop_end = length
 	return wav
 
 

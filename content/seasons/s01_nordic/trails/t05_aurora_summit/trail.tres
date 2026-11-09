@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="TrailData" format=3]
+
+[ext_resource type="Script" path="res://data/trail_data.gd" id="1_trail"]
+[ext_resource type="Script" path="res://data/viewpoint_data.gd" id="3_vp"]
+[ext_resource type="Resource" path="res://content/weather/snow.tres" id="2_weather"]
+
+[sub_resource type="Resource" id="Viewpoint_1"]
+script = ExtResource("3_vp")
+id = &"cabin"
+name_key = "VP_CABIN"
+
+[sub_resource type="Resource" id="Viewpoint_2"]
+script = ExtResource("3_vp")
+id = &"aurora"
+name_key = "VP_AURORA"
+
+[resource]
+script = ExtResource("1_trail")
+id = &"t05_aurora_summit"
+name_key = "TRAIL_T05_NAME"
+season_id = &"s01_nordic"
+scene_path = "res://content/seasons/s01_nordic/trails/t05_aurora_summit/trail.tscn"
+length_m = 3600
+daylight_seconds = 170.0
+par_time = 125.0
+weather = ExtResource("2_weather")
+viewpoints = Array[ExtResource("3_vp")]([SubResource("Viewpoint_1"), SubResource("Viewpoint_2")])
+unlock_order = 4
+night = true
+star3_key = "RESULTS_STAR_AURORA"

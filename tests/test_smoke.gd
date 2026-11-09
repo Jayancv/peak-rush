@@ -75,5 +75,20 @@ func test_lapland_fell_runs_with_fog() -> void:
 	GameState.current_trail_id = &""
 
 
+func test_gear_screen_lists_every_item() -> void:
+	var gear: Node = add_child_autofree((load(SceneRouter.GEAR) as PackedScene).instantiate())
+	assert_eq(int(gear.call("card_count")), ContentDB.gear_list().size())
+
+
+func test_main_menu_offers_continue() -> void:
+	var saved: Dictionary = GameState.to_dict()
+	GameState.reset()
+	var menu: Node = add_child_autofree((load(SceneRouter.MAIN_MENU) as PackedScene).instantiate())
+	var button: Button = menu.get("continue_button") as Button
+	assert_true(button.visible)
+	assert_string_contains(button.text, tr("TRAIL_T01_NAME"))
+	GameState.from_dict(saved)
+
+
 func test_translations_resolve() -> void:
 	assert_eq(tr("MENU_PLAY"), "Play", "strings.csv not imported or not registered")

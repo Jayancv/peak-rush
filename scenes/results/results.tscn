@@ -17,7 +17,7 @@ corner_radius_top_right = 14
 corner_radius_bottom_right = 14
 corner_radius_bottom_left = 14
 
-[node name="Results" type="Control" node_paths=PackedStringArray("trail_label", "stars", "star_tags", "time_label", "best_tag", "par_label", "tp_breakdown", "tp_total", "stamp", "card", "next_button", "replay_button", "trails_button")]
+[node name="Results" type="Control" node_paths=PackedStringArray("trail_label", "stars", "star_tags", "star3_caption", "time_label", "best_tag", "par_label", "tp_breakdown", "tp_total", "stamp", "card", "next_button", "replay_button", "trails_button")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -29,6 +29,7 @@ script = ExtResource("1_results")
 trail_label = NodePath("Layer/Center/Card/VBox/Trail")
 stars = [NodePath("Layer/Center/Card/VBox/Stars/Slot1/Star"), NodePath("Layer/Center/Card/VBox/Stars/Slot2/Star"), NodePath("Layer/Center/Card/VBox/Stars/Slot3/Star")]
 star_tags = [NodePath("Layer/Center/Card/VBox/Stars/Slot1/New"), NodePath("Layer/Center/Card/VBox/Stars/Slot2/New"), NodePath("Layer/Center/Card/VBox/Stars/Slot3/New")]
+star3_caption = NodePath("Layer/Center/Card/VBox/Stars/Slot3/Caption")
 time_label = NodePath("Layer/Center/Card/VBox/Stats/Time")
 best_tag = NodePath("Layer/Center/Card/VBox/Stats/Best")
 par_label = NodePath("Layer/Center/Card/VBox/Stats/Par")

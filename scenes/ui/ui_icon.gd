@@ -4,7 +4,8 @@ extends Control
 ## Small vector icons drawn in code, so they look crisp at any size and don't depend
 ## on a font having arrow glyphs (many phone fonts don't).
 
-enum Kind { MOUNTAIN, WALK, JUMP, BACK, PAUSE, CAMERA, STAR, STAR_EMPTY, LOCK, GEAR }
+## BOOTS..HEADLAMP follow GearData.Icon order (kind = BOOTS + icon).
+enum Kind { MOUNTAIN, WALK, JUMP, BACK, PAUSE, CAMERA, STAR, STAR_EMPTY, LOCK, GEAR, BOOTS, POLES, SHELL, THERMOS, HEADLAMP }
 
 @export var kind: Kind = Kind.WALK:
 	set(v):
@@ -69,6 +70,27 @@ func _draw() -> void:
 				teeth.append(c + Vector2(cos(a), sin(a)) * r)
 			draw_colored_polygon(teeth, color)
 			draw_circle(c, s * 0.14, SNOW, true, -1.0, true)
+		Kind.BOOTS:
+			# A hiking boot: shaft, foot and a chunky sole.
+			draw_colored_polygon(PackedVector2Array([c + Vector2(-s * 0.3, -s * 0.38), c + Vector2(-s * 0.02, -s * 0.38), c + Vector2(0, s * 0.02), c + Vector2(s * 0.38, s * 0.1), c + Vector2(s * 0.4, s * 0.26), c + Vector2(-s * 0.3, s * 0.26)]), color)
+			draw_rect(Rect2(c + Vector2(-s * 0.34, s * 0.24), Vector2(s * 0.78, s * 0.1)), ACCENT, true)
+		Kind.POLES:
+			for dx: float in [-0.14, 0.14]:
+				draw_line(c + Vector2(s * dx - s * 0.08, -s * 0.42), c + Vector2(s * dx + s * 0.08, s * 0.42), color, maxf(s * 0.07, 2.0), true)
+				draw_rect(Rect2(c + Vector2(s * dx - s * 0.12, -s * 0.44), Vector2(s * 0.1, s * 0.16)), ACCENT, true)
+		Kind.SHELL:
+			# A rain jacket with a hood.
+			draw_colored_polygon(PackedVector2Array([c + Vector2(-s * 0.12, -s * 0.36), c + Vector2(s * 0.12, -s * 0.36), c + Vector2(s * 0.42, -s * 0.1), c + Vector2(s * 0.32, s * 0.04), c + Vector2(s * 0.24, -s * 0.02), c + Vector2(s * 0.24, s * 0.4), c + Vector2(-s * 0.24, s * 0.4), c + Vector2(-s * 0.24, -s * 0.02), c + Vector2(-s * 0.32, s * 0.04), c + Vector2(-s * 0.42, -s * 0.1)]), color)
+			draw_line(c + Vector2(0, -s * 0.3), c + Vector2(0, s * 0.38), SNOW, maxf(s * 0.04, 1.5), true)
+		Kind.THERMOS:
+			draw_rect(Rect2(c + Vector2(-s * 0.18, -s * 0.28), Vector2(s * 0.36, s * 0.7)), color, true)
+			draw_rect(Rect2(c + Vector2(-s * 0.14, -s * 0.42), Vector2(s * 0.28, s * 0.14)), ACCENT, true)
+			draw_rect(Rect2(c + Vector2(-s * 0.18, -s * 0.02), Vector2(s * 0.36, s * 0.08)), SNOW, true)
+		Kind.HEADLAMP:
+			draw_arc(c + Vector2(0, s * 0.06), s * 0.3, PI, TAU, 16, color, maxf(s * 0.08, 2.0), true)
+			draw_circle(c + Vector2(0, -s * 0.24), s * 0.13, color, true, -1.0, true)
+			draw_circle(c + Vector2(0, -s * 0.24), s * 0.07, Color("#FFE9A8"), true, -1.0, true)
+			draw_colored_polygon(PackedVector2Array([c + Vector2(s * 0.08, -s * 0.3), c + Vector2(s * 0.46, -s * 0.44), c + Vector2(s * 0.46, -s * 0.04), c + Vector2(s * 0.08, -s * 0.18)]), Color("#FFE9A8", 0.7))
 		Kind.CAMERA:
 			var body: Rect2 = Rect2(c + Vector2(-s * 0.42, -s * 0.24), Vector2(s * 0.84, s * 0.58))
 			draw_rect(body, color, true)

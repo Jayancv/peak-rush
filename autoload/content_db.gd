@@ -11,6 +11,7 @@ var index: ContentIndex
 
 var _seasons: Dictionary = {}
 var _trails: Dictionary = {}
+var _gear: Dictionary = {}
 
 
 func _ready() -> void:
@@ -30,6 +31,10 @@ func use_index(new_index: ContentIndex) -> void:
 	index = new_index
 	_seasons.clear()
 	_trails.clear()
+	_gear.clear()
+	for g: GearData in index.gear:
+		if g != null:
+			_gear[g.id] = g
 	for season: SeasonData in index.seasons:
 		if season == null:
 			continue
@@ -57,6 +62,30 @@ func get_trail(id: StringName) -> TrailData:
 
 func has_trail(id: StringName) -> bool:
 	return _trails.has(id)
+
+
+func gear_list() -> Array[GearData]:
+	var out: Array[GearData] = []
+	for g: GearData in index.gear:
+		if g != null:
+			out.append(g)
+	return out
+
+
+func get_gear(id: StringName) -> GearData:
+	return _gear.get(id) as GearData
+
+
+## The first unlocked trail not finished yet, newest season first (what "Continue"
+## should open). Null when everything open has been finished.
+func next_unfinished_trail(is_unlocked: Callable, is_completed: Callable) -> TrailData:
+	var list: Array[SeasonData] = seasons()
+	list.reverse()
+	for s: SeasonData in list:
+		for t: TrailData in s.ordered_trails():
+			if is_unlocked.call(t) and not is_completed.call(t.id):
+				return t
+	return null
 
 
 func first_trail() -> TrailData:

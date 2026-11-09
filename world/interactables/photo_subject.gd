@@ -5,7 +5,7 @@ extends Node2D
 ## walking reindeer that moves back and forth along a path. Always moving, so it's visible (and timing
 ## matters) before the player even opens photo mode.
 
-enum Kind { BIRD, BOAT, REINDEER }
+enum Kind { BIRD, BOAT, REINDEER, STAR }
 
 const INK: Color = Color("#2B2D42")
 const BOAT_HULL: Color = Color("#8C3B2A")
@@ -35,6 +35,11 @@ const BOB_PX: float = 2.0
 @export var color: Color = INK:
 	set(v):
 		color = v
+		_rebuild()
+## Second colour (a woodpecker's red cap). Transparent = none.
+@export var accent: Color = Color(0, 0, 0, 0):
+	set(v):
+		accent = v
 		_rebuild()
 @export var size: float = 1.0:
 	set(v):
@@ -117,9 +122,16 @@ func _rebuild() -> void:
 			ShapeUtil.add_poly(_body, PackedVector2Array([Vector2(12, -3), Vector2(20, 0), Vector2(12, 2)]), Color("#E8A33F"))
 			ShapeUtil.add_poly(_body, PackedVector2Array([Vector2(-11, 0), Vector2(-20, -5), Vector2(-20, 5)]), color)
 			_wings = ShapeUtil.add_poly(_body, PackedVector2Array([Vector2(-4, 0), Vector2(6, 0), Vector2(-2, -18)]), color.darkened(0.25))
-			ShapeUtil.add_poly(_body, ShapeUtil.ellipse(Vector2(7, -2), Vector2(4, 3.5), 8), Color("#D9483B") if color != INK else INK)
+			if accent.a > 0.0:
+				ShapeUtil.add_poly(_body, ShapeUtil.ellipse(Vector2(7, -2), Vector2(4, 3.5), 8), accent)
 		Kind.REINDEER:
 			_build_reindeer()
+		Kind.STAR:
+			# A shooting star: bright head, fading tail behind it.
+			var tail: Polygon2D = ShapeUtil.add_poly(_body, PackedVector2Array([Vector2(0, -3), Vector2(-60, 0), Vector2(0, 3)]), Color.WHITE)
+			tail.vertex_colors = PackedColorArray([Color(1, 1, 0.9, 0.9), Color(1, 1, 1, 0), Color(1, 1, 0.9, 0.9)])
+			ShapeUtil.add_poly(_body, ShapeUtil.ellipse(Vector2.ZERO, Vector2(9, 9), 12), Color(1, 0.98, 0.85, 0.35))
+			ShapeUtil.add_poly(_body, ShapeUtil.ellipse(Vector2.ZERO, Vector2(4.5, 4.5), 10), Color(1, 1, 0.95, 1))
 		Kind.BOAT:
 			ShapeUtil.add_poly(_body, PackedVector2Array([Vector2(-30, 0), Vector2(30, 0), Vector2(22, 12), Vector2(-24, 12)]), BOAT_HULL)
 			ShapeUtil.add_poly(_body, PackedVector2Array([Vector2(-2, -4), Vector2(-2, -58), Vector2(24, -8)]), SAIL)

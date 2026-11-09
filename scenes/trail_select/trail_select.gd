@@ -10,12 +10,14 @@ const CARD_SCENE: PackedScene = preload("res://scenes/trail_select/trail_card.ts
 @export var back_button: Button
 @export var tp_label: Label
 @export var stars_label: Label
+@export var gear_button: Button
 
 var _season: SeasonData
 
 
 func _ready() -> void:
 	back_button.pressed.connect(_go_back)
+	gear_button.pressed.connect(_open_gear)
 	AudioManager.enter_menu()
 	tp_label.text = tr("HUD_TP") % GameState.tp
 	stars_label.text = str(GameState.total_stars())
@@ -77,6 +79,12 @@ func _scroll_to(card: Control) -> void:
 func _start(trail: TrailData) -> void:
 	GameState.current_trail_id = trail.id
 	SceneRouter.go_to(SceneRouter.TRAIL_RUNNER)
+
+
+## Gear is picked before a hike, so the gear screen comes back here.
+func _open_gear() -> void:
+	GearScreen.return_to = SceneRouter.TRAIL_SELECT
+	SceneRouter.go_to(SceneRouter.GEAR)
 
 
 func _go_back() -> void:

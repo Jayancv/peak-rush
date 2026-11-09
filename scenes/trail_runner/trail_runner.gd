@@ -46,7 +46,7 @@ func _ready() -> void:
 		# Started directly (F6 in the editor, tests): fall back to the first trail.
 		trail = ContentDB.first_trail()
 		GameState.current_trail_id = trail.id
-	daylight = Daylight.new(_balance, trail.daylight_seconds)
+	daylight = Daylight.new(_balance, trail.daylight_seconds, trail.night)
 	daylight.phase_changed.connect(_on_phase_changed)
 	weather = WeatherEffects.new(trail.weather, hash(trail.id))
 	weather.gust_started.connect(_on_gust_started)
@@ -80,6 +80,10 @@ func _load_trail() -> void:
 	world.add_child(hiker)
 	hiker.teleport(trailhead.global_position)
 	hiker.condition.weather_drain_mult = trail.weather_drain()
+	hiker.condition.set_gear(GameState.equipped_items())
+	if trail.night:
+		# Dark from the start: lamp on, but no slowdown until the window closes.
+		hiker.visual.set_headlamp(true)
 	_respawn_point = trailhead.global_position
 	hiker.stamina_changed.connect(_on_stamina_changed)
 	hiker.exhausted.connect(func() -> void: hud.show_toast("TOAST_EXHAUSTED"))
@@ -101,6 +105,10 @@ func _load_trail() -> void:
 			vp.hiker_entered.connect(_on_viewpoint_entered)
 			vp.hiker_left.connect(_on_viewpoint_left)
 	_update_photo_count()
+	if trail.tutorial and not GameState.is_completed(trail.id):
+		for node: Node in get_tree().get_nodes_in_group(TutorialTrigger.GROUP):
+			if level.is_ancestor_of(node):
+				(node as TutorialTrigger).triggered.connect(func(key: String, secs: float) -> void: hud.show_toast(key, secs))
 
 
 func _process(delta: float) -> void:
@@ -170,13 +178,13 @@ func _apply_daylight() -> void:
 	weather_fx.set_tint(tint)
 	if _backdrop != null:
 		_backdrop.set_daylight(daylight.sun_progress(), tint)
-	hud.set_daylight(daylight.sun_progress(), daylight.phase())
+	hud.set_daylight(daylight.sun_progress(), daylight.phase(), trail.night)
 
 
 func _on_phase_changed(phase: Daylight.Phase) -> void:
 	if phase == Daylight.Phase.DUSK:
 		hiker.set_dusk(true)
-		hud.show_toast("TOAST_DUSK")
+		hud.show_toast("TOAST_AURORA_FADES" if trail.night else "TOAST_DUSK")
 
 
 func _on_stamina_changed(value: float, max_value: float) -> void:

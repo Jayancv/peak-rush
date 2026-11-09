@@ -1,0 +1,190 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/terrain_strip.gd" id="strip"]
+[ext_resource type="PackedScene" path="res://world/obstacles/root.tscn" id="root"]
+[ext_resource type="PackedScene" path="res://world/obstacles/rock.tscn" id="rock"]
+[ext_resource type="PackedScene" path="res://world/obstacles/mud_patch.tscn" id="mud"]
+[ext_resource type="PackedScene" path="res://world/obstacles/ice_patch.tscn" id="ice"]
+[ext_resource type="PackedScene" path="res://world/obstacles/kill_zone.tscn" id="kill"]
+[ext_resource type="PackedScene" path="res://world/obstacles/stepping_stones.tscn" id="stones"]
+[ext_resource type="PackedScene" path="res://world/interactables/bench.tscn" id="bench"]
+[ext_resource type="PackedScene" path="res://world/interactables/checkpoint.tscn" id="checkpoint"]
+[ext_resource type="PackedScene" path="res://world/interactables/finish.tscn" id="finish"]
+[ext_resource type="PackedScene" path="res://world/interactables/viewpoint.tscn" id="vp"]
+[ext_resource type="PackedScene" path="res://world/interactables/tutorial_trigger.tscn" id="tut"]
+[ext_resource type="PackedScene" path="res://world/backdrop/backdrop_fjord.tscn" id="backdrop"]
+
+[node name="FjordRidge" type="Node2D"]
+
+[node name="Backdrop" parent="." instance=ExtResource("backdrop")]
+
+[node name="Scenery" type="Node2D" parent="."]
+
+[node name="Waterfall" type="Node2D" parent="Scenery"]
+position = Vector2(4220, 118)
+
+[node name="Cliff" type="Polygon2D" parent="Scenery/Waterfall"]
+color = Color(0.3608, 0.4196, 0.4000, 1.0)
+antialiased = true
+polygon = PackedVector2Array(-120, 0, -90, -340, 90, -360, 130, 0)
+
+[node name="Fall" type="Polygon2D" parent="Scenery/Waterfall"]
+color = Color(0.7490, 0.8902, 0.9412, 1.0)
+antialiased = true
+polygon = PackedVector2Array(-34, 0, -30, -300, 30, -300, 34, 0)
+
+[node name="Streak0" type="Polygon2D" parent="Scenery/Waterfall"]
+color = Color(1.0000, 1.0000, 1.0000, 0.7)
+antialiased = true
+polygon = PackedVector2Array(-22, 0, -22, -300, -18, -300, -18, 0)
+
+[node name="Streak1" type="Polygon2D" parent="Scenery/Waterfall"]
+color = Color(1.0000, 1.0000, 1.0000, 0.7)
+antialiased = true
+polygon = PackedVector2Array(-8, 0, -8, -300, -4, -300, -4, 0)
+
+[node name="Streak2" type="Polygon2D" parent="Scenery/Waterfall"]
+color = Color(1.0000, 1.0000, 1.0000, 0.7)
+antialiased = true
+polygon = PackedVector2Array(6, 0, 6, -300, 10, -300, 10, 0)
+
+[node name="Streak3" type="Polygon2D" parent="Scenery/Waterfall"]
+color = Color(1.0000, 1.0000, 1.0000, 0.7)
+antialiased = true
+polygon = PackedVector2Array(20, 0, 20, -300, 24, -300, 24, 0)
+
+[node name="Foam" type="Polygon2D" parent="Scenery/Waterfall"]
+color = Color(0.9490, 0.9843, 1.0000, 1.0)
+antialiased = true
+polygon = PackedVector2Array(-60, 0, -40, -18, 0, -24, 40, -18, 60, 0)
+
+[node name="Trailhead" type="Marker2D" parent="."]
+position = Vector2(160, 550)
+
+[node name="Ground" type="Node2D" parent="."]
+
+[node name="Strip1" type="Line2D" parent="Ground"]
+points = PackedVector2Array(-300, 560, 400, 560, 462.5, 558.5, 525, 553.9, 587.5, 546.5, 650, 536.6, 712.5, 524.4, 775, 510.6, 837.5, 495.6, 900, 480, 962.5, 464.4, 1025, 449.4, 1087.5, 435.6, 1150, 423.4, 1212.5, 413.5, 1275, 406.1, 1337.5, 401.5, 1400, 400, 1650, 400, 1654, 356, 2004, 356, 2008, 312, 2308, 312)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("strip")
+surface = 0
+fill_color = Color(0.2471, 0.4196, 0.3059, 1.0)
+fill_bottom_color = Color(0.1098, 0.2000, 0.1490, 1.0)
+tuft_color = Color(0.3686, 0.5725, 0.3333, 1.0)
+decor_seed = 3
+
+[node name="Strip2" type="Line2D" parent="Ground"]
+points = PackedVector2Array(2308, 312, 2369.1, 310.5, 2430.2, 306, 2491.3, 298.6, 2552.4, 288.6, 2613.6, 276.3, 2674.7, 262, 2735.8, 246.2, 2796.9, 229.4, 2858, 212, 2919.1, 194.6, 2980.2, 177.8, 3041.3, 162, 3102.4, 147.7, 3163.6, 135.4, 3224.7, 125.4, 3285.8, 118, 3346.9, 113.5, 3408, 112, 3708, 112)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("strip")
+surface = 1
+fill_color = Color(0.2471, 0.4196, 0.3059, 1.0)
+fill_bottom_color = Color(0.1098, 0.2000, 0.1490, 1.0)
+tuft_color = Color(0.3686, 0.5725, 0.3333, 1.0)
+decor_seed = 4
+
+[node name="Strip3" type="Line2D" parent="Ground"]
+points = PackedVector2Array(3790, 112, 4490, 112, 4550.9, 110.8, 4611.7, 107.2, 4672.6, 101.2, 4733.5, 93.1, 4794.3, 82.8, 4855.2, 70.7, 4916.1, 57, 4977, 41.8, 5037.8, 25.5, 5098.7, 8.4, 5159.6, -9.1, 5220.4, -26.9, 5281.3, -44.4, 5342.2, -61.5, 5403, -77.8, 5463.9, -93, 5524.8, -106.7, 5585.7, -118.8, 5646.5, -129.1, 5707.4, -137.2, 5768.3, -143.2, 5829.1, -146.8, 5890, -148, 5894, -188, 6494, -188)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("strip")
+surface = 1
+fill_color = Color(0.2471, 0.4196, 0.3059, 1.0)
+fill_bottom_color = Color(0.1098, 0.2000, 0.1490, 1.0)
+tuft_color = Color(0.3686, 0.5725, 0.3333, 1.0)
+decor_seed = 5
+
+[node name="Strip4" type="Line2D" parent="Ground"]
+points = PackedVector2Array(6494, -188, 6554, -186.8, 6614, -183.3, 6674, -177.5, 6734, -169.4, 6794, -159.4, 6854, -147.3, 6914, -133.6, 6974, -118.4, 7034, -101.9, 7094, -84.4, 7154, -66.1, 7214, -47.4, 7274, -28.6, 7334, -9.9, 7394, 8.4, 7454, 25.9, 7514, 42.4, 7574, 57.6, 7634, 71.3, 7694, 83.4, 7754, 93.4, 7814, 101.5, 7874, 107.3, 7934, 110.8, 7994, 112, 8194, 112)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("strip")
+surface = 0
+fill_color = Color(0.2471, 0.4196, 0.3059, 1.0)
+fill_bottom_color = Color(0.1098, 0.2000, 0.1490, 1.0)
+tuft_color = Color(0.3686, 0.5725, 0.3333, 1.0)
+decor_seed = 6
+
+[node name="Strip5" type="Line2D" parent="Ground"]
+points = PackedVector2Array(8278, 112, 8678, 112, 8740.5, 110.4, 8803, 105.5, 8865.5, 97.7, 8928, 87.1, 8990.5, 74.2, 9053, 59.5, 9115.5, 43.6, 9178, 27, 9240.5, 10.4, 9303, -5.5, 9365.5, -20.2, 9428, -33.1, 9490.5, -43.7, 9553, -51.5, 9615.5, -56.4, 9678, -58, 9878, -58, 9882, -98, 10282, -98, 10882, -98)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("strip")
+surface = 0
+fill_color = Color(0.2471, 0.4196, 0.3059, 1.0)
+fill_bottom_color = Color(0.1098, 0.2000, 0.1490, 1.0)
+tuft_color = Color(0.3686, 0.5725, 0.3333, 1.0)
+decor_seed = 7
+
+[node name="Pieces" type="Node2D" parent="."]
+
+[node name="Kill1" parent="Pieces" instance=ExtResource("kill")]
+position = Vector2(3749, 372)
+size = Vector2(122, 300)
+
+[node name="Kill2" parent="Pieces" instance=ExtResource("kill")]
+position = Vector2(8236, 372)
+size = Vector2(124, 300)
+
+[node name="Mud1" parent="Pieces" instance=ExtResource("mud")]
+position = Vector2(950, 467.52)
+width = 150.0
+
+[node name="Checkpoint1" parent="Pieces" instance=ExtResource("checkpoint")]
+position = Vector2(3558, 112)
+
+[node name="Bench1" parent="Pieces" instance=ExtResource("bench")]
+position = Vector2(4340, 112)
+
+[node name="Vp1" parent="Pieces" instance=ExtResource("vp")]
+position = Vector2(3890, 112)
+viewpoint_id = &"waterfall"
+frame_offset = Vector2(300, -150)
+subject_kind = 0
+subject_path = PackedVector2Array(-60, 60, 40, -40, 110, 30, 40, 80)
+subject_speed = 60
+subject_size = 0.8
+subject_color = Color(0.3529, 0.4157, 0.4706, 1.0)
+
+[node name="Rock1" parent="Pieces" instance=ExtResource("rock")]
+position = Vector2(5090, 10.8429)
+
+[node name="Vp2" parent="Pieces" instance=ExtResource("vp")]
+position = Vector2(5994, -188)
+viewpoint_id = &"fjord"
+frame_offset = Vector2(260, -220)
+subject_kind = 0
+subject_path = PackedVector2Array(-300, 20, 0, -70, 300, 0)
+subject_speed = 90
+subject_size = 1.7
+subject_color = Color(0.2902, 0.2275, 0.1804, 1.0)
+subject_accent = Color(0.9569, 0.9647, 0.9725, 1.0)
+
+[node name="Checkpoint2" parent="Pieces" instance=ExtResource("checkpoint")]
+position = Vector2(6374, -188)
+
+[node name="Mud2" parent="Pieces" instance=ExtResource("mud")]
+position = Vector2(6994, -112.9)
+width = 170.0
+
+[node name="Mud3" parent="Pieces" instance=ExtResource("mud")]
+position = Vector2(7594, 62.1667)
+width = 140.0
+
+[node name="Bench2" parent="Pieces" instance=ExtResource("bench")]
+position = Vector2(8428, 112)
+
+[node name="Finish1" parent="Pieces" instance=ExtResource("finish")]
+position = Vector2(10082, -98)

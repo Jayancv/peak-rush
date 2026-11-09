@@ -43,6 +43,11 @@ const SIGN_INK: Color = Color("#2B2D42")
 		subject_color = v
 		if _subject != null:
 			_subject.color = v
+@export var subject_accent: Color = Color(0, 0, 0, 0):
+	set(v):
+		subject_accent = v
+		if _subject != null:
+			_subject.accent = v
 @export var subject_size: float = 1.0:
 	set(v):
 		subject_size = v
@@ -74,6 +79,7 @@ func build() -> void:
 	_subject.speed = subject_speed
 	_subject.size = subject_size
 	_subject.color = subject_color
+	_subject.accent = subject_accent
 	_frame.add_child(_subject, false, Node.INTERNAL_MODE_BACK)
 	_place_subject()
 	ShapeUtil.add_rect_shape(self, Rect2(-70, -120, 140, 124))

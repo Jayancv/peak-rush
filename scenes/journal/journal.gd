@@ -3,8 +3,10 @@ extends Control
 ## postcards earned at viewpoints (bordered bronze/silver/gold by best photo).
 ## Tap a collected postcard to see it large. Built from ContentDB + GameState.
 
-const STAMP_SIZE: Vector2 = Vector2(150, 150)
-const CARD_SIZE: Vector2 = Vector2(210, 150)
+## Three stamps per row; the passport scrolls if a season ever has more than fit.
+const STAMP_SIZE: Vector2 = Vector2(108, 108)
+const CARD_SIZE: Vector2 = Vector2(190, 136)
+const CARD_GAP: int = 18
 ## Uncompleted trails show as a faint stamp outline.
 const FADED_INK: Color = Color(0.168627, 0.176471, 0.258824, 0.18)
 const INK: Color = Color("#B8432C")
@@ -25,6 +27,9 @@ func _ready() -> void:
 	AudioManager.enter_menu()
 	enlarged.visible = false
 	enlarged.gui_input.connect(_on_enlarged_input)
+	# As many postcard columns as fit: phones range from 16:9 to 20:9 (and tablets 4:3).
+	var scroll: Control = postcards.get_parent() as Control
+	scroll.resized.connect(func() -> void: _fit_columns(scroll.size.x))
 	for season: SeasonData in ContentDB.seasons():
 		var tab: Button = Button.new()
 		tab.text = tr(season.title_key)
@@ -56,6 +61,10 @@ func show_season(season: SeasonData) -> void:
 				collected += 1
 			postcards.add_child(_make_postcard(trail, vp, q, season, i))
 	count_label.text = tr("JOURNAL_COLLECTED") % [collected, total]
+
+
+func _fit_columns(width: float) -> void:
+	postcards.columns = maxi(1, int((width + CARD_GAP) / (CARD_SIZE.x + CARD_GAP)))
 
 
 ## How many postcards are shown (for tests).

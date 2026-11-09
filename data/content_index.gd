@@ -4,3 +4,5 @@ extends Resource
 ## Listed explicitly because exported builds can't reliably scan folders.
 
 @export var seasons: Array[SeasonData] = []
+## Everything the gear shop sells.
+@export var gear: Array[GearData] = []

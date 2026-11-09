@@ -1,8 +1,11 @@
 class_name HikeModifiers
 extends RefCounted
 ## Combines everything that changes how fast the hiker walks and how fast they tire:
-## slope, surface underfoot, wet feet, dusk and exhaustion. Weather (M5) and gear (M6)
-## plug in as extra multipliers. All effects multiply together.
+## slope, surface underfoot, wet feet, dusk, exhaustion, weather, and the equipped
+## gear (which softens some of those). All effects multiply together.
+
+## Equipped gear; replace via HikerCondition.set_gear().
+var gear: GearModifiers = GearModifiers.new()
 
 var _balance: Balance
 var _slope: Slope
@@ -22,7 +25,7 @@ func speed_multiplier(grade: float, surface: TerrainStrip.Surface, is_dusk: bool
 	var m: float = _slope.speed_factor(grade)
 	m *= surface_speed(surface)
 	if is_dusk:
-		m *= _balance.dusk_speed_mult
+		m *= gear.dusk_speed(_balance.dusk_speed_mult)
 	if recovering:
 		m *= _balance.exhausted_speed_mult
 	return m
@@ -30,7 +33,9 @@ func speed_multiplier(grade: float, surface: TerrainStrip.Surface, is_dusk: bool
 
 ## Multiplies the base walking drain.
 func drain_multiplier(grade: float, surface: TerrainStrip.Surface, wet_feet: bool, weather_mult: float = 1.0) -> float:
-	var m: float = _slope.drain_factor(grade) * weather_mult
+	var m: float = _slope.drain_factor(grade) * gear.weather_multiplier(weather_mult)
+	if grade > 0.0:
+		m *= gear.uphill_drain_scale
 	if surface == TerrainStrip.Surface.MUD:
 		m *= _balance.mud_drain_mult
 	if wet_feet:

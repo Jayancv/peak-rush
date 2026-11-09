@@ -74,3 +74,40 @@ SETTINGS_SFX,Sound effects
 SETTINGS_AMBIENCE,Ambience
 SETTING_LEFT_HANDED_ON,Left-handed controls: On
 SETTING_LEFT_HANDED_OFF,Left-handed controls: Off
+GEAR_GRIP_BOOTS,Grip boots
+GEAR_GRIP_BOOTS_DESC,Slip 75% less on ice and snow
+GEAR_POLES,Hiking poles
+GEAR_POLES_DESC,Climbing uses 20% less energy
+GEAR_RAIN_SHELL,Rain shell
+GEAR_RAIN_SHELL_DESC,Halves the extra drain from weather
+GEAR_THERMOS,Thermos
+GEAR_THERMOS_DESC,Resting refills 25% faster
+GEAR_HEADLAMP,Bright headlamp
+GEAR_HEADLAMP_DESC,Halves the slowdown after dusk
+GEAR_TITLE,Gear
+GEAR_SLOTS,Equipped %d / %d
+GEAR_BUY,Buy %d TP
+GEAR_EQUIP,Equip
+GEAR_UNEQUIP,Take off
+GEAR_SLOTS_FULL,Slots full
+GEAR_CANT_AFFORD,Need %d TP
+MENU_CONTINUE,Continue
+MENU_TRAILS,All trails
+MENU_ALL_DONE,Season complete!
+MENU_SEASON,Season %d
+TUT_WALK,Hold the left side of the screen to walk
+TUT_REST,Let go to rest - your energy refills
+TUT_JUMP,Tap the right side to jump over roots
+TUT_ROCK,Big rocks block the path - jump them
+TUT_PHOTO,Camera sign ahead: stop and tap Take photo
+TUT_BENCH,Benches refill energy twice as fast
+TUT_DUSK,Reach the summit before the sun sets for the third star
+TOAST_AURORA_FADES,The aurora fades
+RESULTS_STAR_AURORA,Under the aurora
+TRAIL_T04_NAME,Fjord Ridge
+TRAIL_T05_NAME,Aurora Summit
+VP_WATERFALL,Waterfall
+VP_FJORD,Fjord panorama
+VP_AURORA,Aurora
+VP_CABIN,Snowy cabin
+TUT_STONES,Hop from stone to stone - or get wet feet

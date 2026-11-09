@@ -47,13 +47,17 @@ func tick(delta: float, walking: bool, resting: bool, grade: float, ground: Terr
 		var drain: float = modifiers.drain_multiplier(grade, effective_surface(ground), has_wet_feet(), weather_drain_mult)
 		stamina.walk(delta, drain)
 	elif resting:
-		stamina.rest(delta, is_on_bench())
+		stamina.rest(delta, is_on_bench(), modifiers.gear.rest_regen_scale)
 	var mode: Regen = Regen.NONE
 	if resting and stamina.value < stamina.max_value:
 		mode = Regen.BENCH if is_on_bench() else Regen.REST
 	if mode != regen:
 		regen = mode
 		regen_changed.emit(mode)
+
+
+func set_gear(items: Array[GearData]) -> void:
+	modifiers.gear = GearModifiers.from_gear(items)
 
 
 func has_wet_feet() -> bool:

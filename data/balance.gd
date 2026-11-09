@@ -83,6 +83,9 @@ extends Resource
 @export var tint_midday: Color = Color("#FFFFFF")
 @export var tint_golden: Color = Color("#FFDDB5")
 @export var tint_dusk: Color = Color("#6C74A6")
+## Night trails: the tint during the window, and after it closes.
+@export var tint_night: Color = Color("#7E8BC4")
+@export var tint_night_late: Color = Color("#4E5888")
 
 @export_group("Feedback")
 @export var stumble_vibrate_ms: int = 60
@@ -99,6 +102,9 @@ extends Resource
 @export var photo_good_radius: float = 0.62
 ## Camera zoom while framing a shot.
 @export var photo_zoom: float = 1.2
+
+@export_group("Gear")
+@export var gear_slots: int = 2
 
 @export_group("Rewards")
 ## Trail Points (GAME_DESIGN §5.6): every finish, each star the first time it's

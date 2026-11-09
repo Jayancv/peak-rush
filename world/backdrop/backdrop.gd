@@ -16,8 +16,9 @@ const SUN_END: Vector2 = Vector2(0.88, 0.5)
 @export var horizon_glow: CanvasItem
 
 ## Multiplying a blue sky by an orange tint turns it grey, so the sky only takes
-## part of the tint and the warmth comes from the glow instead.
-const SKY_TINT_STRENGTH: float = 0.55
+## part of the tint and the warmth comes from the glow instead. Night skies are
+## already dark and take even less.
+@export_range(0.0, 1.0) var sky_tint_strength: float = 0.55
 
 
 func _ready() -> void:
@@ -26,7 +27,7 @@ func _ready() -> void:
 
 func set_daylight(sun_progress: float, tint: Color) -> void:
 	if sky != null:
-		sky.modulate = Color.WHITE.lerp(tint, SKY_TINT_STRENGTH)
+		sky.modulate = Color.WHITE.lerp(tint, sky_tint_strength)
 	if horizon_glow != null:
 		# Warm tints have less blue than red; that gap is how golden the light is.
 		var warmth: float = clampf((tint.r - tint.b) * 3.0, 0.0, 1.0)
