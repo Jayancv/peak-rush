@@ -4,6 +4,7 @@ extends Control
 ## pause_pressed when the pause button is tapped.
 
 signal pause_pressed
+signal photo_pressed
 
 const TOAST_SECONDS: float = 2.2
 
@@ -15,6 +16,8 @@ const TOAST_SECONDS: float = 2.2
 @export var toast_label: Label
 ## Green "×2" next to the bar while resting at a bench.
 @export var boost_badge: Control
+## "Take photo" button shown while standing at a viewpoint.
+@export var photo_prompt: Button
 
 var _toast_tween: Tween
 
@@ -22,6 +25,12 @@ var _toast_tween: Tween
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	pause_button.pressed.connect(func() -> void: pause_pressed.emit())
+	photo_prompt.pressed.connect(func() -> void: photo_pressed.emit())
+	# Right-aligned text leaves room for the camera icon on the left.
+	photo_prompt.add_theme_constant_override("h_separation", 0)
+	photo_prompt.add_theme_stylebox_override("normal", _with_left_room(photo_prompt.get_theme_stylebox("normal")))
+	photo_prompt.add_theme_stylebox_override("hover", _with_left_room(photo_prompt.get_theme_stylebox("hover")))
+	photo_prompt.add_theme_stylebox_override("pressed", _with_left_room(photo_prompt.get_theme_stylebox("pressed")))
 	toast.modulate.a = 0.0
 	# Faded rather than hidden so the top bar never shifts sideways.
 	boost_badge.modulate.a = 0.0
@@ -29,6 +38,27 @@ func _ready() -> void:
 
 func set_stamina(value: float, max_value: float, recovering: bool) -> void:
 	stamina_bar.set_stamina(value, max_value, recovering)
+
+
+static func _with_left_room(box: StyleBox) -> StyleBox:
+	var copy: StyleBox = box.duplicate()
+	copy.content_margin_left = 84.0
+	return copy
+
+
+func show_photo_prompt(on: bool) -> void:
+	if on and not photo_prompt.visible:
+		photo_prompt.pivot_offset = photo_prompt.size * 0.5
+		photo_prompt.scale = Vector2(0.6, 0.6)
+		create_tween().tween_property(photo_prompt, "scale", Vector2.ONE, 0.25).set_trans(Tween.TRANS_BACK)
+	photo_prompt.visible = on
+
+
+## Photo mode owns the screen: hide the top bar and the prompt (toasts still show).
+func set_photo_mode(on: bool) -> void:
+	(pause_button.get_parent() as Control).visible = not on
+	if on:
+		photo_prompt.visible = false
 
 
 func set_regen(mode: HikerCondition.Regen) -> void:

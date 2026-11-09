@@ -44,3 +44,19 @@ RESULTS_TP_PHOTOS,Photos +%d
 RESULTS_NEXT,Next trail
 RESULTS_REPLAY,Replay
 RESULTS_TRAILS,Trails
+VP_LAKE_MIRROR,Lake mirror
+VP_WOODPECKER,Woodpecker
+VP_SEABIRDS,Seabirds
+VP_LIGHTHOUSE,Lighthouse
+HUD_TAKE_PHOTO,Take photo
+PHOTO_HINT,Tap when it's in the centre
+PHOTO_PERFECT,Perfect!
+PHOTO_GREAT,Great!
+PHOTO_GOOD,Good
+PHOTO_MISSED,Missed - try again
+MENU_JOURNAL,Journal
+JOURNAL_TITLE,Travel journal
+JOURNAL_PASSPORT,Passport
+JOURNAL_POSTCARDS,Postcards
+JOURNAL_TAP_TO_CLOSE,Tap to close
+JOURNAL_COLLECTED,%d / %d collected

@@ -1,7 +1,18 @@
 [gd_resource type="Resource" script_class="TrailData" format=3]
 
 [ext_resource type="Script" path="res://data/trail_data.gd" id="1_trail"]
+[ext_resource type="Script" path="res://data/viewpoint_data.gd" id="3_vp"]
 [ext_resource type="Resource" path="res://content/weather/windy.tres" id="2_weather"]
+
+[sub_resource type="Resource" id="Viewpoint_1"]
+script = ExtResource("3_vp")
+id = &"seabirds"
+name_key = "VP_SEABIRDS"
+
+[sub_resource type="Resource" id="Viewpoint_2"]
+script = ExtResource("3_vp")
+id = &"lighthouse"
+name_key = "VP_LIGHTHOUSE"
 
 [resource]
 script = ExtResource("1_trail")
@@ -14,3 +25,4 @@ daylight_seconds = 70.0
 par_time = 45.0
 weather = ExtResource("2_weather")
 unlock_order = 1
+viewpoints = Array[ExtResource("3_vp")]([SubResource("Viewpoint_1"), SubResource("Viewpoint_2")])

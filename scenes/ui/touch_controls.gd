@@ -65,6 +65,13 @@ func _unhandled_input(event: InputEvent) -> void:
 	get_viewport().set_input_as_handled()
 
 
+## Off while another screen owns touches (photo mode): hides the hints and lets go.
+func set_enabled(on: bool) -> void:
+	release_all()
+	set_process_unhandled_input(on)
+	visible = on
+
+
 func action_for_position(pos: Vector2) -> StringName:
 	var on_left: bool = pos.x < get_viewport_rect().size.x * 0.5
 	return &"walk" if on_left != left_handed else &"jump"

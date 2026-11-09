@@ -31,7 +31,7 @@ shadow_color = Color(0.168627, 0.176471, 0.258824, 0.12)
 shadow_size = 6
 shadow_offset = Vector2(0, 3)
 
-[node name="Hud" type="Control" node_paths=PackedStringArray("stamina_bar", "sun_arc", "photo_label", "pause_button", "toast", "toast_label", "boost_badge")]
+[node name="Hud" type="Control" node_paths=PackedStringArray("stamina_bar", "sun_arc", "photo_label", "pause_button", "toast", "toast_label", "boost_badge", "photo_prompt")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -47,6 +47,7 @@ pause_button = NodePath("SafeArea/Column/Top/PauseButton")
 toast = NodePath("SafeArea/Column/Toast")
 toast_label = NodePath("SafeArea/Column/Toast/Label")
 boost_badge = NodePath("SafeArea/Column/Top/StaminaPill/Row/Boost")
+photo_prompt = NodePath("SafeArea/Column/PhotoPrompt")
 
 [node name="SafeArea" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -178,3 +179,33 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 26
 text = "TOAST_CHECKPOINT"
 horizontal_alignment = 1
+
+[node name="Fill" type="Control" parent="SafeArea/Column"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="PhotoPrompt" type="Button" parent="SafeArea/Column" groups=["touch_blocker"]]
+visible = false
+custom_minimum_size = Vector2(300, 88)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"PrimaryButton"
+theme_override_font_sizes/font_size = 32
+text = "HUD_TAKE_PHOTO"
+alignment = 2
+
+[node name="Icon" type="Control" parent="SafeArea/Column/PhotoPrompt"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 26.0
+offset_top = -24.0
+offset_right = 70.0
+offset_bottom = 16.0
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("3_icon")
+kind = 5
+color = Color(1, 0.964706, 0.898039, 1)

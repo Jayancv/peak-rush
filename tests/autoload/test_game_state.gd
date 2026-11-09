@@ -17,12 +17,16 @@ func after_each() -> void:
 	GameState.from_dict(_saved)
 
 
-func _finish(trail: TrailData, time: float, before_dusk: bool = true) -> Dictionary:
+## Finishes `trail`, photographing every viewpoint at `quality` (NONE = no photos).
+func _finish(trail: TrailData, time: float, before_dusk: bool = true, quality: int = StarRating.PhotoQuality.GOOD) -> Dictionary:
 	var r: TrailResult = TrailResult.new(trail.id)
 	r.finished = true
 	r.time_seconds = time
 	r.before_dusk = before_dusk
 	r.viewpoint_total = trail.viewpoints.size()
+	if quality > StarRating.PhotoQuality.NONE:
+		for vp: ViewpointData in trail.viewpoints:
+			r.photos[String(vp.id)] = quality
 	return GameState.record_result(r)
 
 
@@ -41,10 +45,23 @@ func test_tp_accumulates_and_stars_merge() -> void:
 	_finish(_t1, 90.0, false)
 	assert_eq(GameState.stars_mask(_t1.id), StarRating.STAR_SUMMIT | StarRating.STAR_PHOTOS)
 	var tp_after_first: int = GameState.tp
-	assert_eq(tp_after_first, 50 + 50)
+	var photo_tp: int = _t1.viewpoints.size() * ContentDB.balance.tp_photo_good
+	assert_eq(tp_after_first, 50 + 50 + photo_tp)
 	_finish(_t1, 95.0, true)
 	assert_eq(GameState.stars_mask(_t1.id), StarRating.ALL_STARS, "a dusk star earned on a later run is kept")
-	assert_eq(GameState.tp, tp_after_first + 50 + 25)
+	assert_eq(GameState.tp, tp_after_first + 50 + 25, "same photos again pay nothing extra")
+
+
+func test_missing_photos_withholds_the_photo_star() -> void:
+	_finish(_t1, 90.0, true, StarRating.PhotoQuality.NONE)
+	assert_eq(GameState.stars_mask(_t1.id), StarRating.STAR_SUMMIT | StarRating.STAR_BEFORE_DUSK)
+
+
+func test_best_photo_quality_is_saved_per_viewpoint() -> void:
+	_finish(_t1, 90.0, true, StarRating.PhotoQuality.PERFECT)
+	_finish(_t1, 90.0, true, StarRating.PhotoQuality.GOOD)
+	var vp_id: String = String(_t1.viewpoints[0].id)
+	assert_eq(int(GameState.record(_t1.id).photos[vp_id]), StarRating.PhotoQuality.PERFECT)
 
 
 func test_best_time_only_improves() -> void:

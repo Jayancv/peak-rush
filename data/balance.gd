@@ -88,6 +88,18 @@ extends Resource
 @export var stumble_vibrate_ms: int = 60
 @export var fall_vibrate_ms: int = 120
 
+@export_group("Photos")
+## Shots on the film roll each time photo mode opens at a viewpoint.
+@export var photo_shots_per_visit: int = 3
+## Half the viewfinder height in viewport pixels; distances are measured against it.
+@export var photo_frame_half: float = 190.0
+## Subject distance from the frame centre (as a fraction of photo_frame_half) for each grade.
+@export var photo_perfect_radius: float = 0.14
+@export var photo_great_radius: float = 0.32
+@export var photo_good_radius: float = 0.62
+## Camera zoom while framing a shot.
+@export var photo_zoom: float = 1.2
+
 @export_group("Rewards")
 ## Trail Points (GAME_DESIGN §5.6): every finish, each star the first time it's
 ## earned, and photos by quality (only improvements on the best shot count).

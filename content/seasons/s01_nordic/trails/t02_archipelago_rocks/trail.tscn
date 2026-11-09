@@ -9,10 +9,119 @@
 [ext_resource type="PackedScene" path="res://world/interactables/bench.tscn" id="7_bench"]
 [ext_resource type="PackedScene" path="res://world/interactables/checkpoint.tscn" id="8_checkpoint"]
 [ext_resource type="PackedScene" path="res://world/interactables/finish.tscn" id="9_finish"]
+[ext_resource type="PackedScene" path="res://world/interactables/viewpoint.tscn" id="vp_scene"]
 
 [node name="ArchipelagoRocks" type="Node2D"]
 
 [node name="Backdrop" parent="." instance=ExtResource("2_backdrop")]
+
+[node name="Scenery" type="Node2D" parent="."]
+
+[node name="Sea" type="Node2D" parent="Scenery"]
+
+[node name="Water" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.4706, 0.7373, 0.8392, 1.0)
+antialiased = true
+polygon = PackedVector2Array(1320, 422, 3600, 422, 3600, 2022, 1320, 2022)
+vertex_colors = PackedColorArray(0.6235, 0.8275, 0.9020, 1.0, 0.6235, 0.8275, 0.9020, 1.0, 0.3059, 0.5608, 0.6588, 1.0, 0.3059, 0.5608, 0.6588, 1.0)
+
+[node name="Ripple0" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(1360, 447, 1410, 447, 1410, 450, 1360, 450)
+
+[node name="Ripple1" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(1505, 436, 1555, 436, 1555, 439, 1505, 439)
+
+[node name="Ripple2" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(1687, 443, 1737, 443, 1737, 446, 1687, 446)
+
+[node name="Ripple3" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(1906, 432, 1956, 432, 1956, 435, 1906, 435)
+
+[node name="Ripple4" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(2072, 439, 2122, 439, 2122, 442, 2072, 442)
+
+[node name="Ripple5" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(2275, 446, 2325, 446, 2325, 449, 2275, 449)
+
+[node name="Ripple6" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(2425, 435, 2475, 435, 2475, 438, 2425, 438)
+
+[node name="Ripple7" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(2612, 442, 2662, 442, 2662, 445, 2612, 445)
+
+[node name="Ripple8" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(2836, 431, 2886, 431, 2886, 434, 2836, 434)
+
+[node name="Ripple9" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(3007, 438, 3057, 438, 3057, 441, 3007, 441)
+
+[node name="Ripple10" type="Polygon2D" parent="Scenery/Sea"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(3215, 445, 3265, 445, 3265, 448, 3215, 448)
+
+[node name="Lighthouse" type="Node2D" parent="Scenery"]
+position = Vector2(2960, 440)
+
+[node name="Band0" type="Polygon2D" parent="Scenery/Lighthouse"]
+color = Color(0.9098, 0.3647, 0.2471, 1.0)
+antialiased = true
+polygon = PackedVector2Array(-26, 0, 26, 0, 23, -46, -23, -46)
+
+[node name="Band1" type="Polygon2D" parent="Scenery/Lighthouse"]
+color = Color(1.0000, 0.9647, 0.8980, 1.0)
+antialiased = true
+polygon = PackedVector2Array(-23, -46, 23, -46, 20, -92, -20, -92)
+
+[node name="Band2" type="Polygon2D" parent="Scenery/Lighthouse"]
+color = Color(0.9098, 0.3647, 0.2471, 1.0)
+antialiased = true
+polygon = PackedVector2Array(-20, -92, 20, -92, 17, -138, -17, -138)
+
+[node name="Band3" type="Polygon2D" parent="Scenery/Lighthouse"]
+color = Color(1.0000, 0.9647, 0.8980, 1.0)
+antialiased = true
+polygon = PackedVector2Array(-17, -138, 17, -138, 14, -184, -14, -184)
+
+[node name="Band4" type="Polygon2D" parent="Scenery/Lighthouse"]
+color = Color(0.9098, 0.3647, 0.2471, 1.0)
+antialiased = true
+polygon = PackedVector2Array(-14, -184, 14, -184, 11, -230, -11, -230)
+
+[node name="Gallery" type="Polygon2D" parent="Scenery/Lighthouse"]
+color = Color(0.1686, 0.1765, 0.2588, 1.0)
+antialiased = true
+polygon = PackedVector2Array(-20, -230, 20, -230, 20, -238, -20, -238)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lighthouse"]
+color = Color(1.0000, 0.9137, 0.6588, 1.0)
+antialiased = true
+polygon = PackedVector2Array(-12, -238, 12, -238, 12, -264, -12, -264)
+
+[node name="Roof" type="Polygon2D" parent="Scenery/Lighthouse"]
+color = Color(0.1686, 0.1765, 0.2588, 1.0)
+antialiased = true
+polygon = PackedVector2Array(-18, -264, 18, -264, 0, -286)
 
 [node name="Trailhead" type="Marker2D" parent="."]
 position = Vector2(160, 550)
@@ -41,7 +150,7 @@ surface = 1
 decor_seed = 8
 
 [node name="Point" type="Line2D" parent="Ground"]
-points = PackedVector2Array(2280, 480, 2500, 480, 2700, 440, 3000, 440)
+points = PackedVector2Array(2280, 480, 2500, 480, 2700, 440, 3500, 440)
 width = 14.0
 default_color = Color(0.611765, 0.603922, 0.564706, 1)
 joint_mode = 2
@@ -78,3 +187,21 @@ size = Vector2(64, 46)
 
 [node name="Finish" parent="Pieces" instance=ExtResource("9_finish")]
 position = Vector2(2850, 440)
+
+[node name="Seabirds" parent="Pieces" instance=ExtResource("vp_scene")]
+position = Vector2(1760, 478)
+viewpoint_id = &"seabirds"
+frame_offset = Vector2(260, -200)
+subject_kind = 0
+subject_path = PackedVector2Array(-300, 10, -60, -60, 120, -10, 300, -70)
+subject_speed = 120
+subject_size = 1.1
+
+[node name="LighthouseView" parent="Pieces" instance=ExtResource("vp_scene")]
+position = Vector2(2560, 480)
+viewpoint_id = &"lighthouse"
+frame_offset = Vector2(330, -72)
+subject_kind = 1
+subject_path = PackedVector2Array(-260, 0, 260, 0)
+subject_speed = 55
+subject_size = 1.0

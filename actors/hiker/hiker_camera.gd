@@ -5,6 +5,9 @@ extends Camera2D
 @export var target: CharacterBody2D
 
 var _balance: Balance
+## When set, the camera frames this point (photo mode) instead of following the target.
+var _frame_point: Variant = null
+var _zoom_tween: Tween
 
 
 func _ready() -> void:
@@ -33,7 +36,30 @@ func snap_to_target() -> void:
 	reset_physics_interpolation()
 
 
+## Glide to `point` and zoom in, e.g. to compose a photo.
+func frame(point: Vector2, zoom_level: float) -> void:
+	_frame_point = point
+	_tween_zoom(zoom_level)
+
+
+## Back to following the hiker.
+func release_frame() -> void:
+	_frame_point = null
+	_tween_zoom(1.0)
+
+
+func _tween_zoom(level: float) -> void:
+	if _zoom_tween != null:
+		_zoom_tween.kill()
+	_zoom_tween = create_tween()
+	_zoom_tween.tween_property(self, "zoom", Vector2(level, level), 0.45).set_trans(Tween.TRANS_SINE)
+
+
 func _physics_process(delta: float) -> void:
+	if _frame_point != null:
+		offset = offset.lerp(Vector2.ZERO, 1.0 - exp(-_balance.camera_look_ahead_speed * 4.0 * delta))
+		global_position = _frame_point
+		return
 	if target == null:
 		return
 	# Look further ahead while moving so the next obstacle comes into view in time.

@@ -11,10 +11,73 @@
 [ext_resource type="PackedScene" path="res://world/interactables/bench.tscn" id="9_bench"]
 [ext_resource type="PackedScene" path="res://world/interactables/checkpoint.tscn" id="10_checkpoint"]
 [ext_resource type="PackedScene" path="res://world/interactables/finish.tscn" id="11_finish"]
+[ext_resource type="PackedScene" path="res://world/interactables/viewpoint.tscn" id="vp_scene"]
 
 [node name="ForestLakeLoop" type="Node2D"]
 
 [node name="Backdrop" parent="." instance=ExtResource("2_backdrop")]
+
+[node name="Scenery" type="Node2D" parent="."]
+
+[node name="Lake" type="Node2D" parent="Scenery"]
+
+[node name="Water" type="Polygon2D" parent="Scenery/Lake"]
+color = Color(0.4706, 0.7373, 0.8392, 1.0)
+antialiased = true
+polygon = PackedVector2Array(880, 506, 960, 480, 1040, 472, 1680, 472, 1730, 490, 1760, 520, 1760, 2072, 880, 2072)
+
+[node name="Ripple0" type="Polygon2D" parent="Scenery/Lake"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(920, 494, 970, 494, 970, 497, 920, 497)
+
+[node name="Ripple1" type="Polygon2D" parent="Scenery/Lake"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(1134, 483, 1184, 483, 1184, 486, 1134, 486)
+
+[node name="Ripple2" type="Polygon2D" parent="Scenery/Lake"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(1295, 490, 1345, 490, 1345, 493, 1295, 493)
+
+[node name="Ripple3" type="Polygon2D" parent="Scenery/Lake"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(1493, 497, 1543, 497, 1543, 500, 1493, 500)
+
+[node name="Ripple4" type="Polygon2D" parent="Scenery/Lake"]
+color = Color(0.9020, 0.9608, 0.9804, 0.8)
+antialiased = true
+polygon = PackedVector2Array(1638, 486, 1688, 486, 1688, 489, 1638, 489)
+
+[node name="BigPine" type="Node2D" parent="Scenery"]
+position = Vector2(4260, 62)
+
+[node name="Trunk" type="Polygon2D" parent="Scenery/BigPine"]
+color = Color(0.4196, 0.2902, 0.2000, 1.0)
+antialiased = true
+polygon = PackedVector2Array(-9, 0, 9, 0, 6, -260, -6, -260)
+
+[node name="Needles0" type="Polygon2D" parent="Scenery/BigPine"]
+color = Color(0.2471, 0.4196, 0.3412, 1.0)
+antialiased = true
+polygon = PackedVector2Array(-143, -91, 143, -91, 0, -174.2)
+
+[node name="Needles1" type="Polygon2D" parent="Scenery/BigPine"]
+color = Color(0.2471, 0.4196, 0.3412, 1.0)
+antialiased = true
+polygon = PackedVector2Array(-117, -135.2, 117, -135.2, 0, -218.4)
+
+[node name="Needles2" type="Polygon2D" parent="Scenery/BigPine"]
+color = Color(0.2471, 0.4196, 0.3412, 1.0)
+antialiased = true
+polygon = PackedVector2Array(-91, -179.4, 91, -179.4, 0, -262.6)
+
+[node name="Needles3" type="Polygon2D" parent="Scenery/BigPine"]
+color = Color(0.2471, 0.4196, 0.3412, 1.0)
+antialiased = true
+polygon = PackedVector2Array(-65, -223.6, 65, -223.6, 0, -306.8)
 
 [node name="Trailhead" type="Marker2D" parent="."]
 position = Vector2(160, 550)
@@ -113,3 +176,22 @@ position = Vector2(6620, 530)
 
 [node name="Finish" parent="Pieces" instance=ExtResource("11_finish")]
 position = Vector2(7300, 440)
+
+[node name="LakeMirror" parent="Pieces" instance=ExtResource("vp_scene")]
+position = Vector2(980, 490)
+viewpoint_id = &"lake_mirror"
+frame_offset = Vector2(300, -170)
+subject_kind = 0
+subject_path = PackedVector2Array(-330, -30, -80, 10, 180, -20, 330, 20)
+subject_speed = 95
+subject_size = 1.3
+
+[node name="Woodpecker" parent="Pieces" instance=ExtResource("vp_scene")]
+position = Vector2(3990, 60)
+viewpoint_id = &"woodpecker"
+subject_color = Color(0.956863, 0.890196, 0.764706, 1)
+frame_offset = Vector2(250, -120)
+subject_kind = 0
+subject_path = PackedVector2Array(30, 40, 6, -10, 30, -70)
+subject_speed = 45
+subject_size = 0.9

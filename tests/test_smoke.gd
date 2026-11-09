@@ -49,5 +49,13 @@ func test_results_screen_instantiates_without_a_result() -> void:
 	GameState.last_result = saved
 
 
+func test_journal_shows_every_postcard_slot() -> void:
+	var journal: Node = add_child_autofree((load(SceneRouter.JOURNAL) as PackedScene).instantiate())
+	var expected: int = 0
+	for t: TrailData in ContentDB.seasons()[0].trails:
+		expected += t.viewpoints.size()
+	assert_eq(int(journal.call("postcard_count")), expected)
+
+
 func test_translations_resolve() -> void:
 	assert_eq(tr("MENU_PLAY"), "Play", "strings.csv not imported or not registered")

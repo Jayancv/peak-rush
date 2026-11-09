@@ -11,6 +11,7 @@ extends Node2D
 @export var hud: Hud
 @export var touch_controls: TouchControls
 @export var pause_menu: PauseMenu
+@export var photo_mode: PhotoMode
 
 ## How far below the lowest ground the hiker can drop before it counts as a fall,
 ## a safety net in case a gap has no KillZone.
@@ -23,6 +24,8 @@ var trail: TrailData
 var hiker: Hiker
 var daylight: Daylight
 var finished: bool = false
+## Best photo this hike per viewpoint id (String -> StarRating.PhotoQuality).
+var photos: Dictionary = {}
 
 var _balance: Balance
 var _backdrop: Backdrop
@@ -30,6 +33,7 @@ var _respawn_point: Vector2
 var _fall_limit_y: float = INF
 var _respawning: bool = false
 var _bench_explained: bool = false
+var _near_viewpoint: Viewpoint
 
 
 func _ready() -> void:
@@ -46,6 +50,9 @@ func _ready() -> void:
 	pause_menu.resume_pressed.connect(resume)
 	pause_menu.restart_pressed.connect(func() -> void: SceneRouter.go_to(SceneRouter.TRAIL_RUNNER))
 	pause_menu.quit_pressed.connect(func() -> void: SceneRouter.go_to(SceneRouter.TRAIL_SELECT))
+	hud.photo_pressed.connect(start_photo)
+	photo_mode.shot_taken.connect(_on_shot_taken)
+	photo_mode.closed.connect(_on_photo_closed)
 	_load_trail()
 	_apply_daylight()
 
@@ -79,8 +86,12 @@ func _load_trail() -> void:
 	camera.snap_to_target()
 	var stamina: Stamina = hiker.condition.stamina
 	hud.set_stamina(stamina.value, stamina.max_value, stamina.recovering)
-	# Viewpoints arrive in M4; the counter already shows how many a trail has.
-	hud.set_photos(0, get_tree().get_nodes_in_group(&"viewpoint").size())
+	for node: Node in get_tree().get_nodes_in_group(Viewpoint.GROUP):
+		var vp: Viewpoint = node as Viewpoint
+		if vp != null and level.is_ancestor_of(vp):
+			vp.hiker_entered.connect(_on_viewpoint_entered)
+			vp.hiker_left.connect(_on_viewpoint_left)
+	_update_photo_count()
 
 
 func _process(delta: float) -> void:
@@ -105,10 +116,22 @@ func resume() -> void:
 	get_tree().paused = false
 
 
+## Opens photo mode at the viewpoint the hiker is standing at.
+func start_photo() -> void:
+	if _near_viewpoint == null or photo_mode.is_open() or not hiker.enter_photo():
+		return
+	touch_controls.set_enabled(false)
+	hud.set_photo_mode(true)
+	camera.frame(_near_viewpoint.frame_center(), _balance.photo_zoom)
+	photo_mode.open(_near_viewpoint)
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("pause"):
 		get_viewport().set_input_as_handled()
-		if not finished:
+		if photo_mode.is_open():
+			photo_mode.close()
+		elif not finished:
 			pause()
 
 
@@ -118,7 +141,9 @@ func _notification(what: int) -> void:
 			# Android back: opens the pause card, or closes it if it's already open.
 			if finished:
 				return
-			if get_tree().paused:
+			if photo_mode.is_open():
+				photo_mode.close()
+			elif get_tree().paused:
 				resume()
 			else:
 				pause()
@@ -178,10 +203,45 @@ func _on_reached_finish() -> void:
 	result.time_seconds = daylight.elapsed
 	result.before_dusk = not daylight.is_dusk()
 	result.viewpoint_total = trail.viewpoints.size()
-	# Photos are taken in M4; until then the result simply has none.
+	for id: String in photos:
+		if int(photos[id]) > StarRating.PhotoQuality.NONE:
+			result.photos[id] = photos[id]
 	GameState.record_result(result)
 	await get_tree().create_timer(SUMMIT_PAUSE).timeout
 	SceneRouter.go_to(SceneRouter.RESULTS)
+
+
+func _on_viewpoint_entered(vp: Viewpoint) -> void:
+	_near_viewpoint = vp
+	hud.show_photo_prompt(not finished)
+
+
+func _on_viewpoint_left(vp: Viewpoint) -> void:
+	if _near_viewpoint == vp:
+		_near_viewpoint = null
+		hud.show_photo_prompt(false)
+
+
+func _on_shot_taken(viewpoint_id: StringName, quality: int) -> void:
+	var key: String = String(viewpoint_id)
+	photos[key] = maxi(int(photos.get(key, StarRating.PhotoQuality.NONE)), quality)
+	_update_photo_count()
+
+
+func _on_photo_closed() -> void:
+	hiker.exit_photo()
+	camera.release_frame()
+	touch_controls.set_enabled(true)
+	hud.set_photo_mode(false)
+	hud.show_photo_prompt(_near_viewpoint != null and not finished)
+
+
+func _update_photo_count() -> void:
+	var taken: int = 0
+	for id: String in photos:
+		if int(photos[id]) > StarRating.PhotoQuality.NONE:
+			taken += 1
+	hud.set_photos(taken, trail.viewpoints.size())
 
 
 func _vibrate(ms: int) -> void:

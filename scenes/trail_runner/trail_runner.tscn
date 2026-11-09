@@ -6,8 +6,9 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/touch_controls.tscn" id="6_touch"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="7_hud"]
 [ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="8_pause"]
+[ext_resource type="PackedScene" path="res://scenes/photo_mode/photo_mode.tscn" id="9_photo"]
 
-[node name="TrailRunner" type="Node2D" node_paths=PackedStringArray("world", "camera", "world_tint", "hud", "touch_controls", "pause_menu")]
+[node name="TrailRunner" type="Node2D" node_paths=PackedStringArray("world", "camera", "world_tint", "hud", "touch_controls", "pause_menu", "photo_mode")]
 script = ExtResource("1_runner")
 hiker_scene = ExtResource("4_hiker")
 world = NodePath("World")
@@ -16,6 +17,7 @@ world_tint = NodePath("WorldTint")
 hud = NodePath("UI/Hud")
 touch_controls = NodePath("UI/TouchControls")
 pause_menu = NodePath("UI/PauseMenu")
+photo_mode = NodePath("UI/PhotoMode")
 
 [node name="World" type="Node2D" parent="."]
 
@@ -30,5 +32,7 @@ script = ExtResource("5_camera")
 [node name="TouchControls" parent="UI" instance=ExtResource("6_touch")]
 
 [node name="Hud" parent="UI" instance=ExtResource("7_hud")]
+
+[node name="PhotoMode" parent="UI" instance=ExtResource("9_photo")]
 
 [node name="PauseMenu" parent="UI" instance=ExtResource("8_pause")]

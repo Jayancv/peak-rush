@@ -85,7 +85,7 @@ docs/                GAME_DESIGN.md, PLAN.md
 - At the end of each session, update **Current status** below and tick the boxes in `docs/PLAN.md`.
 
 ## Current status
-- Milestone: **M3 – built, 124 tests green, on Pixel 7 Pro; awaiting user check that progress survives an app restart on the phone**. M0–M2 done. Next: M4.
+- Milestone: **M4 – built, 143 tests green, on Pixel 7 Pro; awaiting user playtest of photo timing**. M0–M3 done. Next: M5 (vertical slice).
 - Godot 4.7.2-stable (not on PATH; ask the user for the executable path if unknown); GUT 9.7.1.
 - Notes: Autoloads are stubs except SceneRouter (fade + `go_to`, scene path consts `MAIN_MENU`/`TRAIL_RUNNER`).
   `scenes/ui/safe_area_margin.gd` (`SafeAreaMargin`) wraps screen UI. Global theme: `shared_art/ui_theme.tres`.
@@ -112,7 +112,13 @@ docs/                GAME_DESIGN.md, PLAN.md
   `ContentValidator` (systems/) instantiates levels; tests run it over the whole index + the template.
   Saves: `SaveService` writes via .tmp + .bak swap; bad JSON is moved to `save.corrupt-<time>.json`; under GUT it uses
   `user://save_test.json` and autosave is off. Format changes: bump SAVE_VERSION + add a step in `systems/save_migrations.gd` + a test.
-  Stars are a bitmask (StarRating.STAR_*); a trail with 0 viewpoints grants the photo star until M4 adds viewpoints.
+  Stars are a bitmask (StarRating.STAR_*); a trail with 0 viewpoints grants the photo star automatically.
+  M4: `Viewpoint` (HikerArea) emits hiker_entered/hiker_left -> runner shows HUD "Take photo" -> `PhotoMode` overlay.
+  The subject (`PhotoSubject`) moves along `subject_path`, which is relative to `frame_offset` (the photo's centre).
+  Shots are scored against the *screen* centre, so keep viewpoint frames away from trail ends (camera limits would
+  stop the camera centring). `PhotoScoring` = grading + film roll; quality colours live in `Postcard.border_color`.
+  Placeholder postcards/stamps are drawn in code (`Postcard`, `PassportStamp`); a ViewpointData.postcard texture replaces the art.
+  AudioManager synthesises a shutter click (no audio assets yet). In .tscn, PackedColorArray is a flat list of floats.
   `.tres` typed arrays of custom resources use `Array[ExtResource("<script id>")]([...])`.
   Buttons over the play area must join group `touch_blocker`. Physics interpolation is on: use `Hiker.teleport()` to move instantly.
   On this machine, git over HTTPS needs `-c http.sslBackend=schannel`.

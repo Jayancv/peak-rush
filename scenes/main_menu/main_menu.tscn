@@ -8,7 +8,7 @@
 [ext_resource type="Script" path="res://scenes/ui/ui_icon.gd" id="6_icon"]
 [ext_resource type="FontVariation" path="res://shared_art/title_font.tres" id="7_title"]
 
-[node name="MainMenu" type="Control" node_paths=PackedStringArray("play_button", "backdrop")]
+[node name="MainMenu" type="Control" node_paths=PackedStringArray("play_button", "journal_button", "backdrop")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -18,6 +18,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_menu")
 play_button = NodePath("SafeArea/VBox/PlayButton")
+journal_button = NodePath("SafeArea/VBox/JournalButton")
 backdrop = NodePath("Backdrop")
 
 [node name="Backdrop" parent="." instance=ExtResource("3_backdrop")]
@@ -49,7 +50,7 @@ script = ExtResource("2_safe")
 [node name="VBox" type="VBoxContainer" parent="SafeArea"]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/separation = 36
+theme_override_constants/separation = 24
 alignment = 1
 
 [node name="Card" type="PanelContainer" parent="SafeArea/VBox"]
@@ -94,7 +95,14 @@ theme_override_fonts/font = ExtResource("7_title")
 theme_override_font_sizes/font_size = 44
 text = "MENU_PLAY"
 
+[node name="JournalButton" type="Button" parent="SafeArea/VBox"]
+custom_minimum_size = Vector2(260, 76)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 30
+text = "MENU_JOURNAL"
+
 [node name="BottomSpacer" type="Control" parent="SafeArea/VBox"]
-custom_minimum_size = Vector2(0, 70)
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 mouse_filter = 2

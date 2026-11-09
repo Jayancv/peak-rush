@@ -105,10 +105,10 @@ Claude Code ticks `[x]` as tasks finish and updates "Current status" in `CLAUDE.
 ---
 
 ## M4 — Viewpoints, photo mode and journal
-- [ ] `world/interactables/viewpoint.tscn`: an `Area2D` with a 📷 prompt and an exported `viewpoint_id`
-- [ ] **Photo mode** scene: viewfinder overlay, a moving subject (configurable path and speed per viewpoint), tap to shoot, shutter flash and sound, Good/Great/Perfect result, with tests for the quality maths
-- [ ] Placeholder postcards (a coloured card with the trail and viewpoint name)
-- [ ] **Journal screen:** a passport page per season (stamps) and a postcard gallery with quality borders; tap a postcard to enlarge it
+- [x] `world/interactables/viewpoint.tscn`: an `Area2D` with a 📷 prompt and an exported `viewpoint_id`
+- [x] **Photo mode** scene: viewfinder overlay, a moving subject (configurable path and speed per viewpoint), tap to shoot, shutter flash and sound, Good/Great/Perfect result, with tests for the quality maths
+- [x] Placeholder postcards (a coloured card with the trail and viewpoint name)
+- [x] **Journal screen:** a passport page per season (stamps) and a postcard gallery with quality borders; tap a postcard to enlarge it
 
 **Done when:** you can photograph viewpoints, results count towards ★2, and the postcards show up in the journal.
 
