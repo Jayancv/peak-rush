@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://actors/hiker/hiker.gd" id="1_hiker"]
+[ext_resource type="Script" path="res://actors/hiker/hiker_visual.gd" id="2_visual"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_body"]
 radius = 13.0
@@ -16,16 +17,105 @@ visual = NodePath("Visual")
 position = Vector2(0, -35)
 shape = SubResource("CapsuleShape2D_body")
 
-[node name="Visual" type="Node2D" parent="."]
+[node name="Visual" type="Node2D" parent="." node_paths=PackedStringArray("front_leg", "back_leg", "arm")]
+script = ExtResource("2_visual")
+front_leg = NodePath("FrontLeg")
+back_leg = NodePath("BackLeg")
+arm = NodePath("Arm")
+
+[node name="BackLeg" type="Node2D" parent="Visual"]
+position = Vector2(-3, -30)
+
+[node name="Leg" type="Polygon2D" parent="Visual/BackLeg"]
+color = Color(0.1686, 0.1765, 0.2588, 1.0)
+antialiased = true
+polygon = PackedVector2Array(1.0, -2.0, 2.5, -1.6, 3.6, -0.5, 4.0, 1.0, 4.0, 21.0, 3.6, 22.5, 2.5, 23.6, 1.0, 24.0, -1.0, 24.0, -2.5, 23.6, -3.6, 22.5, -4.0, 21.0, -4.0, 1.0, -3.6, -0.5, -2.5, -1.6, -1.0, -2.0)
+
+[node name="Boot" type="Polygon2D" parent="Visual/BackLeg"]
+color = Color(0.3255, 0.2196, 0.1490, 1.0)
+antialiased = true
+polygon = PackedVector2Array(7.0, 21.0, 8.5, 21.4, 9.6, 22.5, 10.0, 24.0, 10.0, 27.0, 9.6, 28.5, 8.5, 29.6, 7.0, 30.0, -2.0, 30.0, -3.5, 29.6, -4.6, 28.5, -5.0, 27.0, -5.0, 24.0, -4.6, 22.5, -3.5, 21.4, -2.0, 21.0)
+
+[node name="Bedroll" type="Polygon2D" parent="Visual"]
+color = Color(0.8510, 0.7804, 0.6392, 1.0)
+antialiased = true
+polygon = PackedVector2Array(-8.0, -69.0, -6.0, -68.5, -4.5, -67.0, -4.0, -65.0, -4.0, -64.0, -4.5, -62.0, -6.0, -60.5, -8.0, -60.0, -21.0, -60.0, -23.0, -60.5, -24.5, -62.0, -25.0, -64.0, -25.0, -65.0, -24.5, -67.0, -23.0, -68.5, -21.0, -69.0)
 
 [node name="Backpack" type="Polygon2D" parent="Visual"]
-color = Color(0.909804, 0.364706, 0.247059, 1)
-polygon = PackedVector2Array(-11.0, -56.0, -8.5, -55.3, -6.7, -53.5, -6.0, -51.0, -6.0, -25.0, -6.7, -22.5, -8.5, -20.7, -11.0, -20.0, -20.0, -20.0, -22.5, -20.7, -24.3, -22.5, -25.0, -25.0, -25.0, -51.0, -24.3, -53.5, -22.5, -55.3, -20.0, -56.0)
+color = Color(0.9098, 0.3647, 0.2471, 1.0)
+antialiased = true
+polygon = PackedVector2Array(-11.0, -62.0, -8.5, -61.3, -6.7, -59.5, -6.0, -57.0, -6.0, -35.0, -6.7, -32.5, -8.5, -30.7, -11.0, -30.0, -18.0, -30.0, -20.5, -30.7, -22.3, -32.5, -23.0, -35.0, -23.0, -57.0, -22.3, -59.5, -20.5, -61.3, -18.0, -62.0)
 
-[node name="Body" type="Polygon2D" parent="Visual"]
-color = Color(0.168627, 0.176471, 0.258824, 1)
-polygon = PackedVector2Array(-14.0, -58.0, -12.9, -63.4, -9.9, -67.9, -5.4, -70.9, 0.0, -72.0, 5.4, -70.9, 9.9, -67.9, 12.9, -63.4, 14.0, -58.0, 14.0, -14.0, 12.9, -8.6, 9.9, -4.1, 5.4, -1.1, 0.0, 0.0, -5.4, -1.1, -9.9, -4.1, -12.9, -8.6, -14.0, -14.0)
+[node name="Pocket" type="Polygon2D" parent="Visual"]
+color = Color(0.7882, 0.2902, 0.1882, 1.0)
+antialiased = true
+polygon = PackedVector2Array(-13.0, -47.0, -11.5, -46.6, -10.4, -45.5, -10.0, -44.0, -10.0, -38.0, -10.4, -36.5, -11.5, -35.4, -13.0, -35.0, -18.0, -35.0, -19.5, -35.4, -20.6, -36.5, -21.0, -38.0, -21.0, -44.0, -20.6, -45.5, -19.5, -46.6, -18.0, -47.0)
+
+[node name="FrontLeg" type="Node2D" parent="Visual"]
+position = Vector2(3, -30)
+
+[node name="Leg" type="Polygon2D" parent="Visual/FrontLeg"]
+color = Color(0.2275, 0.2471, 0.3608, 1.0)
+antialiased = true
+polygon = PackedVector2Array(1.0, -2.0, 2.5, -1.6, 3.6, -0.5, 4.0, 1.0, 4.0, 21.0, 3.6, 22.5, 2.5, 23.6, 1.0, 24.0, -1.0, 24.0, -2.5, 23.6, -3.6, 22.5, -4.0, 21.0, -4.0, 1.0, -3.6, -0.5, -2.5, -1.6, -1.0, -2.0)
+
+[node name="Boot" type="Polygon2D" parent="Visual/FrontLeg"]
+color = Color(0.4196, 0.2902, 0.2000, 1.0)
+antialiased = true
+polygon = PackedVector2Array(7.0, 21.0, 8.5, 21.4, 9.6, 22.5, 10.0, 24.0, 10.0, 27.0, 9.6, 28.5, 8.5, 29.6, 7.0, 30.0, -2.0, 30.0, -3.5, 29.6, -4.6, 28.5, -5.0, 27.0, -5.0, 24.0, -4.6, 22.5, -3.5, 21.4, -2.0, 21.0)
+
+[node name="Torso" type="Polygon2D" parent="Visual"]
+color = Color(0.2000, 0.4000, 0.6275, 1.0)
+antialiased = true
+polygon = PackedVector2Array(5.0, -61.0, 8.5, -60.1, 11.1, -57.5, 12.0, -54.0, 12.0, -33.0, 11.1, -29.5, 8.5, -26.9, 5.0, -26.0, -4.0, -26.0, -7.5, -26.9, -10.1, -29.5, -11.0, -33.0, -11.0, -54.0, -10.1, -57.5, -7.5, -60.1, -4.0, -61.0)
+
+[node name="Strap" type="Polygon2D" parent="Visual"]
+color = Color(0.7216, 0.2627, 0.1725, 1.0)
+antialiased = true
+polygon = PackedVector2Array(-7.0, -59.0, -3.0, -60.0, 6.0, -38.0, 2.0, -37.0)
+
+[node name="Head" type="Polygon2D" parent="Visual"]
+color = Color(0.9569, 0.7882, 0.6392, 1.0)
+antialiased = true
+polygon = PackedVector2Array(13.0, -70.0, 12.5, -66.9, 11.1, -64.1, 8.9, -61.9, 6.1, -60.5, 3.0, -60.0, -0.1, -60.5, -2.9, -61.9, -5.1, -64.1, -6.5, -66.9, -7.0, -70.0, -6.5, -73.1, -5.1, -75.9, -2.9, -78.1, -0.1, -79.5, 3.0, -80.0, 6.1, -79.5, 8.9, -78.1, 11.1, -75.9, 12.5, -73.1)
+
+[node name="Cheek" type="Polygon2D" parent="Visual"]
+color = Color(0.9412, 0.6039, 0.5255, 0.7)
+antialiased = true
+polygon = PackedVector2Array(11.2, -66.5, 10.6, -64.9, 9.0, -64.3, 7.4, -64.9, 6.8, -66.5, 7.4, -68.1, 9.0, -68.7, 10.6, -68.1)
 
 [node name="Eye" type="Polygon2D" parent="Visual"]
-color = Color(1, 0.964706, 0.898039, 1)
-polygon = PackedVector2Array(10.0, -60.0, 9.1, -57.9, 7.0, -57.0, 4.9, -57.9, 4.0, -60.0, 4.9, -62.1, 7.0, -63.0, 9.1, -62.1)
+color = Color(0.1686, 0.1765, 0.2588, 1.0)
+antialiased = true
+polygon = PackedVector2Array(9.7, -71.0, 9.2, -69.8, 8.0, -69.3, 6.8, -69.8, 6.3, -71.0, 6.8, -72.2, 8.0, -72.7, 9.2, -72.2)
+
+[node name="Beanie" type="Polygon2D" parent="Visual"]
+color = Color(0.9490, 0.7020, 0.2392, 1.0)
+antialiased = true
+polygon = PackedVector2Array(-8.0, -71.0, -7.5, -74.4, -5.9, -77.5, -3.5, -79.9, -0.4, -81.5, 3.0, -82.0, 6.4, -81.5, 9.5, -79.9, 11.9, -77.5, 13.5, -74.4, 14.0, -71.0, 14.0, -68.0, -8.0, -68.0)
+
+[node name="Pom" type="Polygon2D" parent="Visual"]
+color = Color(0.9686, 0.8235, 0.4784, 1.0)
+antialiased = true
+polygon = PackedVector2Array(5.5, -83.0, 4.8, -80.9, 3.1, -79.7, 0.9, -79.7, -0.8, -80.9, -1.5, -83.0, -0.8, -85.1, 0.9, -86.3, 3.1, -86.3, 4.8, -85.1)
+
+[node name="Arm" type="Node2D" parent="Visual"]
+position = Vector2(4, -53)
+
+[node name="Pole" type="Line2D" parent="Visual/Arm"]
+points = PackedVector2Array(0, 19, 9, 53)
+width = 2.5
+default_color = Color(0.5412, 0.5608, 0.6000, 1.0)
+begin_cap_mode = 2
+end_cap_mode = 2
+antialiased = true
+
+[node name="Sleeve" type="Polygon2D" parent="Visual/Arm"]
+color = Color(0.1647, 0.3373, 0.5294, 1.0)
+antialiased = true
+polygon = PackedVector2Array(-0.0, -2.0, 1.5, -1.6, 2.6, -0.5, 3.0, 1.0, 3.0, 15.0, 2.6, 16.5, 1.5, 17.6, 0.0, 18.0, 0.0, 18.0, -1.5, 17.6, -2.6, 16.5, -3.0, 15.0, -3.0, 1.0, -2.6, -0.5, -1.5, -1.6, -0.0, -2.0)
+
+[node name="Hand" type="Polygon2D" parent="Visual/Arm"]
+color = Color(0.9569, 0.7882, 0.6392, 1.0)
+antialiased = true
+polygon = PackedVector2Array(3.3, 19.0, 2.7, 20.9, 1.0, 22.1, -1.0, 22.1, -2.7, 20.9, -3.3, 19.0, -2.7, 17.1, -1.0, 15.9, 1.0, 15.9, 2.7, 17.1)

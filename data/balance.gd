@@ -56,7 +56,16 @@ extends Resource
 @export var jump_stretch: Vector2 = Vector2(0.85, 1.15)
 @export var land_squash: Vector2 = Vector2(1.2, 0.8)
 @export var squash_recover_rate: float = 12.0
-@export var walk_bob_px: float = 3.0
+@export var walk_bob_px: float = 2.5
+## Leg and arm swing amplitude in the walk cycle (radians).
+@export var walk_leg_swing: float = 0.5
+@export var walk_arm_swing: float = 0.45
+## How quickly limbs blend between poses (higher is snappier).
+@export var pose_blend_rate: float = 14.0
+## Body lean per unit of slope grade, and when stumbling or exhausted (radians, + leans forward).
+@export var slope_lean: float = 0.12
+@export var stumble_lean: float = 0.35
+@export var exhausted_lean: float = 0.2
 ## Steps per second at full walk speed.
 @export var walk_bob_hz: float = 2.2
 ## Rest breathing: vertical scale wobble and breaths per second.

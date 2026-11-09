@@ -2,56 +2,39 @@
 
 [ext_resource type="Script" path="res://scenes/main_menu/main_menu.gd" id="1_menu"]
 [ext_resource type="Script" path="res://scenes/ui/safe_area_margin.gd" id="2_safe"]
+[ext_resource type="PackedScene" path="res://world/backdrop/backdrop.tscn" id="3_backdrop"]
+[ext_resource type="Script" path="res://world/terrain_strip.gd" id="4_strip"]
+[ext_resource type="PackedScene" path="res://actors/hiker/hiker.tscn" id="5_hiker"]
+[ext_resource type="Script" path="res://scenes/ui/ui_icon.gd" id="6_icon"]
+[ext_resource type="FontVariation" path="res://shared_art/title_font.tres" id="7_title"]
 
-[node name="MainMenu" type="Control" node_paths=PackedStringArray("play_button")]
+[node name="MainMenu" type="Control" node_paths=PackedStringArray("play_button", "backdrop")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_menu")
 play_button = NodePath("SafeArea/VBox/PlayButton")
+backdrop = NodePath("Backdrop")
 
-[node name="Sky" type="ColorRect" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0.658824, 0.847059, 0.917647, 1)
+[node name="Backdrop" parent="." instance=ExtResource("3_backdrop")]
 
-[node name="Landscape" type="Control" parent="."]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 0
-mouse_filter = 2
-
-[node name="FarHills" type="Polygon2D" parent="Landscape"]
-color = Color(0.498039, 0.65098, 0.627451, 1)
-polygon = PackedVector2Array(-200, 0, -200, -330, 150, -420, 420, -360, 700, -470, 1000, -380, 1300, -450, 1600, -360, 1900, -440, 2600, -380, 2600, 0)
-
-[node name="MidHills" type="Polygon2D" parent="Landscape"]
-color = Color(0.368627, 0.54902, 0.478431, 1)
-polygon = PackedVector2Array(-200, 0, -200, -230, 250, -300, 560, -220, 880, -290, 1180, -210, 1500, -280, 1850, -220, 2600, -260, 2600, 0)
-
-[node name="NearGround" type="Polygon2D" parent="Landscape"]
-color = Color(0.231373, 0.356863, 0.290196, 1)
-polygon = PackedVector2Array(-200, 0, -200, -120, 300, -150, 700, -110, 1100, -140, 1500, -100, 2000, -140, 2600, -120, 2600, 0)
-
-[node name="Path" type="Line2D" parent="Landscape"]
-points = PackedVector2Array(-200, -60, 300, -80, 700, -50, 1100, -75, 1500, -45, 2000, -70, 2600, -55)
+[node name="Ground" type="Line2D" parent="."]
+points = PackedVector2Array(-300, 650, 60, 640, 220, 606, 340, 598, 470, 612, 700, 648, 1000, 662, 1350, 650, 1700, 664, 2300, 650)
 width = 14.0
 default_color = Color(0.788235, 0.698039, 0.560784, 1)
 joint_mode = 2
 begin_cap_mode = 2
 end_cap_mode = 2
+script = ExtResource("4_strip")
+decor_seed = 4
+
+[node name="Hiker" parent="." instance=ExtResource("5_hiker")]
+position = Vector2(300, 596)
+input_enabled = false
 
 [node name="SafeArea" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -60,36 +43,58 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("2_safe")
 
 [node name="VBox" type="VBoxContainer" parent="SafeArea"]
 layout_mode = 2
-theme_override_constants/separation = 12
+mouse_filter = 2
+theme_override_constants/separation = 36
 alignment = 1
 
-[node name="Title" type="Label" parent="SafeArea/VBox"]
+[node name="Card" type="PanelContainer" parent="SafeArea/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 72
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_type_variation = &"CardPanel"
+
+[node name="Content" type="VBoxContainer" parent="SafeArea/VBox/Card"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Logo" type="Control" parent="SafeArea/VBox/Card/Content"]
+custom_minimum_size = Vector2(120, 76)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+script = ExtResource("6_icon")
+kind = 0
+
+[node name="Title" type="Label" parent="SafeArea/VBox/Card/Content"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("7_title")
+theme_override_font_sizes/font_size = 84
 text = "MENU_TITLE"
 horizontal_alignment = 1
 
-[node name="Subtitle" type="Label" parent="SafeArea/VBox"]
+[node name="Subtitle" type="Label" parent="SafeArea/VBox/Card/Content"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(0.721569, 0.262745, 0.172549, 1)
+theme_override_font_sizes/font_size = 28
 text = "MENU_SUBTITLE"
 horizontal_alignment = 1
 
-[node name="Spacer" type="Control" parent="SafeArea/VBox"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-
 [node name="PlayButton" type="Button" parent="SafeArea/VBox"]
-custom_minimum_size = Vector2(320, 96)
+custom_minimum_size = Vector2(340, 104)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 40
+theme_type_variation = &"PrimaryButton"
+theme_override_fonts/font = ExtResource("7_title")
+theme_override_font_sizes/font_size = 44
 text = "MENU_PLAY"
 
 [node name="BottomSpacer" type="Control" parent="SafeArea/VBox"]
-custom_minimum_size = Vector2(0, 160)
+custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
+mouse_filter = 2

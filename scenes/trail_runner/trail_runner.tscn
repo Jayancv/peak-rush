@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://actors/hiker/hiker.tscn" id="4_hiker"]
 [ext_resource type="Script" path="res://actors/hiker/hiker_camera.gd" id="5_camera"]
 [ext_resource type="PackedScene" path="res://scenes/ui/touch_controls.tscn" id="6_touch"]
+[ext_resource type="Script" path="res://scenes/ui/ui_icon.gd" id="7_icon"]
 
 [node name="TrailRunner" type="Node2D" node_paths=PackedStringArray("world", "camera", "back_button")]
 script = ExtResource("1_runner")
@@ -40,6 +41,23 @@ size_flags_vertical = 0
 mouse_filter = 2
 
 [node name="BackButton" type="Button" parent="UI/SafeArea/Top" groups=["touch_blocker"]]
-custom_minimum_size = Vector2(160, 72)
+custom_minimum_size = Vector2(84, 84)
 layout_mode = 2
-text = "COMMON_BACK"
+tooltip_text = "COMMON_BACK"
+theme_type_variation = &"IconButton"
+
+[node name="Icon" type="Control" parent="UI/SafeArea/Top/BackButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_top = 16.0
+offset_right = -18.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("7_icon")
+kind = 3
+stroke = 0.16

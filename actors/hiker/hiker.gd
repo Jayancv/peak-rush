@@ -18,7 +18,9 @@ const FACING: float = 1.0
 const SURFACE_CHECK_SECONDS: float = 0.1
 
 @export var balance: Balance
-@export var visual: Node2D
+@export var visual: HikerVisual
+## Off for decorative hikers (e.g. resting on the main menu) so keys don't walk them away.
+@export var input_enabled: bool = true
 
 ## Outside slowdowns (exhaustion, dusk, mud in M2) multiply walk speed here.
 var speed_multiplier: float = 1.0
@@ -34,8 +36,6 @@ var _jump_buffer_left: float = 0.0
 var _jump_was_down: bool = false
 var _was_on_floor: bool = false
 var _surface_check_left: float = 0.0
-var _squash: Vector2 = Vector2.ONE
-var _anim_time: float = 0.0
 
 
 func _ready() -> void:
@@ -60,6 +60,8 @@ func _ready() -> void:
 		HikerPhotoState.new(self),
 	]
 	_states[state].enter()
+	if visual != null:
+		visual.setup(balance)
 
 
 func _physics_process(delta: float) -> void:
@@ -74,7 +76,8 @@ func _physics_process(delta: float) -> void:
 
 
 func _process(delta: float) -> void:
-	_animate(delta)
+	if visual != null:
+		visual.update_pose(delta, self)
 
 
 # --- Public API (called by obstacles, systems and the HUD) ---
@@ -124,7 +127,7 @@ func teleport(to: Vector2) -> void:
 # --- Movement helpers for states ---
 
 func wants_walk() -> bool:
-	return Input.is_action_pressed("walk")
+	return input_enabled and Input.is_action_pressed("walk")
 
 
 func has_buffered_jump() -> bool:
@@ -168,7 +171,8 @@ func start_jump() -> void:
 	velocity.y = -balance.jump_velocity
 	_jump_buffer_left = 0.0
 	_coyote_left = 0.0
-	_squash = balance.jump_stretch
+	if visual != null:
+		visual.squash(balance.jump_stretch)
 	jumped.emit()
 
 
@@ -181,8 +185,8 @@ func _is_on_foot() -> bool:
 func _update_jump_input(delta: float) -> void:
 	# Touch presses arrive via Input.action_press, which can land between physics
 	# ticks; checking the held edge too means a quick tap is never lost.
-	var down: bool = Input.is_action_pressed("jump")
-	if Input.is_action_just_pressed("jump") or (down and not _jump_was_down):
+	var down: bool = input_enabled and Input.is_action_pressed("jump")
+	if (input_enabled and Input.is_action_just_pressed("jump")) or (down and not _jump_was_down):
 		_jump_buffer_left = balance.jump_buffer_seconds
 	else:
 		_jump_buffer_left = maxf(_jump_buffer_left - delta, 0.0)
@@ -200,7 +204,8 @@ func _update_floor_info(delta: float) -> void:
 	else:
 		signed_grade = 0.0
 	if on_floor and not _was_on_floor:
-		_squash = balance.land_squash
+		if visual != null:
+			visual.squash(balance.land_squash)
 		landed.emit()
 	_was_on_floor = on_floor
 
@@ -211,20 +216,3 @@ func _read_surface() -> void:
 		if collision.get_normal().y < -0.5:
 			surface = TerrainStrip.surface_of(collision.get_collider())
 			return
-
-
-func _animate(delta: float) -> void:
-	if visual == null:
-		return
-	_anim_time += delta
-	_squash = _squash.lerp(Vector2.ONE, 1.0 - exp(-balance.squash_recover_rate * delta))
-	var scale_out: Vector2 = _squash
-	var bob: float = 0.0
-	if state == State.WALK and is_on_floor():
-		var speed_ratio: float = absf(velocity.x) / balance.walk_speed
-		bob = -absf(sin(_anim_time * PI * balance.walk_bob_hz * speed_ratio)) * balance.walk_bob_px
-	elif state == State.REST or state == State.EXHAUSTED:
-		var breath_hz: float = balance.rest_breath_hz * (2.0 if state == State.EXHAUSTED else 1.0)
-		scale_out.y *= 1.0 + sin(_anim_time * TAU * breath_hz) * balance.rest_breath_amount
-	visual.scale = scale_out
-	visual.position.y = bob

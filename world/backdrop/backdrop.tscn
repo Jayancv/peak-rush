@@ -1,0 +1,137 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/backdrop/ridge_layer.gd" id="1_ridge"]
+[ext_resource type="Script" path="res://world/backdrop/cloud_layer.gd" id="2_cloud"]
+
+[sub_resource type="Gradient" id="Gradient_sky"]
+offsets = PackedFloat32Array(0, 0.65, 1)
+colors = PackedColorArray(0.4588, 0.7255, 0.8667, 1, 0.6588, 0.8471, 0.9176, 1, 0.8667, 0.9373, 0.9451, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_sky"]
+gradient = SubResource("Gradient_sky")
+width = 8
+height = 256
+fill_to = Vector2(0, 1)
+
+[node name="Backdrop" type="Node2D"]
+
+[node name="Sky" type="CanvasLayer" parent="."]
+layer = -100
+
+[node name="Gradient" type="TextureRect" parent="Sky"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_sky")
+expand_mode = 1
+
+[node name="SunAnchor" type="Control" parent="Sky"]
+layout_mode = 3
+anchor_left = 0.78
+anchor_top = 0.2
+anchor_right = 0.78
+anchor_bottom = 0.2
+mouse_filter = 2
+
+[node name="Halo" type="Polygon2D" parent="Sky/SunAnchor"]
+color = Color(1.0000, 0.9647, 0.8980, 0.18)
+antialiased = true
+polygon = PackedVector2Array(120.0, 0.0, 117.7, 23.4, 110.9, 45.9, 99.8, 66.7, 84.9, 84.9, 66.7, 99.8, 45.9, 110.9, 23.4, 117.7, 0.0, 120.0, -23.4, 117.7, -45.9, 110.9, -66.7, 99.8, -84.9, 84.9, -99.8, 66.7, -110.9, 45.9, -117.7, 23.4, -120.0, 0.0, -117.7, -23.4, -110.9, -45.9, -99.8, -66.7, -84.9, -84.9, -66.7, -99.8, -45.9, -110.9, -23.4, -117.7, -0.0, -120.0, 23.4, -117.7, 45.9, -110.9, 66.7, -99.8, 84.9, -84.9, 99.8, -66.7, 110.9, -45.9, 117.7, -23.4)
+
+[node name="Glow" type="Polygon2D" parent="Sky/SunAnchor"]
+color = Color(1.0000, 0.9647, 0.8980, 0.3)
+antialiased = true
+polygon = PackedVector2Array(76.0, 0.0, 74.5, 14.8, 70.2, 29.1, 63.2, 42.2, 53.7, 53.7, 42.2, 63.2, 29.1, 70.2, 14.8, 74.5, 0.0, 76.0, -14.8, 74.5, -29.1, 70.2, -42.2, 63.2, -53.7, 53.7, -63.2, 42.2, -70.2, 29.1, -74.5, 14.8, -76.0, 0.0, -74.5, -14.8, -70.2, -29.1, -63.2, -42.2, -53.7, -53.7, -42.2, -63.2, -29.1, -70.2, -14.8, -74.5, -0.0, -76.0, 14.8, -74.5, 29.1, -70.2, 42.2, -63.2, 53.7, -53.7, 63.2, -42.2, 70.2, -29.1, 74.5, -14.8)
+
+[node name="Sun" type="Polygon2D" parent="Sky/SunAnchor"]
+color = Color(1.0000, 0.9451, 0.7882, 1.0)
+antialiased = true
+polygon = PackedVector2Array(46.0, 0.0, 45.1, 9.0, 42.5, 17.6, 38.2, 25.6, 32.5, 32.5, 25.6, 38.2, 17.6, 42.5, 9.0, 45.1, 0.0, 46.0, -9.0, 45.1, -17.6, 42.5, -25.6, 38.2, -32.5, 32.5, -38.2, 25.6, -42.5, 17.6, -45.1, 9.0, -46.0, 0.0, -45.1, -9.0, -42.5, -17.6, -38.2, -25.6, -32.5, -32.5, -25.6, -38.2, -17.6, -42.5, -9.0, -45.1, -0.0, -46.0, 9.0, -45.1, 17.6, -42.5, 25.6, -38.2, 32.5, -32.5, 38.2, -25.6, 42.5, -17.6, 45.1, -9.0)
+
+[node name="Clouds" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.05, 0.05)
+repeat_size = Vector2(2560, 0)
+repeat_times = 2
+autoscroll = Vector2(-10, 0)
+
+[node name="Shape" type="Polygon2D" parent="Clouds"]
+script = ExtResource("2_cloud")
+color = Color(0.9700, 0.9850, 1.0000, 1.0)
+cloud_count = 7
+y_range = Vector2(50, 230)
+size_range = Vector2(70, 160)
+seed_value = 3
+
+[node name="Mountains" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.1, 0.08)
+repeat_size = Vector2(2560, 0)
+repeat_times = 2
+
+[node name="Shape" type="Polygon2D" parent="Mountains"]
+script = ExtResource("1_ridge")
+color = Color(0.6157, 0.7059, 0.7843, 1.0)
+base_y = 420.0
+amplitude = 260.0
+ridged = true
+octaves = 3
+base_frequency = 3
+seed_value = 11
+haze_amount = 0.45
+snow_line_y = 262.0
+
+[node name="FarHills" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.25, 0.15)
+repeat_size = Vector2(2560, 0)
+repeat_times = 2
+
+[node name="Shape" type="Polygon2D" parent="FarHills"]
+script = ExtResource("1_ridge")
+color = Color(0.4980, 0.6510, 0.6275, 1.0)
+base_y = 470.0
+amplitude = 120.0
+octaves = 3
+base_frequency = 2
+seed_value = 5
+haze_amount = 0.3
+tree_count = 60
+tree_height = Vector2(14, 26)
+tree_color = Color(0.4471, 0.6039, 0.5765, 1.0)
+
+[node name="MidHills" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.45, 0.3)
+repeat_size = Vector2(2560, 0)
+repeat_times = 2
+
+[node name="Shape" type="Polygon2D" parent="MidHills"]
+script = ExtResource("1_ridge")
+color = Color(0.3686, 0.5490, 0.4784, 1.0)
+base_y = 520.0
+amplitude = 100.0
+octaves = 2
+base_frequency = 2
+seed_value = 21
+haze_amount = 0.2
+tree_count = 45
+tree_height = Vector2(30, 60)
+tree_color = Color(0.3216, 0.5020, 0.4314, 1.0)
+
+[node name="Treeline" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.7, 0.55)
+repeat_size = Vector2(2560, 0)
+repeat_times = 2
+
+[node name="Shape" type="Polygon2D" parent="Treeline"]
+script = ExtResource("1_ridge")
+color = Color(0.2902, 0.4588, 0.3882, 1.0)
+base_y = 500.0
+amplitude = 40.0
+octaves = 2
+base_frequency = 4
+seed_value = 8
+haze_amount = 0.0
+tree_count = 70
+tree_height = Vector2(50, 100)
+tree_color = Color(0.2588, 0.4196, 0.3490, 1.0)

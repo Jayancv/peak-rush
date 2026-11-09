@@ -17,8 +17,10 @@ const HINT_ACTIVE_ALPHA: float = 0.8
 		_update_hints()
 @export var left_hint: Control
 @export var left_hint_label: Label
+@export var left_hint_icon: UiIcon
 @export var right_hint: Control
 @export var right_hint_label: Label
+@export var right_hint_icon: UiIcon
 
 ## finger index -> action it controls
 var _fingers: Dictionary[int, StringName] = {}
@@ -92,6 +94,9 @@ func _update_hints() -> void:
 		return
 	left_hint_label.text = "TOUCH_HINT_JUMP" if left_handed else "TOUCH_HINT_WALK"
 	right_hint_label.text = "TOUCH_HINT_WALK" if left_handed else "TOUCH_HINT_JUMP"
+	if left_hint_icon != null and right_hint_icon != null:
+		left_hint_icon.kind = UiIcon.Kind.JUMP if left_handed else UiIcon.Kind.WALK
+		right_hint_icon.kind = UiIcon.Kind.WALK if left_handed else UiIcon.Kind.JUMP
 	var walk_held: bool = _fingers.values().has(&"walk")
 	var jump_held: bool = _fingers.values().has(&"jump")
 	var left_held: bool = jump_held if left_handed else walk_held

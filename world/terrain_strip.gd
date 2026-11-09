@@ -22,18 +22,41 @@ const SURFACE_COLORS: Array[Color] = [
 	set(value):
 		surface = value
 		default_color = SURFACE_COLORS[surface]
-@export var fill_color: Color = Color("#3B5B4A"):
+		_rebuild()
+## Ground colour just under the path; it darkens towards fill_bottom_color with depth.
+@export var fill_color: Color = Color("#4A7359"):
 	set(value):
 		fill_color = value
-		if _fill != null:
-			_fill.color = fill_color
+		_rebuild()
+@export var fill_bottom_color: Color = Color("#22372C"):
+	set(value):
+		fill_bottom_color = value
+		_rebuild()
+## Grass tufts along the path and pebbles in the ground (placeholder art).
+@export var decorate: bool = true:
+	set(value):
+		decorate = value
+		_rebuild()
+@export var decor_seed: int = 1:
+	set(value):
+		decor_seed = value
+		_rebuild()
 ## How far below the lowest point the ground fill and collision reach.
 @export var fill_depth: float = 800.0:
 	set(value):
 		fill_depth = value
 		_rebuild()
 
+const TUFT_COLOR: Color = Color("#6F9C5F")
+const PEBBLE_COLOR: Color = Color("#6C8E73")
+const BOULDER_COLOR: Color = Color("#8C8B84")
+const BOULDER_SHADE: Color = Color("#6F6E68")
+## How much darker the rim under the path edge is.
+const RIM_DARKEN: float = 0.3
+
 var _fill: Polygon2D
+var _rim: Line2D
+var _decor: Polygon2D
 var _shape: CollisionPolygon2D
 var _built_points: PackedVector2Array = PackedVector2Array()
 
@@ -111,9 +134,17 @@ func _build_children() -> void:
 		return
 	_fill = Polygon2D.new()
 	_fill.name = "Fill"
-	_fill.color = fill_color
-	# Fill draws behind the edge line so the path stays on top.
+	_fill.antialiased = true
+	# Fill, rim and decor all draw behind the edge line so the path stays on top.
 	_fill.show_behind_parent = true
+	_rim = Line2D.new()
+	_rim.name = "Rim"
+	_rim.show_behind_parent = true
+	_rim.joint_mode = Line2D.LINE_JOINT_ROUND
+	_decor = Polygon2D.new()
+	_decor.name = "Decor"
+	_decor.show_behind_parent = true
+	_decor.antialiased = true
 	var body: StaticBody2D = StaticBody2D.new()
 	body.name = "Body"
 	body.collision_layer = 1
@@ -123,6 +154,8 @@ func _build_children() -> void:
 	body.add_child(_shape)
 	# Internal children aren't saved into the scene file, so they're always regenerated.
 	add_child(_fill, false, Node.INTERNAL_MODE_FRONT)
+	add_child(_rim, false, Node.INTERNAL_MODE_FRONT)
+	add_child(_decor, false, Node.INTERNAL_MODE_FRONT)
 	add_child(body, false, Node.INTERNAL_MODE_FRONT)
 
 
@@ -131,8 +164,92 @@ func _rebuild() -> void:
 		return
 	var poly: PackedVector2Array = _solid_polygon()
 	_fill.polygon = poly
+	# Top points get the light colour, the two bottom corners the dark one.
+	var cols: PackedColorArray = PackedColorArray()
+	for i: int in poly.size():
+		cols.append(fill_bottom_color if i >= points.size() else fill_color)
+	_fill.vertex_colors = cols
 	_shape.polygon = poly
+	var rim_points: PackedVector2Array = PackedVector2Array()
+	for p: Vector2 in points:
+		rim_points.append(p + Vector2(0.0, width * 0.55))
+	_rim.points = rim_points
+	_rim.width = width * 0.6
+	_rim.default_color = default_color.darkened(RIM_DARKEN)
+	_build_decor()
 	_built_points = points.duplicate()
+
+
+func _build_decor() -> void:
+	var pts: PackedVector2Array = PackedVector2Array()
+	var cols: PackedColorArray = PackedColorArray()
+	var polys: Array = []
+	if decorate and points.size() >= 2:
+		var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+		rng.seed = decor_seed
+		var start_x: float = points[0].x
+		var end_x: float = points[points.size() - 1].x
+		var grassy: bool = surface == Surface.DIRT or surface == Surface.MUD
+		var x: float = start_x + rng.randf_range(10.0, 60.0)
+		while grassy and x < end_x - 10.0:
+			var y: float = edge_y_at(x)
+			# Three blades leaning slightly, poking up just behind the path.
+			for b: int in 3:
+				var bx: float = x + (b - 1) * 4.0
+				var h: float = rng.randf_range(9.0, 17.0) * (1.25 if b == 1 else 0.8)
+				_add_tri(Vector2(bx - 2.2, y), Vector2(bx + 2.2, y), Vector2(bx + (b - 1) * 3.0, y - h), TUFT_COLOR, pts, cols, polys)
+			x += rng.randf_range(28.0, 95.0)
+		x = start_x + rng.randf_range(20.0, 60.0)
+		while surface == Surface.ROCK and x < end_x - 10.0:
+			# Grey boulders half-buried along a rocky path.
+			var r: float = rng.randf_range(10.0, 20.0)
+			_add_lump(Vector2(x, edge_y_at(x) + r * 0.15), r * rng.randf_range(1.1, 1.5), r, BOULDER_SHADE, pts, cols, polys)
+			_add_lump(Vector2(x - r * 0.15, edge_y_at(x) + r * 0.05), r * 0.95, r * 0.8, BOULDER_COLOR, pts, cols, polys)
+			x += rng.randf_range(40.0, 120.0)
+		x = start_x + rng.randf_range(20.0, 80.0)
+		while x < end_x - 10.0:
+			var center: Vector2 = Vector2(x, edge_y_at(x) + rng.randf_range(26.0, 140.0))
+			var r: float = rng.randf_range(2.0, 4.5)
+			var start: int = pts.size()
+			var ring: PackedInt32Array = PackedInt32Array()
+			for i: int in 8:
+				var a: float = TAU * float(i) / 8.0
+				ring.append(start + i)
+				pts.append(center + Vector2(cos(a) * r * 1.4, sin(a) * r))
+				cols.append(PEBBLE_COLOR)
+			polys.append(ring)
+			x += rng.randf_range(90.0, 220.0)
+	_decor.polygon = pts
+	_decor.vertex_colors = cols
+	_decor.polygons = polys
+
+
+## Upper half of an ellipse, flat side down.
+func _add_lump(center: Vector2, rx: float, ry: float, col: Color, pts: PackedVector2Array, cols: PackedColorArray, polys: Array) -> void:
+	var ring: PackedInt32Array = PackedInt32Array()
+	for i: int in 9:
+		var a: float = PI + PI * float(i) / 8.0
+		ring.append(pts.size())
+		pts.append(center + Vector2(cos(a) * rx, sin(a) * ry))
+		cols.append(col)
+	polys.append(ring)
+
+
+func _add_tri(a: Vector2, b: Vector2, c: Vector2, col: Color, pts: PackedVector2Array, cols: PackedColorArray, polys: Array) -> void:
+	var start: int = pts.size()
+	pts.append_array(PackedVector2Array([a, b, c]))
+	cols.append_array(PackedColorArray([col, col, col]))
+	polys.append(PackedInt32Array([start, start + 1, start + 2]))
+
+
+## Height of the path edge at a given local x (points are left to right).
+func edge_y_at(x: float) -> float:
+	for i: int in range(1, points.size()):
+		if x <= points[i].x:
+			var a: Vector2 = points[i - 1]
+			var b: Vector2 = points[i]
+			return lerpf(a.y, b.y, (x - a.x) / maxf(b.x - a.x, 0.001))
+	return points[points.size() - 1].y
 
 
 ## The ground points closed off downwards into a solid shape.

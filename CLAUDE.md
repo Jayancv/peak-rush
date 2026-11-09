@@ -95,6 +95,10 @@ docs/                GAME_DESIGN.md, PLAN.md
   Dev level `content/_dev/test_hills/trail.tscn` is wired into trail_runner via an exported PackedScene (M3 replaces with TrailData).
   TerrainStrip extends Line2D (edit points in the 2D editor); generated fill/body are INTERNAL children (not saved).
   Hiker states are RefCounted classes in actors/hiker/states/, returning Hiker.STAY or the next state.
+  Visual pass (after M1): `world/backdrop/backdrop.tscn` (sky CanvasLayer + Parallax2D layers built by @tool RidgeLayer/CloudLayer,
+  repeat_size.x must equal the layer `width`); each trail scene instances its own Backdrop (M5 makes per-trail palettes).
+  Hiker art/animation lives in `actors/hiker/hiker_visual.gd` (HikerVisual). UI icons are drawn in code by `scenes/ui/ui_icon.gd`
+  (phone fonts may lack arrow glyphs). Theme variations: PrimaryButton, IconButton, CardPanel. Title font: `shared_art/title_font.tres`.
   Buttons over the play area must join group `touch_blocker`. Physics interpolation is on: use `Hiker.teleport()` to move instantly.
   On this machine, git over HTTPS needs `-c http.sslBackend=schannel`.
   Android: SDK at `%LOCALAPPDATA%\Android\Sdk` (installed with the new `android sdk install pkg/ver` CLI; `sdkmanager` is deprecated),

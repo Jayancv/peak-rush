@@ -1,8 +1,11 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://world/terrain_strip.gd" id="1_strip"]
+[ext_resource type="PackedScene" path="res://world/backdrop/backdrop.tscn" id="2_backdrop"]
 
 [node name="TestHills" type="Node2D"]
+
+[node name="Backdrop" parent="." instance=ExtResource("2_backdrop")]
 
 [node name="Trailhead" type="Marker2D" parent="."]
 position = Vector2(160, 550)
@@ -25,9 +28,11 @@ begin_cap_mode = 2
 end_cap_mode = 2
 script = ExtResource("1_strip")
 surface = 1
+decor_seed = 2
 
 [node name="Descent" type="Line2D" parent="."]
 points = PackedVector2Array(4300, 60, 4400, 80, 5200, 500, 5300, 530, 6200, 530)
+decor_seed = 3
 width = 14.0
 default_color = Color(0.788235, 0.698039, 0.560784, 1)
 joint_mode = 2
