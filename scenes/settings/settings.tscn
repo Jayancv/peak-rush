@@ -5,6 +5,8 @@
 [ext_resource type="Script" path="res://scenes/ui/safe_area_margin.gd" id="3_safe"]
 [ext_resource type="Script" path="res://scenes/ui/ui_icon.gd" id="4_icon"]
 [ext_resource type="FontVariation" path="res://shared_art/title_font.tres" id="5_title"]
+[ext_resource type="Script" path="res://scenes/ui/toggle_switch.gd" id="6_switch"]
+[ext_resource type="Script" path="res://scenes/ui/shaded_badge.gd" id="7_badge"]
 
 [node name="Settings" type="Control" node_paths=PackedStringArray("music_slider", "sfx_slider", "ambience_slider", "left_handed_toggle", "vibration_toggle", "back_button")]
 layout_mode = 3
@@ -18,8 +20,8 @@ script = ExtResource("1_settings")
 music_slider = NodePath("Center/Card/VBox/MusicRow/Slider")
 sfx_slider = NodePath("Center/Card/VBox/SfxRow/Slider")
 ambience_slider = NodePath("Center/Card/VBox/AmbienceRow/Slider")
-left_handed_toggle = NodePath("Center/Card/VBox/LeftHanded")
-vibration_toggle = NodePath("Center/Card/VBox/Vibration")
+left_handed_toggle = NodePath("Center/Card/VBox/LeftHandedRow/Switch")
+vibration_toggle = NodePath("Center/Card/VBox/VibrationRow/Switch")
 back_button = NodePath("SafeArea/Top/BackButton")
 
 [node name="Backdrop" parent="." instance=ExtResource("2_backdrop")]
@@ -60,64 +62,229 @@ text = "SETTINGS_TITLE"
 horizontal_alignment = 1
 
 [node name="MusicRow" type="HBoxContainer" parent="Center/Card/VBox"]
+custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 18
+
+[node name="Badge" type="Control" parent="Center/Card/VBox/MusicRow"]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("7_badge")
+base_color = Color(0.976471, 0.858824, 0.811765, 1)
+shadow_size = 4.0
+
+[node name="Icon" type="Control" parent="Center/Card/VBox/MusicRow/Badge"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 11.0
+offset_top = 11.0
+offset_right = -11.0
+offset_bottom = -11.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_icon")
+kind = 15
+color = Color(0.909804, 0.364706, 0.247059, 1)
+stroke = 0.1
 
 [node name="Label" type="Label" parent="Center/Card/VBox/MusicRow"]
-custom_minimum_size = Vector2(240, 0)
+custom_minimum_size = Vector2(220, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 28
 text = "SETTINGS_MUSIC"
 
 [node name="Slider" type="HSlider" parent="Center/Card/VBox/MusicRow"]
-custom_minimum_size = Vector2(320, 56)
+custom_minimum_size = Vector2(300, 56)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 
 [node name="SfxRow" type="HBoxContainer" parent="Center/Card/VBox"]
+custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 18
+
+[node name="Badge" type="Control" parent="Center/Card/VBox/SfxRow"]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("7_badge")
+base_color = Color(0.976471, 0.858824, 0.811765, 1)
+shadow_size = 4.0
+
+[node name="Icon" type="Control" parent="Center/Card/VBox/SfxRow/Badge"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 11.0
+offset_top = 11.0
+offset_right = -11.0
+offset_bottom = -11.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_icon")
+kind = 16
+color = Color(0.909804, 0.364706, 0.247059, 1)
+stroke = 0.1
 
 [node name="Label" type="Label" parent="Center/Card/VBox/SfxRow"]
-custom_minimum_size = Vector2(240, 0)
+custom_minimum_size = Vector2(220, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 28
 text = "SETTINGS_SFX"
 
 [node name="Slider" type="HSlider" parent="Center/Card/VBox/SfxRow"]
-custom_minimum_size = Vector2(320, 56)
+custom_minimum_size = Vector2(300, 56)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 
 [node name="AmbienceRow" type="HBoxContainer" parent="Center/Card/VBox"]
+custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 18
+
+[node name="Badge" type="Control" parent="Center/Card/VBox/AmbienceRow"]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("7_badge")
+base_color = Color(0.976471, 0.858824, 0.811765, 1)
+shadow_size = 4.0
+
+[node name="Icon" type="Control" parent="Center/Card/VBox/AmbienceRow/Badge"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 11.0
+offset_top = 11.0
+offset_right = -11.0
+offset_bottom = -11.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_icon")
+kind = 17
+color = Color(0.909804, 0.364706, 0.247059, 1)
+stroke = 0.1
 
 [node name="Label" type="Label" parent="Center/Card/VBox/AmbienceRow"]
-custom_minimum_size = Vector2(240, 0)
+custom_minimum_size = Vector2(220, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 28
 text = "SETTINGS_AMBIENCE"
 
 [node name="Slider" type="HSlider" parent="Center/Card/VBox/AmbienceRow"]
-custom_minimum_size = Vector2(320, 56)
+custom_minimum_size = Vector2(300, 56)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 
-[node name="LeftHanded" type="Button" parent="Center/Card/VBox"]
-custom_minimum_size = Vector2(0, 72)
+[node name="Gap" type="Control" parent="Center/Card/VBox"]
+custom_minimum_size = Vector2(0, 4)
 layout_mode = 2
-theme_override_font_sizes/font_size = 26
-text = "SETTING_LEFT_HANDED_OFF"
+mouse_filter = 2
 
-[node name="Vibration" type="Button" parent="Center/Card/VBox"]
-custom_minimum_size = Vector2(0, 72)
+[node name="LeftHandedRow" type="HBoxContainer" parent="Center/Card/VBox"]
+custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
-theme_override_font_sizes/font_size = 26
-text = "SETTING_VIBRATION_ON"
+theme_override_constants/separation = 18
+
+[node name="Badge" type="Control" parent="Center/Card/VBox/LeftHandedRow"]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("7_badge")
+base_color = Color(0.976471, 0.858824, 0.811765, 1)
+shadow_size = 4.0
+
+[node name="Icon" type="Control" parent="Center/Card/VBox/LeftHandedRow/Badge"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 11.0
+offset_top = 11.0
+offset_right = -11.0
+offset_bottom = -11.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_icon")
+kind = 18
+color = Color(0.909804, 0.364706, 0.247059, 1)
+stroke = 0.1
+
+[node name="Label" type="Label" parent="Center/Card/VBox/LeftHandedRow"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 28
+text = "SETTINGS_LEFT_HANDED"
+
+[node name="Switch" type="Button" parent="Center/Card/VBox/LeftHandedRow"]
+custom_minimum_size = Vector2(92, 56)
+layout_mode = 2
+size_flags_vertical = 4
+script = ExtResource("6_switch")
+
+[node name="VibrationRow" type="HBoxContainer" parent="Center/Card/VBox"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Badge" type="Control" parent="Center/Card/VBox/VibrationRow"]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("7_badge")
+base_color = Color(0.976471, 0.858824, 0.811765, 1)
+shadow_size = 4.0
+
+[node name="Icon" type="Control" parent="Center/Card/VBox/VibrationRow/Badge"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 11.0
+offset_top = 11.0
+offset_right = -11.0
+offset_bottom = -11.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_icon")
+kind = 19
+color = Color(0.909804, 0.364706, 0.247059, 1)
+stroke = 0.1
+
+[node name="Label" type="Label" parent="Center/Card/VBox/VibrationRow"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 28
+text = "SETTINGS_VIBRATION"
+
+[node name="Switch" type="Button" parent="Center/Card/VBox/VibrationRow"]
+custom_minimum_size = Vector2(92, 56)
+layout_mode = 2
+size_flags_vertical = 4
+script = ExtResource("6_switch")
 
 [node name="SafeArea" type="MarginContainer" parent="."]
 layout_mode = 1

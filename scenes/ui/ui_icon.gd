@@ -5,7 +5,9 @@ extends Control
 ## on a font having arrow glyphs (many phone fonts don't).
 
 ## BOOTS..HEADLAMP follow GearData.Icon order (kind = BOOTS + icon).
-enum Kind { MOUNTAIN, WALK, JUMP, BACK, PAUSE, CAMERA, STAR, STAR_EMPTY, LOCK, GEAR, BOOTS, POLES, SHELL, THERMOS, HEADLAMP }
+## New kinds go at the end: scenes store the number.
+enum Kind { MOUNTAIN, WALK, JUMP, BACK, PAUSE, CAMERA, STAR, STAR_EMPTY, LOCK, GEAR, BOOTS, POLES, SHELL, THERMOS, HEADLAMP,
+	MUSIC, SOUND, NATURE, SWAP, VIBRATE }
 
 @export var kind: Kind = Kind.WALK:
 	set(v):
@@ -63,13 +65,21 @@ func _draw() -> void:
 			draw_arc(c + Vector2(0, -s * 0.08), s * 0.2, PI, TAU, 12, color, maxf(s * 0.1, 2.0), true)
 			draw_circle(c + Vector2(0, s * 0.14), s * 0.06, SNOW, true, -1.0, true)
 		Kind.GEAR:
-			var teeth: PackedVector2Array = PackedVector2Array()
-			for i: int in 16:
-				var r: float = s * (0.44 if i % 2 == 0 else 0.32)
-				var a: float = TAU * float(i) / 16.0
-				teeth.append(c + Vector2(cos(a), sin(a)) * r)
-			draw_colored_polygon(teeth, color)
-			draw_circle(c, s * 0.14, SNOW, true, -1.0, true)
+			# A cog: eight flat-topped teeth on a round body, with a hole in the middle.
+			var teeth: int = 8
+			var outer: float = s * 0.46
+			var inner: float = s * 0.35
+			var cog: PackedVector2Array = PackedVector2Array()
+			for i: int in teeth:
+				var a: float = TAU * float(i) / float(teeth)
+				for step: Vector2 in [Vector2(-0.3, inner), Vector2(-0.19, outer), Vector2(0.19, outer), Vector2(0.3, inner)]:
+					cog.append(c + Vector2.from_angle(a + step.x) * step.y)
+				# Round the body between this tooth and the next.
+				for k: int in range(1, 3):
+					var b: float = a + 0.3 + (TAU / float(teeth) - 0.6) * float(k) / 3.0
+					cog.append(c + Vector2.from_angle(b) * inner)
+			draw_colored_polygon(cog, color)
+			draw_circle(c, s * 0.15, SNOW, true, -1.0, true)
 		Kind.BOOTS:
 			# A hiking boot: shaft, foot and a chunky sole.
 			draw_colored_polygon(PackedVector2Array([c + Vector2(-s * 0.3, -s * 0.38), c + Vector2(-s * 0.02, -s * 0.38), c + Vector2(0, s * 0.02), c + Vector2(s * 0.38, s * 0.1), c + Vector2(s * 0.4, s * 0.26), c + Vector2(-s * 0.3, s * 0.26)]), color)
@@ -91,6 +101,44 @@ func _draw() -> void:
 			draw_circle(c + Vector2(0, -s * 0.24), s * 0.13, color, true, -1.0, true)
 			draw_circle(c + Vector2(0, -s * 0.24), s * 0.07, Color("#FFE9A8"), true, -1.0, true)
 			draw_colored_polygon(PackedVector2Array([c + Vector2(s * 0.08, -s * 0.3), c + Vector2(s * 0.46, -s * 0.44), c + Vector2(s * 0.46, -s * 0.04), c + Vector2(s * 0.08, -s * 0.18)]), Color("#FFE9A8", 0.7))
+		Kind.MUSIC:
+			# Two beamed notes.
+			for dx: float in [-0.2, 0.22]:
+				draw_set_transform(c + Vector2(s * dx, s * 0.26), -0.35, Vector2.ONE)
+				draw_colored_polygon(ShapeUtil.ellipse(Vector2.ZERO, Vector2(s * 0.14, s * 0.1), 14), color)
+				draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+				draw_line(c + Vector2(s * (dx + 0.12), s * 0.22), c + Vector2(s * (dx + 0.12), -s * 0.3), color, w, true)
+			draw_colored_polygon(PackedVector2Array([c + Vector2(-s * 0.1, -s * 0.3), c + Vector2(s * 0.36, -s * 0.38), c + Vector2(s * 0.36, -s * 0.24), c + Vector2(-s * 0.1, -s * 0.16)]), color)
+		Kind.SOUND:
+			draw_colored_polygon(PackedVector2Array([c + Vector2(-s * 0.4, -s * 0.12), c + Vector2(-s * 0.22, -s * 0.12), c + Vector2(0, -s * 0.34), c + Vector2(0, s * 0.34), c + Vector2(-s * 0.22, s * 0.12), c + Vector2(-s * 0.4, s * 0.12)]), color)
+			draw_arc(c + Vector2(s * 0.02, 0), s * 0.18, -0.9, 0.9, 10, color, w, true)
+			draw_arc(c + Vector2(s * 0.02, 0), s * 0.34, -0.9, 0.9, 14, color, w, true)
+		Kind.NATURE:
+			# A leaf with its midrib.
+			var leaf: PackedVector2Array = PackedVector2Array()
+			for i: int in 17:
+				var t: float = float(i) / 16.0
+				leaf.append(c + Vector2(lerpf(-s * 0.46, s * 0.46, t), -sin(t * PI) * s * 0.3).rotated(-0.6))
+			for i: int in range(15, 0, -1):
+				var t: float = float(i) / 16.0
+				leaf.append(c + Vector2(lerpf(-s * 0.46, s * 0.46, t), sin(t * PI) * s * 0.26).rotated(-0.6))
+			draw_colored_polygon(leaf, color)
+			draw_line(c + Vector2(-s * 0.5, 0).rotated(-0.6), c + Vector2(s * 0.34, 0).rotated(-0.6), SNOW, maxf(w * 0.5, 1.5), true)
+		Kind.SWAP:
+			# Arrows pointing both ways: which side walks and which side jumps.
+			for row: float in [-1.0, 1.0]:
+				var y: float = row * s * 0.17
+				var dir: float = -row
+				draw_line(c + Vector2(-s * 0.32, y), c + Vector2(s * 0.32, y), color, w, true)
+				var tip: Vector2 = c + Vector2(s * 0.38 * dir, y)
+				draw_colored_polygon(PackedVector2Array([tip, tip + Vector2(-s * 0.18 * dir, -s * 0.13), tip + Vector2(-s * 0.18 * dir, s * 0.13)]), color)
+		Kind.VIBRATE:
+			var phone: Rect2 = Rect2(c + Vector2(-s * 0.16, -s * 0.34), Vector2(s * 0.32, s * 0.68))
+			draw_rect(phone, color, false, w)
+			draw_circle(c + Vector2(0, s * 0.24), s * 0.035, color, true, -1.0, true)
+			for side: float in [-1.0, 1.0]:
+				var x: float = c.x + side * s * 0.3
+				draw_polyline(PackedVector2Array([Vector2(x, c.y - s * 0.22), Vector2(x + side * s * 0.07, c.y - s * 0.11), Vector2(x, c.y), Vector2(x + side * s * 0.07, c.y + s * 0.11), Vector2(x, c.y + s * 0.22)]), color, maxf(w * 0.8, 1.5), true)
 		Kind.CAMERA:
 			var body: Rect2 = Rect2(c + Vector2(-s * 0.42, -s * 0.24), Vector2(s * 0.84, s * 0.58))
 			draw_rect(body, color, true)

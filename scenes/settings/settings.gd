@@ -17,8 +17,8 @@ func _ready() -> void:
 	_bind_slider(music_slider, "music_volume")
 	_bind_slider(sfx_slider, "sfx_volume")
 	_bind_slider(ambience_slider, "ambience_volume")
-	_bind_toggle(left_handed_toggle, "left_handed", "SETTING_LEFT_HANDED")
-	_bind_toggle(vibration_toggle, "vibration", "SETTING_VIBRATION")
+	_bind_toggle(left_handed_toggle, "left_handed")
+	_bind_toggle(vibration_toggle, "vibration")
 	# A sample sound while dragging the effects slider, so the level can be judged.
 	sfx_slider.drag_ended.connect(func(_changed: bool) -> void: AudioManager.play_footstep(TerrainStrip.Surface.ROCK))
 	UiMotion.intro($Center/Card/VBox.get_children(), 0.08)
@@ -32,15 +32,11 @@ func _bind_slider(slider: HSlider, key: String) -> void:
 	slider.value_changed.connect(func(v: float) -> void: GameState.set_setting(key, v))
 
 
-## Toggles show "<label>: On/Off" from the keys `<prefix>_ON` / `<prefix>_OFF`.
-func _bind_toggle(button: Button, key: String, prefix: String) -> void:
-	button.toggle_mode = true
-	button.set_pressed_no_signal(bool(GameState.settings.get(key, false)))
-	button.text = tr(prefix + ("_ON" if button.button_pressed else "_OFF"))
-	button.toggled.connect(func(on: bool) -> void:
-		GameState.set_setting(key, on)
-		button.text = tr(prefix + ("_ON" if on else "_OFF"))
-	)
+## Switches write straight to the setting; the label beside each one says what it is.
+func _bind_toggle(toggle: Button, key: String) -> void:
+	toggle.set_pressed_no_signal(bool(GameState.settings.get(key, false)))
+	(toggle as ToggleSwitch).sync()
+	toggle.toggled.connect(func(on: bool) -> void: GameState.set_setting(key, on))
 
 
 func _go_back() -> void:

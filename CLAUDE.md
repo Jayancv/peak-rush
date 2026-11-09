@@ -153,4 +153,7 @@ docs/                GAME_DESIGN.md, PLAN.md
   Pixel 7 Pro (debug): 60 fps, worst frame 16.7 ms, startup ~0.8 s, ~84 MB static memory.
   UI motion: `UiMotion` (scenes/ui/ui_motion.gd, static). SceneRouter calls `UiMotion.watch()` so every BaseButton squishes on press
   (opt out with meta `no_press_motion`); screens call `UiMotion.intro([...])` for staggered ease-in (scale + alpha only, safe in containers).
+  Art helpers: `TreeArt` (backdrop pines/birches, two-tone, one Polygon2D per layer via TreeArt.Batch), `SubjectArt` (bird/reindeer/boat).
+  Settings rows = icon badge + label + HSlider/`ToggleSwitch` (a toggle Button drawn as a switch; call sync() after set_pressed_no_signal).
+  HSlider knob = `shared_art/ui/slider_knob.svg` (theme). New UiIcon kinds go at the END of the enum (scenes store the number).
   Water: SteppingStones uses `world/obstacles/water.gdshader` (waves/depth/glints in local px). GroundPatch art follows the TerrainStrip slope.

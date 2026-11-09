@@ -63,7 +63,7 @@ func test_settings_toggles_write_to_game_state() -> void:
 	var toggle: Button = settings.get("left_handed_toggle") as Button
 	toggle.toggled.emit(not before)
 	assert_eq(bool(GameState.settings.left_handed), not before)
-	assert_eq(toggle.text, tr("SETTING_LEFT_HANDED_ON" if not before else "SETTING_LEFT_HANDED_OFF"))
+	assert_eq((toggle as ToggleSwitch).shown_on(), not before)
 	GameState.set_setting("left_handed", before)
 
 

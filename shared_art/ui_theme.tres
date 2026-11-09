@@ -1,5 +1,7 @@
 [gd_resource type="Theme" format=3]
 
+[ext_resource type="Texture2D" path="res://shared_art/ui/slider_knob.svg" id="1_knob"]
+
 [sub_resource type="StyleBoxFlat" id="Button_normal"]
 content_margin_left = 32.0
 content_margin_top = 14.0
@@ -200,8 +202,8 @@ corner_radius_bottom_right = 28
 corner_radius_bottom_left = 28
 
 [sub_resource type="StyleBoxFlat" id="Slider_track"]
-content_margin_top = 6.0
-content_margin_bottom = 6.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
 bg_color = Color(0.168627, 0.176471, 0.258824, 0.25)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
@@ -209,8 +211,8 @@ corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxFlat" id="Slider_fill"]
-content_margin_top = 6.0
-content_margin_bottom = 6.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
 bg_color = Color(0.909804, 0.364706, 0.247059, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
@@ -242,6 +244,8 @@ IconButton/styles/normal = SubResource("Icon_normal")
 IconButton/styles/hover = SubResource("Icon_normal")
 IconButton/styles/pressed = SubResource("Icon_pressed")
 IconButton/styles/focus = SubResource("Empty")
+HSlider/icons/grabber = ExtResource("1_knob")
+HSlider/icons/grabber_highlight = ExtResource("1_knob")
 HSlider/styles/grabber_area = SubResource("Slider_fill")
 HSlider/styles/grabber_area_highlight = SubResource("Slider_fill")
 HSlider/styles/slider = SubResource("Slider_track")
