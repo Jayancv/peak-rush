@@ -85,7 +85,9 @@ docs/                GAME_DESIGN.md, PLAN.md
 - At the end of each session, update **Current status** below and tick the boxes in `docs/PLAN.md`.
 
 ## Current status
-- Milestone: **M6 – built, 189 tests green, on Pixel 7 Pro; awaiting a full Season 1 run on the phone (done-when)**. M5 playtest still open. Next: M7.
+- Milestone: **M7 – non-release part done (profiling, layout check, icon/splash, privacy doc), 190 tests green**. Release steps
+  (keystore, AAB, stores, iOS, screenshots, 1.0.0) deliberately not started; low-end phone profiling still open.
+  M5/M6 full-season phone playtest still open. Next: M7 release steps or M8.
 - Godot 4.7.2-stable (not on PATH; ask the user for the executable path if unknown); GUT 9.7.1.
 - Notes: Autoloads are stubs except SceneRouter (fade + `go_to`, scene path consts `MAIN_MENU`/`TRAIL_RUNNER`).
   `scenes/ui/safe_area_margin.gd` (`SafeAreaMargin`) wraps screen UI. Global theme: `shared_art/ui_theme.tres`.
@@ -139,3 +141,10 @@ docs/                GAME_DESIGN.md, PLAN.md
   Android: SDK at `%LOCALAPPDATA%\Android\Sdk` (installed with the new `android sdk install pkg/ver` CLI; `sdkmanager` is deprecated),
   Godot uses JDK 17. Preset "Android" in `export_presets.cfg` (`org.jcv.peakrush`, arm64). `window/size/mode.mobile=3` gives immersive fullscreen.
   Headless deploy: `godot --headless --path . --export-debug "Android" export/android/peak-rush-debug.apk`, then `adb install -r`.
+  M7: `PerfProbe` (debug builds only) logs "PERF" lines every 5 s; read with `adb logcat -s godot`. Main menu logs startup ms.
+  AudioManager synthesises all sounds on a WorkerThreadPool task at boot; loops asked for early start when ready.
+  SynthSounds pads every buffer (TAIL_PAD) because the Android mixer reads past the end (it crashed the AudioTrack thread).
+  `SafeAreaMargin.debug_insets` fakes notches on desktop for layout checks.
+  Icons: painted source `shared_art/icons/source/icon_source.png` (.gdignore, not exported) -> `tools/raster_icons.gd` makes the PNGs the export preset (launcher_icons/*) and
+  boot splash use (adaptive = painting as background, framed by ADAPTIVE_VIEW/CENTRE so the hiker fits any mask, + empty foreground; themed icon from adaptive_monochrome.svg). Android 12+ shows its own system splash (adaptive icon on dark) first.
+  Pixel 7 Pro (debug): 60 fps, worst frame 16.7 ms, startup ~0.8 s, ~84 MB static memory.

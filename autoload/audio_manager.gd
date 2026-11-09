@@ -21,6 +21,14 @@ var _ambience: AudioStreamPlayer
 var _music: AudioStreamPlayer
 var _ambience_kind: Ambience = Ambience.NONE
 var _cache: Dictionary = {}
+## Sounds are synthesised on a worker thread at boot so nothing is built mid-game
+## (a 6 s ambience loop costs ~40 ms on a fast phone, several times that on a slow one).
+const PREWARM: Array[StringName] = [&"menu_pad", &"step_0", &"step_1", &"step_2", &"step_3", &"step_4",
+	&"shutter", &"summit", &"ambience_1", &"ambience_2", &"ambience_3", &"ambience_4"]
+var _prewarm_task: int = -1
+## Loops asked for before the worker finished them; they start as soon as they arrive.
+var _waiting_music: bool = false
+var _waiting_ambience: Ambience = Ambience.NONE
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 
@@ -32,6 +40,40 @@ func _ready() -> void:
 	_music = _make_player(MUSIC_BUS)
 	apply_volumes()
 	GameState.settings_changed.connect(apply_volumes)
+	_prewarm_task = WorkerThreadPool.add_task(_prewarm, false, "Synthesise sounds")
+
+
+func _exit_tree() -> void:
+	if _prewarm_task >= 0:
+		WorkerThreadPool.wait_for_task_completion(_prewarm_task)
+		_prewarm_task = -1
+
+
+## Runs on a worker thread: builds every sound and hands each to the main thread.
+func _prewarm() -> void:
+	for key: StringName in PREWARM:
+		var started: int = Time.get_ticks_usec()
+		var stream: AudioStreamWAV = SynthSounds.make(key)
+		_store.call_deferred(key, stream, (Time.get_ticks_usec() - started) / 1000.0)
+
+
+func _store(key: StringName, stream: AudioStream, ms: float) -> void:
+	if not _cache.has(key):
+		_cache[key] = stream
+	if OS.is_debug_build():
+		print("PERF synth %s ms=%.1f (background)" % [key, ms])
+	if _waiting_music and key == &"menu_pad":
+		_waiting_music = false
+		play_menu_music()
+	if _waiting_ambience != Ambience.NONE and key == StringName("ambience_%d" % _waiting_ambience):
+		var kind: Ambience = _waiting_ambience
+		_waiting_ambience = Ambience.NONE
+		_ambience_kind = Ambience.NONE
+		play_ambience(kind)
+
+
+func is_ready(key: StringName) -> bool:
+	return _cache.has(key)
 
 
 ## Bus volumes from the settings (0..1 sliders).
@@ -70,14 +112,24 @@ func play_ambience(kind: Ambience) -> void:
 	if kind == _ambience_kind and _ambience.playing:
 		return
 	_ambience_kind = kind
+	_waiting_ambience = Ambience.NONE
 	if kind == Ambience.NONE:
 		_fade_out(_ambience)
 		return
-	_fade_in(_ambience, _sound(StringName("ambience_%d" % kind)), -10.0)
+	var key: StringName = StringName("ambience_%d" % kind)
+	if not _cache.has(key) and _prewarm_task >= 0:
+		# Still being built in the background: start it when it arrives.
+		_fade_out(_ambience)
+		_waiting_ambience = kind
+		return
+	_fade_in(_ambience, _sound(key), -10.0)
 
 
 func play_menu_music() -> void:
 	if _music.playing:
+		return
+	if not _cache.has(&"menu_pad") and _prewarm_task >= 0:
+		_waiting_music = true
 		return
 	_fade_in(_music, _sound(&"menu_pad"), -12.0)
 
@@ -89,6 +141,7 @@ func enter_menu() -> void:
 
 
 func stop_music() -> void:
+	_waiting_music = false
 	_fade_out(_music)
 
 
@@ -111,7 +164,11 @@ func has_bus(bus_name: StringName) -> bool:
 
 func _sound(key: StringName) -> AudioStream:
 	if not _cache.has(key):
+		# Only short effects get here before the worker has made them; they're cheap.
+		var started: int = Time.get_ticks_usec()
 		_cache[key] = SynthSounds.make(key)
+		if OS.is_debug_build():
+			print("PERF synth %s ms=%.1f (main thread)" % [key, (Time.get_ticks_usec() - started) / 1000.0])
 	return _cache[key]
 
 

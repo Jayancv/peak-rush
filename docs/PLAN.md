@@ -146,8 +146,11 @@ Make one trail feel like the finished game before building more.
 
 ## M7 — Mobile polish and release
 - [ ] Profile on a low-end Android phone: hold 60 fps, keep texture sizes sensible, and keep startup under 5 s
-- [ ] Check the layout at 16:9, 19.5:9, 20:9 and 4:3 (iPad), with notches and safe areas
-- [ ] App icon (including the Android adaptive icon) and a splash screen
+  - [x] Debug-build `PerfProbe` ("PERF" lines in logcat) + startup/synth timings; sounds synthesised on a worker thread
+  - [x] Pixel 7 Pro: steady 60 fps, worst frame 16.7 ms, startup to menu ~0.8 s, ~84 MB static memory
+  - [ ] Repeat on a low-end phone
+- [x] Check the layout at 16:9, 19.5:9, 20:9 and 4:3 (iPad), with notches and safe areas
+- [x] App icon (including the Android adaptive icon) and a splash screen
 - [ ] **Android release:**
   - [ ] Create a release keystore, **back it up somewhere safe**, and keep it out of git
   - [ ] Turn on Gradle build and export an **AAB**
@@ -157,7 +160,7 @@ Make one trail feel like the finished game before building more.
   - [ ] Join the Apple Developer Program
   - [ ] Export the Xcode project from Godot, sign it and archive it
   - [ ] App Store Connect: listing, privacy labels, **TestFlight**
-- [ ] A simple privacy policy page (v1 collects no data)
+- [x] A simple privacy policy (`docs/PRIVACY.md`, v1 collects no data); host it at a public URL when submitting
 - [ ] Store screenshots and a short trailer clip
 - [ ] Version **1.0.0 = Season 1**
 

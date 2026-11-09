@@ -6,6 +6,10 @@ extends MarginContainer
 ## Breathing room added on top of the safe-area inset.
 @export var padding: int = 24
 
+## Layout testing on desktop: pretend the screen has these (left, top, right, bottom)
+## insets in viewport pixels, e.g. a camera cutout. Zero = off.
+static var debug_insets: Vector4 = Vector4.ZERO
+
 
 func _ready() -> void:
 	# A full-screen container must never swallow touches meant for TouchControls.
@@ -30,7 +34,7 @@ func _safe_insets() -> Vector4:
 	# On desktop the "safe area" is the whole monitor, not the window, so it
 	# would produce nonsense margins. Only phones have notches.
 	if not OS.has_feature("mobile"):
-		return Vector4.ZERO
+		return debug_insets
 	var window_size: Vector2 = Vector2(DisplayServer.window_get_size())
 	if window_size.x <= 0.0 or window_size.y <= 0.0:
 		return Vector4.ZERO

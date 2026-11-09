@@ -63,6 +63,7 @@ func _ready() -> void:
 	photo_mode.closed.connect(_on_photo_closed)
 	_load_trail()
 	_apply_daylight()
+	PerfProbe.attach_if_debug(self)
 
 
 func _load_trail() -> void:
