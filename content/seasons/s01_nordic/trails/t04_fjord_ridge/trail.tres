@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="TrailData" format=3]
 
 [ext_resource type="Script" path="res://data/trail_data.gd" id="1_trail"]
+[ext_resource type="Script" path="res://data/find_data.gd" id="9_find"]
 [ext_resource type="Script" path="res://data/viewpoint_data.gd" id="3_vp"]
 [ext_resource type="Resource" path="res://content/weather/rain.tres" id="2_weather"]
 
@@ -14,6 +15,38 @@ script = ExtResource("3_vp")
 id = &"fjord"
 name_key = "VP_FJORD"
 
+[sub_resource type="Resource" id="Find_old_compass"]
+script = ExtResource("9_find")
+id = &"old_compass"
+name_key = "FIND_OLD_COMPASS"
+kind = 2
+color = Color(0.4314, 0.2902, 0.1804, 1)
+appear_chance = 1.0
+
+[sub_resource type="Resource" id="Find_harebell"]
+script = ExtResource("9_find")
+id = &"harebell"
+name_key = "FIND_HAREBELL"
+kind = 0
+color = Color(0.4235, 0.4980, 0.8196, 1)
+appear_chance = 1.0
+
+[sub_resource type="Resource" id="Find_fly_agaric"]
+script = ExtResource("9_find")
+id = &"fly_agaric"
+name_key = "FIND_FLY_AGARIC"
+kind = 1
+color = Color(0.8471, 0.2275, 0.1647, 1)
+appear_chance = 1.0
+
+[sub_resource type="Resource" id="Find_red_fox_fjord"]
+script = ExtResource("9_find")
+id = &"red_fox_fjord"
+name_key = "FIND_RED_FOX_FJORD"
+kind = 3
+color = Color(0.7843, 0.3922, 0.1804, 1)
+appear_chance = 0.65
+
 [resource]
 script = ExtResource("1_trail")
 id = &"t04_fjord_ridge"
@@ -26,3 +59,4 @@ par_time = 140.0
 weather = ExtResource("2_weather")
 viewpoints = Array[ExtResource("3_vp")]([SubResource("Viewpoint_1"), SubResource("Viewpoint_2")])
 unlock_order = 3
+finds = Array[ExtResource("9_find")]([SubResource("Find_old_compass"), SubResource("Find_harebell"), SubResource("Find_fly_agaric"), SubResource("Find_red_fox_fjord")])

@@ -168,6 +168,20 @@ Make one trail feel like the finished game before building more.
 
 ---
 
+## M7.5 — Trail depth (exploration, water, route choice)
+- [x] **Finds:** `FindData` per trail (flowers, mushrooms, lost items, one rare animal); `Find` pieces in levels;
+      collected on contact (animals: stand still nearby to spot them, walk on and they flee); TP for new finds;
+      journal shows them; save v3 stores finds per trail (+ migration and test); badges Forager / Wildlife Watcher
+- [x] **Water:** `Hydration` system (drains while walking; thirsty = faster tiring, slower rest); `Spring` pieces and
+      streams refill it; HUD water gauge; tests
+- [x] **Forked paths:** one-way `Boardwalk` ridge routes above slower valley paths (T01, T02, T04, T05; T03 is open fell),
+      with a `ForkSign`; falling off a gap lands on the valley path; hidden lookouts with a secret find on every trail
+- [x] Place on all Season 1 trails; every trail still completes (bot), times retuned if needed
+
+**Done when:** each trail has a real route choice, 3–4 finds (one hidden) and a spring, and Season 1 still plays through.
+
+---
+
 ## M8 — Live seasons pipeline (after launch)
 - [ ] Turn Appendix A below into `docs/ADDING_CONTENT.md`
 - [ ] A "What's new" banner on the main menu (compares `season.release_version` with the last version the player has seen)

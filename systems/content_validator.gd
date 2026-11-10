@@ -54,6 +54,14 @@ static func validate_trail(trail: TrailData) -> Array[String]:
 			errors.append("%s lists viewpoint '%s' twice" % [who, vp.id])
 		else:
 			vp_ids[vp.id] = true
+	var find_ids: Dictionary = {}
+	for f: FindData in trail.finds:
+		if f == null:
+			errors.append("%s has an empty find slot" % who)
+		elif find_ids.has(f.id):
+			errors.append("%s lists find '%s' twice" % [who, f.id])
+		else:
+			find_ids[f.id] = true
 	if trail.scene_path.is_empty() or not ResourceLoader.exists(trail.scene_path):
 		errors.append("%s scene not found: '%s'" % [who, trail.scene_path])
 		return errors
@@ -66,7 +74,10 @@ static func validate_trail(trail: TrailData) -> Array[String]:
 		errors.append("%s level has no Trailhead (Marker2D) at its root" % who)
 	var finishes: int = 0
 	var scene_vps: Dictionary = {}
+	var scene_finds: Dictionary = {}
 	for node: Node in _all_nodes(level):
+		if node is Find:
+			scene_finds[(node as Find).find_id] = true
 		if node is TrailFinish:
 			finishes += 1
 		var vp_id: Variant = node.get("viewpoint_id")
@@ -80,6 +91,12 @@ static func validate_trail(trail: TrailData) -> Array[String]:
 	for id: StringName in vp_ids:
 		if not scene_vps.has(id):
 			errors.append("%s data lists viewpoint '%s' that isn't in the level" % [who, id])
+	for id: StringName in scene_finds:
+		if not find_ids.has(id):
+			errors.append("%s level has find '%s' that isn't in its data" % [who, id])
+	for id: StringName in find_ids:
+		if not scene_finds.has(id):
+			errors.append("%s data lists find '%s' that isn't in the level" % [who, id])
 	level.free()
 	return errors
 

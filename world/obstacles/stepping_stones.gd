@@ -23,6 +23,11 @@ extends Node2D
 	set(v):
 		depth = v
 		_rebuild()
+## How far each stone sinks and tips under the hiker (px). 0 = solid stones.
+@export var wobble: float = 0.0:
+	set(v):
+		wobble = v
+		_rebuild()
 
 const WATER_SHADER: Shader = preload("res://world/obstacles/water.gdshader")
 const BANK: Color = Color("#6A5440")
@@ -34,6 +39,8 @@ const STONE_DARK: Color = Color("#55544F")
 const MOSS: Color = Color("#6F8D4A")
 const MOSS_LIGHT: Color = Color("#93AE5E")
 const FOAM: Color = Color(1, 1, 1, 0.75)
+const SPLASH_DROPS: int = 16
+const WATER_LIGHT: Color = Color("#CFEAF2")
 const REED: Color = Color("#6E8B4C")
 const REED_LIGHT: Color = Color("#8FA75B")
 const CATTAIL: Color = Color("#6B4A2F")
@@ -102,6 +109,7 @@ func _rebuild() -> void:
 	ShapeUtil.add_rect_shape(area, Rect2(0, WATER_DROP + 6.0, w, depth - WATER_DROP))
 	if not Engine.is_editor_hint():
 		area.body_entered.connect(_on_water_entered)
+		area.body_exited.connect(_on_water_exited)
 
 
 ## U-shaped stream channel from y = top: steep banks that flatten out into the bed.
@@ -159,7 +167,7 @@ func _add_bed_pebbles(w: float, rng: RandomNumberGenerator) -> void:
 
 
 func _add_stone(x: float, rng: RandomNumberGenerator) -> void:
-	var stone: StaticBody2D = StaticBody2D.new()
+	var stone: SteppingStone = SteppingStone.new()
 	add_child(stone, false, Node.INTERNAL_MODE_BACK)
 	var top: float = -STONE_RISE
 	var bottom: float = depth + 4.0
@@ -191,6 +199,8 @@ func _add_stone(x: float, rng: RandomNumberGenerator) -> void:
 	ShapeUtil.add_poly(stone, ShapeUtil.ellipse(Vector2(moss_x - 2.0, top + 1.6), Vector2(stone_width * 0.16, 1.5), 10), MOSS_LIGHT)
 	ShapeUtil.add_poly(stone, ShapeUtil.ellipse(Vector2(x + stone_width * 0.72, top + 3.0), Vector2(stone_width * 0.12, 1.4), 8), Color(1, 1, 1, 0.35))
 	ShapeUtil.add_rect_shape(stone, Rect2(x, top, stone_width, depth + STONE_RISE))
+	stone.recentre(Vector2(x + stone_width * 0.5, top), stone_width * 0.5)
+	stone.enable_wobble(wobble)
 
 
 ## Foam where the water parts around a stone (more on the downstream side).
@@ -203,18 +213,74 @@ func _add_foam(x: float, rng: RandomNumberGenerator) -> void:
 
 ## A clump of reeds on a bank; `side` -1 leans them left (left bank), +1 right.
 func _add_reeds(x: float, side: float, rng: RandomNumberGenerator) -> void:
+	# Reeds rock gently, lean in gusts and part for the hiker (sway shader).
 	for i: int in 5:
 		var bx: float = x + side * rng.randf_range(-4.0, 10.0)
 		var h: float = rng.randf_range(16.0, 30.0)
 		var lean: float = side * rng.randf_range(2.0, 9.0)
 		var col: Color = REED if i % 2 == 0 else REED_LIGHT
-		ShapeUtil.add_poly(self, PackedVector2Array([Vector2(bx - 1.6, 4.0), Vector2(bx + 1.6, 4.0), Vector2(bx + lean, 4.0 - h)]), col)
+		var phase: float = rng.randf() * TAU
+		var blade: Polygon2D = ShapeUtil.add_poly(self, PackedVector2Array([Vector2(bx - 1.6, 4.0), Vector2(bx + 1.6, 4.0), Vector2(bx + lean, 4.0 - h)]), col)
+		blade.uv = PackedVector2Array([Vector2(phase, 0.0), Vector2(phase, 0.0), Vector2(phase, 1.0)])
+		TerrainStrip.apply_sway(blade, 8.0, 1.8, 6.0)
 		if i == 1 or i == 3:
 			var tip: Vector2 = Vector2(bx + lean * 0.8, 4.0 - h * 0.8)
-			ShapeUtil.add_poly(self, ShapeUtil.ellipse(tip, Vector2(2.0, 4.5), 8), CATTAIL)
+			var head: Polygon2D = ShapeUtil.add_poly(self, ShapeUtil.ellipse(tip, Vector2(2.0, 4.5), 8), CATTAIL)
+			var uvs: PackedVector2Array = PackedVector2Array()
+			for p: Vector2 in head.polygon:
+				uvs.append(Vector2(phase, clampf((4.0 - p.y) / h, 0.0, 1.0)))
+			head.uv = uvs
+			TerrainStrip.apply_sway(head, 8.0, 1.8, 6.0)
 
 
 func _on_water_entered(body: Node2D) -> void:
 	var hiker: Hiker = body as Hiker
 	if hiker != null:
 		hiker.condition.soak_feet()
+		# Standing in the stream fills the bottle (at the price of wet feet).
+		hiker.condition.enter_spring()
+		_splash(to_local(hiker.global_position).x)
+
+
+func _on_water_exited(body: Node2D) -> void:
+	var hiker: Hiker = body as Hiker
+	if hiker != null:
+		hiker.condition.exit_spring()
+
+
+## Droplets thrown up where the hiker went in, and rings spreading on the surface.
+func _splash(x: float) -> void:
+	var drops: CPUParticles2D = CPUParticles2D.new()
+	drops.position = Vector2(x, WATER_DROP)
+	drops.z_index = 2
+	drops.emitting = false
+	drops.one_shot = true
+	drops.explosiveness = 1.0
+	drops.amount = SPLASH_DROPS
+	drops.lifetime = 0.7
+	drops.direction = Vector2.UP
+	drops.spread = 55.0
+	drops.initial_velocity_min = 90.0
+	drops.initial_velocity_max = 190.0
+	drops.gravity = Vector2(0, 700)
+	drops.scale_amount_min = 1.6
+	drops.scale_amount_max = 3.2
+	drops.color = WATER_LIGHT
+	add_child(drops)
+	drops.emitting = true
+	drops.finished.connect(drops.queue_free)
+	for i: int in 2:
+		var ring: Line2D = Line2D.new()
+		var pts: PackedVector2Array = ShapeUtil.ellipse(Vector2.ZERO, Vector2(10, 2.2), 20)
+		pts.append(pts[0])
+		ring.points = pts
+		ring.width = 1.4
+		ring.default_color = Color(1, 1, 1, 0.75)
+		ring.antialiased = true
+		ring.position = Vector2(x, WATER_DROP + 1.0)
+		ring.z_index = 2
+		add_child(ring)
+		var grow: Tween = ring.create_tween().set_parallel()
+		grow.tween_property(ring, "scale", Vector2(3.4, 1.8), 0.9).set_delay(0.15 * float(i)).set_ease(Tween.EASE_OUT)
+		grow.tween_property(ring, "modulate:a", 0.0, 0.9).set_delay(0.15 * float(i))
+		grow.chain().tween_callback(ring.queue_free)

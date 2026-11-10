@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="TrailData" format=3]
 
 [ext_resource type="Script" path="res://data/trail_data.gd" id="1_trail"]
+[ext_resource type="Script" path="res://data/find_data.gd" id="9_find"]
 [ext_resource type="Script" path="res://data/viewpoint_data.gd" id="3_vp"]
 [ext_resource type="Resource" path="res://content/weather/snow.tres" id="2_weather"]
 
@@ -13,6 +14,38 @@ name_key = "VP_CABIN"
 script = ExtResource("3_vp")
 id = &"aurora"
 name_key = "VP_AURORA"
+
+[sub_resource type="Resource" id="Find_lost_mitten"]
+script = ExtResource("9_find")
+id = &"lost_mitten"
+name_key = "FIND_LOST_MITTEN"
+kind = 2
+color = Color(0.7843, 0.2588, 0.2314, 1)
+appear_chance = 1.0
+
+[sub_resource type="Resource" id="Find_purple_saxifrage"]
+script = ExtResource("9_find")
+id = &"purple_saxifrage"
+name_key = "FIND_PURPLE_SAXIFRAGE"
+kind = 0
+color = Color(0.6275, 0.3529, 0.7843, 1)
+appear_chance = 1.0
+
+[sub_resource type="Resource" id="Find_moss_campion"]
+script = ExtResource("9_find")
+id = &"moss_campion"
+name_key = "FIND_MOSS_CAMPION"
+kind = 0
+color = Color(0.8784, 0.4784, 0.6588, 1)
+appear_chance = 1.0
+
+[sub_resource type="Resource" id="Find_arctic_fox_aurora"]
+script = ExtResource("9_find")
+id = &"arctic_fox_aurora"
+name_key = "FIND_ARCTIC_FOX_AURORA"
+kind = 3
+color = Color(0.8902, 0.9059, 0.9333, 1)
+appear_chance = 0.65
 
 [resource]
 script = ExtResource("1_trail")
@@ -28,3 +61,4 @@ viewpoints = Array[ExtResource("3_vp")]([SubResource("Viewpoint_1"), SubResource
 unlock_order = 4
 night = true
 star3_key = "RESULTS_STAR_AURORA"
+finds = Array[ExtResource("9_find")]([SubResource("Find_lost_mitten"), SubResource("Find_purple_saxifrage"), SubResource("Find_moss_campion"), SubResource("Find_arctic_fox_aurora")])

@@ -160,3 +160,40 @@ TIME_MINUTES,%d min
 TIME_HOURS_MINUTES,%d h %02d min
 GEAR_TAG_EQUIPPED,Equipped
 GEAR_TAG_OWNED,Owned
+TOAST_EXPOSED,Exposed ridge - stop to brace against the wind
+TOAST_SLIDE,Wheee! Sliding saves your energy
+TOAST_THIRSTY,Out of water - find a spring or a stream
+TOAST_SPRING,Fresh spring - stand here to fill your bottle
+TOAST_FOUND,Found: %s
+TOAST_SPOTTED,Spotted: %s
+TOAST_NEW_FIND,(new!)
+BADGE_FORAGER,Forager
+BADGE_FORAGER_DESC,Collect 8 finds
+BADGE_WILDLIFE_WATCHER,Wildlife Watcher
+BADGE_WILDLIFE_WATCHER_DESC,Spot 3 animals
+RESULTS_TP_FINDS,New finds +%d
+JOURNAL_FINDS,%d/%d finds
+SIGN_RIDGE,Ridge
+SIGN_VALLEY,Valley
+FIND_LOST_COMPASS,Lost compass
+FIND_LINGONBERRY,Lingonberry flowers
+FIND_CHANTERELLE,Chanterelles
+FIND_RED_FOX,Red fox
+FIND_BRASS_WHISTLE,Brass whistle
+FIND_SEA_THRIFT,Sea thrift
+FIND_SEA_CAMPION,Sea campion
+FIND_MOUNTAIN_HARE,Mountain hare
+FIND_CLOUDBERRY,Cloudberry flower
+FIND_BIRCH_BOLETE,Birch bolete
+FIND_LOST_GLOVE,Lost glove
+FIND_ARCTIC_FOX_FELL,Arctic fox
+FIND_OLD_COMPASS,Old compass
+FIND_HAREBELL,Harebells
+FIND_FLY_AGARIC,Fly agaric
+FIND_RED_FOX_FJORD,Red fox
+FIND_LOST_MITTEN,Lost mitten
+FIND_PURPLE_SAXIFRAGE,Purple saxifrage
+FIND_MOSS_CAMPION,Moss campion
+FIND_ARCTIC_FOX_AURORA,Arctic fox
+TOAST_BACK_LIMIT,You can walk back as far as the last checkpoint
+TOUCH_HINT_BACK,Back

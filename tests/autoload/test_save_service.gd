@@ -73,12 +73,21 @@ func test_current_version_passes_through_unchanged() -> void:
 func test_migrates_v1_save_to_v2_with_an_empty_profile() -> void:
 	var v1: Dictionary = {"save_version": 1, "tp": 5, "trails": {"t01_forest_lake": {"stars": 1}}}
 	var out: Dictionary = SaveService.migrate(v1)
-	assert_eq(int(out.save_version), 2)
+	assert_eq(int(out.save_version), SaveService.SAVE_VERSION)
 	assert_eq(int(out.tp), 5)
 	assert_true(out.profile is Dictionary)
 	assert_eq(str(out.profile.name), "")
 	assert_eq((out.profile.badges as Array).size(), 0)
 	assert_eq(int(out.trails.t01_forest_lake.stars), 1, "progress is untouched")
+
+
+func test_migrates_v2_save_to_v3_with_empty_finds() -> void:
+	var v2: Dictionary = {"save_version": 2, "tp": 7, "trails": {"t01_forest_lake": {"stars": 3, "photos": {}}}, "profile": {"name": "Aino"}}
+	var out: Dictionary = SaveService.migrate(v2)
+	assert_eq(int(out.save_version), 3)
+	assert_eq((out.trails.t01_forest_lake.finds as Array).size(), 0)
+	assert_eq(int(out.trails.t01_forest_lake.stars), 3, "progress is untouched")
+	assert_eq(str(out.profile.name), "Aino")
 
 
 func test_newer_save_is_loaded_not_destroyed() -> void:

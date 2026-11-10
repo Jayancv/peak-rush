@@ -1,7 +1,8 @@
 class_name TouchControls
 extends Control
 ## Turns touches into input actions: hold one half of the screen to walk, tap the
-## other half to jump. Gameplay never sees touches, only the walk/jump actions.
+## other half to jump, hold the small Back pad (above the walk hint) to walk back
+## towards the last checkpoint. Gameplay never sees touches, only the actions.
 ## Each finger keeps the role it started with, so sliding across the middle doesn't flip it.
 
 ## Buttons (pause, back...) join this group so touching them never walks or jumps.
@@ -24,13 +25,39 @@ const HINT_ACTIVE_ALPHA: float = 0.8
 
 ## finger index -> action it controls
 var _fingers: Dictionary[int, StringName] = {}
+var _back_pad: Control
+var _back_column: VBoxContainer
 
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_build_back_pad()
 	left_handed = bool(GameState.settings.get("left_handed", false))
 	GameState.settings_changed.connect(_on_settings_changed)
 	_update_hints()
+
+
+## A copy of the walk hint with a back arrow, stacked just above it.
+func _build_back_pad() -> void:
+	if left_hint == null:
+		return
+	var safe: Node = left_hint.get_parent().get_parent()
+	_back_column = VBoxContainer.new()
+	_back_column.size_flags_vertical = Control.SIZE_SHRINK_END
+	_back_column.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	safe.add_child(_back_column)
+	_back_pad = left_hint.duplicate() as Control
+	_back_column.add_child(_back_pad)
+	var icon: UiIcon = _back_pad.find_child("Icon", true, false) as UiIcon
+	if icon != null:
+		icon.kind = UiIcon.Kind.BACK
+	var label: Label = _back_pad.find_child("Label", true, false) as Label
+	if label != null:
+		label.text = "TOUCH_HINT_BACK"
+	var spacer: Control = Control.new()
+	spacer.custom_minimum_size = Vector2(0, left_hint.get_combined_minimum_size().y + 14.0)
+	spacer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_back_column.add_child(spacer)
 
 
 func _exit_tree() -> void:
@@ -73,6 +100,8 @@ func set_enabled(on: bool) -> void:
 
 
 func action_for_position(pos: Vector2) -> StringName:
+	if _back_pad != null and _back_pad.is_visible_in_tree() and _back_pad.get_global_rect().grow(10.0).has_point(pos):
+		return &"walk_back"
 	var on_left: bool = pos.x < get_viewport_rect().size.x * 0.5
 	return &"walk" if on_left != left_handed else &"jump"
 
@@ -111,3 +140,7 @@ func _update_hints() -> void:
 	var right_held: bool = walk_held if left_handed else jump_held
 	left_hint.modulate.a = HINT_ACTIVE_ALPHA if left_held else HINT_IDLE_ALPHA
 	right_hint.modulate.a = HINT_ACTIVE_ALPHA if right_held else HINT_IDLE_ALPHA
+	if _back_pad != null:
+		# The Back pad sits on the walk side.
+		_back_column.size_flags_horizontal = Control.SIZE_SHRINK_END if left_handed else Control.SIZE_SHRINK_BEGIN
+		_back_pad.modulate.a = HINT_ACTIVE_ALPHA if _fingers.values().has(&"walk_back") else HINT_IDLE_ALPHA

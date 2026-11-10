@@ -3,9 +3,10 @@ extends Resource
 ## An achievement shown on the profile. `rule` says what is counted and `amount` how
 ## many are needed; BadgeRules does the counting.
 
-enum Rule { TRAILS_FINISHED, STARS, PHOTOS, PERFECT_PHOTOS, HIKES, NIGHT_TRAILS, GEAR_OWNED, HIKE_MINUTES }
+## New values go at the end: .tres files store the number.
+enum Rule { TRAILS_FINISHED, STARS, PHOTOS, PERFECT_PHOTOS, HIKES, NIGHT_TRAILS, GEAR_OWNED, HIKE_MINUTES, FINDS, ANIMALS }
 ## Which picture the badge shows (drawn by the profile screen).
-enum Art { MOUNTAIN, STAR, CAMERA, BOOTS, HEADLAMP, GEAR, CLOCK }
+enum Art { MOUNTAIN, STAR, CAMERA, BOOTS, HEADLAMP, GEAR, CLOCK, LEAF, PAW }
 
 @export var id: StringName
 @export var name_key: String

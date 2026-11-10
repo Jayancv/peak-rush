@@ -10,6 +10,8 @@ static func step(from_version: int, data: Dictionary) -> Dictionary:
 			return _v0_to_v1(data)
 		1:
 			return _v1_to_v2(data)
+		2:
+			return _v2_to_v3(data)
 	push_error("SaveMigrations: no step from version %d" % from_version)
 	return data
 
@@ -42,4 +44,16 @@ static func _v1_to_v2(data: Dictionary) -> Dictionary:
 	var out: Dictionary = data.duplicate(true)
 	if not (out.get("profile") is Dictionary):
 		out["profile"] = {"name": "", "look": {}, "hikes": 0, "hike_seconds": 0.0, "badges": []}
+	return out
+
+
+## v3 records which finds (flowers, items, animals) each trail has given up.
+static func _v2_to_v3(data: Dictionary) -> Dictionary:
+	var out: Dictionary = data.duplicate(true)
+	var trails: Variant = out.get("trails", {})
+	if trails is Dictionary:
+		for id: Variant in trails:
+			var rec: Variant = trails[id]
+			if rec is Dictionary and not (rec.get("finds") is Array):
+				rec["finds"] = []
 	return out

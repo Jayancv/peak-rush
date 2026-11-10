@@ -4,8 +4,8 @@ extends HikerState
 
 
 func physics_update(delta: float) -> int:
-	hiker.air_control(delta)
-	hiker.apply_gravity(delta)
+	air_control(delta)
+	apply_gravity(delta)
 	if hiker.is_on_floor():
 		# A jump pressed just before touching down fires straight away.
 		if hiker.has_buffered_jump():

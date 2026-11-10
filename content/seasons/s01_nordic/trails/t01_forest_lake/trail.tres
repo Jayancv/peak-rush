@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="TrailData" format=3]
 
 [ext_resource type="Script" path="res://data/trail_data.gd" id="1_trail"]
+[ext_resource type="Script" path="res://data/find_data.gd" id="9_find"]
 [ext_resource type="Script" path="res://data/viewpoint_data.gd" id="3_vp"]
 [ext_resource type="Resource" path="res://content/weather/clear.tres" id="2_weather"]
 
@@ -13,6 +14,38 @@ name_key = "VP_LAKE_MIRROR"
 script = ExtResource("3_vp")
 id = &"woodpecker"
 name_key = "VP_WOODPECKER"
+
+[sub_resource type="Resource" id="Find_lost_compass"]
+script = ExtResource("9_find")
+id = &"lost_compass"
+name_key = "FIND_LOST_COMPASS"
+kind = 2
+color = Color(0.5490, 0.3529, 0.1686, 1)
+appear_chance = 1.0
+
+[sub_resource type="Resource" id="Find_lingonberry"]
+script = ExtResource("9_find")
+id = &"lingonberry"
+name_key = "FIND_LINGONBERRY"
+kind = 0
+color = Color(0.9059, 0.6627, 0.7216, 1)
+appear_chance = 1.0
+
+[sub_resource type="Resource" id="Find_chanterelle"]
+script = ExtResource("9_find")
+id = &"chanterelle"
+name_key = "FIND_CHANTERELLE"
+kind = 1
+color = Color(0.9098, 0.6392, 0.2471, 1)
+appear_chance = 1.0
+
+[sub_resource type="Resource" id="Find_red_fox"]
+script = ExtResource("9_find")
+id = &"red_fox"
+name_key = "FIND_RED_FOX"
+kind = 3
+color = Color(0.7843, 0.3922, 0.1804, 1)
+appear_chance = 0.65
 
 [resource]
 script = ExtResource("1_trail")
@@ -27,3 +60,4 @@ weather = ExtResource("2_weather")
 viewpoints = Array[ExtResource("3_vp")]([SubResource("Viewpoint_1"), SubResource("Viewpoint_2")])
 unlock_order = 0
 tutorial = true
+finds = Array[ExtResource("9_find")]([SubResource("Find_lost_compass"), SubResource("Find_lingonberry"), SubResource("Find_chanterelle"), SubResource("Find_red_fox")])

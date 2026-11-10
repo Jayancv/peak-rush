@@ -6,8 +6,10 @@ extends Line2D
 ## Points must run left to right.
 
 enum Surface { DIRT, ROCK, MUD, ICE, SNOW }
+enum TreeKind { NONE, PINE, BIRCH, MIXED }
 
 const GROUP: StringName = &"terrain_strip"
+const SWAY_SHADER: Shader = preload("res://world/fx/sway.gdshader")
 const EDGE_WIDTH: float = 14.0
 ## Placeholder path-edge colours per surface (dirt is the palette's path colour).
 const SURFACE_COLORS: Array[Color] = [
@@ -52,12 +54,39 @@ const SURFACE_COLORS: Array[Color] = [
 		fill_depth = value
 		_rebuild()
 
-const PEBBLE_COLOR: Color = Color("#6C8E73")
-const BOULDER_COLOR: Color = Color("#8C8B84")
-const BOULDER_SHADE: Color = Color("#6F6E68")
+@export_group("Trail-side trees")
+## Big trees standing just behind this stretch of path (none, pines, birches or mixed).
+@export var side_trees: TreeKind = TreeKind.NONE:
+	set(value):
+		side_trees = value
+		_rebuild()
+## Gap between trees (random between x and y, px).
+@export var side_tree_spacing: Vector2 = Vector2(280, 640):
+	set(value):
+		side_tree_spacing = value
+		_rebuild()
+@export var side_tree_height: Vector2 = Vector2(150, 270):
+	set(value):
+		side_tree_height = value
+		_rebuild()
+@export var side_tree_color: Color = Color("#2F5A43"):
+	set(value):
+		side_tree_color = value
+		_rebuild()
+## Birch crowns (BIRCH / MIXED).
+@export var side_tree_color_alt: Color = Color("#D9A441"):
+	set(value):
+		side_tree_color_alt = value
+		_rebuild()
+@export var side_tree_snow: bool = false:
+	set(value):
+		side_tree_snow = value
+		_rebuild()
+
 ## How much darker the rim under the path edge is.
 const RIM_DARKEN: float = 0.3
 
+var _side_trees: Polygon2D
 var _fill: Polygon2D
 var _rim: Line2D
 var _decor: Polygon2D
@@ -78,6 +107,9 @@ func _ready() -> void:
 	add_to_group(GROUP)
 	_build_children()
 	_rebuild()
+	# Again once the whole level is in: viewpoints and landmarks that keep trees away
+	# may come later in the scene than this strip.
+	_build_side_trees.call_deferred()
 	# Only the editor needs to watch for point edits; at runtime the ground never changes.
 	set_process(Engine.is_editor_hint())
 
@@ -136,6 +168,13 @@ func get_global_bounds() -> Rect2:
 func _build_children() -> void:
 	if _fill != null:
 		return
+	# Trail-side trees come first so they draw behind the ground fill and the path.
+	_side_trees = Polygon2D.new()
+	_side_trees.name = "SideTrees"
+	_side_trees.antialiased = true
+	_side_trees.show_behind_parent = true
+	apply_sway(_side_trees, 0.0, 1.2, 9.0)
+	add_child(_side_trees, false, Node.INTERNAL_MODE_FRONT)
 	_fill = Polygon2D.new()
 	_fill.name = "Fill"
 	_fill.antialiased = true
@@ -149,6 +188,8 @@ func _build_children() -> void:
 	_decor.name = "Decor"
 	_decor.show_behind_parent = true
 	_decor.antialiased = true
+	# Grass tufts sway, lean in gusts and bend away from the hiker's boots.
+	apply_sway(_decor, 9.0, 1.4, 5.0)
 	var body: StaticBody2D = StaticBody2D.new()
 	body.name = "Body"
 	body.collision_layer = 1
@@ -181,69 +222,52 @@ func _rebuild() -> void:
 	_rim.width = width * 0.6
 	_rim.default_color = default_color.darkened(RIM_DARKEN)
 	_build_decor()
+	_build_side_trees()
 	_built_points = points.duplicate()
 
 
 func _build_decor() -> void:
-	var pts: PackedVector2Array = PackedVector2Array()
-	var cols: PackedColorArray = PackedColorArray()
-	var polys: Array = []
-	if decorate and points.size() >= 2:
-		var rng: RandomNumberGenerator = RandomNumberGenerator.new()
-		rng.seed = decor_seed
-		var start_x: float = points[0].x
-		var end_x: float = points[points.size() - 1].x
-		var grassy: bool = surface == Surface.DIRT or surface == Surface.MUD
-		var x: float = start_x + rng.randf_range(10.0, 60.0)
-		while grassy and x < end_x - 10.0:
-			var y: float = edge_y_at(x)
-			# Three blades leaning slightly, poking up just behind the path.
-			for b: int in 3:
-				var bx: float = x + (b - 1) * 4.0
-				var h: float = rng.randf_range(9.0, 17.0) * (1.25 if b == 1 else 0.8)
-				_add_tri(Vector2(bx - 2.2, y), Vector2(bx + 2.2, y), Vector2(bx + (b - 1) * 3.0, y - h), tuft_color, pts, cols, polys)
-			x += rng.randf_range(28.0, 95.0)
-		x = start_x + rng.randf_range(20.0, 60.0)
-		while surface == Surface.ROCK and x < end_x - 10.0:
-			# Grey boulders half-buried along a rocky path.
-			var r: float = rng.randf_range(10.0, 20.0)
-			_add_lump(Vector2(x, edge_y_at(x) + r * 0.15), r * rng.randf_range(1.1, 1.5), r, BOULDER_SHADE, pts, cols, polys)
-			_add_lump(Vector2(x - r * 0.15, edge_y_at(x) + r * 0.05), r * 0.95, r * 0.8, BOULDER_COLOR, pts, cols, polys)
-			x += rng.randf_range(40.0, 120.0)
-		x = start_x + rng.randf_range(20.0, 80.0)
-		while x < end_x - 10.0:
-			var center: Vector2 = Vector2(x, edge_y_at(x) + rng.randf_range(26.0, 140.0))
-			var r: float = rng.randf_range(2.0, 4.5)
-			var start: int = pts.size()
-			var ring: PackedInt32Array = PackedInt32Array()
-			for i: int in 8:
-				var a: float = TAU * float(i) / 8.0
-				ring.append(start + i)
-				pts.append(center + Vector2(cos(a) * r * 1.4, sin(a) * r))
-				cols.append(PEBBLE_COLOR)
-			polys.append(ring)
-			x += rng.randf_range(90.0, 220.0)
-	_decor.polygon = pts
-	_decor.vertex_colors = cols
-	_decor.polygons = polys
+	var batch: TreeArt.Batch = TerrainDecor.build(self)
+	_decor.polygon = batch.pts
+	_decor.vertex_colors = batch.cols
+	_decor.uv = batch.uvs
+	_decor.polygons = batch.polys
 
 
-## Upper half of an ellipse, flat side down.
-func _add_lump(center: Vector2, rx: float, ry: float, col: Color, pts: PackedVector2Array, cols: PackedColorArray, polys: Array) -> void:
-	var ring: PackedInt32Array = PackedInt32Array()
-	for i: int in 9:
-		var a: float = PI + PI * float(i) / 8.0
-		ring.append(pts.size())
-		pts.append(center + Vector2(cos(a) * rx, sin(a) * ry))
-		cols.append(col)
-	polys.append(ring)
+## Godot only passes a Polygon2D's UVs (the sway data) when it has a texture, so swaying
+## shapes get this 1x1 white one; it leaves their colours unchanged.
+static var _white: ImageTexture
 
 
-func _add_tri(a: Vector2, b: Vector2, c: Vector2, col: Color, pts: PackedVector2Array, cols: PackedColorArray, polys: Array) -> void:
-	var start: int = pts.size()
-	pts.append_array(PackedVector2Array([a, b, c]))
-	cols.append_array(PackedColorArray([col, col, col]))
-	polys.append(PackedInt32Array([start, start + 1, start + 2]))
+## Makes `poly` sway: grass and reeds brush aside (brush px), trees don't (brush 0).
+static func apply_sway(poly: Polygon2D, brush: float, sway: float, gust: float) -> void:
+	if _white == null:
+		var img: Image = Image.create_empty(1, 1, false, Image.FORMAT_RGBA8)
+		img.fill(Color.WHITE)
+		_white = ImageTexture.create_from_image(img)
+	poly.texture = _white
+	poly.material = sway_material(brush, sway, gust)
+
+
+static func sway_material(brush: float, sway: float, gust: float) -> ShaderMaterial:
+	var mat: ShaderMaterial = ShaderMaterial.new()
+	mat.shader = SWAY_SHADER
+	mat.set_shader_parameter("brush_px", brush)
+	mat.set_shader_parameter("sway_px", sway)
+	mat.set_shader_parameter("gust_px", gust)
+	return mat
+
+
+func _build_side_trees() -> void:
+	var batch: TreeArt.Batch = TreeArt.Batch.new()
+	if side_trees != TreeKind.NONE and points.size() >= 2:
+		batch = TreeArt.along(edge_y_at, points[0].x, points[points.size() - 1].x, side_trees, side_tree_spacing,
+			side_tree_height, side_tree_color, side_tree_color_alt, side_tree_snow, decor_seed * 31 + 7,
+			TerrainDecor.clear_spans(self))
+	_side_trees.polygon = batch.pts
+	_side_trees.vertex_colors = batch.cols
+	_side_trees.uv = batch.uvs
+	_side_trees.polygons = batch.polys
 
 
 ## Height of the path edge at a given local x (points are left to right).

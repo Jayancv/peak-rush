@@ -103,6 +103,26 @@ amount = 30
 art = 6
 color = Color(0.6588, 0.1961, 0.1765, 1)
 
+[sub_resource type="Resource" id="forager"]
+script = ExtResource("2_badge")
+id = &"forager"
+name_key = "BADGE_FORAGER"
+description_key = "BADGE_FORAGER_DESC"
+rule = 8
+amount = 8
+art = 7
+color = Color(0.3686, 0.5490, 0.2902, 1)
+
+[sub_resource type="Resource" id="wildlife_watcher"]
+script = ExtResource("2_badge")
+id = &"wildlife_watcher"
+name_key = "BADGE_WILDLIFE_WATCHER"
+description_key = "BADGE_WILDLIFE_WATCHER_DESC"
+rule = 9
+amount = 3
+art = 8
+color = Color(0.7098, 0.3961, 0.1137, 1)
+
 [resource]
 script = ExtResource("1_catalog")
-badges = Array[ExtResource("2_badge")]([SubResource("first_summit"), SubResource("seasoned"), SubResource("star_gazer"), SubResource("shining_trail"), SubResource("shutterbug"), SubResource("perfect_shot"), SubResource("night_owl"), SubResource("regular"), SubResource("kitted_out"), SubResource("long_haul")])
+badges = Array[ExtResource("2_badge")]([SubResource("first_summit"), SubResource("seasoned"), SubResource("star_gazer"), SubResource("shining_trail"), SubResource("shutterbug"), SubResource("perfect_shot"), SubResource("night_owl"), SubResource("regular"), SubResource("kitted_out"), SubResource("long_haul"), SubResource("forager"), SubResource("wildlife_watcher")])

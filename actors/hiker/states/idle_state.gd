@@ -4,9 +4,9 @@ extends HikerState
 
 
 func physics_update(delta: float) -> int:
-	hiker.ground_stop(hiker.balance.walk_decel, delta)
-	hiker.apply_gravity(delta)
-	var common: int = hiker.grounded_transition()
+	ground_stop(hiker.balance.walk_decel, delta)
+	apply_gravity(delta)
+	var common: int = grounded_transition()
 	if common != Hiker.STAY:
 		return common
 	if hiker.wants_walk():

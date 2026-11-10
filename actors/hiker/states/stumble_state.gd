@@ -4,8 +4,8 @@ extends HikerState
 
 
 func physics_update(delta: float) -> int:
-	hiker.ground_stop(hiker.balance.walk_decel * 2.0, delta)
-	hiker.apply_gravity(delta)
+	ground_stop(hiker.balance.walk_decel * 2.0, delta)
+	apply_gravity(delta)
 	if hiker.state_time >= hiker.balance.stumble_seconds:
 		return Hiker.State.IDLE
 	return Hiker.STAY

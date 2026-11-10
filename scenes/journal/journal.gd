@@ -73,7 +73,23 @@ func postcard_count() -> int:
 	return postcards.get_child_count()
 
 
-func _make_stamp(trail: TrailData) -> PassportStamp:
+## The trail's stamp, with how many of its finds have been collected underneath.
+func _make_stamp(trail: TrailData) -> Control:
+	var cell: VBoxContainer = VBoxContainer.new()
+	cell.add_theme_constant_override("separation", 2)
+	cell.add_child(_stamp_art(trail))
+	if not trail.finds.is_empty():
+		var found: int = (GameState.record(trail.id).get("finds", []) as Array).size()
+		var label: Label = Label.new()
+		label.text = tr("JOURNAL_FINDS") % [found, trail.finds.size()]
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.add_theme_font_size_override("font_size", 18)
+		label.add_theme_color_override("font_color", Color("#5E8C4A") if found >= trail.finds.size() else Color(0.168627, 0.176471, 0.258824, 0.6))
+		cell.add_child(label)
+	return cell
+
+
+func _stamp_art(trail: TrailData) -> PassportStamp:
 	var stamp: PassportStamp = PassportStamp.new()
 	stamp.custom_minimum_size = STAMP_SIZE
 	var done: bool = GameState.is_completed(trail.id)

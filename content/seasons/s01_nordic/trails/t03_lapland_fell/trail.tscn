@@ -9,6 +9,11 @@
 [ext_resource type="PackedScene" path="res://world/interactables/checkpoint.tscn" id="8_checkpoint"]
 [ext_resource type="PackedScene" path="res://world/interactables/finish.tscn" id="9_finish"]
 [ext_resource type="PackedScene" path="res://world/interactables/viewpoint.tscn" id="vp"]
+[ext_resource type="PackedScene" path="res://world/obstacles/rolling_boulder.tscn" id="p_boulder"]
+[ext_resource type="PackedScene" path="res://world/obstacles/wind_zone.tscn" id="p_wind"]
+[ext_resource type="PackedScene" path="res://world/obstacles/boardwalk.tscn" id="p_board"]
+[ext_resource type="PackedScene" path="res://world/interactables/find.tscn" id="p_find"]
+[ext_resource type="PackedScene" path="res://world/interactables/spring.tscn" id="p_spring"]
 
 [node name="LaplandFell" type="Node2D"]
 
@@ -17,6 +22,11 @@
 [node name="Trailhead" type="Marker2D" parent="."]
 position = Vector2(160, 550)
 
+
+[node name="Scenery" type="Node2D" parent="."]
+
+[node name="Lookout" parent="Scenery" instance=ExtResource("p_board")]
+points = PackedVector2Array(300, 502, 420, 502)
 [node name="Ground" type="Node2D" parent="."]
 
 [node name="BirchValley" type="Line2D" parent="Ground"]
@@ -31,6 +41,11 @@ fill_color = Color(0.482, 0.42, 0.235, 1)
 fill_bottom_color = Color(0.243, 0.196, 0.125, 1)
 tuft_color = Color(0.851, 0.643, 0.255, 1)
 decor_seed = 31
+side_trees = 2
+side_tree_spacing = Vector2(200, 460)
+side_tree_height = Vector2(150, 240)
+side_tree_color = Color(0.24, 0.38, 0.3, 1)
+side_tree_color_alt = Color(0.88, 0.62, 0.22, 1)
 
 [node name="LowerFell" type="Line2D" parent="Ground"]
 points = PackedVector2Array(1500, 500, 1800, 470, 2100, 420, 2400, 370, 2500, 365, 2800, 300, 3100, 230, 3300, 210, 3900, 200)
@@ -44,6 +59,11 @@ fill_color = Color(0.482, 0.42, 0.235, 1)
 fill_bottom_color = Color(0.243, 0.196, 0.125, 1)
 tuft_color = Color(0.851, 0.643, 0.255, 1)
 decor_seed = 32
+side_trees = 3
+side_tree_spacing = Vector2(420, 900)
+side_tree_height = Vector2(120, 210)
+side_tree_color = Color(0.26, 0.38, 0.3, 1)
+side_tree_color_alt = Color(0.86, 0.55, 0.2, 1)
 
 [node name="UpperFell" type="Line2D" parent="Ground"]
 points = PackedVector2Array(3900, 200, 4100, 160, 4500, 40, 4700, -10, 4900, -15, 5300, -150, 5500, -230, 5650, -240, 6000, -360, 6150, -400)
@@ -125,3 +145,38 @@ subject_color = Color(0.29, 0.227, 0.18, 1)
 
 [node name="Finish" parent="Pieces" instance=ExtResource("9_finish")]
 position = Vector2(6850, -438)
+
+[node name="Boulder1" parent="Pieces" instance=ExtResource("p_boulder")]
+position = Vector2(5450, -210)
+trigger_from = -380.0
+
+[node name="Ridge1" parent="Pieces" instance=ExtResource("p_wind")]
+position = Vector2(6160, -401.2)
+width = 640.0
+
+[node name="Find_cloudberry" parent="Pieces" instance=ExtResource("p_find")]
+position = Vector2(370, 502)
+find_id = &"cloudberry"
+kind = 0
+color = Color(0.9608, 0.6314, 0.2588, 1)
+
+[node name="Find_birch_bolete" parent="Pieces" instance=ExtResource("p_find")]
+position = Vector2(2600, 343.333)
+find_id = &"birch_bolete"
+kind = 1
+color = Color(0.5451, 0.3529, 0.1686, 1)
+
+[node name="Find_lost_glove" parent="Pieces" instance=ExtResource("p_find")]
+position = Vector2(4750, -11.25)
+find_id = &"lost_glove"
+kind = 2
+color = Color(0.2431, 0.4196, 0.3098, 1)
+
+[node name="Find_arctic_fox_fell" parent="Pieces" instance=ExtResource("p_find")]
+position = Vector2(2200, 403.333)
+find_id = &"arctic_fox_fell"
+kind = 3
+color = Color(0.8510, 0.8667, 0.8902, 1)
+
+[node name="Spring1" parent="Pieces" instance=ExtResource("p_spring")]
+position = Vector2(3850, 200.833)

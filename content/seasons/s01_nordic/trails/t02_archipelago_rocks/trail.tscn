@@ -13,12 +13,24 @@
 [ext_resource type="PackedScene" path="res://world/interactables/viewpoint.tscn" id="vp"]
 [ext_resource type="PackedScene" path="res://world/interactables/tutorial_trigger.tscn" id="tut"]
 [ext_resource type="PackedScene" path="res://world/backdrop/backdrop.tscn" id="backdrop"]
+[ext_resource type="PackedScene" path="res://world/obstacles/kill_zone.tscn" id="p_kill"]
+[ext_resource type="PackedScene" path="res://world/obstacles/rope_bridge.tscn" id="p_bridge"]
+[ext_resource type="PackedScene" path="res://world/obstacles/boardwalk.tscn" id="p_board"]
+[ext_resource type="PackedScene" path="res://world/interactables/fork_sign.tscn" id="p_sign"]
+[ext_resource type="PackedScene" path="res://world/interactables/find.tscn" id="p_find"]
+[ext_resource type="PackedScene" path="res://world/interactables/spring.tscn" id="p_spring"]
 
 [node name="ArchipelagoRocks" type="Node2D"]
 
 [node name="Backdrop" parent="." instance=ExtResource("backdrop")]
 
 [node name="Scenery" type="Node2D" parent="."]
+
+[node name="Lookout" parent="Scenery" instance=ExtResource("p_board")]
+points = PackedVector2Array(4893, 374.5, 5013, 374.5)
+
+[node name="Ridgewalk" parent="Scenery" instance=ExtResource("p_board")]
+points = PackedVector2Array(1512, 465.7, 2150, 465.7)
 
 [node name="Sea" type="Node2D" parent="Scenery"]
 
@@ -317,8 +329,9 @@ color = Color(0.9020, 0.9608, 0.9804, 0.8)
 antialiased = true
 polygon = PackedVector2Array(10282, 433, 10332, 433, 10332, 436, 10282, 436)
 
-[node name="Lighthouse" type="Node2D" parent="Scenery"]
+[node name="Lighthouse" type="Node2D" parent="Scenery" groups=["tree_clear"]]
 position = Vector2(8498, 350)
+metadata/tree_clear_radius = 220.0
 
 [node name="Band0" type="Polygon2D" parent="Scenery/Lighthouse"]
 color = Color(0.9098, 0.3647, 0.2471, 1.0)
@@ -366,7 +379,7 @@ position = Vector2(160, 550)
 [node name="Ground" type="Node2D" parent="."]
 
 [node name="Strip1" type="Line2D" parent="Ground"]
-points = PackedVector2Array(-300, 560, 800, 560)
+points = PackedVector2Array(-300, 560, 440, 560)
 width = 14.0
 joint_mode = 2
 begin_cap_mode = 2
@@ -377,6 +390,27 @@ fill_color = Color(0.2902, 0.4510, 0.3490, 1.0)
 fill_bottom_color = Color(0.1333, 0.2157, 0.1725, 1.0)
 tuft_color = Color(0.4353, 0.6118, 0.3725, 1.0)
 decor_seed = 3
+side_trees = 1
+side_tree_spacing = Vector2(380, 820)
+side_tree_height = Vector2(140, 240)
+side_tree_color = Color(0.2, 0.36, 0.28, 1)
+
+[node name="Strip1b" type="Line2D" parent="Ground"]
+points = PackedVector2Array(700, 560, 800, 560)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("strip")
+surface = 0
+fill_color = Color(0.2902, 0.4510, 0.3490, 1.0)
+fill_bottom_color = Color(0.1333, 0.2157, 0.1725, 1.0)
+tuft_color = Color(0.4353, 0.6118, 0.3725, 1.0)
+decor_seed = 20
+side_trees = 1
+side_tree_spacing = Vector2(380, 820)
+side_tree_height = Vector2(140, 240)
+side_tree_color = Color(0.2, 0.36, 0.28, 1)
 
 [node name="Strip3" type="Line2D" parent="Ground"]
 points = PackedVector2Array(1212, 560, 1262, 557.1, 1312, 549.2, 1362, 538, 1412, 526.1, 1462, 516.3, 1512, 510.7, 1562, 510.7, 1612, 516.3, 1662, 526.1, 1712, 538, 1762, 549.2, 1812, 557.1, 1862, 560, 1912, 557.1, 1962, 549.2, 2012, 538, 2062, 526.1, 2112, 516.3, 2162, 510.7, 2212, 510.7, 2262, 516.3, 2312, 526.1, 2362, 538, 2412, 549.2, 2462, 557.1, 2512, 560, 2712, 560)
@@ -390,6 +424,10 @@ fill_color = Color(0.2902, 0.4510, 0.3490, 1.0)
 fill_bottom_color = Color(0.1333, 0.2157, 0.1725, 1.0)
 tuft_color = Color(0.4353, 0.6118, 0.3725, 1.0)
 decor_seed = 5
+side_trees = 1
+side_tree_spacing = Vector2(600, 1300)
+side_tree_height = Vector2(110, 190)
+side_tree_color = Color(0.22, 0.37, 0.3, 1)
 
 [node name="Strip4" type="Line2D" parent="Ground"]
 points = PackedVector2Array(2792, 560, 2855.6, 558.2, 2919.3, 552.9, 2982.9, 544.5, 3046.5, 533.7, 3110.2, 521.4, 3173.8, 508.6, 3237.5, 496.3, 3301.1, 485.5, 3364.7, 477.1, 3428.4, 471.8, 3492, 470, 3992, 470, 4242, 470)
@@ -403,6 +441,10 @@ fill_color = Color(0.2902, 0.4510, 0.3490, 1.0)
 fill_bottom_color = Color(0.1333, 0.2157, 0.1725, 1.0)
 tuft_color = Color(0.4353, 0.6118, 0.3725, 1.0)
 decor_seed = 6
+side_trees = 1
+side_tree_spacing = Vector2(600, 1300)
+side_tree_height = Vector2(110, 190)
+side_tree_color = Color(0.22, 0.37, 0.3, 1)
 
 [node name="Strip5" type="Line2D" parent="Ground"]
 points = PackedVector2Array(4778, 470, 4828, 466, 4878, 455, 4928, 440, 4978, 425, 5028, 414, 5078, 410, 5128, 414, 5178, 425, 5228, 440, 5278, 455, 5328, 466, 5378, 470, 5428, 466, 5478, 455, 5528, 440, 5578, 425, 5628, 414, 5678, 410, 5728, 414, 5778, 425, 5828, 440, 5878, 455, 5928, 466, 5978, 470, 6128, 470)
@@ -416,6 +458,10 @@ fill_color = Color(0.2902, 0.4510, 0.3490, 1.0)
 fill_bottom_color = Color(0.1333, 0.2157, 0.1725, 1.0)
 tuft_color = Color(0.4353, 0.6118, 0.3725, 1.0)
 decor_seed = 7
+side_trees = 1
+side_tree_spacing = Vector2(600, 1300)
+side_tree_height = Vector2(110, 190)
+side_tree_color = Color(0.22, 0.37, 0.3, 1)
 
 [node name="Strip6" type="Line2D" parent="Ground"]
 points = PackedVector2Array(6212, 470, 6272, 468.7, 6332, 464.8, 6392, 458.5, 6452, 450.1, 6512, 440, 6572, 428.5, 6632, 416.3, 6692, 403.7, 6752, 391.5, 6812, 380, 6872, 369.9, 6932, 361.5, 6992, 355.2, 7052, 351.3, 7112, 350, 7412, 350)
@@ -429,6 +475,10 @@ fill_color = Color(0.2902, 0.4510, 0.3490, 1.0)
 fill_bottom_color = Color(0.1333, 0.2157, 0.1725, 1.0)
 tuft_color = Color(0.4353, 0.6118, 0.3725, 1.0)
 decor_seed = 8
+side_trees = 1
+side_tree_spacing = Vector2(600, 1300)
+side_tree_height = Vector2(110, 190)
+side_tree_color = Color(0.22, 0.37, 0.3, 1)
 
 [node name="Strip7" type="Line2D" parent="Ground"]
 points = PackedVector2Array(7848, 350, 8348, 350, 8598, 350, 8664.7, 347.3, 8731.3, 340, 8798, 330, 8864.7, 320, 8931.3, 312.7, 8998, 310, 9248, 310, 9948, 310)
@@ -442,6 +492,10 @@ fill_color = Color(0.2902, 0.4510, 0.3490, 1.0)
 fill_bottom_color = Color(0.1333, 0.2157, 0.1725, 1.0)
 tuft_color = Color(0.4353, 0.6118, 0.3725, 1.0)
 decor_seed = 9
+side_trees = 1
+side_tree_spacing = Vector2(600, 1300)
+side_tree_height = Vector2(110, 190)
+side_tree_color = Color(0.22, 0.37, 0.3, 1)
 
 [node name="Pieces" type="Node2D" parent="."]
 
@@ -458,6 +512,7 @@ size = Vector2(120, 300)
 position = Vector2(4242, 470)
 stone_count = 4
 gap = 72
+wobble = 5.0
 
 [node name="Kill2" parent="Pieces" instance=ExtResource("kill")]
 position = Vector2(6170, 730)
@@ -510,3 +565,42 @@ subject_size = 1.0
 
 [node name="Finish1" parent="Pieces" instance=ExtResource("finish")]
 position = Vector2(9098, 310)
+
+[node name="BridgeKill" parent="Pieces" instance=ExtResource("p_kill")]
+position = Vector2(570, 820)
+size = Vector2(300, 300)
+
+[node name="Bridge1" parent="Pieces" instance=ExtResource("p_bridge")]
+position = Vector2(440, 560)
+span = 260.0
+end_drop = 0
+
+[node name="ForkSign" parent="Pieces" instance=ExtResource("p_sign")]
+position = Vector2(1472, 515.18)
+
+[node name="Find_brass_whistle" parent="Pieces" instance=ExtResource("p_find")]
+position = Vector2(1831, 465.7)
+find_id = &"brass_whistle"
+kind = 2
+color = Color(0.5490, 0.5451, 0.5176, 1)
+
+[node name="Find_sea_thrift" parent="Pieces" instance=ExtResource("p_find")]
+position = Vector2(4963, 374.5)
+find_id = &"sea_thrift"
+kind = 0
+color = Color(0.8980, 0.5451, 0.6902, 1)
+
+[node name="Find_sea_campion" parent="Pieces" instance=ExtResource("p_find")]
+position = Vector2(6560, 430.8)
+find_id = &"sea_campion"
+kind = 0
+color = Color(0.9608, 0.9020, 0.9333, 1)
+
+[node name="Find_mountain_hare" parent="Pieces" instance=ExtResource("p_find")]
+position = Vector2(6900, 365.98)
+find_id = &"mountain_hare"
+kind = 3
+color = Color(0.6118, 0.5176, 0.4039, 1)
+
+[node name="Spring1" parent="Pieces" instance=ExtResource("p_spring")]
+position = Vector2(7150, 350)

@@ -49,7 +49,7 @@ func set_setting(key: String, value: Variant) -> void:
 # --- Progress queries ---
 
 func record(trail_id: StringName) -> Dictionary:
-	return trails.get(String(trail_id), {"stars": 0, "best_time": 0.0, "photos": {}, "completions": 0})
+	return trails.get(String(trail_id), {"stars": 0, "best_time": 0.0, "photos": {}, "completions": 0, "finds": []})
 
 
 func stars_mask(trail_id: StringName) -> int:
@@ -167,28 +167,9 @@ func look_colors() -> Dictionary:
 	return out
 
 
-## Totals the badges are judged on (see BadgeRules).
+## Totals the badges are judged on (see BadgeRules / ProfileFacts).
 func profile_facts() -> Dictionary:
-	var finished: int = 0
-	var night: int = 0
-	var photos: int = 0
-	var perfect: int = 0
-	for id: String in trails:
-		var rec: Dictionary = trails[id]
-		if int(rec.stars) & StarRating.STAR_SUMMIT != 0:
-			finished += 1
-			var trail: TrailData = ContentDB.get_trail(StringName(id))
-			if trail != null and trail.night:
-				night += 1
-		for vp: Variant in rec.photos:
-			var q: int = int(rec.photos[vp])
-			photos += 1 if q > StarRating.PhotoQuality.NONE else 0
-			perfect += 1 if q == StarRating.PhotoQuality.PERFECT else 0
-	return {
-		"trails_finished": finished, "stars": total_stars(), "photos": photos, "perfect_photos": perfect,
-		"hikes": profile.hikes, "night_trails": night, "gear_owned": owned_gear.size(),
-		"hike_minutes": int(profile.hike_seconds / 60.0),
-	}
+	return ProfileFacts.build(trails, profile, owned_gear.size(), total_stars(), ContentDB.get_trail)
 
 
 ## Adds any badges earned since the last check and returns them.
@@ -209,6 +190,8 @@ func record_result(result: TrailResult) -> Dictionary:
 	var rating: StarRating = StarRating.new(ContentDB.balance)
 	var award: Dictionary = rating.award(result, int(rec.stars), rec.photos)
 	var previous_best: float = float(rec.best_time)
+	var new_finds: int = 0
+	var find_tp: int = 0
 	if result.finished:
 		rec.stars = int(rec.stars) | int(award.stars_mask)
 		if previous_best <= 0.0 or result.time_seconds < previous_best:
@@ -217,8 +200,15 @@ func record_result(result: TrailResult) -> Dictionary:
 			var vp_key: String = String(vp)
 			rec.photos[vp_key] = maxi(int(rec.photos.get(vp_key, 0)), int(result.photos[vp]))
 		rec.completions = int(rec.completions) + 1
+		var known: Array = rec.get("finds", [])
+		for f: StringName in result.finds:
+			if not known.has(String(f)):
+				known.append(String(f))
+				new_finds += 1
+		rec["finds"] = known
 		trails[key] = rec
-		tp += int(award.total)
+		find_tp = new_finds * ContentDB.balance.tp_per_new_find
+		tp += int(award.total) + find_tp
 	profile.add_hike(result.time_seconds)
 	var new_badges: Array[String] = []
 	for badge: BadgeData in refresh_badges():
@@ -233,7 +223,10 @@ func record_result(result: TrailResult) -> Dictionary:
 		"new_best": result.finished and (previous_best <= 0.0 or result.time_seconds < previous_best),
 		"first_completion": result.finished and int(rec.completions) == 1,
 		"new_badges": new_badges,
+		"new_finds": new_finds,
+		"find_tp": find_tp,
 	})
+	last_result["total"] = int(last_result.get("total", 0)) + find_tp
 	progress_changed.emit()
 	return last_result
 
@@ -270,6 +263,7 @@ func from_dict(data: Dictionary) -> void:
 					"best_time": float(r.get("best_time", 0.0)),
 					"photos": r.get("photos", {}) if r.get("photos", {}) is Dictionary else {},
 					"completions": int(r.get("completions", 0)),
+					"finds": _string_list(r.get("finds", [])),
 				}
 	owned_gear = _string_list(data.get("owned_gear", []))
 	equipped_gear = _string_list(data.get("equipped_gear", []))

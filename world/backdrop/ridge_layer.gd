@@ -71,6 +71,11 @@ enum TreeStyle { PINE, BIRCH, MIXED }
 	set(v):
 		tree_color = v
 		_queue()
+## Snow resting on the pine boughs (winter trails).
+@export var tree_snow: bool = false:
+	set(v):
+		tree_snow = v
+		_queue()
 
 @export_group("Snow")
 ## Peaks rising above this y get snow caps. Leave 0 for none.
@@ -169,7 +174,7 @@ func _build_trees() -> void:
 			var crown: Color = tree_color_alt if tree_style == TreeStyle.MIXED else tree_color
 			TreeArt.birch(tx, ground, h, crown, haze_color, rng, batch)
 		else:
-			TreeArt.pine(tx, ground, h, tree_color, rng, batch)
+			TreeArt.pine(tx, ground, h, tree_color, rng, batch, tree_snow)
 	_trees.polygon = batch.pts
 	_trees.vertex_colors = batch.cols
 	_trees.polygons = batch.polys

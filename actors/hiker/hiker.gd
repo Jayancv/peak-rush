@@ -15,13 +15,17 @@ signal reached_finish
 signal checkpoint_reached(respawn_position: Vector2)
 signal regen_changed(mode: HikerCondition.Regen)
 signal jumped
+signal water_changed(value: float, max_value: float)
+signal thirst_changed(thirsty: bool)
+## Tried to walk back past the last checkpoint.
+signal back_blocked
 signal landed
 
-enum State { IDLE, WALK, REST, JUMP, FALL, STUMBLE, EXHAUSTED, PHOTO }
+enum State { IDLE, WALK, REST, JUMP, FALL, STUMBLE, EXHAUSTED, PHOTO, SLIDE }
 
 const STAY: int = -1
-## Hikers always walk towards the summit (to the right).
-const FACING: float = 1.0
+## How close to the back limit the hiker stops (px).
+const BACK_MARGIN: float = 6.0
 ## Reading slide collisions allocates, so the surface underfoot is sampled, not read every tick.
 const SURFACE_CHECK_SECONDS: float = 0.1
 
@@ -31,6 +35,8 @@ const SURFACE_CHECK_SECONDS: float = 0.1
 @export var input_enabled: bool = true
 
 var condition: HikerCondition
+## Speed carried from descents (systems/momentum.gd).
+var momentum: Momentum
 ## Everything that scales walk speed (slope, surface, dusk, tiredness), refreshed every tick.
 var speed_multiplier: float = 1.0
 var signed_grade: float = 0.0
@@ -38,24 +44,30 @@ var surface: TerrainStrip.Surface = TerrainStrip.Surface.DIRT
 var state: State = State.IDLE
 var state_time: float = 0.0
 var finished: bool = false
+## +1 heading for the summit, -1 walking back down the trail.
+var facing: float = 1.0
+## Walking back stops here (the last checkpoint, or the trailhead).
+var back_limit_x: float = -INF
 
 var _states: Array[HikerState] = []
 var _coyote_left: float = 0.0
-var _jump_buffer_left: float = 0.0
-var _jump_was_down: bool = false
+var _input: HikerInput = HikerInput.new()
 var _was_on_floor: bool = false
 var _surface_check_left: float = 0.0
-## Physics ticks since spawn; input is ignored on the first one.
-var _ticks: int = 0
+var _slide_zones: int = 0
+var _back_was_blocked: bool = false
 
 
 func _ready() -> void:
 	if balance == null:
 		balance = ContentDB.balance
 	condition = HikerCondition.new(balance)
+	momentum = Momentum.new(balance)
 	condition.stamina.changed.connect(func(v: float, m: float) -> void: stamina_changed.emit(v, m))
 	condition.stamina.exhausted.connect(_on_stamina_exhausted)
 	condition.regen_changed.connect(_on_regen_changed)
+	condition.hydration.changed.connect(func(v: float, m: float) -> void: water_changed.emit(v, m))
+	condition.hydration.thirst_changed.connect(func(t: bool) -> void: thirst_changed.emit(t))
 	floor_max_angle = deg_to_rad(balance.max_floor_angle_deg)
 	floor_snap_length = balance.floor_snap_px
 	# Speed along a slope is decided by Slope, not by how steep the collision is.
@@ -72,6 +84,7 @@ func _ready() -> void:
 		HikerStumbleState.new(self),
 		HikerExhaustedState.new(self),
 		HikerPhotoState.new(self),
+		HikerSlideState.new(self),
 	]
 	_states[state].enter()
 	if visual != null:
@@ -80,14 +93,17 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	state_time += delta
-	_update_jump_input(delta)
+	_input.update(delta, input_enabled and not finished, balance.jump_buffer_seconds)
 	_coyote_left = balance.coyote_seconds if is_on_floor() else maxf(_coyote_left - delta, 0.0)
+	_update_facing()
 	speed_multiplier = condition.speed_multiplier(signed_grade, surface)
 	var next: int = _states[state].physics_update(delta)
 	if next != STAY:
 		change_state(next as State)
 	move_and_slide()
 	_update_floor_info(delta)
+	momentum.update(delta, signed_grade, state == State.WALK and wants_walk(), is_on_floor(),
+		condition.modifiers.surface_speed(effective_surface()))
 	var walking: bool = state == State.WALK and is_on_floor() and absf(velocity.x) > 1.0
 	# No regen during the forced exhausted rest: running dry has to cost the slow walk afterwards.
 	var resting: bool = state == State.IDLE or state == State.REST
@@ -146,6 +162,9 @@ func fall_out() -> void:
 func respawn(at: Vector2) -> void:
 	teleport(at)
 	condition.clear_location_effects()
+	momentum.reset()
+	_slide_zones = 0
+	facing = 1.0
 	condition.stamina.spend(balance.fall_cost)
 	if state != State.EXHAUSTED:
 		change_state(State.IDLE)
@@ -175,67 +194,58 @@ func teleport(to: Vector2) -> void:
 	reset_physics_interpolation()
 
 
+## SnowSlide zones call these; the hiker slides while inside one on a steep descent.
+func enter_slide_zone() -> void:
+	_slide_zones += 1
+
+
+func exit_slide_zone() -> void:
+	_slide_zones = maxi(_slide_zones - 1, 0)
+
+
+func in_slide_zone() -> bool:
+	return _slide_zones > 0
+
+
+func can_slide() -> bool:
+	# Slides only run towards the summit.
+	return facing > 0.0 and in_slide_zone() and is_on_floor() and signed_grade <= -balance.slide_min_grade
+
+
 func effective_surface() -> TerrainStrip.Surface:
 	return condition.effective_surface(surface)
 
 
 # --- Movement helpers for states ---
 
+## Wants to move either way: on to the summit, or back towards the last checkpoint.
 func wants_walk() -> bool:
-	return input_enabled and not finished and Input.is_action_pressed("walk")
+	var allowed: bool = input_enabled and not finished
+	return _input.wants_walk(allowed) or (_input.wants_back(allowed) and can_go_back())
+
+
+func can_go_back() -> bool:
+	# Leave room to brake, so the hiker comes to rest at the limit rather than past it.
+	var braking: float = velocity.x * velocity.x / (2.0 * balance.walk_decel) if velocity.x < 0.0 else 0.0
+	return global_position.x - braking > back_limit_x + BACK_MARGIN
 
 
 func has_buffered_jump() -> bool:
-	return _jump_buffer_left > 0.0
-
-
-## Shared exits from the on-foot states: jumping, or walking off an edge.
-func grounded_transition() -> int:
-	if has_buffered_jump() and _coyote_left > 0.0:
-		return State.JUMP
-	if not is_on_floor() and _coyote_left <= 0.0:
-		return State.FALL
-	return STAY
+	return _input.jump_buffer_left > 0.0
 
 
 func walk_target_speed() -> float:
-	return balance.walk_speed * speed_multiplier * FACING + condition.wind_push
+	return (balance.walk_speed * speed_multiplier + momentum.bonus) * facing + condition.wind_push
 
 
-func move_horizontal(target: float, accel: float, delta: float) -> void:
-	velocity.x = move_toward(velocity.x, target, accel * delta)
-
-
-func stop_horizontal(decel: float, delta: float) -> void:
-	velocity.x = move_toward(velocity.x, 0.0, decel * delta)
-
-
-## Standing still: stops quickly on grip, slides on ice (and back down uphill ice).
-func ground_stop(decel: float, delta: float) -> void:
-	if is_on_floor() and HikeModifiers.is_slippery(effective_surface()):
-		# Grip boots shrink both the slide back and the long stop.
-		var grip: float = condition.modifiers.gear.slip_scale
-		var slide: float = -balance.ice_slip_speed * grip * FACING if signed_grade > 0.05 else 0.0
-		move_horizontal(slide, lerpf(decel, balance.ice_decel, grip), delta)
-	else:
-		stop_horizontal(decel, delta)
-
-
-func air_control(delta: float) -> void:
-	if wants_walk():
-		move_horizontal(balance.walk_speed * speed_multiplier * FACING + condition.wind_push, balance.air_accel, delta)
-	else:
-		move_horizontal(condition.wind_push, balance.air_decel, delta)
-
-
-func apply_gravity(delta: float) -> void:
-	if not is_on_floor():
-		velocity.y = minf(velocity.y + balance.gravity * delta, balance.max_fall_speed)
+## Grace time left to jump after walking off an edge.
+func coyote_left() -> float:
+	return _coyote_left
 
 
 func start_jump() -> void:
 	velocity.y = -balance.jump_velocity
-	_jump_buffer_left = 0.0
+	_input.jump_buffer_left = 0.0
 	_coyote_left = 0.0
 	if visual != null:
 		visual.squash(balance.jump_stretch)
@@ -259,28 +269,31 @@ func _is_on_foot() -> bool:
 	return is_on_floor() and (state == State.IDLE or state == State.WALK or state == State.REST)
 
 
-func _update_jump_input(delta: float) -> void:
-	_ticks += 1
-	if _ticks == 1:
-		# A tap from the previous screen still reads as "just pressed" on the first
-		# tick; don't let it make a freshly spawned hiker jump.
-		_jump_was_down = Input.is_action_pressed("jump")
-		return
-	# Touch presses arrive via Input.action_press, which can land between physics
-	# ticks; checking the held edge too means a quick tap is never lost.
+## Forward wins if both directions are held. Turning around sheds momentum.
+func _update_facing() -> void:
 	var allowed: bool = input_enabled and not finished
-	var down: bool = allowed and Input.is_action_pressed("jump")
-	if (allowed and Input.is_action_just_pressed("jump")) or (down and not _jump_was_down):
-		_jump_buffer_left = balance.jump_buffer_seconds
-	else:
-		_jump_buffer_left = maxf(_jump_buffer_left - delta, 0.0)
-	_jump_was_down = down
+	var new_facing: float = facing
+	if _input.wants_walk(allowed):
+		new_facing = 1.0
+	elif _input.wants_back(allowed):
+		if can_go_back():
+			new_facing = -1.0
+			_back_was_blocked = false
+		elif not _back_was_blocked:
+			_back_was_blocked = true
+			back_blocked.emit()
+	if new_facing != facing:
+		facing = new_facing
+		momentum.reset()
 
 
 func _update_floor_info(delta: float) -> void:
 	var on_floor: bool = is_on_floor()
 	if on_floor:
-		signed_grade = Slope.signed_grade(get_floor_normal(), FACING)
+		signed_grade = Slope.signed_grade(get_floor_normal(), facing)
+		# The floor normal wobbles a hair even on level ground; call that flat.
+		if absf(signed_grade) < Momentum.FLAT_GRADE:
+			signed_grade = 0.0
 		_surface_check_left -= delta
 		if _surface_check_left <= 0.0 or not _was_on_floor:
 			_surface_check_left = SURFACE_CHECK_SECONDS

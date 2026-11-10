@@ -7,7 +7,7 @@ extends Control
 ## BOOTS..HEADLAMP follow GearData.Icon order (kind = BOOTS + icon).
 ## New kinds go at the end: scenes store the number.
 enum Kind { MOUNTAIN, WALK, JUMP, BACK, PAUSE, CAMERA, STAR, STAR_EMPTY, LOCK, GEAR, BOOTS, POLES, SHELL, THERMOS, HEADLAMP,
-	MUSIC, SOUND, NATURE, SWAP, VIBRATE, PERSON, CLOCK }
+	MUSIC, SOUND, NATURE, SWAP, VIBRATE, PERSON, CLOCK, DROP, LEAF, PAW }
 
 @export var kind: Kind = Kind.WALK:
 	set(v):
@@ -156,6 +156,27 @@ func _draw() -> void:
 			draw_arc(c, s * 0.38, 0.0, TAU, 32, color, w, true)
 			draw_line(c, c + Vector2(0, -s * 0.24), color, w, true)
 			draw_line(c, c + Vector2(s * 0.17, s * 0.08), color, w, true)
+		Kind.DROP:
+			var drop: PackedVector2Array = PackedVector2Array([c + Vector2(0, -s * 0.44)])
+			for i: int in 13:
+				var a: float = -0.35 + (PI + 0.7) * float(i) / 12.0
+				drop.append(c + Vector2(0, s * 0.12) + Vector2(cos(a), sin(a)) * s * 0.3)
+			draw_colored_polygon(drop, color)
+			draw_circle(c + Vector2(-s * 0.1, s * 0.08), s * 0.07, cutout, true, -1.0, true)
+		Kind.LEAF:
+			var leaf2: PackedVector2Array = PackedVector2Array()
+			for i: int in 17:
+				var t: float = float(i) / 16.0
+				leaf2.append(c + Vector2(-sin(t * PI) * s * 0.3, lerpf(s * 0.42, -s * 0.42, t)).rotated(0.5))
+			for i: int in range(15, 0, -1):
+				var t: float = float(i) / 16.0
+				leaf2.append(c + Vector2(sin(t * PI) * s * 0.3, lerpf(s * 0.42, -s * 0.42, t)).rotated(0.5))
+			draw_colored_polygon(leaf2, color)
+			draw_line(c + Vector2(0, s * 0.46).rotated(0.5), c + Vector2(0, -s * 0.3).rotated(0.5), cutout, maxf(w * 0.5, 1.5), true)
+		Kind.PAW:
+			draw_colored_polygon(ShapeUtil.ellipse(c + Vector2(0, s * 0.16), Vector2(s * 0.22, s * 0.18), 16), color)
+			for p: Vector2 in [Vector2(-0.3, -0.08), Vector2(-0.12, -0.3), Vector2(0.12, -0.3), Vector2(0.3, -0.08)]:
+				draw_colored_polygon(ShapeUtil.ellipse(c + p * s, Vector2(s * 0.09, s * 0.11), 12), color)
 		Kind.CAMERA:
 			var body: Rect2 = Rect2(c + Vector2(-s * 0.42, -s * 0.24), Vector2(s * 0.84, s * 0.58))
 			draw_rect(body, color, true)

@@ -4,6 +4,6 @@ extends HikerState
 
 
 func physics_update(delta: float) -> int:
-	hiker.ground_stop(hiker.balance.walk_decel, delta)
-	hiker.apply_gravity(delta)
+	ground_stop(hiker.balance.walk_decel, delta)
+	apply_gravity(delta)
 	return Hiker.STAY

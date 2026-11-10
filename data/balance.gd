@@ -25,6 +25,24 @@ extends Resource
 @export var max_floor_angle_deg: float = 50.0
 @export var floor_snap_px: float = 16.0
 
+@export_group("Momentum")
+## Downhill build-up (px/s² per unit of grade), cap (px/s), fade on the flat (px/s²)
+## and extra drain per unit of uphill grade (px/s²).
+@export var momentum_gain_per_grade: float = 220.0
+@export var momentum_max: float = 45.0
+@export var momentum_decay: float = 30.0
+@export var momentum_uphill_decay: float = 140.0
+
+@export_group("Wind and sliding")
+## On an exposed ridge (WindZone) gusts are this many times stronger.
+@export var exposed_gust_mult: float = 2.2
+## Snow slide: steepest-descent needed to start sliding, acceleration per unit of
+## grade (px/s²), top speed (px/s), and braking on the flat run-out (px/s²).
+@export var slide_min_grade: float = 0.15
+@export var slide_accel_per_grade: float = 420.0
+@export var slide_max_speed: float = 320.0
+@export var slide_brake: float = 260.0
+
 @export_group("Jumping")
 @export var gravity: float = 1600.0
 ## Initial upward speed. Jump height ≈ jump_velocity² / (2 × gravity).
@@ -59,6 +77,25 @@ extends Resource
 @export var fall_cost: float = 15.0
 ## Below this fraction of max the HUD bar pulses.
 @export var low_stamina_fraction: float = 0.25
+
+@export_group("Water")
+## The bottle: size, drink per second of walking, refill per second in a spring/stream.
+@export var water_max: float = 100.0
+@export var water_drain: float = 0.9
+@export var water_refill: float = 45.0
+## Thirsty (empty bottle): stamina drain and rest regen multipliers.
+@export var thirsty_drain_mult: float = 1.3
+@export var thirsty_regen_mult: float = 0.5
+## Below this fraction the HUD gauge warns.
+@export var water_low_fraction: float = 0.2
+
+@export_group("Finds")
+## TP for each find the first time it's collected.
+@export var tp_per_new_find: int = 15
+## Seconds of standing still near an animal to spot it, and how long it tolerates a
+## walking hiker before it runs off.
+@export var animal_spot_seconds: float = 1.2
+@export var animal_patience_seconds: float = 0.8
 
 @export_group("Terrain effects")
 @export var mud_speed_mult: float = 0.6
@@ -142,6 +179,18 @@ extends Resource
 @export var exhausted_lean: float = 0.2
 ## Steps per second at full walk speed.
 @export var walk_bob_hz: float = 2.2
+## The mug hanging off the backpack: spring stiffness, damping, and how much the
+## hiker's own acceleration (px/s²) swings it (radians per px/s²).
+@export var mug_stiffness: float = 70.0
+@export var mug_damping: float = 5.0
+@export var mug_swing_per_accel: float = 0.0006
+## Chance per footstep on rock (and on dirt) of kicking a loose pebble.
+@export var pebble_chance_rock: float = 0.4
+@export var pebble_chance_dirt: float = 0.08
+@export var pebble_seconds: float = 2.5
+## Footprints in snow and mud: how long they take to fade, and how many at once.
+@export var footprint_seconds: float = 7.0
+@export var footprint_max: int = 24
 ## Rest breathing: vertical scale wobble and breaths per second.
 @export var rest_breath_amount: float = 0.025
 @export var rest_breath_hz: float = 0.4

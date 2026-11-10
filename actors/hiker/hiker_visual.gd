@@ -32,11 +32,22 @@ const BENCH_SPARKLE_COLOR: Color = Color(0.45, 1.0, 0.4, 1.0)
 
 ## Dust colour per TerrainStrip.Surface.
 const DUST_COLORS: Array[Color] = [Color("#C9B28F"), Color("#B5B3AA"), Color("#6E5440"), Color("#E6F5FA"), Color("#FFFFFF")]
+const SLIDE_CROUCH: float = 7.0
+const SLIDE_SPRAY_SECONDS: float = 0.07
 const CELEBRATE_SECONDS: float = 1.6
 const CELEBRATE_HOP_PX: float = 9.0
 const CELEBRATE_HOP_HZ: float = 2.4
 
+## A real footstep landed (not the silent second puff of a landing).
+signal stepped(surface: TerrainStrip.Surface)
+
 var _balance: Balance
+var _mug: Node2D
+var _was_sliding: bool = false
+var _spray_left: float = 0.0
+var _mug_angle: float = 0.0
+var _mug_spin: float = 0.0
+var _prev_vx: float = 0.0
 var _last_step: int = 0
 var _next_dust: int = 0
 var _was_on_floor: bool = true
@@ -59,6 +70,49 @@ const LOOK_PARTS: Dictionary = {
 
 func _ready() -> void:
 	apply_look(GameState.look_colors())
+	_build_mug()
+
+
+## A steel camping mug clipped to the bottom of the pack; it swings on a spring.
+func _build_mug() -> void:
+	var pack: Node = get_node_or_null("Backpack")
+	if pack == null:
+		return
+	_mug = Node2D.new()
+	_mug.name = "Mug"
+	_mug.position = Vector2(-20, -33)
+	add_child(_mug)
+	move_child(_mug, pack.get_index() + 1)
+	var cord: Line2D = Line2D.new()
+	cord.points = PackedVector2Array([Vector2.ZERO, Vector2(0, 3.5)])
+	cord.width = 1.0
+	cord.default_color = Color("#2B2D42")
+	_mug.add_child(cord)
+	var cup: Polygon2D = Polygon2D.new()
+	cup.polygon = PackedVector2Array([Vector2(-3, 3.5), Vector2(3, 3.5), Vector2(2.6, 9.5), Vector2(-2.6, 9.5)])
+	cup.vertex_colors = PackedColorArray([Color("#C9D0D8"), Color("#8E99A6"), Color("#6E7887"), Color("#B2BAC4")])
+	cup.antialiased = true
+	_mug.add_child(cup)
+	var handle: Line2D = Line2D.new()
+	handle.points = PackedVector2Array([Vector2(3, 4.5), Vector2(4.6, 5.5), Vector2(4.6, 7.5), Vector2(2.8, 8.4)])
+	handle.width = 1.0
+	handle.default_color = Color("#8E99A6")
+	_mug.add_child(handle)
+
+
+## Spring-damper swing: the mug lags behind the hiker's acceleration and jolts on landings.
+func _update_mug(delta: float, hiker: Hiker, walking: bool) -> void:
+	if _mug == null or delta <= 0.0:
+		return
+	var accel: float = (hiker.velocity.x - _prev_vx) / delta
+	_prev_vx = hiker.velocity.x
+	var target: float = clampf(accel * _balance.mug_swing_per_accel, -1.0, 1.0)
+	if walking:
+		target += sin(_phase * 2.0) * 0.18
+	_mug_spin += (-_balance.mug_stiffness * (_mug_angle - target) - _balance.mug_damping * _mug_spin) * delta
+	_mug_angle = clampf(_mug_angle + _mug_spin * delta, -1.3, 1.3)
+	# Counter the body's lean so the mug keeps hanging downwards.
+	_mug.rotation = _mug_angle - rotation
 
 
 ## Paints the outfit: CosmeticData.Slot -> Color (slots left out keep their colour).
@@ -120,6 +174,12 @@ func update_pose(delta: float, hiker: Hiker) -> void:
 	var lean: float = 0.0
 	var bob: float = 0.0
 	var breath: float = 0.0
+	var on_floor_now: bool = hiker.is_on_floor()
+	if _was_sliding and hiker.state != Hiker.State.SLIDE:
+		# A powder burst where the slide ends.
+		for i: int in 3:
+			_footstep(TerrainStrip.Surface.SNOW, false)
+	_was_sliding = hiker.state == Hiker.State.SLIDE
 	match hiker.state:
 		Hiker.State.WALK:
 			var speed_ratio: float = clampf(absf(hiker.velocity.x) / _balance.walk_speed, 0.0, 1.3)
@@ -152,6 +212,17 @@ func update_pose(delta: float, hiker: Hiker) -> void:
 			arm_angle = 0.2
 			lean = _balance.exhausted_lean
 			breath = sin(_time * TAU * _balance.rest_breath_hz * 2.5) * _balance.rest_breath_amount * 1.6
+		Hiker.State.SLIDE:
+			# Crouched, arms out for balance, snow spraying from the boots.
+			front = -0.7
+			back = 0.55
+			arm_angle = -1.4
+			lean = -0.18
+			bob = SLIDE_CROUCH
+			_spray_left -= delta
+			if _spray_left <= 0.0 and on_floor_now:
+				_spray_left = SLIDE_SPRAY_SECONDS
+				_footstep(TerrainStrip.Surface.SNOW, false)
 		Hiker.State.REST when hiker.condition.is_on_bench():
 			front = SIT_FRONT_LEG
 			back = SIT_BACK_LEG
@@ -171,7 +242,9 @@ func update_pose(delta: float, hiker: Hiker) -> void:
 	if on_floor and not _was_on_floor:
 		_footstep(hiker.effective_surface())
 		_footstep(hiker.effective_surface(), false)
+		_mug_spin += 6.0
 	_was_on_floor = on_floor
+	_update_mug(delta, hiker, hiker.state == Hiker.State.WALK)
 
 	if hiker.state != Hiker.State.WALK:
 		# Let the stride settle back to standing instead of freezing mid-step.
@@ -179,8 +252,9 @@ func update_pose(delta: float, hiker: Hiker) -> void:
 	front_leg.rotation = lerp_angle(front_leg.rotation, front, blend)
 	back_leg.rotation = lerp_angle(back_leg.rotation, back, blend)
 	arm.rotation = lerp_angle(arm.rotation, arm_angle, blend)
-	rotation = lerp_angle(rotation, lean, blend)
-	scale = Vector2(_squash.x, _squash.y * (1.0 + breath))
+	# Mirrored when walking back down the trail; lean follows the way it faces.
+	rotation = lerp_angle(rotation, lean * hiker.facing, blend)
+	scale = Vector2(_squash.x * hiker.facing, _squash.y * (1.0 + breath))
 	# Ease the height too, so sitting down and standing up don't snap.
 	position.y = bob if hiker.state == Hiker.State.WALK else lerpf(position.y, bob, blend)
 
@@ -188,6 +262,7 @@ func update_pose(delta: float, hiker: Hiker) -> void:
 func _footstep(surface: TerrainStrip.Surface, with_sound: bool = true) -> void:
 	if with_sound:
 		AudioManager.play_footstep(surface)
+		stepped.emit(surface)
 	if dust.is_empty():
 		return
 	var puff: CPUParticles2D = dust[_next_dust]

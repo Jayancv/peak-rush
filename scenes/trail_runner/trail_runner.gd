@@ -18,6 +18,9 @@ extends Node2D
 ## a safety net in case a gap has no KillZone.
 const FALL_MARGIN: float = 200.0
 
+## Wind push (px/s) at which plants lean their full gust_px.
+const WIND_FOR_FULL_LEAN: float = 60.0
+
 ## Pause between touching the cairn and the results screen, to let the moment land.
 const SUMMIT_PAUSE: float = 1.2
 
@@ -25,6 +28,8 @@ var trail: TrailData
 var hiker: Hiker
 var daylight: Daylight
 var weather: WeatherEffects
+## Finds, springs, water gauge and one-time hints for this hike.
+var tracker: HikeTracker
 var finished: bool = false
 ## Best photo this hike per viewpoint id (String -> StarRating.PhotoQuality).
 var photos: Dictionary = {}
@@ -77,8 +82,13 @@ func _load_trail() -> void:
 		if level.is_ancestor_of(node):
 			_backdrop = node as Backdrop
 	weather_fx.add_world_fog(trail.weather, level, _backdrop, camera)
+	# Between the level and the hiker: footprints lie on the path, pebbles pass behind the boots.
+	var fx: TrailFx = TrailFx.new()
+	fx.name = "TrailFx"
+	world.add_child(fx)
 	hiker = hiker_scene.instantiate() as Hiker
 	world.add_child(hiker)
+	fx.setup(hiker, _balance)
 	hiker.teleport(trailhead.global_position)
 	hiker.condition.weather_drain_mult = trail.weather_drain()
 	hiker.condition.set_gear(GameState.equipped_items())
@@ -86,6 +96,8 @@ func _load_trail() -> void:
 		# Dark from the start: lamp on, but no slowdown until the window closes.
 		hiker.visual.set_headlamp(true)
 	_respawn_point = trailhead.global_position
+	# Walking back is allowed only as far as the last checkpoint (here: the trailhead).
+	hiker.back_limit_x = trailhead.global_position.x
 	hiker.stamina_changed.connect(_on_stamina_changed)
 	hiker.exhausted.connect(func() -> void: hud.show_toast("TOAST_EXHAUSTED"))
 	hiker.stumbled.connect(_on_stumbled)
@@ -93,6 +105,10 @@ func _load_trail() -> void:
 	hiker.checkpoint_reached.connect(_on_checkpoint_reached)
 	hiker.reached_finish.connect(_on_reached_finish)
 	hiker.regen_changed.connect(_on_regen_changed)
+	tracker = HikeTracker.new()
+	tracker.name = "HikeTracker"
+	add_child(tracker)
+	tracker.setup(hiker, hud, trail, level, _balance)
 	var bounds: Rect2 = TerrainStrip.bounds_under(level)
 	_fall_limit_y = bounds.end.y + FALL_MARGIN
 	camera.target = hiker
@@ -112,13 +128,22 @@ func _load_trail() -> void:
 				(node as TutorialTrigger).triggered.connect(func(key: String, secs: float) -> void: hud.show_toast(key, secs))
 
 
+func _exit_tree() -> void:
+	# Menus have plants too: leave them calm and not bending around a hiker that's gone.
+	RenderingServer.global_shader_parameter_set(&"wind_strength", 0.0)
+	RenderingServer.global_shader_parameter_set(&"hiker_pos", Vector2(-100000, -100000))
+
+
 func _process(delta: float) -> void:
 	if finished or hiker == null:
 		return
 	daylight.advance(delta)
 	weather.advance(delta)
-	hiker.condition.wind_push = weather.wind_push()
-	weather_fx.set_gusting(weather.is_gusting())
+	hiker.condition.wind_push = hiker.condition.exposed_wind(weather.wind_push())
+	weather_fx.set_gusting(weather.is_gusting() or hiker.condition.is_exposed())
+	# Plants and trees (sway shader) lean with the wind and bend around the hiker.
+	RenderingServer.global_shader_parameter_set(&"wind_strength", -hiker.condition.wind_push / WIND_FOR_FULL_LEAN)
+	RenderingServer.global_shader_parameter_set(&"hiker_pos", hiker.global_position)
 	_apply_daylight()
 	if hiker.global_position.y > _fall_limit_y:
 		_on_hiker_fell()
@@ -202,6 +227,7 @@ func _on_regen_changed(mode: HikerCondition.Regen) -> void:
 
 func _on_checkpoint_reached(respawn_position: Vector2) -> void:
 	_respawn_point = respawn_position
+	hiker.back_limit_x = maxf(hiker.back_limit_x, respawn_position.x)
 	hud.show_toast("TOAST_CHECKPOINT")
 
 
@@ -230,6 +256,7 @@ func _on_reached_finish() -> void:
 	for id: String in photos:
 		if int(photos[id]) > StarRating.PhotoQuality.NONE:
 			result.photos[id] = photos[id]
+	result.finds = tracker.finds.duplicate()
 	GameState.record_result(result)
 	await get_tree().create_timer(SUMMIT_PAUSE).timeout
 	SceneRouter.go_to(SceneRouter.RESULTS)

@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="TrailData" format=3]
 
 [ext_resource type="Script" path="res://data/trail_data.gd" id="1_trail"]
+[ext_resource type="Script" path="res://data/find_data.gd" id="9_find"]
 [ext_resource type="Script" path="res://data/viewpoint_data.gd" id="3_vp"]
 [ext_resource type="Resource" path="res://content/weather/windy.tres" id="2_weather"]
 
@@ -14,6 +15,38 @@ script = ExtResource("3_vp")
 id = &"lighthouse"
 name_key = "VP_LIGHTHOUSE"
 
+[sub_resource type="Resource" id="Find_brass_whistle"]
+script = ExtResource("9_find")
+id = &"brass_whistle"
+name_key = "FIND_BRASS_WHISTLE"
+kind = 2
+color = Color(0.5490, 0.5451, 0.5176, 1)
+appear_chance = 1.0
+
+[sub_resource type="Resource" id="Find_sea_thrift"]
+script = ExtResource("9_find")
+id = &"sea_thrift"
+name_key = "FIND_SEA_THRIFT"
+kind = 0
+color = Color(0.8980, 0.5451, 0.6902, 1)
+appear_chance = 1.0
+
+[sub_resource type="Resource" id="Find_sea_campion"]
+script = ExtResource("9_find")
+id = &"sea_campion"
+name_key = "FIND_SEA_CAMPION"
+kind = 0
+color = Color(0.9608, 0.9020, 0.9333, 1)
+appear_chance = 1.0
+
+[sub_resource type="Resource" id="Find_mountain_hare"]
+script = ExtResource("9_find")
+id = &"mountain_hare"
+name_key = "FIND_MOUNTAIN_HARE"
+kind = 3
+color = Color(0.6118, 0.5176, 0.4039, 1)
+appear_chance = 0.65
+
 [resource]
 script = ExtResource("1_trail")
 id = &"t02_archipelago_rocks"
@@ -26,3 +59,4 @@ par_time = 125.0
 weather = ExtResource("2_weather")
 viewpoints = Array[ExtResource("3_vp")]([SubResource("Viewpoint_1"), SubResource("Viewpoint_2")])
 unlock_order = 1
+finds = Array[ExtResource("9_find")]([SubResource("Find_brass_whistle"), SubResource("Find_sea_thrift"), SubResource("Find_sea_campion"), SubResource("Find_mountain_hare")])

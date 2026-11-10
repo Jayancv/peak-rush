@@ -19,7 +19,7 @@ func _internal_child(strip: TerrainStrip, type_name: String) -> Node:
 
 func test_builds_fill_closed_below_lowest_point() -> void:
 	var strip: TerrainStrip = _make_strip(PackedVector2Array([Vector2(0, 10), Vector2(100, 50), Vector2(200, 0)]))
-	var fill: Polygon2D = _internal_child(strip, "Polygon2D") as Polygon2D
+	var fill: Polygon2D = strip.get_node_or_null("Fill") as Polygon2D
 	assert_not_null(fill)
 	assert_eq(fill.polygon.size(), 5)
 	assert_eq(fill.polygon[3], Vector2(200, 150), "bottom-right corner sits fill_depth below the lowest point")

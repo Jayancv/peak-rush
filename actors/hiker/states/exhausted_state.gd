@@ -5,8 +5,8 @@ extends HikerState
 
 
 func physics_update(delta: float) -> int:
-	hiker.ground_stop(hiker.balance.walk_decel, delta)
-	hiker.apply_gravity(delta)
+	ground_stop(hiker.balance.walk_decel, delta)
+	apply_gravity(delta)
 	if hiker.state_time >= hiker.balance.exhausted_rest_seconds:
 		return Hiker.State.REST
 	return Hiker.STAY

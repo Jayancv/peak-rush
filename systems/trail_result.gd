@@ -9,6 +9,8 @@ var before_dusk: bool = false
 var viewpoint_total: int = 0
 ## viewpoint id -> StarRating.PhotoQuality of the best shot this hike.
 var photos: Dictionary = {}
+## Find ids collected on this hike.
+var finds: Array[StringName] = []
 
 
 func _init(id: StringName = &"") -> void:

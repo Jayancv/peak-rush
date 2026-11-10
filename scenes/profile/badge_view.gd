@@ -6,7 +6,8 @@ const ICONS: Dictionary = {
 	BadgeData.Art.MOUNTAIN: UiIcon.Kind.MOUNTAIN, BadgeData.Art.STAR: UiIcon.Kind.STAR,
 	BadgeData.Art.CAMERA: UiIcon.Kind.CAMERA, BadgeData.Art.BOOTS: UiIcon.Kind.BOOTS,
 	BadgeData.Art.HEADLAMP: UiIcon.Kind.HEADLAMP, BadgeData.Art.GEAR: UiIcon.Kind.SHELL,
-	BadgeData.Art.CLOCK: UiIcon.Kind.CLOCK,
+	BadgeData.Art.CLOCK: UiIcon.Kind.CLOCK, BadgeData.Art.LEAF: UiIcon.Kind.LEAF,
+	BadgeData.Art.PAW: UiIcon.Kind.PAW,
 }
 const LOCKED: Color = Color("#C9C3B6")
 const CREAM: Color = Color("#FFF6E5")

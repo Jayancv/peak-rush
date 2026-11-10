@@ -18,6 +18,8 @@ extends Resource
 ## Background loop. "Auto" picks one from the weather.
 @export_enum("Auto", "Forest", "Coast", "Fell", "Rain") var ambience: int = 0
 @export var viewpoints: Array[ViewpointData] = []
+## Things to discover on this trail (each matched by a `Find` piece in the level).
+@export var finds: Array[FindData] = []
 @export var postcard: Texture2D
 ## Trails unlock in this order within their season; the first is always open.
 @export var unlock_order: int = 0
@@ -28,6 +30,21 @@ extends Resource
 @export var night: bool = false
 ## Caption of the third star on the results screen.
 @export var star3_key: String = "RESULTS_STAR_DUSK"
+
+
+func find_ids() -> Array[StringName]:
+	var out: Array[StringName] = []
+	for f: FindData in finds:
+		if f != null:
+			out.append(f.id)
+	return out
+
+
+func get_find(id: StringName) -> FindData:
+	for f: FindData in finds:
+		if f != null and f.id == id:
+			return f
+	return null
 
 
 func viewpoint_ids() -> Array[StringName]:

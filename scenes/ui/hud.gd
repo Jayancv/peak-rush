@@ -20,6 +20,8 @@ const TOAST_SECONDS: float = 2.2
 @export var photo_prompt: Button
 
 var _toast_tween: Tween
+var _water: WaterGauge
+var _finds_label: Label
 
 
 func _ready() -> void:
@@ -34,6 +36,48 @@ func _ready() -> void:
 	toast.modulate.a = 0.0
 	# Faded rather than hidden so the top bar never shifts sideways.
 	boost_badge.modulate.a = 0.0
+	_build_extra_pills()
+
+
+## The water gauge (after the energy bar) and the finds counter (after photos) are
+## copies of the photo pill, so they match the HUD style exactly.
+func _build_extra_pills() -> void:
+	var photo_pill: Control = photo_label.get_parent().get_parent() as Control
+	var top: Node = photo_pill.get_parent()
+	var finds_pill: Control = photo_pill.duplicate() as Control
+	top.add_child(finds_pill)
+	top.move_child(finds_pill, photo_pill.get_index() + 1)
+	_finds_label = finds_pill.get_node("Row/Count") as Label
+	var leaf: UiIcon = finds_pill.get_node("Row/Icon") as UiIcon
+	leaf.kind = UiIcon.Kind.LEAF
+	leaf.color = Color("#5E8C4A")
+	_finds_label.text = "0/0"
+	var water_pill: Control = photo_pill.duplicate() as Control
+	var stamina_pill: Node = stamina_bar.get_parent().get_parent()
+	top.add_child(water_pill)
+	top.move_child(water_pill, stamina_pill.get_index() + 1)
+	var drop: UiIcon = water_pill.get_node("Row/Icon") as UiIcon
+	drop.kind = UiIcon.Kind.DROP
+	drop.color = WaterGauge.FULL
+	var count: Node = water_pill.get_node("Row/Count")
+	count.get_parent().remove_child(count)
+	count.queue_free()
+	_water = WaterGauge.new()
+	_water.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	water_pill.get_node("Row").add_child(_water)
+
+
+func set_water(value: float, max_value: float, low_fraction: float) -> void:
+	_water.low_fraction = low_fraction
+	_water.fraction = value / max_value if max_value > 0.0 else 0.0
+
+
+func set_finds(found: int, total: int) -> void:
+	var text: String = "%d/%d" % [found, total]
+	if _finds_label.text != text and found > 0:
+		UiMotion.bump(_finds_label.get_parent() as Control)
+	_finds_label.text = text
+	(_finds_label.get_parent().get_parent() as Control).visible = total > 0
 
 
 func set_stamina(value: float, max_value: float, recovering: bool) -> void:
@@ -94,7 +138,12 @@ func set_photos(taken: int, total: int) -> void:
 
 ## Short message under the top bar ("Checkpoint", "Dusk falls"...). `key` is a translation key.
 func show_toast(key: String, seconds: float = TOAST_SECONDS) -> void:
-	toast_label.text = tr(key)
+	show_toast_text(tr(key), seconds)
+
+
+## Like show_toast, for text that's already translated and filled in.
+func show_toast_text(text: String, seconds: float = TOAST_SECONDS) -> void:
+	toast_label.text = text
 	if _toast_tween != null:
 		_toast_tween.kill()
 	toast.modulate.a = 0.0
