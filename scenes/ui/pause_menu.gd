@@ -13,6 +13,8 @@ signal quit_pressed
 @export var quit_button: Button
 @export var vibration_toggle: Button
 @export var card: Control
+## Elevation map of the trail (TrailMap); the trail runner fills it.
+@export var map: TrailMap
 
 var _tween: Tween
 var _closing: bool = false

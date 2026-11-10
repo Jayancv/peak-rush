@@ -240,6 +240,7 @@ func _on_water_entered(body: Node2D) -> void:
 		# Standing in the stream fills the bottle (at the price of wet feet).
 		hiker.condition.enter_spring()
 		_splash(to_local(hiker.global_position).x)
+		AudioManager.play_splash()
 
 
 func _on_water_exited(body: Node2D) -> void:

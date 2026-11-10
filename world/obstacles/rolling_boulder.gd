@@ -118,6 +118,7 @@ func _release() -> void:
 	_body.freeze = false
 	_body.linear_velocity = Vector2(-push, 0)
 	_body.angular_velocity = -push / radius
+	AudioManager.play_thud()
 
 
 func _on_hit(body: Node2D) -> void:

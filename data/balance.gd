@@ -97,6 +97,17 @@ extends Resource
 @export var animal_spot_seconds: float = 1.2
 @export var animal_patience_seconds: float = 0.8
 
+@export_group("Daily trail")
+## Reward for completing the daily trail, extra TP per streak day (up to the cap).
+@export var daily_bonus_tp: int = 60
+@export var daily_streak_tp: int = 10
+@export var daily_streak_cap: int = 5
+## Twists: steady headwind (px/s), daylight multiplier for a short day, finds to collect.
+@export var daily_headwind: float = 24.0
+@export var daily_short_day_mult: float = 0.75
+@export var daily_forager_finds: int = 2
+@export var daily_fog_density: float = 0.55
+
 @export_group("Terrain effects")
 @export var mud_speed_mult: float = 0.6
 @export var mud_drain_mult: float = 2.0

@@ -22,7 +22,8 @@ func test_ambiences_loop() -> void:
 
 func test_every_sound_has_read_ahead_padding() -> void:
 	# Regression: the mixer reads past the play position; unpadded buffers crashed on Android.
-	for key: StringName in [&"shutter", &"summit", &"menu_pad", &"step_0", &"step_4", &"ambience_1", &"ambience_3"]:
+	for key: StringName in [&"shutter", &"summit", &"menu_pad", &"step_0", &"step_4", &"ambience_1", &"ambience_3",
+			&"chime", &"gulp", &"creak", &"thud", &"splash", &"pebble"]:
 		var wav: AudioStreamWAV = SynthSounds.make(key)
 		var frames: int = wav.data.size() / 2
 		if wav.loop_mode == AudioStreamWAV.LOOP_FORWARD:

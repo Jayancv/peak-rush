@@ -27,6 +27,8 @@ var profile: PlayerProfile = PlayerProfile.new()
 
 ## Not saved: which trail the runner should load next, and the last results for the results screen.
 var current_trail_id: StringName = &""
+## True while the current hike is today's daily trail.
+var daily_active: bool = false
 var last_result: Dictionary = {}
 
 
@@ -180,6 +182,42 @@ func refresh_badges() -> Array[BadgeData]:
 	return earned
 
 
+# --- Daily trail ---
+
+func today() -> String:
+	return Time.get_date_string_from_system()
+
+
+## Today's challenge: trail_id, twist, date, done (empty if nothing is unlocked).
+func daily_today() -> Dictionary:
+	var ids: Array[StringName] = []
+	for season: SeasonData in ContentDB.seasons():
+		for trail: TrailData in season.ordered_trails():
+			if is_unlocked(trail):
+				ids.append(trail.id)
+	var c: Dictionary = DailyChallenge.for_date(today(), ids)
+	if not c.is_empty():
+		c["date"] = today()
+		c["done"] = profile.daily_done_on(today())
+	return c
+
+
+func _record_daily(result: TrailResult) -> void:
+	daily_active = false
+	var d: Dictionary = daily_today()
+	if d.is_empty() or d.trail_id != result.trail_id or d.done:
+		return
+	var trail: TrailData = ContentDB.get_trail(result.trail_id)
+	if not DailyChallenge.goal_met(d.twist, result, trail.par_time if trail != null else 0.0, ContentDB.balance):
+		last_result["daily"] = {"done": false}
+		return
+	var streak: int = profile.complete_daily(d.date)
+	var bonus: int = DailyChallenge.reward(streak, ContentDB.balance)
+	tp += bonus
+	last_result["daily"] = {"done": true, "bonus": bonus, "streak": streak}
+	last_result["total"] = int(last_result.get("total", 0)) + bonus
+
+
 # --- Recording a hike ---
 
 ## Merges a finished hike into the trail's record and pays out TP.
@@ -227,6 +265,8 @@ func record_result(result: TrailResult) -> Dictionary:
 		"find_tp": find_tp,
 	})
 	last_result["total"] = int(last_result.get("total", 0)) + find_tp
+	if daily_active:
+		_record_daily(result)
 	progress_changed.emit()
 	return last_result
 

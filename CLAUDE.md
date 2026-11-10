@@ -85,7 +85,7 @@ docs/                GAME_DESIGN.md, PLAN.md
 - At the end of each session, update **Current status** below and tick the boxes in `docs/PLAN.md`.
 
 ## Current status
-- Milestone: **M7.5 (trail depth) built, 222 tests green; physics pass done**. M7 non-release part done. Release steps
+- Milestone: **M7.5 (trail depth) + polish (sounds, trail map, finds page, daily trail) built, 241 tests green**. M7 non-release part done. Release steps
   (keystore, AAB, stores, iOS, screenshots, 1.0.0) deliberately not started; low-end phone profiling still open.
   M5/M6 full-season phone playtest still open. Next: M7 release steps or M8.
 - Godot 4.7.2-stable (not on PATH; ask the user for the executable path if unknown); GUT 9.7.1.
@@ -173,6 +173,10 @@ docs/                GAME_DESIGN.md, PLAN.md
   Walk back: `walk_back` action (touch: Back pad above the walk hint). Hiker.facing (+1/-1) drives slopes/speed/momentum and
   mirrors HikerVisual; Hiker.back_limit_x = trailhead, then each checkpoint (it brakes to stop there); slides only forward.
   Movement helpers (gravity, air control, ground_stop, grounded_transition) live in HikerState.
+  Polish pass: SFX chime/gulp/creak/thud/splash/pebble (`audio/synth_sfx.gd`, AudioManager.play_find/...); pause card has a
+  `TrailMap` (scanned from the level at load); journal has a Postcards/Finds switch (`FindCard`, `FindArt`, facts FIND_<ID>_FACT).
+  Daily trail: `DailyChallenge` (systems/, date -> trail + Twist), GameState.daily_today()/daily_active, profile daily_last/
+  daily_streak (save v4), twists applied in TrailRunner via HikeTracker.daily_twist/twisted_weather; menu `DailyCard`.
   M7.5 trail depth: `Hydration` (systems/) in HikerCondition (springs/streams call enter_spring; thirsty = Balance mults);
   HUD water gauge + finds pill are built in Hud._build_extra_pills (copies of the photo pill). Finds: TrailData.finds
   (FindData) <-> `Find` pieces (find_id; animals need stillness, appear_chance per hike); `HikeTracker` (trail runner child)

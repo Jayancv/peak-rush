@@ -6,6 +6,9 @@ extends Node
 
 var finds: Array[StringName] = []
 
+## Short description of each daily twist (DailyChallenge.Twist order).
+const TWIST_KEYS: Array[String] = ["DAILY_TWIST_HEADWIND", "DAILY_TWIST_FOG", "DAILY_TWIST_SHORT_DAY", "DAILY_TWIST_FORAGER", "DAILY_TWIST_BEAT_PAR"]
+
 var _hiker: Hiker
 var _hud: Hud
 var _trail: TrailData
@@ -47,6 +50,32 @@ func setup(hiker: Hiker, hud: Hud, trail: TrailData, level: Node, balance: Balan
 	_update_hud()
 
 
+## Today's twist if this hike is the daily trail (and it isn't done yet), else -1.
+static func daily_twist(trail: TrailData) -> int:
+	if not GameState.daily_active:
+		return -1
+	var d: Dictionary = GameState.daily_today()
+	if d.is_empty() or d.trail_id != trail.id or d.done:
+		GameState.daily_active = false
+		return -1
+	return int(d.twist)
+
+
+## The trail's weather, with thick fog added on a foggy daily.
+static func twisted_weather(base: WeatherProfile, twist: int, balance: Balance) -> WeatherProfile:
+	if twist != DailyChallenge.Twist.FOG:
+		return base
+	var w: WeatherProfile = base.duplicate() as WeatherProfile if base != null else WeatherProfile.new()
+	w.fog = true
+	w.fog_density = maxf(w.fog_density, balance.daily_fog_density)
+	return w
+
+
+func announce_daily(twist: int) -> void:
+	if twist >= 0:
+		_hud.show_toast_text(tr("TOAST_DAILY") % tr(TWIST_KEYS[twist]), 3.5)
+
+
 ## Shows a hint the first time something happens on this hike.
 func hint_once(key: String) -> void:
 	if not _hints_shown.has(key):
@@ -58,6 +87,7 @@ func _on_find(id: StringName) -> void:
 	if finds.has(id):
 		return
 	finds.append(id)
+	AudioManager.play_find()
 	var data: FindData = _trail.get_find(id)
 	var name_text: String = tr(data.name_key) if data != null else String(id)
 	var known: bool = GameState.record(_trail.id).get("finds", []).has(String(id))

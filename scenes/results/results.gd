@@ -62,6 +62,9 @@ func _fill() -> void:
 		lines.append(tr("RESULTS_TP_PHOTOS") % int(_result.get("photos", 0)))
 	if int(_result.get("find_tp", 0)) > 0:
 		lines.append(tr("RESULTS_TP_FINDS") % int(_result.get("find_tp", 0)))
+	var daily: Dictionary = _result.get("daily", {})
+	if not daily.is_empty():
+		lines.append(tr("RESULTS_DAILY_DONE") % [int(daily.bonus), int(daily.streak)] if daily.done else tr("RESULTS_DAILY_MISSED"))
 	tp_breakdown.text = "\n".join(lines)
 	tp_total.text = tr("HUD_TP") % 0
 	var date: Dictionary = Time.get_date_dict_from_system()

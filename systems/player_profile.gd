@@ -12,6 +12,9 @@ var look: Dictionary = {}
 var hikes: int = 0
 var hike_seconds: float = 0.0
 var badges: Array[String] = []
+## Daily trail: the last date ("YYYY-MM-DD") it was completed, and the streak.
+var daily_last: String = ""
+var daily_streak: int = 0
 
 
 static func slot_key(slot: CosmeticData.Slot) -> String:
@@ -35,6 +38,17 @@ func wear(item: CosmeticData) -> void:
 	look[slot_key(item.slot)] = String(item.id)
 
 
+func daily_done_on(date: String) -> bool:
+	return daily_last == date
+
+
+## Records today's daily as done; returns the new streak.
+func complete_daily(today: String) -> int:
+	daily_streak = DailyChallenge.next_streak(daily_last, today, daily_streak)
+	daily_last = today
+	return daily_streak
+
+
 func add_hike(seconds: float) -> void:
 	hikes += 1
 	hike_seconds += maxf(seconds, 0.0)
@@ -47,6 +61,8 @@ func to_dict() -> Dictionary:
 		"hikes": hikes,
 		"hike_seconds": hike_seconds,
 		"badges": badges.duplicate(),
+		"daily_last": daily_last,
+		"daily_streak": daily_streak,
 	}
 
 
@@ -60,6 +76,8 @@ func from_dict(data: Dictionary) -> void:
 			look[str(slot)] = str(saved_look[slot])
 	hikes = maxi(int(data.get("hikes", 0)), 0)
 	hike_seconds = maxf(float(data.get("hike_seconds", 0.0)), 0.0)
+	daily_last = str(data.get("daily_last", ""))
+	daily_streak = maxi(int(data.get("daily_streak", 0)), 0)
 	badges = []
 	var saved_badges: Variant = data.get("badges", [])
 	if saved_badges is Array:

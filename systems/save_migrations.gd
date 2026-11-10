@@ -12,6 +12,8 @@ static func step(from_version: int, data: Dictionary) -> Dictionary:
 			return _v1_to_v2(data)
 		2:
 			return _v2_to_v3(data)
+		3:
+			return _v3_to_v4(data)
 	push_error("SaveMigrations: no step from version %d" % from_version)
 	return data
 
@@ -56,4 +58,18 @@ static func _v2_to_v3(data: Dictionary) -> Dictionary:
 			var rec: Variant = trails[id]
 			if rec is Dictionary and not (rec.get("finds") is Array):
 				rec["finds"] = []
+	return out
+
+
+## v4 adds the daily trail streak to the profile.
+static func _v3_to_v4(data: Dictionary) -> Dictionary:
+	var out: Dictionary = data.duplicate(true)
+	var profile: Variant = out.get("profile", {})
+	if not (profile is Dictionary):
+		profile = {}
+	if not profile.has("daily_last"):
+		profile["daily_last"] = ""
+	if not profile.has("daily_streak"):
+		profile["daily_streak"] = 0
+	out["profile"] = profile
 	return out

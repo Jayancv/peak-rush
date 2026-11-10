@@ -24,7 +24,8 @@ var _cache: Dictionary = {}
 ## Sounds are synthesised on a worker thread at boot so nothing is built mid-game
 ## (a 6 s ambience loop costs ~40 ms on a fast phone, several times that on a slow one).
 const PREWARM: Array[StringName] = [&"menu_pad", &"step_0", &"step_1", &"step_2", &"step_3", &"step_4",
-	&"shutter", &"summit", &"ambience_1", &"ambience_2", &"ambience_3", &"ambience_4"]
+	&"shutter", &"summit", &"chime", &"gulp", &"creak", &"thud", &"splash", &"pebble",
+	&"ambience_1", &"ambience_2", &"ambience_3", &"ambience_4"]
 var _prewarm_task: int = -1
 ## Loops asked for before the worker finished them; they start as soon as they arrive.
 var _waiting_music: bool = false
@@ -106,6 +107,31 @@ func play_footstep(surface: TerrainStrip.Surface) -> void:
 
 func play_summit() -> void:
 	play_sfx(_sound(&"summit"), -6.0)
+
+
+## Little sounds for the trail extras. Pitch jitter keeps repeats from sounding canned.
+func play_find() -> void:
+	play_sfx(_sound(&"chime"), -6.0)
+
+
+func play_drink() -> void:
+	play_sfx(_sound(&"gulp"), -8.0)
+
+
+func play_creak() -> void:
+	play_sfx(_sound(&"creak"), -12.0, 1.0 + _rng.randf_range(-0.1, 0.1))
+
+
+func play_thud() -> void:
+	play_sfx(_sound(&"thud"), -4.0)
+
+
+func play_splash() -> void:
+	play_sfx(_sound(&"splash"), -8.0, 1.0 + _rng.randf_range(-0.08, 0.08))
+
+
+func play_pebble() -> void:
+	play_sfx(_sound(&"pebble"), -16.0, 1.0 + _rng.randf_range(-0.15, 0.15))
 
 
 func play_ambience(kind: Ambience) -> void:

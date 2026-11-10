@@ -10,6 +10,8 @@ const PEBBLE_LAYER: int = 1 << 5
 const PEBBLE_COLORS: Array[Color] = [Color("#8C8B84"), Color("#A39C8E"), Color("#6F6E68")]
 const PRINT_SNOW: Color = Color(0.55, 0.64, 0.78, 0.55)
 const PRINT_MUD: Color = Color(0.2, 0.13, 0.08, 0.6)
+## Wind push (px/s) at which plants lean their full gust_px (sway shader).
+const WIND_FOR_FULL_LEAN: float = 60.0
 
 var _hiker: Hiker
 var _balance: Balance
@@ -28,7 +30,17 @@ func setup(hiker: Hiker, balance: Balance) -> void:
 		hiker.visual.stepped.connect(_on_stepped)
 
 
+func _exit_tree() -> void:
+	# Menus have plants too: leave them calm and not bending around a hiker that's gone.
+	RenderingServer.global_shader_parameter_set(&"wind_strength", 0.0)
+	RenderingServer.global_shader_parameter_set(&"hiker_pos", Vector2(-100000, -100000))
+
+
 func _process(delta: float) -> void:
+	if _hiker != null:
+		# Plants and trees lean with the wind and bend around the hiker.
+		RenderingServer.global_shader_parameter_set(&"wind_strength", -_hiker.condition.wind_push / WIND_FOR_FULL_LEAN)
+		RenderingServer.global_shader_parameter_set(&"hiker_pos", _hiker.global_position)
 	for i: int in _prints.size():
 		if not _prints[i].visible:
 			continue
@@ -97,6 +109,7 @@ func _kick_pebble() -> void:
 	pebble.linear_velocity = Vector2(_rng.randf_range(60.0, 150.0) * _hiker.facing, _rng.randf_range(-170.0, -80.0))
 	pebble.angular_velocity = _rng.randf_range(-12.0, 12.0)
 	add_child(pebble)
+	AudioManager.play_pebble()
 	var fade: Tween = pebble.create_tween()
 	fade.tween_interval(_balance.pebble_seconds)
 	fade.tween_property(pebble, "modulate:a", 0.0, 0.4)

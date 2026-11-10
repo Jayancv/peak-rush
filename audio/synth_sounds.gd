@@ -17,6 +17,9 @@ static func make(key: StringName) -> AudioStreamWAV:
 			return _summit()
 		"menu_pad":
 			return _menu_pad()
+	var extra: AudioStreamWAV = SynthSfx.make(String(key))
+	if extra != null:
+		return extra
 	if String(key).begins_with("step_"):
 		return _footstep(int(String(key).trim_prefix("step_")))
 	if String(key).begins_with("ambience_"):

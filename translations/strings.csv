@@ -197,3 +197,40 @@ FIND_MOSS_CAMPION,Moss campion
 FIND_ARCTIC_FOX_AURORA,Arctic fox
 TOAST_BACK_LIMIT,You can walk back as far as the last checkpoint
 TOUCH_HINT_BACK,Back
+FIND_LOST_COMPASS_FACT,Someone took the wrong turn here. Pine needles have covered its glass.
+FIND_LINGONBERRY_FACT,Pink bell flowers in June become tart red berries by autumn.
+FIND_CHANTERELLE_FACT,Golden and smelling faintly of apricots - a forager's favourite.
+FIND_RED_FOX_FACT,Foxes hear a mouse squeak from 40 metres away.
+FIND_BRASS_WHISTLE_FACT,Three blasts mean 'help' on any trail in the world.
+FIND_SEA_THRIFT_FACT,"Grows in salty cracks where little else can, cushioned against the wind."
+FIND_SEA_CAMPION_FACT,Its white flowers puff up like tiny balloons after rain.
+FIND_MOUNTAIN_HARE_FACT,Its coat turns white in winter and brown again in spring.
+FIND_CLOUDBERRY_FACT,The 'gold of the fells' - its berries ripen orange in late summer.
+FIND_BIRCH_BOLETE_FACT,"Only grows near birch trees, sharing nutrients with their roots."
+FIND_LOST_GLOVE_FACT,"A woollen glove, still warm-looking. Someone is missing a hand."
+FIND_ARCTIC_FOX_FELL_FACT,Its thick fur keeps it warm down to minus 50 degrees.
+FIND_OLD_COMPASS_FACT,Scratched initials on the lid. Hikers have used this route for a century.
+FIND_HAREBELL_FACT,Its nodding blue bells keep the pollen dry in the rain.
+FIND_FLY_AGARIC_FACT,"The fairy-tale toadstool. Pretty, and poisonous - look, don't touch."
+FIND_RED_FOX_FJORD_FACT,Fjord foxes hunt along the shore at low tide.
+FIND_LOST_MITTEN_FACT,A red mitten on a cold night. Its twin must be somewhere up the hill.
+FIND_PURPLE_SAXIFRAGE_FACT,One of the first flowers to bloom after the snow - it means 'stone breaker'.
+FIND_MOSS_CAMPION_FACT,A tight pink cushion that can live for over a hundred years.
+FIND_ARCTIC_FOX_AURORA_FACT,It follows polar bears at a safe distance for leftovers.
+JOURNAL_FINDS_TAB,Finds
+JOURNAL_NOT_FOUND,Not found yet - somewhere on %s
+DAILY_TWIST_HEADWIND,Headwind all the way
+DAILY_TWIST_FOG,Thick fog
+DAILY_TWIST_SHORT_DAY,A short day: less daylight
+DAILY_TWIST_FORAGER,Collect 2 finds
+DAILY_TWIST_BEAT_PAR,Beat the par time
+TOAST_DAILY,Daily trail: %s
+RESULTS_DAILY_DONE,Daily trail +%d (streak %d)
+RESULTS_DAILY_MISSED,Daily goal missed - try again today
+DAILY_TITLE,Daily trail
+DAILY_PILL,Daily
+DAILY_START,Start
+DAILY_CLOSE,Not now
+DAILY_DONE,Done for today - come back tomorrow!
+DAILY_STREAK,Streak: %d days
+DAILY_REWARD,Reward: +%d TP

@@ -20,6 +20,13 @@ const INK: Color = Color("#B8432C")
 @export var enlarged_card: Postcard
 
 var _season: SeasonData
+var _finds_grid: GridContainer
+var _finds_scroll: ScrollContainer
+var _page_buttons: Array[Button] = []
+var _showing_finds: bool = false
+## [collected, total] for the season's postcards and finds; the counter shows the open page's.
+var _postcard_count: Vector2i = Vector2i.ZERO
+var _find_count: Vector2i = Vector2i.ZERO
 
 
 func _ready() -> void:
@@ -38,8 +45,57 @@ func _ready() -> void:
 		tab.set_meta("season_id", season.id)
 		tab.pressed.connect(show_season.bind(season))
 		tabs.add_child(tab)
+	_build_finds_page()
 	if not ContentDB.seasons().is_empty():
 		show_season(ContentDB.seasons()[0])
+
+
+## Swaps the postcards heading for a Postcards / Finds switch and adds the finds grid.
+func _build_finds_page() -> void:
+	var heading: Label = $SafeArea/VBox/Pages/Postcards/VBox/Label as Label
+	var page: VBoxContainer = heading.get_parent() as VBoxContainer
+	var switch: HBoxContainer = HBoxContainer.new()
+	switch.add_theme_constant_override("separation", 8)
+	for i: int in 2:
+		var b: Button = Button.new()
+		b.text = tr("JOURNAL_POSTCARDS" if i == 0 else "JOURNAL_FINDS_TAB")
+		b.custom_minimum_size = Vector2(0, 52)
+		b.add_theme_font_size_override("font_size", 22)
+		b.pressed.connect(_show_page.bind(i == 1))
+		switch.add_child(b)
+		_page_buttons.append(b)
+	page.add_child(switch)
+	page.move_child(switch, heading.get_index())
+	heading.visible = false
+	_finds_scroll = ScrollContainer.new()
+	_finds_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	# SHOW_NEVER, not DISABLED: a disabled axis makes the grid's width the scroll's
+	# minimum width, so more columns widened the page, which made room for more columns...
+	_finds_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
+	page.add_child(_finds_scroll)
+	_finds_grid = GridContainer.new()
+	_finds_grid.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_finds_grid.add_theme_constant_override("h_separation", CARD_GAP)
+	_finds_grid.add_theme_constant_override("v_separation", CARD_GAP)
+	_finds_scroll.add_child(_finds_grid)
+	_finds_scroll.resized.connect(_fit_find_columns)
+	_show_page(false)
+
+
+func _show_page(finds: bool) -> void:
+	_showing_finds = finds
+	(postcards.get_parent() as Control).visible = not finds
+	_finds_scroll.visible = finds
+	for i: int in _page_buttons.size():
+		_page_buttons[i].theme_type_variation = &"PrimaryButton" if (i == 1) == finds else &""
+	_update_count()
+	if finds:
+		UiMotion.intro(_finds_grid.get_children(), 0.05)
+
+
+func _update_count() -> void:
+	var c: Vector2i = _find_count if _showing_finds else _postcard_count
+	count_label.text = tr("JOURNAL_COLLECTED") % [c.x, c.y]
 
 
 func show_season(season: SeasonData) -> void:
@@ -60,8 +116,29 @@ func show_season(season: SeasonData) -> void:
 			if q > StarRating.PhotoQuality.NONE:
 				collected += 1
 			postcards.add_child(_make_postcard(trail, vp, q, season, i))
-	count_label.text = tr("JOURNAL_COLLECTED") % [collected, total]
+	_postcard_count = Vector2i(collected, total)
+	_find_count = Vector2i.ZERO
+	for old: Node in _finds_grid.get_children():
+		old.queue_free()
+	for trail: TrailData in season.ordered_trails():
+		var have: Array = GameState.record(trail.id).get("finds", [])
+		for f: FindData in trail.finds:
+			var found: bool = have.has(String(f.id))
+			_find_count += Vector2i(1 if found else 0, 1)
+			_finds_grid.add_child(FindCard.create(f, trail, found))
+	_fit_find_columns()
+	_update_count()
 	UiMotion.intro(stamps.get_children() + postcards.get_children(), 0.08)
+
+
+## Columns that fit beside the vertical scrollbar.
+func _fit_find_columns() -> void:
+	var width: float = _finds_scroll.size.x - _finds_scroll.get_v_scroll_bar().get_combined_minimum_size().x
+	# The card's real width includes the CardPanel padding, so measure one.
+	var card_w: float = FindCard.SIZE.x
+	if _finds_grid.get_child_count() > 0:
+		card_w = maxf(card_w, (_finds_grid.get_child(0) as Control).get_combined_minimum_size().x)
+	_finds_grid.columns = maxi(int((width + CARD_GAP) / (card_w + CARD_GAP)), 1)
 
 
 func _fit_columns(width: float) -> void:

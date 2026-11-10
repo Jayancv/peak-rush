@@ -5,7 +5,7 @@ extends Node
 ## - writes go to a temp file first, so a crash mid-write can't destroy the save,
 ## - a file that won't parse is moved aside (kept for support) and the game starts fresh.
 
-const SAVE_VERSION: int = 3
+const SAVE_VERSION: int = 4
 const SAVE_PATH: String = "user://save.json"
 ## Tests must never touch a real player's save.
 const TEST_SAVE_PATH: String = "user://save_test.json"

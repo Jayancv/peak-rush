@@ -84,7 +84,7 @@ func test_migrates_v1_save_to_v2_with_an_empty_profile() -> void:
 func test_migrates_v2_save_to_v3_with_empty_finds() -> void:
 	var v2: Dictionary = {"save_version": 2, "tp": 7, "trails": {"t01_forest_lake": {"stars": 3, "photos": {}}}, "profile": {"name": "Aino"}}
 	var out: Dictionary = SaveService.migrate(v2)
-	assert_eq(int(out.save_version), 3)
+	assert_eq(int(out.save_version), SaveService.SAVE_VERSION)
 	assert_eq((out.trails.t01_forest_lake.finds as Array).size(), 0)
 	assert_eq(int(out.trails.t01_forest_lake.stars), 3, "progress is untouched")
 	assert_eq(str(out.profile.name), "Aino")
@@ -107,3 +107,12 @@ func test_full_game_state_survives_save_and_load() -> void:
 	assert_eq(GameState.tp, 321)
 	assert_eq(GameState.best_time(&"t01_forest_lake"), 77.5)
 	GameState.from_dict(saved)
+
+
+func test_migrates_v3_save_to_v4_with_a_fresh_daily_streak() -> void:
+	var v3: Dictionary = {"save_version": 3, "tp": 9, "profile": {"name": "Aino", "hikes": 4}}
+	var out: Dictionary = SaveService.migrate(v3)
+	assert_eq(int(out.save_version), 4)
+	assert_eq(str(out.profile.daily_last), "")
+	assert_eq(int(out.profile.daily_streak), 0)
+	assert_eq(int(out.profile.hikes), 4, "the rest of the profile is untouched")

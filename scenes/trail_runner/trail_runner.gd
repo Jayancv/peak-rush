@@ -18,9 +18,6 @@ extends Node2D
 ## a safety net in case a gap has no KillZone.
 const FALL_MARGIN: float = 200.0
 
-## Wind push (px/s) at which plants lean their full gust_px.
-const WIND_FOR_FULL_LEAN: float = 60.0
-
 ## Pause between touching the cairn and the results screen, to let the moment land.
 const SUMMIT_PAUSE: float = 1.2
 
@@ -35,6 +32,9 @@ var finished: bool = false
 var photos: Dictionary = {}
 
 var _balance: Balance
+## Today's daily twist on this hike (DailyChallenge.Twist), or -1.
+var _twist: int = -1
+var _weather_profile: WeatherProfile
 var _backdrop: Backdrop
 var _respawn_point: Vector2
 var _fall_limit_y: float = INF
@@ -51,11 +51,15 @@ func _ready() -> void:
 		# Started directly (F6 in the editor, tests): fall back to the first trail.
 		trail = ContentDB.first_trail()
 		GameState.current_trail_id = trail.id
-	daylight = Daylight.new(_balance, trail.daylight_seconds, trail.night)
+	# A daily trail can change the weather, the wind or the length of the day.
+	_twist = HikeTracker.daily_twist(trail)
+	_weather_profile = HikeTracker.twisted_weather(trail.weather, _twist, _balance)
+	var day_mult: float = _balance.daily_short_day_mult if _twist == DailyChallenge.Twist.SHORT_DAY else 1.0
+	daylight = Daylight.new(_balance, trail.daylight_seconds * day_mult, trail.night)
 	daylight.phase_changed.connect(_on_phase_changed)
-	weather = WeatherEffects.new(trail.weather, hash(trail.id))
+	weather = WeatherEffects.new(_weather_profile, hash(trail.id))
 	weather.gust_started.connect(_on_gust_started)
-	weather_fx.apply(trail.weather)
+	weather_fx.apply(_weather_profile)
 	AudioManager.stop_music()
 	AudioManager.play_ambience(trail.ambience_kind())
 	hud.pause_pressed.connect(pause)
@@ -81,7 +85,7 @@ func _load_trail() -> void:
 	for node: Node in get_tree().get_nodes_in_group(Backdrop.GROUP):
 		if level.is_ancestor_of(node):
 			_backdrop = node as Backdrop
-	weather_fx.add_world_fog(trail.weather, level, _backdrop, camera)
+	weather_fx.add_world_fog(_weather_profile, level, _backdrop, camera)
 	# Between the level and the hiker: footprints lie on the path, pebbles pass behind the boots.
 	var fx: TrailFx = TrailFx.new()
 	fx.name = "TrailFx"
@@ -109,6 +113,8 @@ func _load_trail() -> void:
 	tracker.name = "HikeTracker"
 	add_child(tracker)
 	tracker.setup(hiker, hud, trail, level, _balance)
+	tracker.announce_daily(_twist)
+	pause_menu.map.scan(level)
 	var bounds: Rect2 = TerrainStrip.bounds_under(level)
 	_fall_limit_y = bounds.end.y + FALL_MARGIN
 	camera.target = hiker
@@ -128,22 +134,14 @@ func _load_trail() -> void:
 				(node as TutorialTrigger).triggered.connect(func(key: String, secs: float) -> void: hud.show_toast(key, secs))
 
 
-func _exit_tree() -> void:
-	# Menus have plants too: leave them calm and not bending around a hiker that's gone.
-	RenderingServer.global_shader_parameter_set(&"wind_strength", 0.0)
-	RenderingServer.global_shader_parameter_set(&"hiker_pos", Vector2(-100000, -100000))
-
-
 func _process(delta: float) -> void:
 	if finished or hiker == null:
 		return
 	daylight.advance(delta)
 	weather.advance(delta)
-	hiker.condition.wind_push = hiker.condition.exposed_wind(weather.wind_push())
+	var headwind: float = _balance.daily_headwind if _twist == DailyChallenge.Twist.HEADWIND else 0.0
+	hiker.condition.wind_push = hiker.condition.exposed_wind(weather.wind_push()) - headwind
 	weather_fx.set_gusting(weather.is_gusting() or hiker.condition.is_exposed())
-	# Plants and trees (sway shader) lean with the wind and bend around the hiker.
-	RenderingServer.global_shader_parameter_set(&"wind_strength", -hiker.condition.wind_push / WIND_FOR_FULL_LEAN)
-	RenderingServer.global_shader_parameter_set(&"hiker_pos", hiker.global_position)
 	_apply_daylight()
 	if hiker.global_position.y > _fall_limit_y:
 		_on_hiker_fell()
@@ -154,6 +152,9 @@ func pause() -> void:
 		return
 	touch_controls.release_all()
 	get_tree().paused = true
+	var found: Array = (GameState.record(trail.id).get("finds", []) as Array).duplicate()
+	found.append_array(tracker.finds)
+	pause_menu.map.show_progress(hiker.global_position, hiker.back_limit_x, found)
 	pause_menu.open_pause(tr(trail.name_key))
 
 

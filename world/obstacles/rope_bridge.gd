@@ -114,6 +114,7 @@ func _physics_process(delta: float) -> void:
 		var on_floor: bool = _hiker.is_on_floor()
 		if on_floor and not _was_on_floor:
 			_depth_vel += landing_kick
+			AudioManager.play_creak()
 		_was_on_floor = on_floor
 	else:
 		_was_on_floor = false

@@ -54,6 +54,7 @@ func build() -> void:
 
 func _hiker_entered(hiker: Hiker) -> void:
 	hiker.condition.enter_spring()
+	AudioManager.play_drink()
 	hiker_arrived.emit()
 
 

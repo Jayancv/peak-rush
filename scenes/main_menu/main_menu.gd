@@ -33,11 +33,28 @@ func _ready() -> void:
 	_setup_continue()
 	if not DisplayServer.is_touchscreen_available():
 		(continue_button if continue_button.visible else play_button).grab_focus()
+	_add_daily_button()
 	_start_panning()
 	UiMotion.intro([$SafeArea/VBox/Card, banner, continue_button, play_button, journal_button, gear_button, settings_button, profile_button], 0.1)
 	if OS.is_debug_build() and not _startup_logged:
 		_startup_logged = true
 		print("PERF startup_to_menu_ms=%d" % Time.get_ticks_msec())
+
+
+## "Daily" next to the profile button: highlighted until today's daily is done.
+func _add_daily_button() -> void:
+	var d: Dictionary = GameState.daily_today()
+	if d.is_empty():
+		return
+	var button: Button = Button.new()
+	var streak: int = GameState.profile.daily_streak
+	button.text = tr("DAILY_PILL") + ("  ·  %d" % streak if streak > 0 else "")
+	button.custom_minimum_size = Vector2(0, 80)
+	button.add_theme_font_size_override("font_size", 26)
+	button.theme_type_variation = &"" if d.done else &"PrimaryButton"
+	button.pressed.connect(func() -> void: DailyCard.open(self))
+	profile_button.get_parent().add_child(button)
+	UiMotion.intro([button], 0.5)
 
 
 func _setup_banner() -> void:
