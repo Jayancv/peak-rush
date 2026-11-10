@@ -73,7 +73,7 @@ func _build_look() -> void:
 			var swatch: SwatchButton = SwatchButton.new()
 			swatch.item = item
 			swatch.locked = not PlayerProfile.is_unlocked(item, stars)
-			swatch.pressed.connect(_on_swatch.bind(swatch))
+			ScrollTap.connect_tap(swatch, _on_swatch.bind(swatch))
 			swatches.add_child(swatch)
 			_swatches.append(swatch)
 		row.add_child(swatches)

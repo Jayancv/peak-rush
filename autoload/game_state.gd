@@ -1,8 +1,7 @@
 extends Node
 ## The player's progress and settings while the game runs. SaveService turns this
 ## into JSON and back; nothing here touches files.
-## Trail records are keyed by trail id (String, since that's what JSON gives back):
-##   {"stars": bitmask, "best_time": seconds or 0, "photos": {viewpoint_id: quality}, "completions": n}
+## Trail records are keyed by trail id (String, since that's what JSON gives back); see TrailRecord.
 
 signal settings_changed
 signal progress_changed
@@ -51,7 +50,7 @@ func set_setting(key: String, value: Variant) -> void:
 # --- Progress queries ---
 
 func record(trail_id: StringName) -> Dictionary:
-	return trails.get(String(trail_id), {"stars": 0, "best_time": 0.0, "photos": {}, "completions": 0, "finds": []})
+	return trails.get(String(trail_id), TrailRecord.empty())
 
 
 func stars_mask(trail_id: StringName) -> int:
@@ -231,19 +230,7 @@ func record_result(result: TrailResult) -> Dictionary:
 	var new_finds: int = 0
 	var find_tp: int = 0
 	if result.finished:
-		rec.stars = int(rec.stars) | int(award.stars_mask)
-		if previous_best <= 0.0 or result.time_seconds < previous_best:
-			rec.best_time = result.time_seconds
-		for vp: Variant in result.photos:
-			var vp_key: String = String(vp)
-			rec.photos[vp_key] = maxi(int(rec.photos.get(vp_key, 0)), int(result.photos[vp]))
-		rec.completions = int(rec.completions) + 1
-		var known: Array = rec.get("finds", [])
-		for f: StringName in result.finds:
-			if not known.has(String(f)):
-				known.append(String(f))
-				new_finds += 1
-		rec["finds"] = known
+		new_finds = TrailRecord.merge_finished(rec, result, int(award.stars_mask))
 		trails[key] = rec
 		find_tp = new_finds * ContentDB.balance.tp_per_new_find
 		tp += int(award.total) + find_tp
@@ -296,28 +283,13 @@ func from_dict(data: Dictionary) -> void:
 	var saved_trails: Variant = data.get("trails", {})
 	if saved_trails is Dictionary:
 		for id: Variant in saved_trails:
-			var r: Variant = saved_trails[id]
-			if r is Dictionary:
-				trails[String(id)] = {
-					"stars": int(r.get("stars", 0)) & StarRating.ALL_STARS,
-					"best_time": float(r.get("best_time", 0.0)),
-					"photos": r.get("photos", {}) if r.get("photos", {}) is Dictionary else {},
-					"completions": int(r.get("completions", 0)),
-					"finds": _string_list(r.get("finds", [])),
-				}
-	owned_gear = _string_list(data.get("owned_gear", []))
-	equipped_gear = _string_list(data.get("equipped_gear", []))
+			if saved_trails[id] is Dictionary:
+				trails[String(id)] = TrailRecord.clean(saved_trails[id])
+	owned_gear = TrailRecord.string_list(data.get("owned_gear", []))
+	equipped_gear = TrailRecord.string_list(data.get("equipped_gear", []))
 	seen_version = str(data.get("seen_version", ""))
 	var saved_profile: Variant = data.get("profile", {})
 	if saved_profile is Dictionary:
 		profile.from_dict(saved_profile)
 	# Saves from before badges existed get what they've already earned, quietly.
 	refresh_badges()
-
-
-static func _string_list(value: Variant) -> Array[String]:
-	var out: Array[String] = []
-	if value is Array:
-		for item: Variant in value:
-			out.append(str(item))
-	return out

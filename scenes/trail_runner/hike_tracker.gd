@@ -2,7 +2,7 @@ class_name HikeTracker
 extends Node
 ## Keeps track of the extras on one hike so the trail runner doesn't have to: finds
 ## collected (and which animals turned up today), springs, the water gauge, and the
-## one-time hints (exposed ridge, sliding, thirst).
+## one-time hints (benches, gusts, exposed ridge, sliding, thirst, tutorial triggers).
 
 var finds: Array[StringName] = []
 
@@ -31,6 +31,10 @@ func setup(hiker: Hiker, hud: Hud, trail: TrailData, level: Node, balance: Balan
 		if new_state == Hiker.State.SLIDE:
 			hint_once("TOAST_SLIDE"))
 	hiker.back_blocked.connect(hint_once.bind("TOAST_BACK_LIMIT"))
+	# Benches are explained the first time; after that the ×2 badge says it.
+	hiker.regen_changed.connect(func(mode: HikerCondition.Regen) -> void:
+		if mode == HikerCondition.Regen.BENCH:
+			hint_once("TOAST_BENCH"))
 	hud.set_water(1.0, 1.0, balance.water_low_fraction)
 	for node: Node in get_tree().get_nodes_in_group(WindZone.GROUP):
 		if level.is_ancestor_of(node):
@@ -47,7 +51,16 @@ func setup(hiker: Hiker, hud: Hud, trail: TrailData, level: Node, balance: Balan
 			# Animals only turn up on some hikes.
 			find.set_present(_rng.randf() < data.appear_chance)
 		find.collected.connect(_on_find)
+	if trail.tutorial and not GameState.is_completed(trail.id):
+		for node: Node in get_tree().get_nodes_in_group(TutorialTrigger.GROUP):
+			if level.is_ancestor_of(node):
+				(node as TutorialTrigger).triggered.connect(func(key: String, secs: float) -> void: hud.show_toast(key, secs))
 	_update_hud()
+
+
+## Wind is explained on the first gust; afterwards the streaks and the push say it.
+func watch_weather(weather: WeatherEffects) -> void:
+	weather.gust_started.connect(hint_once.bind("TOAST_GUST"))
 
 
 ## Today's twist if this hike is the daily trail (and it isn't done yet), else -1.

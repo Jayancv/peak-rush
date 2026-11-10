@@ -85,7 +85,18 @@ static func read_from(path: String) -> Dictionary:
 	if not parsed is Dictionary:
 		quarantine(path)
 		return {}
+	if int((parsed as Dictionary).get("save_version", 0)) > SAVE_VERSION:
+		keep_newer_copy(path, int(parsed.save_version))
 	return migrate(parsed)
+
+
+## A save from a newer app (the player went back a version) would lose its newer
+## fields on the next autosave, so keep the original beside it, once per version.
+static func keep_newer_copy(path: String, version: int) -> String:
+	var copy: String = "%s.v%d-backup.json" % [path.get_basename(), version]
+	if not FileAccess.file_exists(copy):
+		DirAccess.copy_absolute(path, copy)
+	return copy
 
 
 static func migrate(data: Dictionary) -> Dictionary:

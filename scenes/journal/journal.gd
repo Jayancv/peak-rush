@@ -187,7 +187,7 @@ func _make_postcard(trail: TrailData, vp: ViewpointData, q: int, season: SeasonD
 	card.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	card.set_anchors_preset(Control.PRESET_FULL_RECT)
 	button.add_child(card)
-	button.pressed.connect(_enlarge.bind(trail, vp, q, season, i))
+	ScrollTap.connect_tap(button, _enlarge.bind(trail, vp, q, season, i))
 	return button
 
 

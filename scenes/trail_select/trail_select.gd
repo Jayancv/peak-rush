@@ -48,7 +48,7 @@ func show_season(season: SeasonData) -> void:
 		var hint: String = tr("SELECT_LOCKED") % tr(previous.name_key) if previous != null else ""
 		var unlocked: bool = GameState.is_unlocked(trail)
 		card.setup(i + 1, trail, GameState.record(trail.id), unlocked, season.theme_color, hint)
-		card.pressed.connect(_start.bind(trail))
+		ScrollTap.connect_tap(card, _start.bind(trail))
 		# Scroll to the first open trail not finished yet (where the player left off).
 		if focus_card == null and unlocked and not GameState.is_completed(trail.id):
 			focus_card = card

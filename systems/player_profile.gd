@@ -39,7 +39,7 @@ func wear(item: CosmeticData) -> void:
 
 
 func daily_done_on(date: String) -> bool:
-	return daily_last == date
+	return DailyChallenge.is_done(daily_last, date)
 
 
 ## Records today's daily as done; returns the new streak.

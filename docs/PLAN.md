@@ -151,20 +151,11 @@ Make one trail feel like the finished game before building more.
   - [ ] Repeat on a low-end phone
 - [x] Check the layout at 16:9, 19.5:9, 20:9 and 4:3 (iPad), with notches and safe areas
 - [x] App icon (including the Android adaptive icon) and a splash screen
-- [ ] **Android release:**
-  - [ ] Create a release keystore, **back it up somewhere safe**, and keep it out of git
-  - [ ] Turn on Gradle build and export an **AAB**
-  - [ ] Set the target SDK to the level Google Play currently requires
-  - [ ] Google Play Console: app listing, content rating, data-safety form, **internal testing** track
-- [ ] **iOS release** (needs a Mac with Xcode, or a cloud Mac build service):
-  - [ ] Join the Apple Developer Program
-  - [ ] Export the Xcode project from Godot, sign it and archive it
-  - [ ] App Store Connect: listing, privacy labels, **TestFlight**
 - [x] A simple privacy policy (`docs/PRIVACY.md`, v1 collects no data); host it at a public URL when submitting
-- [ ] Store screenshots and a short trailer clip
-- [ ] Version **1.0.0 = Season 1**
+- Android release steps moved to **M7.9**, iOS to **M8** (launch plan decided below: Google Play first, free with ads,
+  polish the current code-drawn style, no fixed date — quality first).
 
-**Done when:** both stores have a build in internal testing or TestFlight, then submit for review.
+**Done when:** the remaining profiling item is done (the release itself is M7.9).
 
 ---
 
@@ -182,13 +173,94 @@ Make one trail feel like the finished game before building more.
 
 ---
 
+## Launch plan (Google Play first)
+Decided with the user: **Android first** (iOS after launch, M8), **free with ads**, keep and polish the code-drawn
+art and synth audio, **no fixed date**. Order: M7.6 → M7.7 → M7.8 → M7.9. Start the Play Console account and the
+closed test early: **new personal developer accounts must run a closed test with at least 12 testers for 14 days in a
+row before production access**, so the testers' fortnight overlaps with the last polish work.
+
+## M7.6 — Stabilisation
+Make what exists solid before adding more. Most items are checks plus fixes.
+- [x] **Regression bot in the repo:** move the scratch play-bot into `tools/bot/`; one command plays all five trails
+      headless and fails on a fall-through, a stuck hiker, a missed finish or a time over par
+- [x] **CI:** a GitHub Actions workflow runs GUT + the content validator (+ the bot) on every push
+- [x] **Split the long scripts** (`TrailRecord` out of GameState, hints into HikeTracker, facing into HikerInput; hiker.gd 306)
+- [x] **Save safety:** tests for a killed app mid-save, an unreadable save, a save from a *newer* app version
+      (must not be wiped), and the clock moved backwards/forwards (daily streak can't be farmed or lost unfairly)
+- [ ] **App lifecycle on the phone** (code checked: back on every screen, Daily card back fixed; phone run = `docs/PHONE_CHECKLIST.md`): incoming call, notification shade, app switch, screen lock, long background
+      (daylight and timers mustn't jump), audio resumes, Android back on every screen goes somewhere sensible
+- [x] **Touch audit** (`ScrollTap`, tests/ui/test_touch_audit.gd): every scroll area scrolls by swiping (Postcards page still catches swipes on its buttons —
+      use the gear screen's tap guard), no button too small (≥ 48 dp), no accidental double taps
+- [x] **Layout audit:** 4:3 HUD crowding (unchecked since the water/finds pills), notches, 20:9, large system font
+- [ ] **Release-build check** (code checked: debug output is debug-only; the signed release run waits for the M7.9 keystore): export a *release* build and play the season: no debug-only output (PerfProbe off),
+      no `print` spam, no first-use shader hitches (warm up materials during the splash if needed)
+- [ ] **Low-end phone:** a 2–3 GB RAM Android phone (borrowed, or Play's pre-launch report / Firebase Test Lab):
+      60 fps target, 30 fps floor, startup < 5 s, no out-of-memory; a 30-minute session for heat and battery
+- [ ] **Playtest with 5–10 people** (open since M5): notes in `docs/PLAYTEST_NOTES.md`, then a balance pass
+- [ ] Fix everything above that's red; full test suite + bot green
+
+**Done when:** the bot completes every trail in a release build, the phone survives the lifecycle checklist, and
+playtesters finish Season 1 without hitting a bug.
+
+## M7.7 — Launch features
+Small things players and the store expect. Keep the list short; bigger ideas wait for after launch.
+- [ ] **New-mechanic hints:** first-time hints for walking back, finds (stand still for animals), water and forks
+- [ ] **About screen** (from Settings): version number, credits, privacy policy link (required once ads are in),
+      "Reset progress" with a confirm step
+- [ ] **Season 1 finale:** a short ending moment after the fifth summit (journal page or postcard) so the season feels finished
+- [ ] **Accessibility:** "reduce motion" toggle (UiMotion, screen shake, sway), check colour-only signals (map, gauges)
+- [ ] **Audio pass:** smooth out the synth music/ambience loops, balance volumes between sounds
+- [ ] *(Should)* In-app review prompt after the third summit (Google Play In-App Review plugin)
+- [ ] *(Later, after launch)* Play Games achievements and cloud save, a ghost of your best run, more languages
+
+**Done when:** a new player can learn every mechanic without help and finish the season to a proper ending.
+
+## M7.8 — Ads (free with ads)
+Ads must never interrupt a hike. Rewarded ads are opt-in; interstitials are rare.
+- [ ] **Decide (user):** AdMob account; target audience 13+ (simplest) or also under-13s (Families policy:
+      certified ad SDKs only, child-directed settings)
+- [ ] **Decide (user):** where the ad code lives — `AdService` would be a sixth autoload (ask first), or a plain
+      class owned by an existing autoload
+- [ ] AdMob through a Godot Android plugin (v2), with a desktop/GUT stub so the editor and tests never load ads
+- [ ] **Consent:** Google UMP consent form (EEA/UK) on first launch + "Privacy choices" in Settings
+- [ ] **Rewarded (opt-in):** "Watch an ad: +50% TP" on the results screen; double the daily-trail reward
+- [ ] **Interstitial (rare):** only between hikes, at most one every 3 hikes, never in the first session or the tutorial trail
+- [ ] Ad rules (cooldowns, caps, first-session grace) as a pure `AdPolicy` system with tests; numbers in `balance.tres`
+- [ ] Game works fully offline and with ads failing to load (rewards simply aren't offered)
+- [ ] Privacy policy updated (advertising ID, AdMob), `AD_ID` permission, data-safety answers updated
+- [ ] *(Later)* "Remove ads" in-app purchase (Google Play Billing plugin)
+
+**Done when:** test ads show on the phone at the right moments only, consent works, and tests cover the ad rules.
+
+## M7.9 — Google Play launch
+- [ ] **Play Console developer account** (user; one-time fee, identity verification can take days — start early)
+- [ ] Release keystore: create it, **back it up in two safe places**, never commit it or its passwords
+- [ ] Gradle build + **AAB** export; target SDK at the level Google Play currently requires; 16 KB page-size support
+- [ ] Version **1.0.0** (versionCode 1) = Season 1
+- [ ] Privacy policy hosted at a public URL (e.g. GitHub Pages)
+- [ ] Store listing: name, short description (80 chars), full description, 512 px icon, 1024×500 feature graphic,
+      4–8 phone screenshots (taken with a screenshot script), optional trailer
+- [ ] Content rating questionnaire (mentions ads), target audience, data-safety form, ads declaration
+- [ ] **Internal testing** track: install from the Play Store on the Pixel, check the pre-launch report
+- [ ] **Closed test: ≥ 12 testers for 14 continuous days**; fix what they report; answer the production-access questions
+- [ ] **Production** release (staged rollout, e.g. 20% → 100%); watch Android vitals (crashes, ANRs) for the first week
+
+**Done when:** Peak Rush 1.0.0 is live on Google Play.
+
+---
+
 ## M8 — Live seasons pipeline (after launch)
 - [ ] Turn Appendix A below into `docs/ADDING_CONTENT.md`
 - [ ] A "What's new" banner on the main menu (compares `season.release_version` with the last version the player has seen)
 - [ ] Version scheme: `1.x` = new trails or fixes within a season, `2.0` = Season 2, and so on
 - [ ] A save migration test for every release
 - [ ] **Season 2 – Tea Country** (see GAME_DESIGN §7)
-- [ ] Decide on monetisation (paid vs free with season in-app purchases). If IAP, use Godot's official Google Play Billing plugin and an iOS StoreKit plugin.
+- [x] Decide on monetisation: **free with ads** (M7.8); a "Remove ads" purchase can follow (Google Play Billing / StoreKit plugins)
+- [ ] **iOS release** (needs a Mac with Xcode, or a cloud Mac build service):
+  - [ ] Join the Apple Developer Program
+  - [ ] AdMob + consent on iOS (App Tracking Transparency prompt)
+  - [ ] Export the Xcode project from Godot, sign it and archive it
+  - [ ] App Store Connect: listing, privacy labels, **TestFlight**, then review
 - [ ] *(Advanced, optional)* Download new seasons as `.pck` resource packs (`ProjectSettings.load_resource_pack`) without an app update
 
 ---

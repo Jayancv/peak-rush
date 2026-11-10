@@ -103,5 +103,13 @@ func _start_panning() -> void:
 
 func _notification(what: int) -> void:
 	# Android back on the title screen leaves the app, as players expect.
-	if what == NOTIFICATION_WM_GO_BACK_REQUEST:
+	# Every node hears back; an open Daily card closes itself instead of the app quitting.
+	if what == NOTIFICATION_WM_GO_BACK_REQUEST and not _popup_open():
 		get_tree().quit()
+
+
+func _popup_open() -> bool:
+	for child: Node in get_children():
+		if child is DailyCard and not child.is_queued_for_deletion():
+			return true
+	return false

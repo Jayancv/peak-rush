@@ -39,9 +39,7 @@ var _backdrop: Backdrop
 var _respawn_point: Vector2
 var _fall_limit_y: float = INF
 var _respawning: bool = false
-var _bench_explained: bool = false
 var _near_viewpoint: Viewpoint
-var _gust_explained: bool = false
 
 
 func _ready() -> void:
@@ -58,7 +56,6 @@ func _ready() -> void:
 	daylight = Daylight.new(_balance, trail.daylight_seconds * day_mult, trail.night)
 	daylight.phase_changed.connect(_on_phase_changed)
 	weather = WeatherEffects.new(_weather_profile, hash(trail.id))
-	weather.gust_started.connect(_on_gust_started)
 	weather_fx.apply(_weather_profile)
 	AudioManager.stop_music()
 	AudioManager.play_ambience(trail.ambience_kind())
@@ -108,12 +105,13 @@ func _load_trail() -> void:
 	hiker.fell.connect(_on_hiker_fell)
 	hiker.checkpoint_reached.connect(_on_checkpoint_reached)
 	hiker.reached_finish.connect(_on_reached_finish)
-	hiker.regen_changed.connect(_on_regen_changed)
+	hiker.regen_changed.connect(hud.set_regen)
 	tracker = HikeTracker.new()
 	tracker.name = "HikeTracker"
 	add_child(tracker)
 	tracker.setup(hiker, hud, trail, level, _balance)
 	tracker.announce_daily(_twist)
+	tracker.watch_weather(weather)
 	pause_menu.map.scan(level)
 	var bounds: Rect2 = TerrainStrip.bounds_under(level)
 	_fall_limit_y = bounds.end.y + FALL_MARGIN
@@ -128,10 +126,6 @@ func _load_trail() -> void:
 			vp.hiker_entered.connect(_on_viewpoint_entered)
 			vp.hiker_left.connect(_on_viewpoint_left)
 	_update_photo_count()
-	if trail.tutorial and not GameState.is_completed(trail.id):
-		for node: Node in get_tree().get_nodes_in_group(TutorialTrigger.GROUP):
-			if level.is_ancestor_of(node):
-				(node as TutorialTrigger).triggered.connect(func(key: String, secs: float) -> void: hud.show_toast(key, secs))
 
 
 func _process(delta: float) -> void:
@@ -218,14 +212,6 @@ func _on_stamina_changed(value: float, max_value: float) -> void:
 	hud.set_stamina(value, max_value, hiker.condition.stamina.recovering)
 
 
-func _on_regen_changed(mode: HikerCondition.Regen) -> void:
-	hud.set_regen(mode)
-	# Explain benches the first time one is used; after that the ×2 badge says it.
-	if mode == HikerCondition.Regen.BENCH and not _bench_explained:
-		_bench_explained = true
-		hud.show_toast("TOAST_BENCH")
-
-
 func _on_checkpoint_reached(respawn_position: Vector2) -> void:
 	_respawn_point = respawn_position
 	hiker.back_limit_x = maxf(hiker.back_limit_x, respawn_position.x)
@@ -266,13 +252,6 @@ func _on_reached_finish() -> void:
 func _on_stumbled() -> void:
 	_vibrate(_balance.stumble_vibrate_ms)
 	camera.shake(_balance.shake_stumble_px)
-
-
-func _on_gust_started() -> void:
-	# Explain wind once; afterwards the streaks and the push say it.
-	if not _gust_explained:
-		_gust_explained = true
-		hud.show_toast("TOAST_GUST")
 
 
 func _on_viewpoint_entered(vp: Viewpoint) -> void:

@@ -1,9 +1,13 @@
 class_name HikerInput
 extends RefCounted
-## Reads the walk/jump actions for the hiker and keeps the jump buffer (a jump tapped
-## just before it's possible still fires).
+## Reads the walk/jump actions for the hiker, keeps the jump buffer (a jump tapped
+## just before it's possible still fires) and picks which way to face.
 
 var jump_buffer_left: float = 0.0
+## Set by choose_facing() the moment walking back first hits the limit (once per push).
+var back_just_blocked: bool = false
+
+var _back_was_blocked: bool = false
 
 var _jump_was_down: bool = false
 ## Physics ticks since spawn; input is ignored on the first one.
@@ -16,6 +20,22 @@ func wants_walk(allowed: bool) -> bool:
 
 func wants_back(allowed: bool) -> bool:
 	return allowed and Input.is_action_pressed("walk_back")
+
+
+## Forward wins if both directions are held; back only while `back_ok` (not at the
+## last checkpoint yet). Returns the new facing (+1 / -1).
+func choose_facing(allowed: bool, current: float, back_ok: bool) -> float:
+	back_just_blocked = false
+	if wants_walk(allowed):
+		return 1.0
+	if wants_back(allowed):
+		if back_ok:
+			_back_was_blocked = false
+			return -1.0
+		if not _back_was_blocked:
+			_back_was_blocked = true
+			back_just_blocked = true
+	return current
 
 
 func update(delta: float, allowed: bool, buffer_seconds: float) -> void:

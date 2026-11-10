@@ -9,7 +9,7 @@ func after_each() -> void:
 		if FileAccess.file_exists(f):
 			DirAccess.remove_absolute(f)
 	for f: String in DirAccess.get_files_at("user://"):
-		if f.begins_with("test_save_service.corrupt-"):
+		if f.begins_with("test_save_service.corrupt-") or f.begins_with("test_save_service.v"):
 			DirAccess.remove_absolute("user://" + f)
 
 
@@ -116,3 +116,54 @@ func test_migrates_v3_save_to_v4_with_a_fresh_daily_streak() -> void:
 	assert_eq(str(out.profile.daily_last), "")
 	assert_eq(int(out.profile.daily_streak), 0)
 	assert_eq(int(out.profile.hikes), 4, "the rest of the profile is untouched")
+
+
+func _write_raw(text: String) -> void:
+	var f: FileAccess = FileAccess.open(PATH, FileAccess.WRITE)
+	f.store_string(text)
+	f.close()
+
+
+func test_newer_save_file_is_copied_aside_before_this_app_touches_it() -> void:
+	# The player went back an app version: the newer fields would vanish on the next autosave.
+	var newer: int = SaveService.SAVE_VERSION + 1
+	_write_raw(JSON.stringify({"save_version": newer, "tp": 9, "future_field": {"a": 1}}))
+	assert_eq(int(SaveService.read_from(PATH).tp), 9)
+	assert_push_warning("this app knows")
+	var copy: String = "user://test_save_service.v%d-backup.json" % newer
+	assert_true(FileAccess.file_exists(copy), "the original newer save is kept")
+	var kept: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(copy))
+	assert_true(kept.has("future_field"))
+	SaveService.write_to(PATH, {"tp": 10})
+	assert_true(JSON.parse_string(FileAccess.get_file_as_string(copy)).has("future_field"), "later saves don't overwrite the copy")
+
+
+func test_killed_mid_write_keeps_the_old_save() -> void:
+	# The app died while writing: a half-written .tmp is all that's new.
+	SaveService.write_to(PATH, {"tp": 5})
+	var f: FileAccess = FileAccess.open(PATH + ".tmp", FileAccess.WRITE)
+	f.store_string("{\"tp\": 99, \"tra")
+	f.close()
+	assert_eq(int(SaveService.read_from(PATH).tp), 5, "the half-written file is ignored")
+	assert_true(SaveService.write_to(PATH, {"tp": 6}), "and the next save still works")
+	assert_eq(int(SaveService.read_from(PATH).tp), 6)
+
+
+func test_empty_save_file_is_a_fresh_start_and_kept() -> void:
+	# e.g. the phone ran out of storage.
+	_write_raw("")
+	assert_eq(SaveService.read_from(PATH), {})
+	assert_push_warning("unreadable")
+	assert_false(FileAccess.file_exists(PATH))
+
+
+func test_damaged_fields_lose_only_that_field() -> void:
+	var saved: Dictionary = GameState.to_dict()
+	GameState.from_dict({"tp": 50, "trails": {"t01_forest_lake": {"stars": "lots", "best_time": 80.0, "photos": [1, 2], "finds": "oops"}}, "owned_gear": 7, "profile": "?"})
+	var rec: Dictionary = GameState.record(&"t01_forest_lake")
+	assert_eq(GameState.tp, 50)
+	assert_eq(float(rec.best_time), 80.0)
+	assert_eq(rec.photos, {}, "bad photos fall back to none")
+	assert_eq(rec.finds, [] as Array[String])
+	assert_eq(GameState.owned_gear, [] as Array[String])
+	GameState.from_dict(saved)

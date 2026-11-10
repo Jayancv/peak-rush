@@ -1,0 +1,44 @@
+# Runs the unit tests (incl. the content validator) and the trail-playing bot on every push and pull request.
+name: Checks
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GODOT_VERSION: 4.7.2
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache Godot
+        id: cache-godot
+        uses: actions/cache@v4
+        with:
+          path: ~/godot
+          key: godot-${{ env.GODOT_VERSION }}-linux
+
+      - name: Download Godot
+        if: steps.cache-godot.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ~/godot
+          curl -sSL -o /tmp/godot.zip "https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          unzip -q /tmp/godot.zip -d ~/godot
+          mv ~/godot/Godot_v${GODOT_VERSION}-stable_linux.x86_64 ~/godot/godot
+
+      - name: Import project
+        # The first import builds the class cache the tests need; a non-zero exit here is not fatal.
+        run: ~/godot/godot --headless --path . --import || true
+
+      - name: Unit tests
+        run: |
+          ~/godot/godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -ginclude_subdirs -gexit 2>&1 | tee gut.log
+          if grep -qE "SCRIPT ERROR|Parse Error|Failed to load" gut.log; then echo "::error::script errors in the test run"; exit 1; fi
+          grep -q "Failing Tests" gut.log && { echo "::error::failing tests"; exit 1; } || true
+          grep -q "Passing Tests" gut.log
+
+      - name: Trail bot (plays every trail)
+        run: ~/godot/godot --headless --path . --fixed-fps 60 tools/bot/bot.tscn

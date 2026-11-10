@@ -18,6 +18,12 @@ trail data from what you see here, not from what testers say they'd prefer.
 - Gusts on Archipelago: did they figure out that **standing still braces** them?
 - Fog on Lapland Fell: atmospheric, or annoying?
 - Any moment they looked lost, bored or frustrated?
+- *(Added for M7.6, all five trails)* Did they discover **walking back** (Back pad) on their own?
+- **Finds:** did they notice flowers/items? Did anyone **stand still for an animal**, or did it always flee?
+- **Water:** did they notice the gauge, and **drink at springs** before getting thirsty?
+- **Forks:** did they take the high boardwalk on purpose? Did falling to the valley path feel fair?
+- **Daily trail:** did they find the Daily button, and understand the twist?
+- Did anything feel **unfinished** after the fifth summit?
 - Did any trail end **after dusk**? (= daylight too short, or they lingered on purpose?)
 
 ## Ask afterwards

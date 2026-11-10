@@ -55,7 +55,6 @@ var _input: HikerInput = HikerInput.new()
 var _was_on_floor: bool = false
 var _surface_check_left: float = 0.0
 var _slide_zones: int = 0
-var _back_was_blocked: bool = false
 
 
 func _ready() -> void:
@@ -269,19 +268,11 @@ func _is_on_foot() -> bool:
 	return is_on_floor() and (state == State.IDLE or state == State.WALK or state == State.REST)
 
 
-## Forward wins if both directions are held. Turning around sheds momentum.
+## Turning around sheds momentum.
 func _update_facing() -> void:
-	var allowed: bool = input_enabled and not finished
-	var new_facing: float = facing
-	if _input.wants_walk(allowed):
-		new_facing = 1.0
-	elif _input.wants_back(allowed):
-		if can_go_back():
-			new_facing = -1.0
-			_back_was_blocked = false
-		elif not _back_was_blocked:
-			_back_was_blocked = true
-			back_blocked.emit()
+	var new_facing: float = _input.choose_facing(input_enabled and not finished, facing, can_go_back())
+	if _input.back_just_blocked:
+		back_blocked.emit()
 	if new_facing != facing:
 		facing = new_facing
 		momentum.reset()
