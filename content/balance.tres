@@ -86,3 +86,4 @@ exhausted_lean = 0.2
 walk_bob_hz = 2.2
 rest_breath_amount = 0.025
 rest_breath_hz = 0.4
+review_after_summits = 3

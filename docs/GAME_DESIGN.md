@@ -116,7 +116,8 @@ The player's real steps from the phone's health app become a small TP bonus, so 
 | 2 | Archipelago Rocks | Granite coast, wind | Wind gusts, stepping stones | Lighthouse, seabirds |
 | 3 | Lapland Fell | Autumn "ruska" colours, fog | Fog, longer climb, benches | Reindeer herd, fell top |
 | 4 | Fjord Ridge | Steep and green, rain | Rain, mud, ledges | Waterfall, fjord panorama |
-| 5 | Aurora Summit | Winter night, snow | Ice, headlamp; daylight = aurora window | Aurora, snowy cabin |
+| 5 | Crane Mire | Misty autumn bog, light mist + gusts | Duckboard fork (dry boards vs muddy valley), bog pools, all mechanics mixed | Dancing cranes, fire lookout tower, misty pond |
+| 6 | Aurora Summit | Winter night, snow | Ice, headlamp; daylight = aurora window (the finale) | Aurora, snowy cabin |
 
 ## 7. Future seasons (ideas)
 - **S2 Tea Country:** hill country inspired by Sri Lanka, with tea terraces, an Ella Rock-style climb, a sunrise pilgrimage peak, misty "World's End" plains, and monsoon rain.

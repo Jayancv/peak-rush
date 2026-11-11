@@ -233,6 +233,9 @@ Ads must never interrupt a hike. Rewarded ads are opt-in; interstitials are rare
 **Done when:** test ads show on the phone at the right moments only, consent works, and tests cover the ad rules.
 
 ## M7.9 — Google Play launch
+- [x] **Production pass** (from genre research): consent deferred until ads matter, postcard pop on new shots,
+      captioned store screenshots, feedback mail button (needs SUPPORT_EMAIL), review prompt seam (needs the plugin)
+- [x] **Trail 6, Crane Mire** (added before launch to round out Season 1; played 5th, Aurora Summit stays the finale)
 - [ ] **Play Console developer account** (user; one-time fee, identity verification can take days — start early)
 - [ ] Release keystore: create it, **back it up in two safe places**, never commit it or its passwords
 - [x] Gradle build + **AAB** export (preset "Android Release", docs/RELEASE.md; checked with the debug key standing in); target SDK 36 (Play's requirement since Aug 2026); 16 KB page-size support (Godot 4.7 templates)

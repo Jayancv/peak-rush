@@ -27,6 +27,8 @@ const COUNT_SECONDS: float = 1.0
 const BADGE_SHOW_SECONDS: float = 3.5
 ## Pause between the stamp landing and the season finale (lets the badges show first).
 const FINALE_DELAY: float = 2.2
+## The review request waits for the stars and TP to land.
+const REVIEW_DELAY: float = 2.8
 
 var _result: Dictionary
 ## "Watch an ad: +N TP" (built in code; shown only when an ad is ready).
@@ -55,6 +57,11 @@ func _ready() -> void:
 	if bool(_result.get("finished", false)):
 		Ads.note_hike_finished()
 	_add_ad_button()
+	# A review request belongs to a happy moment, after the stars land (never over the finale).
+	if SeasonFinale.finished_season(_result, _trail) == null:
+		get_tree().create_timer(REVIEW_DELAY).timeout.connect(func() -> void:
+			if is_inside_tree() and not _leaving and not Ads.is_showing():
+				ReviewPrompt.maybe_ask(self, _result))
 
 
 func _fill() -> void:
@@ -216,9 +223,12 @@ func _add_ad_button() -> void:
 	_ad_button.text = tr("RESULTS_AD_REWARD") % _ad_tp
 	_ad_button.custom_minimum_size = Vector2(0, 64)
 	_ad_button.add_theme_font_size_override("font_size", 22)
-	_ad_button.visible = Ads.rewarded_ready()
+	_ad_button.visible = Ads.can_offer_reward()
 	_ad_button.pressed.connect(func() -> void:
-		Ads.show_rewarded(self, _on_ad_reward))
+		_ad_button.disabled = true
+		Ads.request_rewarded(self, _on_ad_reward, func() -> void:
+			if _ad_button != null:
+				_ad_button.disabled = false))
 	# In the button row, not a row of its own: a busy results card is already tall.
 	var buttons: Node = next_button.get_parent()
 	buttons.add_child(_ad_button)
@@ -227,7 +237,7 @@ func _add_ad_button() -> void:
 
 func _process(_delta: float) -> void:
 	# Ads load in the background: offer the reward as soon as one is ready.
-	if _ad_button != null and not _ad_button.visible and Ads.rewarded_ready():
+	if _ad_button != null and not _ad_button.visible and Ads.can_offer_reward():
 		_ad_button.visible = true
 		UiMotion.intro([_ad_button])
 

@@ -34,7 +34,7 @@ func _ready() -> void:
 	if not DisplayServer.is_touchscreen_available():
 		(continue_button if continue_button.visible else play_button).grab_focus()
 	_add_daily_button()
-	# First launch: the ad consent question (once; About can reopen it).
+	# Ad consent waits until ads matter (see Ads); this only catches players past the grace period.
 	Ads.ensure_consent.call_deferred(self)
 	_start_panning()
 	UiMotion.intro([$SafeArea/VBox/Card, banner, continue_button, play_button, journal_button, gear_button, settings_button, profile_button], 0.1)

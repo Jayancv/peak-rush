@@ -8,6 +8,8 @@ const MUTED: Color = Color(0.168627, 0.176471, 0.258824, 0.65)
 const DANGER: Color = Color("#C0392B")
 ## Public privacy policy page; set when it's hosted (M7.9). Empty = show the summary only.
 const PRIVACY_URL: String = ""
+## Support address shown on the store listing; "Send feedback" opens a mail to it. Empty = no button.
+const SUPPORT_EMAIL: String = ""
 ## How long the "tap again to erase" state waits for the second tap.
 const CONFIRM_SECONDS: float = 4.0
 
@@ -51,6 +53,8 @@ func _build() -> void:
 	if not PRIVACY_URL.is_empty():
 		links.add_child(_button(tr("ABOUT_PRIVACY_LINK"), func() -> void: OS.shell_open(PRIVACY_URL)))
 	links.add_child(_button(tr("ABOUT_LICENSES"), _show_licenses))
+	if not SUPPORT_EMAIL.is_empty():
+		links.add_child(_button(tr("ABOUT_FEEDBACK"), func() -> void: OS.shell_open(feedback_url(SUPPORT_EMAIL))))
 	Ads._ensure()
 	if Ads.provider.needs_consent():
 		links.add_child(_button(tr("ABOUT_AD_CHOICES"), func() -> void: Ads.open_consent(self)))
@@ -61,6 +65,13 @@ func _build() -> void:
 	close.theme_type_variation = &"PrimaryButton"
 	actions.add_child(close)
 	UiMotion.intro([panel])
+
+
+## mailto: link with the version and phone filled in, so a report says what it ran on.
+static func feedback_url(email: String) -> String:
+	var device: String = TranslationServer.translate("FEEDBACK_DEVICE") % [version(), OS.get_model_name(), OS.get_version()]
+	var body: String = TranslationServer.translate("FEEDBACK_PROMPT") + "\n\n\n---\n" + device
+	return "mailto:%s?subject=%s&body=%s" % [email, (TranslationServer.translate("FEEDBACK_SUBJECT") % version()).uri_encode(), body.uri_encode()]
 
 
 ## The version players see (and quote in feedback).

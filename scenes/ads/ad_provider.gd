@@ -14,6 +14,11 @@ func show_consent(_host: Node, on_done: Callable) -> void:
 	on_done.call("non_personalized")
 
 
+## Called once the player has chosen (and on later launches): the network may start loading ads.
+func start(_personalized: bool) -> void:
+	pass
+
+
 func is_rewarded_ready() -> bool:
 	return false
 

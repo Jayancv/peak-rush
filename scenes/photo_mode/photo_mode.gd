@@ -30,6 +30,8 @@ var scoring: PhotoScoring
 
 var _balance: Balance
 var _cooldown: float = 0.0
+## Best quality already earned for this viewpoint (journal or earlier in this visit).
+var _best_known: int = 0
 
 
 func _ready() -> void:
@@ -50,6 +52,7 @@ func open(at: Viewpoint) -> void:
 	hint_label.visible = true
 	flash.color.a = 0.0
 	_cooldown = 0.0
+	_best_known = int(GameState.record(GameState.current_trail_id).photos.get(String(at.viewpoint_id), 0))
 	visible = true
 
 
@@ -79,6 +82,7 @@ func shoot_at(subject_screen: Vector2) -> int:
 	hint_label.visible = false
 	_flash()
 	_show_result(q)
+	_pop_postcard(q)
 	AudioManager.play_shutter()
 	shot_taken.emit(viewpoint.viewpoint_id, q)
 	if not scoring.has_film():
@@ -108,6 +112,17 @@ func _unhandled_input(event: InputEvent) -> void:
 func _flash() -> void:
 	flash.color.a = 0.9
 	create_tween().tween_property(flash, "color:a", 0.0, 0.35).set_ease(Tween.EASE_OUT)
+
+
+func _pop_postcard(q: int) -> void:
+	var caption: String = PostcardPop.caption_for(q, _best_known)
+	_best_known = maxi(_best_known, q)
+	var trail: TrailData = ContentDB.get_trail(GameState.current_trail_id)
+	if caption.is_empty() or trail == null:
+		return
+	for vp: ViewpointData in trail.viewpoints:
+		if vp.id == viewpoint.viewpoint_id:
+			PostcardPop.pop(self, trail, vp, q, caption)
 
 
 func _show_result(q: int) -> void:

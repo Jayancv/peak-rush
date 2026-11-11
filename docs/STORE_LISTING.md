@@ -13,9 +13,9 @@ Hike Nordic trails, beat the sunset and fill a travel journal with your photos.
 Lace up your boots. Peak Rush is a calm, side-scrolling hiking game about pacing yourself
 from trailhead to summit before the sun goes down.
 
-HIKE FIVE NORDIC TRAILS
-Forest lakes, island rocks, open fells, a rainy fjord ridge and a night climb under the
-northern lights. Every trail is longer and wilder than the last.
+HIKE SIX NORDIC TRAILS
+Forest lakes, island rocks, open fells, a rainy fjord ridge, a misty crane bog and a night
+climb under the northern lights. Every trail is longer and wilder than the last.
 
 PACE YOUR ENERGY AND WATER
 Hold to walk, tap to jump roots and rocks. Uphill climbs drain your energy; rest on a bench
@@ -60,18 +60,22 @@ badges along the way.
 Made by `godot --path . --resolution 1920x1080 tools/store_shots/store_shots.tscn`
 (writes `export/store/`, not committed). Upload in this order:
 
-| File | What it shows |
+| File | Caption |
 |---|---|
-| `01_forest.png` | Forest Lake Loop, hiker climbing, full HUD |
-| `02_photo.png` | Photo mode at the Seabirds viewpoint |
-| `03_fjord.png` | Rainy Fjord Ridge with a spring |
-| `04_aurora.png` | Night hike under the aurora with the headlamp |
-| `05_summit.png` | Summit moment (flag, title, time) |
-| `06_results.png` | Results: three stars, stamp, TP |
-| `07_journal.png` | Travel journal: passport stamps + postcards |
-| `08_main_menu.png` | Title screen |
+| `01_aurora.png` | Hike under the northern lights |
+| `02_photo.png` | Snap the perfect postcard |
+| `03_summit.png` | Beat the sunset to the summit |
+| `04_forest.png` | Pace your energy, trail by trail |
+| `05_mire.png` | Choose your path |
+| `06_journal.png` | Fill your travel journal |
+| `07_results.png` | Earn three stars on every trail |
+| `08_fjord.png` | Brave rain, wind, fog and snow |
 | `feature_graphic.png` | 1024 x 500 feature graphic |
 | `icon_512.png` | 512 x 512 store icon (copy of shared_art/icons/icon_512.png) |
+
+Captioned shots are what you upload; the uncaptioned originals are in `export/store/raw/` (handy
+for A/B testing captioned vs plain in Play's store listing experiments). The first screenshot
+matters most, so the aurora leads. Captions live in `CAPTIONS` in tools/store_shots/store_shots.gd.
 
 Play's rules: 2–8 phone screenshots, 16:9 landscape is fine, each side 320–3840 px; the
 feature graphic is required and must be exactly 1024 x 500 (no alpha). Tablet screenshots are

@@ -304,3 +304,26 @@ FIND_TRAIL_MAP_FACT,Folded so often the creases have worn through - someone knew
 VP_FROZEN_LAKE,Frozen lake
 FIND_SNOW_BUNTING,Snow bunting
 FIND_SNOW_BUNTING_FACT,Snow buntings nest further north than almost any other songbird.
+TRAIL_T06_NAME,Crane Mire
+WEATHER_MIST,Mist
+VP_CRANES,Dancing cranes
+VP_FIRE_TOWER,Fire lookout tower
+VP_MISTY_POND,Misty pond
+FIND_COTTON_GRASS,Cotton grass
+FIND_COTTON_GRASS_FACT,"Its white tufts mark wet ground, so hikers learn to step around them."
+FIND_FUNNEL_CHANTERELLE,Funnel chanterelles
+FIND_FUNNEL_CHANTERELLE_FACT,These small autumn mushrooms grow in mossy spruce woods at the edge of the bog.
+FIND_CRANE_FEATHER,Crane feather
+FIND_CRANE_FEATHER_FACT,Common cranes moult all their flight feathers at once and can't fly for a few weeks.
+FIND_OLD_LANTERN,Old storm lantern
+FIND_OLD_LANTERN_FACT,"Bog walkers once carried lanterns like this; mist could hide the path in minutes."
+FIND_MOOSE,Moose
+FIND_MOOSE_FACT,"Moose wade into mires to eat water plants, and their long legs keep them out of the mud."
+PHOTO_NEW_POSTCARD,New postcard for your journal!
+PHOTO_BETTER_POSTCARD,Better postcard!
+REVIEW_TEST_TITLE,TEST: review request
+REVIEW_TEST_BODY,"Google Play's own review dialog will appear here once its plugin is added. This stand-in only shows in debug builds."
+ABOUT_FEEDBACK,Send feedback
+FEEDBACK_SUBJECT,Peak Rush %s feedback
+FEEDBACK_PROMPT,"Tell us what you liked, what was hard, or what went wrong:"
+FEEDBACK_DEVICE,"Version %s, %s, Android %s"

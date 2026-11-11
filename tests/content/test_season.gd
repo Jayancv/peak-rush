@@ -17,11 +17,12 @@ func _complete(id: StringName) -> void:
 	GameState.trails[String(id)] = {"stars": StarRating.STAR_SUMMIT, "best_time": 60.0, "photos": {}, "completions": 1}
 
 
-func test_season_one_has_the_five_design_trails() -> void:
+func test_season_one_has_the_six_design_trails() -> void:
 	var ids: Array[StringName] = []
 	for t: TrailData in ContentDB.get_season(&"s01_nordic").ordered_trails():
 		ids.append(t.id)
-	assert_eq(ids, [&"t01_forest_lake", &"t02_archipelago_rocks", &"t03_lapland_fell", &"t04_fjord_ridge", &"t05_aurora_summit"] as Array[StringName])
+	assert_eq(ids, [&"t01_forest_lake", &"t02_archipelago_rocks", &"t03_lapland_fell", &"t04_fjord_ridge", &"t06_crane_mire", &"t05_aurora_summit"] as Array[StringName],
+		"Crane Mire comes before the Aurora Summit finale")
 
 
 func test_every_trail_has_two_to_four_viewpoints() -> void:
@@ -55,11 +56,13 @@ func test_aurora_summit_is_a_night_trail() -> void:
 
 
 func test_weather_matches_design() -> void:
-	# GAME_DESIGN §6: wind on Archipelago, fog on Lapland, rain on Fjord, snow on Aurora.
+	# GAME_DESIGN §6: wind on Archipelago, fog on Lapland, rain on Fjord, mist on Crane Mire, snow on Aurora.
 	assert_true(ContentDB.get_trail(&"t02_archipelago_rocks").weather.wind)
 	assert_true(ContentDB.get_trail(&"t03_lapland_fell").weather.fog)
 	assert_true(ContentDB.get_trail(&"t04_fjord_ridge").weather.rain)
 	assert_true(ContentDB.get_trail(&"t05_aurora_summit").weather.snow)
+	var mire: WeatherProfile = ContentDB.get_trail(&"t06_crane_mire").weather
+	assert_true(mire.fog and mire.fog_density < ContentDB.get_trail(&"t03_lapland_fell").weather.fog_density, "light mist, thinner than Lapland's fog")
 
 
 func test_tutorial_hints_have_strings() -> void:

@@ -92,6 +92,28 @@ static func draw(ci: CanvasItem, pic: Rect2, motif: int, night: bool, theme: Col
 			_pines(ci, pic, rng, 0.76, 4, 0.18, 1.0, PINE.darkened(0.35) if is_night else PINE)
 			if motif == ViewpointData.Motif.CABIN:
 				_cabin(ci, pic, _at(pic, 0.55, 0.78), pic.size.y * 0.2, is_night)
+		ViewpointData.Motif.MARSH:
+			_ridge(ci, pic, rng, hill, 0.55, 0.05)
+			_ridge(ci, pic, rng, theme.lerp(Color("#B0A060"), 0.45), 0.68, 0.02)
+			for i: int in 3:
+				var c: Vector2 = _at(pic, 0.15 + i * 0.3 + rng.randf_range(-0.05, 0.05), 0.82 + rng.randf_range(-0.04, 0.04))
+				ci.draw_set_transform(c, 0.0, Vector2(1.0, 0.22))
+				ci.draw_circle(Vector2.ZERO, pic.size.x * 0.11, WATER.lightened(0.25), true, -1.0, true)
+				ci.draw_set_transform_matrix(Transform2D.IDENTITY)
+			_crane(ci, pic, _at(pic, 0.4, 0.86), pic.size.y * 0.55, 1.0)
+			_crane(ci, pic, _at(pic, 0.64, 0.84), pic.size.y * 0.5, -1.0)
+		ViewpointData.Motif.TOWER:
+			_ridge(ci, pic, rng, hill, 0.6, 0.06)
+			_ridge(ci, pic, rng, theme, 0.78, 0.04)
+			_tower(ci, pic, _at(pic, 0.62, 0.8), pic.size.y * 0.62)
+			_pines(ci, pic, rng, 0.8, 4, 0.2, 0.45)
+		ViewpointData.Motif.MISTY_POND:
+			_ridge(ci, pic, rng, hill, 0.5, 0.06)
+			ci.draw_rect(_band(pic, 0.62, 1.0), WATER.lightened(0.2))
+			_pines(ci, pic, rng, 0.62, 6, 0.18)
+			for i: int in 3:
+				ci.draw_rect(_band(pic, 0.45 + i * 0.12, 0.5 + i * 0.12), Color(1, 1, 1, 0.35))
+			_boat(ci, pic, _at(pic, 0.5, 0.8), pic.size.y * 0.16)
 		_:
 			_ridge(ci, pic, rng, hill, 0.55, 0.12)
 			_ridge(ci, pic, rng, theme, 0.75, 0.08)
@@ -233,3 +255,40 @@ static func _woodpecker(ci: CanvasItem, pic: Rect2, at: Vector2, s: float) -> vo
 	_poly(ci, pic, PackedVector2Array([at + Vector2(-s * 0.26, -s * 0.34), at + Vector2(-s * 0.42, -s * 0.3),
 		at + Vector2(-s * 0.26, -s * 0.27)]), Color("#D9B26B"))
 	ci.draw_circle(at + Vector2(-s * 0.2, -s * 0.34), s * 0.025, SNOW, true, -1.0, true)
+
+
+## A standing crane: grey body, long legs and neck, red crown.
+static func _crane(ci: CanvasItem, pic: Rect2, feet: Vector2, h: float, facing: float) -> void:
+	var grey: Color = Color("#7D848E")
+	var w: float = maxf(h * 0.035, 1.5)
+	ci.draw_line(feet + Vector2(-h * 0.05, 0), feet + Vector2(-h * 0.03, -h * 0.4), INK, w)
+	ci.draw_line(feet + Vector2(h * 0.05, 0), feet + Vector2(h * 0.03, -h * 0.4), INK, w)
+	_poly(ci, pic, PackedVector2Array([feet + Vector2(-h * 0.3 * facing, -h * 0.44), feet + Vector2(-h * 0.05 * facing, -h * 0.64),
+		feet + Vector2(h * 0.16 * facing, -h * 0.62), feet + Vector2(h * 0.22 * facing, -h * 0.48), feet + Vector2(-h * 0.02 * facing, -h * 0.36)]), grey)
+	_poly(ci, pic, PackedVector2Array([feet + Vector2(-h * 0.3 * facing, -h * 0.44), feet + Vector2(-h * 0.4 * facing, -h * 0.36),
+		feet + Vector2(-h * 0.12 * facing, -h * 0.4)]), INK)
+	ci.draw_line(feet + Vector2(h * 0.14 * facing, -h * 0.56), feet + Vector2(h * 0.2 * facing, -h * 0.95), grey.darkened(0.3), maxf(h * 0.07, 2.0))
+	ci.draw_circle(feet + Vector2(h * 0.21 * facing, -h * 0.97), h * 0.045, INK, true, -1.0, true)
+	ci.draw_circle(feet + Vector2(h * 0.21 * facing, -h * 1.0), h * 0.022, RED, true, -1.0, true)
+	ci.draw_line(feet + Vector2(h * 0.24 * facing, -h * 0.97), feet + Vector2(h * 0.34 * facing, -h * 0.94), INK, w)
+
+
+static func _tower(ci: CanvasItem, pic: Rect2, base: Vector2, h: float) -> void:
+	var w: float = h * 0.18
+	var w2: float = maxf(h * 0.02, 1.0)
+	ci.draw_line(base + Vector2(-w, 0), base + Vector2(-w * 0.35, -h * 0.82), WOOD, w2)
+	ci.draw_line(base + Vector2(w, 0), base + Vector2(w * 0.35, -h * 0.82), WOOD, w2)
+	for i: int in 3:
+		var y: float = -h * (0.2 + i * 0.22)
+		var half: float = w * (1.0 - (0.2 + i * 0.22) * 0.8)
+		ci.draw_line(base + Vector2(-half, y), base + Vector2(half, y), WOOD, w2 * 0.8)
+	ci.draw_rect(Rect2(base + Vector2(-w * 0.55, -h * 0.97), Vector2(w * 1.1, h * 0.15)), RED.darkened(0.2))
+	ci.draw_rect(Rect2(base + Vector2(-w * 0.4, -h * 0.94), Vector2(w * 0.8, h * 0.06)), Color("#E6DEB9"))
+	_poly(ci, pic, PackedVector2Array([base + Vector2(-w * 0.7, -h * 0.97), base + Vector2(w * 0.7, -h * 0.97), base + Vector2(0, -h * 1.08)]), INK)
+
+
+static func _boat(ci: CanvasItem, pic: Rect2, at: Vector2, s: float) -> void:
+	_poly(ci, pic, PackedVector2Array([at + Vector2(-s, -s * 0.2), at + Vector2(s, -s * 0.2), at + Vector2(s * 0.7, s * 0.1), at + Vector2(-s * 0.7, s * 0.1)]), RED.darkened(0.15))
+	ci.draw_circle(at + Vector2(0, -s * 0.45), s * 0.13, INK, true, -1.0, true)
+	ci.draw_rect(Rect2(at + Vector2(-s * 0.12, -s * 0.35), Vector2(s * 0.24, s * 0.18)), Color("#3E6A8A"))
+	ci.draw_line(at + Vector2(-s * 0.6, -s * 0.15), at + Vector2(s * 0.5, -s * 0.5), WOOD, maxf(s * 0.05, 1.0))

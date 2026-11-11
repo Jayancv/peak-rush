@@ -85,7 +85,7 @@ docs/                GAME_DESIGN.md, PLAN.md
 - At the end of each session, update **Current status** below and tick the boxes in `docs/PLAN.md`.
 
 ## Current status
-- Milestone: **M7.5 (trail depth) + polish (sounds, trail map, finds page, daily trail) built, 299 tests green; M7.6 automated part done (phone checklist, low-end phone, playtest open); M7.7 done**. M7 non-release part done. Release steps
+- Milestone: **M7.5 (trail depth) + polish (sounds, trail map, finds page, daily trail) built, 309 tests green; M7.6 automated part done (phone checklist, low-end phone, playtest open); M7.7 done**. M7 non-release part done. Release steps
   (keystore, AAB, stores, iOS, screenshots, 1.0.0) deliberately not started; low-end phone profiling still open.
   M5/M6 full-season phone playtest still open. Launch plan in PLAN.md: M7.6 stabilisation -> M7.7 launch features -> M7.8 ads -> M7.9 Google Play (Android first, free with ads, iOS after launch in M8).
 - Godot 4.7.2-stable (not on PATH; ask the user for the executable path if unknown); GUT 9.7.1.
@@ -220,4 +220,15 @@ docs/                GAME_DESIGN.md, PLAN.md
   Postcards: `PostcardArt` (scenes/journal) draws a scene per ViewpointData.motif (enum; new motifs at the END), night sky on
   night trails; a painted ViewpointData.postcard still wins. Airborne wind = wind_push * Balance.air_wind_scale (0.4) so a
   gust can't stall a jump. Jump gaps over water are <= 70 px (a scan found 4 at 80-84 px; widen nothing past 75).
+  Trail 6 Crane Mire (t06_crane_mire, unlock_order 4 = played 5th; Aurora Summit is unlock_order 5, the finale): misty bog,
+  weather mist.tres (light fog + gusts), backdrop_mire.tscn, duckboard fork (DuckboardsA/B + Lookout), Ditch* water polygons
+  fill open gaps, motifs MARSH/TOWER/MISTY_POND. Built by a scratch builder; edit it in the editor from now on.
+  Season 1 now: 6 trails, 15 postcards, 29 finds. Bot: T4 212 s, T6 224, T5 229 (daylight 320 / par 240).
+  Production pass: ad consent is deferred (Ads.consent_pending; asked on the first "watch an ad" tap via
+  Ads.request_rewarded, or instead of the first due interstitial; menu only asks past the grace period); providers get
+  start() after consent and load nothing before. `PostcardPop` (photo mode) shows the postcard on a new/better shot.
+  Store shots are captioned (raw in export/store/raw/). `ReviewPolicy` + `ReviewPrompt` (results, once, after a first summit
+  at >= Balance.review_after_summits summits; plugin singleton checked, debug builds show a TEST card).
+  About "Send feedback" = mailto with version/phone, hidden until AboutCard.SUPPORT_EMAIL is set.
+  New settings keys with defaults (ad_consent, review_asked) need no save migration: settings merge over DEFAULT_SETTINGS.
   Water: SteppingStones uses `world/obstacles/water.gdshader` (waves/depth/glints in local px). GroundPatch art follows the TerrainStrip slope.

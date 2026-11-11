@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="WeatherProfile" format=3]
+
+[ext_resource type="Script" path="res://data/weather_profile.gd" id="1_weather"]
+
+[resource]
+script = ExtResource("1_weather")
+id = &"mist"
+name_key = "WEATHER_MIST"
+drain_multiplier = 1.0
+fog = true
+fog_density = 0.28
+fog_color = Color(0.9, 0.92, 0.92, 1)
+wind = true
+wind_base = 4.0
+gust_strength = 45.0
+gust_interval = Vector2(8.0, 14.0)
+gust_seconds = 1.5

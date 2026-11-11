@@ -12,6 +12,8 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"reduce_motion": false,
 	## "" until asked, then "personalized" / "non_personalized" (Ads.ensure_consent).
 	"ad_consent": "",
+	## Set once the store review request has been made (ReviewPrompt; never asked twice).
+	"review_asked": false,
 	"music_volume": 0.8,
 	"sfx_volume": 0.8,
 	"ambience_volume": 0.8,

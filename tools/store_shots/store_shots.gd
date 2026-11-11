@@ -10,6 +10,22 @@ const OUT_DIR: String = "res://export/store/"
 const SIZE: Vector2i = Vector2i(1920, 1080)
 const FEATURE_SIZE: Vector2i = Vector2i(1024, 500)
 const STEP: float = 1.0 / 60.0
+## Upload order (the first screenshot sells the game): raw shot -> caption.
+## Store images are English like the listing; translate these with the listing later.
+const CAPTIONS: Array[Array] = [
+	["aurora", "Hike under the northern lights"],
+	["photo", "Snap the perfect postcard"],
+	["summit", "Beat the sunset to the summit"],
+	["forest", "Pace your energy, trail by trail"],
+	["mire", "Choose your path"],
+	["journal", "Fill your travel journal"],
+	["results", "Earn three stars on every trail"],
+	["fjord", "Brave rain, wind, fog and snow"],
+]
+const TITLE_FONT: Font = preload("res://shared_art/title_font.tres")
+const BG_TOP: Color = Color("#2F4A3F")
+const BG_BOTTOM: Color = Color("#1E2E28")
+const CREAM: Color = Color("#FFF6E5")
 
 
 func _ready() -> void:
@@ -22,21 +38,23 @@ func _run() -> void:
 	tree.root.add_child(self)
 	SaveService.autosave = false
 	get_window().size = SIZE
-	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(OUT_DIR))
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(OUT_DIR + "raw"))
 	_fake_progress()
 	# No test-ad cards or consent form in store shots.
 	Ads.use_provider(AdProvider.new())
-	await _menu_shot(SceneRouter.MAIN_MENU, "08_main_menu")
-	await _trail_shot(&"t01_forest_lake", 0.42, "01_forest")
-	await _trail_shot(&"t04_fjord_ridge", 0.3, "03_fjord")
-	await _trail_shot(&"t05_aurora_summit", 0.5, "04_aurora")
-	await _photo_shot(&"t02_archipelago_rocks", "02_photo")
-	await _menu_shot(SceneRouter.JOURNAL, "07_journal")
-	await _menu_shot(SceneRouter.TRAIL_SELECT, "09_trails")
+	await _menu_shot(SceneRouter.MAIN_MENU, "raw/main_menu")
+	await _trail_shot(&"t01_forest_lake", 0.42, "raw/forest")
+	await _trail_shot(&"t04_fjord_ridge", 0.3, "raw/fjord")
+	await _trail_shot(&"t05_aurora_summit", 0.5, "raw/aurora")
+	await _trail_shot(&"t06_crane_mire", 0.5, "raw/mire")
+	await _photo_shot(&"t02_archipelago_rocks", "raw/photo")
+	await _menu_shot(SceneRouter.JOURNAL, "raw/journal")
+	await _menu_shot(SceneRouter.TRAIL_SELECT, "raw/trails")
 	# Before the summit: its badge toast outlives the results screen.
 	await _feature_graphic()
 	get_window().size = SIZE
-	await _summit_shots(&"t03_lapland_fell", "05_summit", "06_results")
+	await _summit_shots(&"t03_lapland_fell", "raw/summit", "raw/results")
+	await _caption_all()
 	DirAccess.copy_absolute(ProjectSettings.globalize_path("res://shared_art/icons/icon_512.png"),
 		ProjectSettings.globalize_path(OUT_DIR + "icon_512.png"))
 	print("STORE SHOTS done -> ", ProjectSettings.globalize_path(OUT_DIR))
@@ -162,6 +180,53 @@ func _summit_shots(id: StringName, summit_file: String, results_file: String) ->
 	await _save(results_file)
 
 
+## The captioned store screenshots: caption band on top, the shot framed below.
+func _caption_all() -> void:
+	for i: int in CAPTIONS.size():
+		var raw: Image = Image.load_from_file(ProjectSettings.globalize_path(OUT_DIR + "raw/" + CAPTIONS[i][0] + ".png"))
+		var layer: CanvasLayer = CanvasLayer.new()
+		layer.layer = 200
+		add_child(layer)
+		var view: Vector2 = get_viewport().get_visible_rect().size
+		var bg: TextureRect = TextureRect.new()
+		var grad: GradientTexture2D = GradientTexture2D.new()
+		grad.gradient = Gradient.new()
+		grad.gradient.set_color(0, BG_TOP)
+		grad.gradient.set_color(1, BG_BOTTOM)
+		grad.fill_to = Vector2(0, 1)
+		bg.texture = grad
+		bg.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		bg.size = view
+		layer.add_child(bg)
+		var shot_w: float = view.x * 0.74
+		var shot: Rect2 = Rect2(Vector2((view.x - shot_w) * 0.5, view.y * 0.2), Vector2(shot_w, shot_w * 9.0 / 16.0))
+		var frame: ColorRect = ColorRect.new()
+		frame.color = CREAM
+		frame.position = shot.position - Vector2(6, 6)
+		frame.size = shot.size + Vector2(12, 12)
+		layer.add_child(frame)
+		var pic: TextureRect = TextureRect.new()
+		pic.texture = ImageTexture.create_from_image(raw)
+		pic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		pic.position = shot.position
+		pic.size = shot.size
+		layer.add_child(pic)
+		var label: Label = Label.new()
+		label.text = CAPTIONS[i][1]
+		label.add_theme_font_override("font", TITLE_FONT)
+		label.add_theme_font_size_override("font_size", int(view.y * 0.075))
+		label.add_theme_color_override("font_color", CREAM)
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		label.size = Vector2(view.x, view.y * 0.2)
+		layer.add_child(label)
+		await _wait(0.2)
+		await RenderingServer.frame_post_draw
+		_write(get_viewport().get_texture().get_image(), "%02d_%s" % [i + 1, CAPTIONS[i][0]])
+		layer.queue_free()
+		await get_tree().process_frame
+
+
 ## Ground point under `x` (the hiker collides with layer 1).
 func _ground(x: float) -> Vector2:
 	var space: PhysicsDirectSpaceState2D = get_tree().current_scene.get_world_2d().direct_space_state
@@ -186,6 +251,11 @@ func _wait(seconds: float) -> void:
 
 
 func _save(file: String) -> void:
+	# In-game toasts ("Checkpoint reached") are noise in a store shot.
+	var scene: Node = get_tree().current_scene
+	var hud: Node = scene.get("hud") if scene != null and "hud" in scene else null
+	if hud != null:
+		(hud.get("toast") as Control).visible = false
 	await RenderingServer.frame_post_draw
 	_write(get_viewport().get_texture().get_image(), file)
 

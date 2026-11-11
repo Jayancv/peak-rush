@@ -15,6 +15,11 @@ var fail_loads: bool = false
 var instant: bool = false
 var shown_rewarded: int = 0
 var shown_interstitials: int = 0
+## Tests: answer the consent form at once with this choice ("" = show the form).
+var auto_consent: String = ""
+var consent_asked: int = 0
+## Like a real SDK: nothing loads until Ads starts it (after consent).
+var started: bool = false
 
 var _ready_at_msec: int = 0
 var _overlay: MockAdOverlay
@@ -25,11 +30,21 @@ func needs_consent() -> bool:
 
 
 func show_consent(host: Node, on_done: Callable) -> void:
+	consent_asked += 1
+	if not auto_consent.is_empty():
+		on_done.call(auto_consent)
+		return
 	MockAdOverlay.consent(host, on_done)
 
 
+func start(_personalized: bool) -> void:
+	started = true
+	if not instant:
+		_reload()
+
+
 func is_rewarded_ready() -> bool:
-	return not fail_loads and Time.get_ticks_msec() >= _ready_at_msec
+	return started and not fail_loads and Time.get_ticks_msec() >= _ready_at_msec
 
 
 func is_interstitial_ready() -> bool:

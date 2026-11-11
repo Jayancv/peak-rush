@@ -1,0 +1,79 @@
+[gd_resource type="Resource" script_class="TrailData" format=3]
+
+[ext_resource type="Script" path="res://data/trail_data.gd" id="1_trail"]
+[ext_resource type="Script" path="res://data/find_data.gd" id="9_find"]
+[ext_resource type="Script" path="res://data/viewpoint_data.gd" id="3_vp"]
+[ext_resource type="Resource" path="res://content/weather/mist.tres" id="2_weather"]
+
+[sub_resource type="Resource" id="Viewpoint_cranes"]
+script = ExtResource("3_vp")
+id = &"cranes"
+name_key = "VP_CRANES"
+motif = 13
+
+[sub_resource type="Resource" id="Viewpoint_fire_tower"]
+script = ExtResource("3_vp")
+id = &"fire_tower"
+name_key = "VP_FIRE_TOWER"
+motif = 14
+
+[sub_resource type="Resource" id="Viewpoint_misty_pond"]
+script = ExtResource("3_vp")
+id = &"misty_pond"
+name_key = "VP_MISTY_POND"
+motif = 15
+
+[sub_resource type="Resource" id="Find_cotton_grass"]
+script = ExtResource("9_find")
+id = &"cotton_grass"
+name_key = "FIND_COTTON_GRASS"
+kind = 0
+color = Color(0.9608, 0.9529, 0.9216, 1)
+appear_chance = 1.0
+
+[sub_resource type="Resource" id="Find_funnel_chanterelle"]
+script = ExtResource("9_find")
+id = &"funnel_chanterelle"
+name_key = "FIND_FUNNEL_CHANTERELLE"
+kind = 1
+color = Color(0.7843, 0.5961, 0.2588, 1)
+appear_chance = 1.0
+
+[sub_resource type="Resource" id="Find_crane_feather"]
+script = ExtResource("9_find")
+id = &"crane_feather"
+name_key = "FIND_CRANE_FEATHER"
+kind = 2
+color = Color(0.6588, 0.6745, 0.7020, 1)
+appear_chance = 1.0
+
+[sub_resource type="Resource" id="Find_old_lantern"]
+script = ExtResource("9_find")
+id = &"old_lantern"
+name_key = "FIND_OLD_LANTERN"
+kind = 2
+color = Color(0.7529, 0.3412, 0.1882, 1)
+appear_chance = 1.0
+
+[sub_resource type="Resource" id="Find_moose"]
+script = ExtResource("9_find")
+id = &"moose"
+name_key = "FIND_MOOSE"
+kind = 3
+color = Color(0.3529, 0.2627, 0.1961, 1)
+appear_chance = 0.6
+
+[resource]
+script = ExtResource("1_trail")
+id = &"t06_crane_mire"
+name_key = "TRAIL_T06_NAME"
+season_id = &"s01_nordic"
+scene_path = "res://content/seasons/s01_nordic/trails/t06_crane_mire/trail.tscn"
+length_m = 6200
+daylight_seconds = 320.0
+par_time = 240.0
+weather = ExtResource("2_weather")
+ambience = 1
+viewpoints = Array[ExtResource("3_vp")]([SubResource("Viewpoint_cranes"), SubResource("Viewpoint_fire_tower"), SubResource("Viewpoint_misty_pond")])
+unlock_order = 4
+finds = Array[ExtResource("9_find")]([SubResource("Find_cotton_grass"), SubResource("Find_funnel_chanterelle"), SubResource("Find_crane_feather"), SubResource("Find_old_lantern"), SubResource("Find_moose")])

@@ -216,6 +216,8 @@ extends Resource
 @export var ad_interstitial_every: int = 3
 @export var ad_interstitial_min_seconds: float = 180.0
 @export var ad_grace_hikes: int = 5
+## Ask for a store review after this many different summits (once ever, after a first summit).
+@export var review_after_summits: int = 3
 
 @export_group("Summit moment")
 ## How long the summit moment lasts before the results (a tap skips it sooner).
