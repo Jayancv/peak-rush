@@ -19,7 +19,9 @@ func _ready() -> void:
 	_bind_slider(ambience_slider, "ambience_volume")
 	_bind_toggle(left_handed_toggle, "left_handed")
 	_bind_toggle(vibration_toggle, "vibration")
-	_bind_toggle(_add_toggle_row(vibration_toggle.get_parent(), "SETTINGS_REDUCE_MOTION", UiIcon.Kind.MOTION), "reduce_motion")
+	var motion_toggle: Button = _add_toggle_row(vibration_toggle.get_parent(), "SETTINGS_REDUCE_MOTION", UiIcon.Kind.MOTION)
+	_bind_toggle(motion_toggle, "reduce_motion")
+	_add_steps_row(motion_toggle.get_parent())
 	_add_about_button()
 	# A sample sound while dragging the effects slider, so the level can be judged.
 	sfx_slider.drag_ended.connect(func(_changed: bool) -> void: AudioManager.play_footstep(TerrainStrip.Surface.ROCK))
@@ -49,6 +51,25 @@ func _add_toggle_row(like: Node, label_key: String, icon: UiIcon.Kind) -> Button
 	(row.get_node("Label") as Label).text = label_key
 	(row.get_node("Badge/Icon") as UiIcon).kind = icon
 	return row.get_node("Switch") as Button
+
+
+## Real steps -> TP (M9). Only on phones with a step source; switching on asks the
+## phone for access, and a refusal flips the switch back.
+func _add_steps_row(like: Node) -> void:
+	if not Steps.is_supported():
+		return
+	var toggle: ToggleSwitch = _add_toggle_row(like, "SETTINGS_STEPS", UiIcon.Kind.BOOTS) as ToggleSwitch
+	toggle.get_parent().name = "StepsRow"
+	toggle.set_pressed_no_signal(Steps.is_on())
+	toggle.sync()
+	toggle.toggled.connect(func(on: bool) -> void:
+		if not on:
+			Steps.turn_off()
+			return
+		Steps.turn_on(func(granted: bool) -> void:
+			if not granted and is_instance_valid(toggle):
+				toggle.set_pressed_no_signal(false)
+				toggle.sync()))
 
 
 ## An "i" button at the top right, styled like the back button.

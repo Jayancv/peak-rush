@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Health Connect shows this screen outside the game, so it can't use the game's
+     translations/strings.csv. Translate it with values-<lang>/strings.xml next to this file.
+     Keep the numbers in step with content/balance.tres (steps_per_tp, step_tp_daily_cap). -->
+<resources>
+    <string name="peak_rush_steps_rationale_title">Peak Rush and your steps</string>
+    <string name="peak_rush_steps_rationale_body">Peak Rush reads your daily step count to give you a small Trail Points bonus (1 TP per 500 steps, up to 40 TP a day).\n\nOnly step counts are read, only while the game is open, and only steps taken after you switched the step counter on. Your step data stays on this phone: it is never uploaded or shared.\n\nYou can switch it off in Peak Rush, Settings, or remove the permission in Health Connect.</string>
+</resources>

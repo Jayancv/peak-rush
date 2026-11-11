@@ -23,7 +23,7 @@ Claude Code ticks `[x]` as tasks finish and updates "Current status" in `CLAUDE.
 | M6 | Full Season 1 and gear | 4–6 days |
 | M7 | Mobile polish and store release | 3–5 days |
 | M8 | Live seasons pipeline | ongoing |
-| M9 | Real-world step rewards (Health Connect / HealthKit) | 4–6 days |
+| M9 | Real-world step rewards (Health Connect / HealthKit) | 4–6 days (Android side built) |
 *Focused working days. Expect about 2–3× that if you work part-time and are learning Godot along the way.
 
 ---
@@ -268,21 +268,28 @@ Ads must never interrupt a hike. Rewarded ads are opt-in; interstitials are rare
 
 ---
 
-## M9 — Real-world step rewards (after launch)
-Turn the player's real steps into a small TP bonus (GAME_DESIGN §5.10). Start only after 1.0 has shipped.
-Android comes first because it can be built on Windows; iOS needs a Mac.
-- [ ] `systems/step_rewards.gd` (`StepRewards`): steps → TP per day, daily cap, 7-day claim window, no steps from before opt-in, with tests (including clock moved backwards and duplicate syncs)
-- [ ] `balance.tres`: `steps_per_tp` (500), `step_tp_daily_cap` (40), `step_claim_window_days` (7), `step_length_m` (0.75)
-- [ ] Save format: `steps_opt_in_time`, `steps_last_sync`, claimed steps per day and lifetime steps; bump `SAVE_VERSION`, add a migration step and a test
-- [ ] A step bridge that uses the native plugin through `Engine.has_singleton()` and does nothing on desktop and under GUT, so the editor and tests keep working. Put it inside an existing autoload, or **ask the user** before adding a sixth one
-- [ ] **Android plugin** (Godot Android plugin v2, Kotlin): Health Connect availability check, `READ_STEPS` permission request, daily step totals for a date range; added to the Android export preset
-- [ ] Settings: a "Connect step counter" toggle with a short explanation, and a way to disconnect
-- [ ] Main menu: a "Steps walked today → +N TP" claim card (with the TP count-up from the results screen); it hides itself when not connected
-- [ ] Journal: a "Real km walked" stat
-- [ ] Strings in `translations/strings.csv`
+## M9 — Real-world step rewards
+Turn the player's real steps into a small TP bonus (GAME_DESIGN §5.10). Started early (before 1.0) at the user's request;
+it can ship in 1.0 or a 1.x update. Android comes first because it can be built on Windows; iOS needs a Mac.
+- [x] `systems/step_ledger.gd` (`StepLedger`): steps → TP per day, daily cap, 7-day claim window, no steps from before opt-in, with tests (including clock moved backwards and duplicate syncs)
+- [x] `balance.tres`: `steps_per_tp` (500), `step_tp_daily_cap` (40), `step_claim_window_days` (7), `step_length_m` (0.75)
+- [x] Save v6: top-level `steps` (enabled, opt-in time/date, claimed steps per day, lifetime steps, last sync); migration `_v5_to_v6` + test
+- [x] Step bridge without a new autoload: static `Steps` (scenes/steps/, like `Ads`) picks `HealthConnectStepProvider` (plugin singleton), `MockStepProvider` (debug builds) or the no-op `StepProvider` (release desktop, GUT)
+- [x] **Android plugin** (Godot Android plugin v2, Kotlin, `native/android/peak_rush_steps`): Health Connect status, `READ_STEPS` request, daily totals; packaged by `addons/peak_rush_steps`; both presets now use the Gradle build with min SDK 26
+- [x] Settings: "Real steps give TP" switch (hidden without a step source); switching off disconnects
+- [x] Main menu: "Steps today" button, highlighted with "+N TP" while there is TP to claim; a tap claims it
+- [x] "Real km walked" stat (on the profile screen, next to the other totals)
+- [x] Step badges: Step Outside (10,000 steps), Marathon Legs (42 km), Long Walker (200 km)
+- [x] Strings in `translations/strings.csv`
+- [ ] Phone test on the Pixel 7 Pro (see the list below)
 - [ ] Store paperwork: update the privacy policy (step data stays on the device), the Google Play data-safety form and the **Health Connect permission declaration**
+- [x] Polish: claim count-up + new-badge pills, re-read when the app returns, UI tests with a mock phone, rationale text as Android string resources
+- [ ] Later, if wanted: step cosmetics, streak protection on 5,000-step days
 - [ ] **iOS plugin** (Swift, HealthKit) with the entitlement and `NSHealthShareUsageDescription`; needs a Mac with Xcode, so postpone if there isn't one
-- [ ] Test on the Pixel 7 Pro: connect, walk around, claim TP, deny the permission, revoke it in system settings, and make sure the game still works
+
+Phone test: switch on in Settings (Health Connect asks), go back to the menu (button shows today's steps since switching on),
+walk 500+ steps, reopen the menu and claim; deny the permission (switch flips back off); revoke it in Health Connect (the menu
+button disappears, no TP); check the game still plays normally throughout.
 
 **Done when:** on the phone, real steps turn into TP up to the daily cap, the game works normally when the permission is denied or revoked, and all tests pass.
 

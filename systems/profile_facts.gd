@@ -5,7 +5,9 @@ extends RefCounted
 
 
 ## `trail_lookup` is a Callable(StringName) -> TrailData (ContentDB.get_trail in the game).
-static func build(trails: Dictionary, profile: PlayerProfile, gear_owned: int, stars: int, trail_lookup: Callable) -> Dictionary:
+## `real_steps` / `real_km` come from the StepLedger (real-world steps from the phone).
+static func build(trails: Dictionary, profile: PlayerProfile, gear_owned: int, stars: int, trail_lookup: Callable,
+		real_steps: int = 0, real_km: float = 0.0) -> Dictionary:
 	var finished: int = 0
 	var night: int = 0
 	var photos: int = 0
@@ -33,4 +35,5 @@ static func build(trails: Dictionary, profile: PlayerProfile, gear_owned: int, s
 		"trails_finished": finished, "stars": stars, "photos": photos, "perfect_photos": perfect,
 		"hikes": profile.hikes, "night_trails": night, "gear_owned": gear_owned,
 		"hike_minutes": int(profile.hike_seconds / 60.0), "finds": found, "animals": animals,
+		"real_steps": real_steps, "real_km": int(real_km),
 	}

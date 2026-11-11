@@ -16,6 +16,8 @@ static func step(from_version: int, data: Dictionary) -> Dictionary:
 			return _v3_to_v4(data)
 		4:
 			return _v4_to_v5(data)
+		5:
+			return _v5_to_v6(data)
 	push_error("SaveMigrations: no step from version %d" % from_version)
 	return data
 
@@ -96,4 +98,12 @@ static func _v4_to_v5(data: Dictionary) -> Dictionary:
 		for id: Variant in trails:
 			if trails[id] is Dictionary and not trails[id].has("challenges"):
 				trails[id]["challenges"] = 0
+	return out
+
+
+## v6 adds the real-world step counter (StepLedger), off until the player opts in.
+static func _v5_to_v6(data: Dictionary) -> Dictionary:
+	var out: Dictionary = data.duplicate(true)
+	if not (out.get("steps") is Dictionary):
+		out["steps"] = {"enabled": false, "opt_in_unix": 0, "opt_in_date": "", "claimed": {}, "lifetime_steps": 0, "last_sync_unix": 0}
 	return out

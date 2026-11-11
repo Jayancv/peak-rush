@@ -182,6 +182,15 @@ extends Resource
 @export var tp_photo_great: int = 20
 @export var tp_photo_perfect: int = 30
 
+@export_group("Real steps")
+## Steps from the phone's health app (GAME_DESIGN §5.10): a small TP bonus, never the main source.
+@export var steps_per_tp: int = 500
+@export var step_tp_daily_cap: int = 40
+## Unclaimed days stay claimable this long (today counts as one).
+@export var step_claim_window_days: int = 7
+## For the "real km walked" stat and the km badges.
+@export var step_length_m: float = 0.75
+
 @export_group("Camera")
 @export var camera_look_ahead_px: float = 220.0
 ## Keeps the hiker below the screen centre so the climb ahead is visible.

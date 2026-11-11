@@ -121,10 +121,22 @@ func test_migrates_v3_save_to_v4_with_a_fresh_daily_streak() -> void:
 func test_migrates_v4_save_to_v5_with_no_hints_seen() -> void:
 	var v4: Dictionary = {"save_version": 4, "tp": 9, "profile": {"name": "Aino", "daily_streak": 3}}
 	var out: Dictionary = SaveService.migrate(v4)
-	assert_eq(int(out.save_version), 5)
+	assert_eq(int(out.save_version), SaveService.SAVE_VERSION)
 	assert_eq(out.profile.hints_seen, [])
 	assert_eq(out.profile.daily_pick, {})
 	assert_eq(int(out.profile.daily_streak), 3, "the rest of the profile is untouched")
+
+
+func test_migrates_v5_save_to_v6_with_the_step_counter_off() -> void:
+	var v5: Dictionary = {"save_version": 5, "tp": 9, "profile": {"name": "Aino"}}
+	var out: Dictionary = SaveService.migrate(v5)
+	assert_eq(int(out.save_version), 6)
+	assert_false(bool(out.steps.enabled))
+	assert_eq(int(out.steps.lifetime_steps), 0)
+	assert_eq(int(out.tp), 9)
+	GameState.from_dict(out)
+	assert_false(GameState.steps.enabled, "migrated players must opt in themselves")
+	GameState.reset()
 
 
 func _write_raw(text: String) -> void:

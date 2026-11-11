@@ -327,3 +327,14 @@ ABOUT_FEEDBACK,Send feedback
 FEEDBACK_SUBJECT,Peak Rush %s feedback
 FEEDBACK_PROMPT,"Tell us what you liked, what was hard, or what went wrong:"
 FEEDBACK_DEVICE,"Version %s, %s, Android %s"
+SETTINGS_STEPS,Real steps give TP
+STEPS_PILL,Steps today: %d
+STEPS_CLAIMED,+%d TP from your steps!
+STAT_REAL_KM,Real km walked
+BADGE_STEP_OUT,Step Outside
+BADGE_STEP_OUT_DESC,"Walk 10,000 real steps"
+BADGE_MARATHON_LEGS,Marathon Legs
+BADGE_MARATHON_LEGS_DESC,Walk 42 real km
+BADGE_LONG_WALKER,Long Walker
+BADGE_LONG_WALKER_DESC,Walk 200 real km
+STEPS_PILL_PENDING,Steps today: %d  ·  +%d TP

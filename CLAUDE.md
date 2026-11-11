@@ -235,4 +235,15 @@ docs/                GAME_DESIGN.md, PLAN.md
   -- <trail_id>` (one trail per run; it keeps the runner unpaused when the window loses focus) writes
   trails/<trail>/postcards/<viewpoint>.webp (900x600), linked as ViewpointData.postcard. Re-run after changing a viewpoint or
   backdrop. Postcard draws them as a printed photo + caption strip + stamp/postmark; PostcardArt is the fallback.
+  M9 real steps (started early, Android built): `StepLedger` (systems/, GameState.steps, save v6 "steps") = steps->TP per
+  day (Balance steps_per_tp/step_tp_daily_cap/step_claim_window_days), no backfill before first opt-in, claims store steps per day.
+  Static `Steps` (scenes/steps/, no autoload) picks HealthConnectStepProvider (singleton PeakRushSteps) / MockStepProvider
+  (debug desktop, 100 steps/min) / no-op StepProvider (GUT, release desktop). Settings switch (hidden if unsupported), menu
+  "Steps today" claim button, profile "Real km walked", badges REAL_STEPS/REAL_KM (rules at the END of BadgeData.Rule).
+  Kotlin plugin source: native/android/peak_rush_steps (.gdignore; build per its README) -> addons/peak_rush_steps/bin AAR,
+  packaged by the addons/peak_rush_steps export plugin. Both Android presets now use the Gradle build, min SDK 26.
+  Health Connect client pinned to 1.1.0-beta01: newer ones need AGP 8.9.1, Godot 4.7.2's template has 8.6.1.
+  Menu claim = `StepsButton` (scenes/main_menu; re-reads on app focus-in/resume, count-up, badge pills). New-badge pills are
+  shared: `BadgePills.show(parent, ids)` (results + step claims). Health Connect's rationale text lives in the plugin's
+  res/values/strings.xml (runs outside the game, so not strings.csv). UI tests: tests/ui/test_steps_ui.gd (mock phone).
   Water: SteppingStones uses `world/obstacles/water.gdshader` (waves/depth/glints in local px). GroundPatch art follows the TerrainStrip slope.

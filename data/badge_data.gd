@@ -4,7 +4,7 @@ extends Resource
 ## many are needed; BadgeRules does the counting.
 
 ## New values go at the end: .tres files store the number.
-enum Rule { TRAILS_FINISHED, STARS, PHOTOS, PERFECT_PHOTOS, HIKES, NIGHT_TRAILS, GEAR_OWNED, HIKE_MINUTES, FINDS, ANIMALS }
+enum Rule { TRAILS_FINISHED, STARS, PHOTOS, PERFECT_PHOTOS, HIKES, NIGHT_TRAILS, GEAR_OWNED, HIKE_MINUTES, FINDS, ANIMALS, REAL_STEPS, REAL_KM }
 ## Which picture the badge shows (drawn by the profile screen).
 enum Art { MOUNTAIN, STAR, CAMERA, BOOTS, HEADLAMP, GEAR, CLOCK, LEAF, PAW }
 

@@ -119,6 +119,8 @@ func _build_stats() -> void:
 		[UiIcon.Kind.MOUNTAIN, "STAT_TP", str(GameState.tp)],
 		[UiIcon.Kind.STAR_EMPTY, "STAT_BADGES", "%d / %d" % [GameState.profile.badges.size(), ContentDB.badge_list().size()]],
 	]
+	if GameState.steps.enabled or GameState.steps.lifetime_steps > 0:
+		rows.append([UiIcon.Kind.BOOTS, "STAT_REAL_KM", "%.1f km" % GameState.steps.lifetime_km(ContentDB.balance)])
 	for r: Array in rows:
 		var row: HBoxContainer = HBoxContainer.new()
 		row.add_theme_constant_override("separation", 14)

@@ -34,6 +34,7 @@ func _ready() -> void:
 	if not DisplayServer.is_touchscreen_available():
 		(continue_button if continue_button.visible else play_button).grab_focus()
 	_add_daily_button()
+	_add_steps_button()
 	# Ad consent waits until ads matter (see Ads); this only catches players past the grace period.
 	Ads.ensure_consent.call_deferred(self)
 	_start_panning()
@@ -57,6 +58,14 @@ func _add_daily_button() -> void:
 	button.pressed.connect(func() -> void: DailyCard.open(self))
 	profile_button.get_parent().add_child(button)
 	UiMotion.intro([button], 0.5)
+
+
+## Real steps (M9): only while the step counter is on (see StepsButton).
+func _add_steps_button() -> void:
+	if not Steps.is_on():
+		return
+	var button: StepsButton = StepsButton.create(profile_button.get_parent(), self)
+	UiMotion.intro([button], 0.55)
 
 
 func _setup_banner() -> void:

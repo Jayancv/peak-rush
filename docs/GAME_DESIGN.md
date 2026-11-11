@@ -98,15 +98,16 @@ Two slots means each trail's weather makes you choose your loadout.
 - Trails unlock **in order within a season**. Trail 1 of every season is always open, so new players can jump straight into the latest season.
 - The journal shows each season as a passport page.
 
-### 5.10 Real-world steps (post-launch, M9)
+### 5.10 Real-world steps (M9)
 The player's real steps from the phone's health app become a small TP bonus, so a walk in real life helps your hiker.
 - **Source:** Android **Health Connect**, iOS **HealthKit**. Read-only, steps only.
-- **Opt-in:** a "Connect step counter" option in Settings. The game is fully playable without it, and saying no costs nothing.
+- **Opt-in:** a "Real steps give TP" switch in Settings (only on phones with a step source). The game is fully playable without it, and saying no costs nothing.
 - **Rate:** **1 TP per 500 steps**, capped at **40 TP per day** (≈ 20,000 steps). Both numbers live in `balance.tres`.
 - **No backfill:** only steps taken after the player opts in count. History from before that is ignored.
-- **Claiming:** on the main menu, a "Steps walked today → +N TP" card. Unclaimed steps from the last **7 days** can still be claimed (each day capped separately); anything older is lost.
+- **Claiming:** on the main menu, a "Steps today" button that lights up with "+N TP"; one tap claims. Unclaimed steps from the last **7 days** can still be claimed (each day capped separately); anything older is lost.
 - **Fairness:** the cap keeps steps a bonus. Trails, stars and photos stay the main source of TP. The cap, plus the stored last-sync time, is enough anti-cheat for a single-player game.
-- **Journal stat:** "Real km walked" (steps × 0.75 m) on the journal cover.
+- **Profile stat:** "Real km walked" (steps × 0.75 m), counting every claimed step, past the TP cap too.
+- **Badges:** Step Outside (10,000 steps), Marathon Legs (42 km), Long Walker (200 km).
 - **Privacy:** step data is used only on the device and never leaves it. The privacy policy and store forms must say so.
 
 ## 6. Season 1 — Nordic Trails (launch content)

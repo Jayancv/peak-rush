@@ -28,6 +28,8 @@ var equipped_gear: Array[String] = []
 var seen_version: String = ""
 ## Name, outfit, hike totals and badges (saved under "profile").
 var profile: PlayerProfile = PlayerProfile.new()
+## Real-world steps from the phone (saved under "steps"; see Steps for the reading side).
+var steps: StepLedger = StepLedger.new()
 
 ## Not saved: which trail the runner should load next, and the last results for the results screen.
 var current_trail_id: StringName = &""
@@ -44,6 +46,7 @@ func reset() -> void:
 	equipped_gear = []
 	seen_version = ""
 	profile = PlayerProfile.new()
+	steps = StepLedger.new()
 	last_result = {}
 
 
@@ -181,7 +184,8 @@ func look_colors() -> Dictionary:
 
 ## Totals the badges are judged on (see BadgeRules / ProfileFacts).
 func profile_facts() -> Dictionary:
-	return ProfileFacts.build(trails, profile, owned_gear.size(), total_stars(), ContentDB.get_trail)
+	return ProfileFacts.build(trails, profile, owned_gear.size(), total_stars(), ContentDB.get_trail,
+		steps.lifetime_steps, steps.lifetime_km(ContentDB.balance))
 
 
 ## Adds any badges earned since the last check and returns them.
@@ -272,6 +276,15 @@ func add_bonus_tp(amount: int) -> void:
 	progress_changed.emit()
 
 
+## Pays out real-world steps read from the phone (`totals`: date -> steps). Returns {tp, steps, badges}.
+func claim_steps(totals: Dictionary) -> Dictionary:
+	var out: Dictionary = steps.claim(totals, today(), int(Time.get_unix_time_from_system()), ContentDB.balance)
+	tp += int(out.tp)
+	out["badges"] = refresh_badges()
+	progress_changed.emit()
+	return out
+
+
 # --- Save format ---
 
 func to_dict() -> Dictionary:
@@ -283,6 +296,7 @@ func to_dict() -> Dictionary:
 		"equipped_gear": equipped_gear.duplicate(),
 		"seen_version": seen_version,
 		"profile": profile.to_dict(),
+		"steps": steps.to_dict(),
 	}
 
 
@@ -305,5 +319,8 @@ func from_dict(data: Dictionary) -> void:
 	var saved_profile: Variant = data.get("profile", {})
 	if saved_profile is Dictionary:
 		profile.from_dict(saved_profile)
+	var saved_steps: Variant = data.get("steps", {})
+	if saved_steps is Dictionary:
+		steps.from_dict(saved_steps)
 	# Saves from before badges existed get what they've already earned, quietly.
 	refresh_badges()

@@ -23,8 +23,6 @@ const COUNT_SECONDS: float = 1.0
 @export var replay_button: Button
 @export var trails_button: Button
 
-## How long the "badge earned" pills stay before fading.
-const BADGE_SHOW_SECONDS: float = 3.5
 ## Pause between the stamp landing and the season finale (lets the badges show first).
 const FINALE_DELAY: float = 2.2
 ## The review request waits for the stars and TP to land.
@@ -145,47 +143,7 @@ func _land_stamp() -> void:
 
 ## Newly earned badges slide down from the top as small pills.
 func _show_new_badges() -> void:
-	var ids: Array = _result.get("new_badges", [])
-	if ids.is_empty():
-		return
-	var column: VBoxContainer = VBoxContainer.new()
-	column.add_theme_constant_override("separation", 8)
-	column.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP)
-	column.grow_horizontal = Control.GROW_DIRECTION_BOTH
-	column.offset_top = 18.0
-	column.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	card.get_parent().get_parent().add_child(column)
-	var i: int = 0
-	for badge: BadgeData in ContentDB.badge_list():
-		if not ids.has(String(badge.id)):
-			continue
-		var pill: PanelContainer = PanelContainer.new()
-		var box: StyleBoxFlat = StyleBoxFlat.new()
-		box.bg_color = Color(1, 0.964706, 0.898039, 0.96)
-		box.set_corner_radius_all(34)
-		box.content_margin_left = 10.0
-		box.content_margin_right = 24.0
-		box.content_margin_top = 8.0
-		box.content_margin_bottom = 8.0
-		box.shadow_color = Color(0.168627, 0.176471, 0.258824, 0.2)
-		box.shadow_size = 8
-		pill.add_theme_stylebox_override("panel", box)
-		var row: HBoxContainer = HBoxContainer.new()
-		row.add_theme_constant_override("separation", 12)
-		row.add_child(BadgeView.medal(badge, true, 52.0))
-		var label: Label = Label.new()
-		label.text = tr("RESULTS_NEW_BADGE") % tr(badge.name_key)
-		label.add_theme_font_size_override("font_size", 26)
-		row.add_child(label)
-		pill.add_child(row)
-		column.add_child(pill)
-		UiMotion.intro([pill], 0.15 + 0.25 * float(i))
-		i += 1
-	# They sit over the top of the card, so they step aside after a few seconds.
-	var fade: Tween = column.create_tween()
-	fade.tween_interval(BADGE_SHOW_SECONDS + 0.25 * float(i))
-	fade.tween_property(column, "modulate:a", 0.0, 0.5)
-	fade.tween_callback(column.queue_free)
+	BadgePills.show(card.get_parent().get_parent(), _result.get("new_badges", []))
 
 
 func _thump() -> void:

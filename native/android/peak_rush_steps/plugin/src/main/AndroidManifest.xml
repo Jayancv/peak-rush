@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Read-only, steps only (GAME_DESIGN 5.10). -->
+    <uses-permission android:name="android.permission.health.READ_STEPS" />
+
+    <!-- Lets the app see whether Health Connect is installed (Android 13 and older). -->
+    <queries>
+        <package android:name="com.google.android.apps.healthdata" />
+    </queries>
+
+    <application>
+        <meta-data
+            android:name="org.godotengine.plugin.v2.PeakRushSteps"
+            android:value="org.jcv.peakrush.steps.PeakRushStepsPlugin" />
+
+        <!-- Health Connect refuses to show the permission dialog unless the app can
+             explain why it wants the data (Android 13 and older). -->
+        <activity
+            android:name="org.jcv.peakrush.steps.PermissionsRationaleActivity"
+            android:exported="true"
+            android:theme="@android:style/Theme.Material.Light.Dialog">
+            <intent-filter>
+                <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" />
+            </intent-filter>
+        </activity>
+
+        <!-- The same explanation for Android 14 and newer. -->
+        <activity-alias
+            android:name="org.jcv.peakrush.steps.ViewPermissionUsageActivity"
+            android:exported="true"
+            android:permission="android.permission.START_VIEW_PERMISSION_USAGE"
+            android:targetActivity="org.jcv.peakrush.steps.PermissionsRationaleActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW_PERMISSION_USAGE" />
+                <category android:name="android.intent.category.HEALTH_PERMISSIONS" />
+            </intent-filter>
+        </activity-alias>
+    </application>
+</manifest>

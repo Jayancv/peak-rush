@@ -123,6 +123,36 @@ amount = 3
 art = 8
 color = Color(0.7098, 0.3961, 0.1137, 1)
 
+[sub_resource type="Resource" id="step_out"]
+script = ExtResource("2_badge")
+id = &"step_out"
+name_key = "BADGE_STEP_OUT"
+description_key = "BADGE_STEP_OUT_DESC"
+rule = 10
+amount = 10000
+art = 3
+color = Color(0.4196, 0.5765, 0.3804, 1)
+
+[sub_resource type="Resource" id="marathon_legs"]
+script = ExtResource("2_badge")
+id = &"marathon_legs"
+name_key = "BADGE_MARATHON_LEGS"
+description_key = "BADGE_MARATHON_LEGS_DESC"
+rule = 11
+amount = 42
+art = 3
+color = Color(0.2431, 0.4196, 0.5490, 1)
+
+[sub_resource type="Resource" id="long_walker"]
+script = ExtResource("2_badge")
+id = &"long_walker"
+name_key = "BADGE_LONG_WALKER"
+description_key = "BADGE_LONG_WALKER_DESC"
+rule = 11
+amount = 200
+art = 3
+color = Color(0.5490, 0.2902, 0.4196, 1)
+
 [resource]
 script = ExtResource("1_catalog")
-badges = Array[ExtResource("2_badge")]([SubResource("first_summit"), SubResource("seasoned"), SubResource("star_gazer"), SubResource("shining_trail"), SubResource("shutterbug"), SubResource("perfect_shot"), SubResource("night_owl"), SubResource("regular"), SubResource("kitted_out"), SubResource("long_haul"), SubResource("forager"), SubResource("wildlife_watcher")])
+badges = Array[ExtResource("2_badge")]([SubResource("first_summit"), SubResource("seasoned"), SubResource("star_gazer"), SubResource("shining_trail"), SubResource("shutterbug"), SubResource("perfect_shot"), SubResource("night_owl"), SubResource("regular"), SubResource("kitted_out"), SubResource("long_haul"), SubResource("forager"), SubResource("wildlife_watcher"), SubResource("step_out"), SubResource("marathon_legs"), SubResource("long_walker")])

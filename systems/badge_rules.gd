@@ -3,7 +3,7 @@ extends RefCounted
 ## Decides which badges a player has earned from a "facts" dictionary of totals
 ## (built by GameState from the save). Pure, so it's easy to test.
 ## Facts keys: trails_finished, stars, photos, perfect_photos, hikes, night_trails,
-## gear_owned, hike_minutes, finds, animals (all ints; missing keys count as 0).
+## gear_owned, hike_minutes, finds, animals, real_steps, real_km (all ints; missing keys count as 0).
 
 const FACT_FOR_RULE: Dictionary = {
 	BadgeData.Rule.TRAILS_FINISHED: "trails_finished",
@@ -16,6 +16,8 @@ const FACT_FOR_RULE: Dictionary = {
 	BadgeData.Rule.HIKE_MINUTES: "hike_minutes",
 	BadgeData.Rule.FINDS: "finds",
 	BadgeData.Rule.ANIMALS: "animals",
+	BadgeData.Rule.REAL_STEPS: "real_steps",
+	BadgeData.Rule.REAL_KM: "real_km",
 }
 
 

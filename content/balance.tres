@@ -87,3 +87,7 @@ walk_bob_hz = 2.2
 rest_breath_amount = 0.025
 rest_breath_hz = 0.4
 review_after_summits = 3
+steps_per_tp = 500
+step_tp_daily_cap = 40
+step_claim_window_days = 7
+step_length_m = 0.75
