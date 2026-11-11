@@ -39,7 +39,7 @@ func setup(number: int, data: TrailData, record: Dictionary, unlocked: bool, the
 	if best > 0.0:
 		var challenges: int = int(record.get("challenges", 0))
 		var extra: String = tr("SELECT_MEDAL") if TrailChallenges.has_medal(challenges) else tr("SELECT_CHALLENGES") % TrailChallenges.count(challenges)
-		detail_label.text += "  ·  " + extra
+		detail_label.text += "\n" + extra
 	disabled = not unlocked
 	lock_row.visible = not unlocked
 	detail_label.visible = unlocked

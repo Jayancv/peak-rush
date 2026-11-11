@@ -6,3 +6,7 @@ extends Resource
 @export var name_key: String
 ## Pre-drawn postcard unlocked by photographing this viewpoint.
 @export var postcard: Texture2D
+## What the code-drawn postcard shows until `postcard` has painted art (PostcardArt).
+## New motifs go at the END: trail.tres files store the number.
+enum Motif { DEFAULT, LAKE, BIRD, SEA, LIGHTHOUSE, REINDEER, FELL, WATERFALL, FJORD, GLACIER, CABIN, AURORA, FROZEN_LAKE }
+@export var motif: Motif = Motif.DEFAULT

@@ -55,9 +55,9 @@ func ground_stop(decel: float, delta: float) -> void:
 
 func air_control(delta: float) -> void:
 	if hiker.wants_walk():
-		move_horizontal(hiker.walk_target_speed(), hiker.balance.air_accel, delta)
+		move_horizontal(hiker.walk_target_speed(hiker.balance.air_wind_scale), hiker.balance.air_accel, delta)
 	else:
-		move_horizontal(hiker.condition.wind_push, hiker.balance.air_decel, delta)
+		move_horizontal(hiker.condition.wind_push * hiker.balance.air_wind_scale, hiker.balance.air_decel, delta)
 
 
 func apply_gravity(delta: float) -> void:

@@ -9,11 +9,13 @@
 script = ExtResource("3_vp")
 id = &"reindeer_herd"
 name_key = "VP_REINDEER"
+motif = 5
 
 [sub_resource type="Resource" id="Viewpoint_2"]
 script = ExtResource("3_vp")
 id = &"fell_top"
 name_key = "VP_FELL_TOP"
+motif = 6
 
 [sub_resource type="Resource" id="Find_cloudberry"]
 script = ExtResource("9_find")

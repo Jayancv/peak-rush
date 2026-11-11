@@ -51,6 +51,8 @@ extends Resource
 ## Horizontal acceleration in the air while walk is held, and drag while it isn't.
 @export var air_accel: float = 400.0
 @export var air_decel: float = 150.0
+## Share of the wind push felt while airborne (gusts mustn't wreck a committed jump).
+@export_range(0.0, 1.0) var air_wind_scale: float = 0.4
 ## Grace period to still jump after walking off an edge.
 @export var coyote_seconds: float = 0.1
 ## A jump pressed this long before landing still fires on landing.

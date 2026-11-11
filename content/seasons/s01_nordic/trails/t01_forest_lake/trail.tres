@@ -9,11 +9,13 @@
 script = ExtResource("3_vp")
 id = &"lake_mirror"
 name_key = "VP_LAKE_MIRROR"
+motif = 1
 
 [sub_resource type="Resource" id="Viewpoint_2"]
 script = ExtResource("3_vp")
 id = &"woodpecker"
 name_key = "VP_WOODPECKER"
+motif = 2
 
 [sub_resource type="Resource" id="Find_lost_compass"]
 script = ExtResource("9_find")

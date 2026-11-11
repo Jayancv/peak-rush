@@ -94,6 +94,7 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.168627, 0.176471, 0.258824, 0.7)
 theme_override_font_sizes/font_size = 24
 text = "SELECT_NOT_HIKED"
+autowrap_mode = 3
 
 [node name="Lock" type="HBoxContainer" parent="VBox"]
 visible = false

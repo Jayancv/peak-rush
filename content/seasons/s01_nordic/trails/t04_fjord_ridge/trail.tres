@@ -9,11 +9,13 @@
 script = ExtResource("3_vp")
 id = &"waterfall"
 name_key = "VP_WATERFALL"
+motif = 7
 
 [sub_resource type="Resource" id="Viewpoint_2"]
 script = ExtResource("3_vp")
 id = &"fjord"
 name_key = "VP_FJORD"
+motif = 8
 
 [sub_resource type="Resource" id="Find_old_compass"]
 script = ExtResource("9_find")
@@ -59,6 +61,7 @@ appear_chance = 1.0
 script = ExtResource("3_vp")
 id = &"glacier"
 name_key = "VP_GLACIER"
+motif = 9
 
 [resource]
 script = ExtResource("1_trail")

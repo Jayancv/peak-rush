@@ -203,6 +203,8 @@ func _fill(card: Postcard, trail: TrailData, vp: ViewpointData, q: int, season: 
 	card.quality = q
 	card.theme_color = season.theme_color
 	card.art = vp.postcard
+	card.motif = vp.motif
+	card.night = trail.night
 	card.art_seed = hash(vp.id) + i
 
 

@@ -19,6 +19,7 @@ jump_velocity = 540.0
 max_fall_speed = 1400.0
 air_accel = 400.0
 air_decel = 150.0
+air_wind_scale = 0.4
 coyote_seconds = 0.1
 jump_buffer_seconds = 0.12
 rest_delay_seconds = 0.5

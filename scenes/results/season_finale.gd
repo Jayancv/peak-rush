@@ -67,6 +67,11 @@ func _build(season: SeasonData) -> void:
 	card.quality = 3
 	card.art = season.banner
 	card.art_seed = hash(season.id)
+	# The season's last view (its finale trail), unless the season has a painted banner.
+	var last: TrailData = season.ordered_trails().back() if not season.trails.is_empty() else null
+	if last != null and not last.viewpoints.is_empty():
+		card.motif = last.viewpoints.back().motif
+		card.night = last.night
 	card.rotation = deg_to_rad(-3.0)
 	row.add_child(card)
 	var box: VBoxContainer = VBoxContainer.new()

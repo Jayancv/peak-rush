@@ -234,8 +234,9 @@ func has_buffered_jump() -> bool:
 	return _input.jump_buffer_left > 0.0
 
 
-func walk_target_speed() -> float:
-	return (balance.walk_speed * speed_multiplier + momentum.bonus) * facing + condition.wind_push
+## `wind_scale` < 1 in the air: a gust mid-jump nudges, it can't drop you into a gap.
+func walk_target_speed(wind_scale: float = 1.0) -> float:
+	return (balance.walk_speed * speed_multiplier + momentum.bonus) * facing + condition.wind_push * wind_scale
 
 
 ## Grace time left to jump after walking off an edge.

@@ -39,6 +39,21 @@ func test_strong_gust_pushes_back_while_walking() -> void:
 	assert_lt(hiker.global_position.x, x, "a gust stronger than walking speed pushes the hiker back")
 
 
+func test_gust_mid_jump_only_nudges() -> void:
+	Input.action_press(&"walk")
+	await wait_physics_frames(60)
+	var takeoff: float = hiker.velocity.x
+	Input.action_press(&"jump")
+	await wait_physics_frames(2)
+	Input.action_release(&"jump")
+	hiker.condition.wind_push = -80.0
+	await wait_physics_frames(18)
+	assert_false(hiker.is_on_floor(), "still in the air")
+	var floor_speed: float = hiker.balance.walk_speed - 80.0 * hiker.balance.air_wind_scale
+	assert_gt(hiker.velocity.x, floor_speed - 3.0, "a headwind gust can't stall a committed jump")
+	assert_lt(hiker.velocity.x, takeoff, "but the gust is still felt")
+
+
 func test_camera_shake_decays_back_to_the_view() -> void:
 	var cam: HikerCamera = HikerCamera.new()
 	# Physics interpolation needs the physics process mode before entering the tree.

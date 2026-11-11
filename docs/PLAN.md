@@ -235,12 +235,12 @@ Ads must never interrupt a hike. Rewarded ads are opt-in; interstitials are rare
 ## M7.9 — Google Play launch
 - [ ] **Play Console developer account** (user; one-time fee, identity verification can take days — start early)
 - [ ] Release keystore: create it, **back it up in two safe places**, never commit it or its passwords
-- [ ] Gradle build + **AAB** export; target SDK at the level Google Play currently requires; 16 KB page-size support
-- [ ] Version **1.0.0** (versionCode 1) = Season 1
+- [x] Gradle build + **AAB** export (preset "Android Release", docs/RELEASE.md; checked with the debug key standing in); target SDK 36 (Play's requirement since Aug 2026); 16 KB page-size support (Godot 4.7 templates)
+- [x] Version **1.0.0** (versionCode 1) = Season 1 (project.godot config/version; presets read it)
 - [ ] Privacy policy hosted at a public URL (e.g. GitHub Pages)
-- [ ] Store listing: name, short description (80 chars), full description, 512 px icon, 1024×500 feature graphic,
+- [~] Store listing (text drafted in docs/STORE_LISTING.md; images from tools/store_shots, user to approve and upload): name, short description (80 chars), full description, 512 px icon, 1024×500 feature graphic,
       4–8 phone screenshots (taken with a screenshot script), optional trailer
-- [ ] Content rating questionnaire (mentions ads), target audience, data-safety form, ads declaration
+- [~] Content rating questionnaire (mentions ads), target audience, data-safety form, ads declaration (expected answers in docs/STORE_LISTING.md)
 - [ ] **Internal testing** track: install from the Play Store on the Pixel, check the pre-launch report
 - [ ] **Closed test: ≥ 12 testers for 14 continuous days**; fix what they report; answer the production-access questions
 - [ ] **Production** release (staged rollout, e.g. 20% → 100%); watch Android vitals (crashes, ANRs) for the first week
