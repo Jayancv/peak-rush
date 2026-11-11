@@ -72,6 +72,8 @@ func _build(season: SeasonData) -> void:
 	if last != null and not last.viewpoints.is_empty():
 		card.motif = last.viewpoints.back().motif
 		card.night = last.night
+		if card.art == null:
+			card.art = last.viewpoints.back().postcard
 	card.rotation = deg_to_rad(-3.0)
 	row.add_child(card)
 	var box: VBoxContainer = VBoxContainer.new()

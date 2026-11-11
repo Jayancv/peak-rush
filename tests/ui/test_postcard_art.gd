@@ -34,3 +34,13 @@ func test_trail_card_detail_wraps_instead_of_overflowing() -> void:
 	var card: TrailCard = (load("res://scenes/trail_select/trail_card.tscn") as PackedScene).instantiate()
 	add_child_autofree(card)
 	assert_ne(card.detail_label.autowrap_mode, TextServer.AUTOWRAP_OFF)
+
+
+func test_every_viewpoint_has_its_rendered_postcard() -> void:
+	# Pictures come from tools/postcards/make_postcards.tscn (the real game view).
+	for season: SeasonData in ContentDB.seasons():
+		for trail: TrailData in season.trails:
+			for vp: ViewpointData in trail.viewpoints:
+				assert_not_null(vp.postcard, "%s has a postcard picture" % vp.id)
+				if vp.postcard != null:
+					assert_almost_eq(vp.postcard.get_size().aspect(), 1.5, 0.01, "%s is a 3:2 print" % vp.id)

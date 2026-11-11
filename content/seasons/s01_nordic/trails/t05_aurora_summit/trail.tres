@@ -4,17 +4,22 @@
 [ext_resource type="Script" path="res://data/find_data.gd" id="9_find"]
 [ext_resource type="Script" path="res://data/viewpoint_data.gd" id="3_vp"]
 [ext_resource type="Resource" path="res://content/weather/snow.tres" id="2_weather"]
+[ext_resource type="Texture2D" path="res://content/seasons/s01_nordic/trails/t05_aurora_summit/postcards/cabin.webp" id="pc_cabin"]
+[ext_resource type="Texture2D" path="res://content/seasons/s01_nordic/trails/t05_aurora_summit/postcards/aurora.webp" id="pc_aurora"]
+[ext_resource type="Texture2D" path="res://content/seasons/s01_nordic/trails/t05_aurora_summit/postcards/frozen_lake.webp" id="pc_frozen_lake"]
 
 [sub_resource type="Resource" id="Viewpoint_1"]
 script = ExtResource("3_vp")
 id = &"cabin"
 name_key = "VP_CABIN"
+postcard = ExtResource("pc_cabin")
 motif = 10
 
 [sub_resource type="Resource" id="Viewpoint_2"]
 script = ExtResource("3_vp")
 id = &"aurora"
 name_key = "VP_AURORA"
+postcard = ExtResource("pc_aurora")
 motif = 11
 
 [sub_resource type="Resource" id="Find_lost_mitten"]
@@ -61,6 +66,7 @@ appear_chance = 0.65
 script = ExtResource("3_vp")
 id = &"frozen_lake"
 name_key = "VP_FROZEN_LAKE"
+postcard = ExtResource("pc_frozen_lake")
 motif = 12
 
 [resource]

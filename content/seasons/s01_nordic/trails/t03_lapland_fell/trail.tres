@@ -4,17 +4,21 @@
 [ext_resource type="Script" path="res://data/find_data.gd" id="9_find"]
 [ext_resource type="Script" path="res://data/viewpoint_data.gd" id="3_vp"]
 [ext_resource type="Resource" path="res://content/weather/fog.tres" id="2_weather"]
+[ext_resource type="Texture2D" path="res://content/seasons/s01_nordic/trails/t03_lapland_fell/postcards/reindeer_herd.webp" id="pc_reindeer_herd"]
+[ext_resource type="Texture2D" path="res://content/seasons/s01_nordic/trails/t03_lapland_fell/postcards/fell_top.webp" id="pc_fell_top"]
 
 [sub_resource type="Resource" id="Viewpoint_1"]
 script = ExtResource("3_vp")
 id = &"reindeer_herd"
 name_key = "VP_REINDEER"
+postcard = ExtResource("pc_reindeer_herd")
 motif = 5
 
 [sub_resource type="Resource" id="Viewpoint_2"]
 script = ExtResource("3_vp")
 id = &"fell_top"
 name_key = "VP_FELL_TOP"
+postcard = ExtResource("pc_fell_top")
 motif = 6
 
 [sub_resource type="Resource" id="Find_cloudberry"]

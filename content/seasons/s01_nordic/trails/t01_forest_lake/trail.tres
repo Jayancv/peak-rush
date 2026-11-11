@@ -4,17 +4,21 @@
 [ext_resource type="Script" path="res://data/find_data.gd" id="9_find"]
 [ext_resource type="Script" path="res://data/viewpoint_data.gd" id="3_vp"]
 [ext_resource type="Resource" path="res://content/weather/clear.tres" id="2_weather"]
+[ext_resource type="Texture2D" path="res://content/seasons/s01_nordic/trails/t01_forest_lake/postcards/lake_mirror.webp" id="pc_lake_mirror"]
+[ext_resource type="Texture2D" path="res://content/seasons/s01_nordic/trails/t01_forest_lake/postcards/woodpecker.webp" id="pc_woodpecker"]
 
 [sub_resource type="Resource" id="Viewpoint_1"]
 script = ExtResource("3_vp")
 id = &"lake_mirror"
 name_key = "VP_LAKE_MIRROR"
+postcard = ExtResource("pc_lake_mirror")
 motif = 1
 
 [sub_resource type="Resource" id="Viewpoint_2"]
 script = ExtResource("3_vp")
 id = &"woodpecker"
 name_key = "VP_WOODPECKER"
+postcard = ExtResource("pc_woodpecker")
 motif = 2
 
 [sub_resource type="Resource" id="Find_lost_compass"]

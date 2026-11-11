@@ -231,4 +231,8 @@ docs/                GAME_DESIGN.md, PLAN.md
   at >= Balance.review_after_summits summits; plugin singleton checked, debug builds show a TEST card).
   About "Send feedback" = mailto with version/phone, hidden until AboutCard.SUPPORT_EMAIL is set.
   New settings keys with defaults (ad_consent, review_asked) need no save migration: settings merge over DEFAULT_SETTINGS.
+  Postcard pictures are rendered from the real game: `godot --path . --resolution 1920x1080 tools/postcards/make_postcards.tscn
+  -- <trail_id>` (one trail per run; it keeps the runner unpaused when the window loses focus) writes
+  trails/<trail>/postcards/<viewpoint>.webp (900x600), linked as ViewpointData.postcard. Re-run after changing a viewpoint or
+  backdrop. Postcard draws them as a printed photo + caption strip + stamp/postmark; PostcardArt is the fallback.
   Water: SteppingStones uses `world/obstacles/water.gdshader` (waves/depth/glints in local px). GroundPatch art follows the TerrainStrip slope.

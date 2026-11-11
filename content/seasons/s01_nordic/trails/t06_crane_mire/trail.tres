@@ -4,23 +4,29 @@
 [ext_resource type="Script" path="res://data/find_data.gd" id="9_find"]
 [ext_resource type="Script" path="res://data/viewpoint_data.gd" id="3_vp"]
 [ext_resource type="Resource" path="res://content/weather/mist.tres" id="2_weather"]
+[ext_resource type="Texture2D" path="res://content/seasons/s01_nordic/trails/t06_crane_mire/postcards/cranes.webp" id="pc_cranes"]
+[ext_resource type="Texture2D" path="res://content/seasons/s01_nordic/trails/t06_crane_mire/postcards/fire_tower.webp" id="pc_fire_tower"]
+[ext_resource type="Texture2D" path="res://content/seasons/s01_nordic/trails/t06_crane_mire/postcards/misty_pond.webp" id="pc_misty_pond"]
 
 [sub_resource type="Resource" id="Viewpoint_cranes"]
 script = ExtResource("3_vp")
 id = &"cranes"
 name_key = "VP_CRANES"
+postcard = ExtResource("pc_cranes")
 motif = 13
 
 [sub_resource type="Resource" id="Viewpoint_fire_tower"]
 script = ExtResource("3_vp")
 id = &"fire_tower"
 name_key = "VP_FIRE_TOWER"
+postcard = ExtResource("pc_fire_tower")
 motif = 14
 
 [sub_resource type="Resource" id="Viewpoint_misty_pond"]
 script = ExtResource("3_vp")
 id = &"misty_pond"
 name_key = "VP_MISTY_POND"
+postcard = ExtResource("pc_misty_pond")
 motif = 15
 
 [sub_resource type="Resource" id="Find_cotton_grass"]

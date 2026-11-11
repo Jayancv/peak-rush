@@ -4,17 +4,21 @@
 [ext_resource type="Script" path="res://data/find_data.gd" id="9_find"]
 [ext_resource type="Script" path="res://data/viewpoint_data.gd" id="3_vp"]
 [ext_resource type="Resource" path="res://content/weather/windy.tres" id="2_weather"]
+[ext_resource type="Texture2D" path="res://content/seasons/s01_nordic/trails/t02_archipelago_rocks/postcards/seabirds.webp" id="pc_seabirds"]
+[ext_resource type="Texture2D" path="res://content/seasons/s01_nordic/trails/t02_archipelago_rocks/postcards/lighthouse.webp" id="pc_lighthouse"]
 
 [sub_resource type="Resource" id="Viewpoint_1"]
 script = ExtResource("3_vp")
 id = &"seabirds"
 name_key = "VP_SEABIRDS"
+postcard = ExtResource("pc_seabirds")
 motif = 3
 
 [sub_resource type="Resource" id="Viewpoint_2"]
 script = ExtResource("3_vp")
 id = &"lighthouse"
 name_key = "VP_LIGHTHOUSE"
+postcard = ExtResource("pc_lighthouse")
 motif = 4
 
 [sub_resource type="Resource" id="Find_brass_whistle"]
