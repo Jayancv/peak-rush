@@ -12,6 +12,8 @@ var max_value: float
 
 var _balance: Balance
 var _thirsty: bool = false
+## Multiplies the drain while walking (the Dry spell daily sets it above 1).
+var drain_scale: float = 1.0
 
 
 func _init(balance: Balance) -> void:
@@ -25,7 +27,7 @@ func tick(delta: float, walking: bool, refilling: bool) -> void:
 	if refilling:
 		value = minf(value + _balance.water_refill * delta, max_value)
 	elif walking:
-		value = maxf(value - _balance.water_drain * delta, 0.0)
+		value = maxf(value - _balance.water_drain * drain_scale * delta, 0.0)
 	if not is_equal_approx(before, value):
 		changed.emit(value, max_value)
 	var now_thirsty: bool = value <= 0.0

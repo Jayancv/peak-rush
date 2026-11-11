@@ -118,9 +118,16 @@ func _draw() -> void:
 		var at: Vector2 = _to_map(m[0])
 		match m[1]:
 			Mark.CHECKPOINT:
-				var col: Color = DONE if (m[0] as Vector2).x <= _reached_x + 1.0 else TODO
+				# Reached = filled green flag, ahead = hollow grey one (shape, not just colour).
+				var reached: bool = (m[0] as Vector2).x <= _reached_x + 1.0
+				var col: Color = DONE if reached else TODO
 				draw_line(at, at + Vector2(0, -12), col, 1.6, true)
-				draw_colored_polygon(PackedVector2Array([at + Vector2(0, -12), at + Vector2(8, -9), at + Vector2(0, -6)]), col)
+				var flag: PackedVector2Array = PackedVector2Array([at + Vector2(0, -12), at + Vector2(8, -9), at + Vector2(0, -6)])
+				if reached:
+					draw_colored_polygon(flag, col)
+				else:
+					flag.append(flag[0])
+					draw_polyline(flag, col, 1.4, true)
 			Mark.SPRING:
 				draw_circle(at + Vector2(0, -6), 3.6, SPRING_COL, true, -1.0, true)
 			Mark.FORK:

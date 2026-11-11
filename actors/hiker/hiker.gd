@@ -131,6 +131,7 @@ func stumble() -> bool:
 		return false
 	change_state(State.STUMBLE)
 	stumbled.emit()
+	condition.flow.break_flow()
 	condition.stamina.spend(balance.stumble_cost)
 	return true
 

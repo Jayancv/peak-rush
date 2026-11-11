@@ -204,13 +204,13 @@ playtesters finish Season 1 without hitting a bug.
 
 ## M7.7 — Launch features
 Small things players and the store expect. Keep the list short; bigger ideas wait for after launch.
-- [ ] **New-mechanic hints:** first-time hints for walking back, finds (stand still for animals), water and forks
-- [ ] **About screen** (from Settings): version number, credits, privacy policy link (required once ads are in),
+- [x] **New-mechanic hints** (`FirstHints`, once ever, save v5 `profile.hints_seen`): first-time hints for walking back, finds (stand still for animals), water and forks
+- [x] **About screen** (from Settings; privacy *link* waits for the hosted URL in M7.9): version number, credits, privacy policy link (required once ads are in),
       "Reset progress" with a confirm step
-- [ ] **Season 1 finale:** a short ending moment after the fifth summit (journal page or postcard) so the season feels finished
-- [ ] **Accessibility:** "reduce motion" toggle (UiMotion, screen shake, sway), check colour-only signals (map, gauges)
-- [ ] **Audio pass:** smooth out the synth music/ambience loops, balance volumes between sounds
-- [ ] *(Should)* In-app review prompt after the third summit (Google Play In-App Review plugin)
+- [x] **Season 1 finale** (`SeasonFinale` on the results screen): a short ending moment after the fifth summit (journal page or postcard) so the season feels finished
+- [x] **Accessibility:** "reduce motion" toggle (UiMotion, screen shake, sway), check colour-only signals (map, gauges)
+- [x] **Audio pass** (measured: loops already seamless; ambience levelled to ~-35 dB, soft footsteps raised): smooth out the synth music/ambience loops, balance volumes between sounds
+- [ ] *(Should, moved to M7.9: needs Google's plugin — ask first)* In-app review prompt after the third summit (Google Play In-App Review plugin)
 - [ ] *(Later, after launch)* Play Games achievements and cloud save, a ghost of your best run, more languages
 
 **Done when:** a new player can learn every mechanic without help and finish the season to a proper ending.

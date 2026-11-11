@@ -2,12 +2,12 @@ class_name TrailRecord
 extends RefCounted
 ## One trail's saved record, as a plain Dictionary (that's what the save JSON holds):
 ##   {"stars": bitmask, "best_time": seconds or 0, "photos": {viewpoint_id: quality},
-##    "completions": n, "finds": [find ids]}
+##    "completions": n, "finds": [find ids], "challenges": TrailChallenges bitmask}
 ## Pure helpers so GameState stays small and the rules are testable.
 
 
 static func empty() -> Dictionary:
-	return {"stars": 0, "best_time": 0.0, "photos": {}, "completions": 0, "finds": []}
+	return {"stars": 0, "best_time": 0.0, "photos": {}, "completions": 0, "finds": [], "challenges": 0}
 
 
 ## A record read back from a save, with every field forced to the right type.
@@ -20,12 +20,14 @@ static func clean(raw: Dictionary) -> Dictionary:
 		"photos": photos if photos is Dictionary else {},
 		"completions": int(raw.get("completions", 0)),
 		"finds": string_list(raw.get("finds", [])),
+		"challenges": int(raw.get("challenges", 0)) & TrailChallenges.ALL,
 	}
 
 
 ## Folds a finished hike into `rec` (in place): stars, best time, best photo per
-## viewpoint, completions and finds. Returns how many finds were new.
-static func merge_finished(rec: Dictionary, result: TrailResult, stars_mask: int) -> int:
+## viewpoint, completions, finds and challenges (when `trail` is given).
+## Returns {"new_finds": n, "new_challenges": bitmask}.
+static func merge_finished(rec: Dictionary, result: TrailResult, stars_mask: int, trail: TrailData = null) -> Dictionary:
 	rec.stars = int(rec.stars) | stars_mask
 	var previous_best: float = float(rec.best_time)
 	if previous_best <= 0.0 or result.time_seconds < previous_best:
@@ -41,7 +43,11 @@ static func merge_finished(rec: Dictionary, result: TrailResult, stars_mask: int
 			known.append(String(f))
 			new_finds += 1
 	rec["finds"] = known
-	return new_finds
+	var new_challenges: int = 0
+	if trail != null:
+		new_challenges = TrailChallenges.newly_met(int(rec.get("challenges", 0)), result, trail)
+		rec["challenges"] = int(rec.get("challenges", 0)) | new_challenges
+	return {"new_finds": new_finds, "new_challenges": new_challenges}
 
 
 ## A JSON array as Array[String] (anything else becomes an empty list).

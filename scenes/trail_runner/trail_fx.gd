@@ -37,7 +37,7 @@ func _exit_tree() -> void:
 
 
 func _process(delta: float) -> void:
-	if _hiker != null:
+	if _hiker != null and not UiMotion.reduced():
 		# Plants and trees lean with the wind and bend around the hiker.
 		RenderingServer.global_shader_parameter_set(&"wind_strength", -_hiker.condition.wind_push / WIND_FOR_FULL_LEAN)
 		RenderingServer.global_shader_parameter_set(&"hiker_pos", _hiker.global_position)

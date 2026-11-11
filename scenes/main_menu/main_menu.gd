@@ -92,7 +92,7 @@ func _on_continue() -> void:
 
 
 func _start_panning() -> void:
-	if backdrop == null:
+	if backdrop == null or UiMotion.reduced():
 		return
 	for child: Node in backdrop.get_children():
 		var layer: Parallax2D = child as Parallax2D

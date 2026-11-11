@@ -14,6 +14,9 @@ const LOOP_FADE_SECONDS: float = 1.2
 ## Footsteps are quiet and varied so a long walk doesn't become a metronome.
 const FOOTSTEP_DB: float = -14.0
 const FOOTSTEP_PITCH_JITTER: float = 0.08
+## Ambience volume per Ambience kind, so every trail's loop plays at about the same
+## loudness (measured: the forest loop is ~12 dB quieter than rain at the same setting).
+const AMBIENCE_DB: Array[float] = [0.0, -4.0, -10.5, -9.5, -15.5]
 
 var _players: Array[AudioStreamPlayer] = []
 var _next: int = 0
@@ -24,7 +27,7 @@ var _cache: Dictionary = {}
 ## Sounds are synthesised on a worker thread at boot so nothing is built mid-game
 ## (a 6 s ambience loop costs ~40 ms on a fast phone, several times that on a slow one).
 const PREWARM: Array[StringName] = [&"menu_pad", &"step_0", &"step_1", &"step_2", &"step_3", &"step_4",
-	&"shutter", &"summit", &"chime", &"gulp", &"creak", &"thud", &"splash", &"pebble",
+	&"shutter", &"summit", &"chime", &"gulp", &"creak", &"thud", &"splash", &"pebble", &"flutter", &"cry",
 	&"ambience_1", &"ambience_2", &"ambience_3", &"ambience_4"]
 var _prewarm_task: int = -1
 ## Loops asked for before the worker finished them; they start as soon as they arrive.
@@ -115,7 +118,7 @@ func play_find() -> void:
 
 
 func play_drink() -> void:
-	play_sfx(_sound(&"gulp"), -8.0)
+	play_sfx(_sound(&"gulp"), -12.0)
 
 
 func play_creak() -> void:
@@ -123,7 +126,7 @@ func play_creak() -> void:
 
 
 func play_thud() -> void:
-	play_sfx(_sound(&"thud"), -4.0)
+	play_sfx(_sound(&"thud"), -7.0)
 
 
 func play_splash() -> void:
@@ -132,6 +135,15 @@ func play_splash() -> void:
 
 func play_pebble() -> void:
 	play_sfx(_sound(&"pebble"), -16.0, 1.0 + _rng.randf_range(-0.15, 0.15))
+
+
+func play_flutter() -> void:
+	play_sfx(_sound(&"flutter"), -10.0, 1.0 + _rng.randf_range(-0.1, 0.1))
+
+
+func play_cry() -> void:
+	# Far away: quiet, so it reads as distance rather than an alarm.
+	play_sfx(_sound(&"cry"), -16.0, 1.0 + _rng.randf_range(-0.05, 0.05))
 
 
 func play_ambience(kind: Ambience) -> void:
@@ -148,7 +160,7 @@ func play_ambience(kind: Ambience) -> void:
 		_fade_out(_ambience)
 		_waiting_ambience = kind
 		return
-	_fade_in(_ambience, _sound(key), -10.0)
+	_fade_in(_ambience, _sound(key), AMBIENCE_DB[kind])
 
 
 func play_menu_music() -> void:

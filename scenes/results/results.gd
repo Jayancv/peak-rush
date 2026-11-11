@@ -25,6 +25,8 @@ const COUNT_SECONDS: float = 1.0
 
 ## How long the "badge earned" pills stay before fading.
 const BADGE_SHOW_SECONDS: float = 3.5
+## Pause between the stamp landing and the season finale (lets the badges show first).
+const FINALE_DELAY: float = 2.2
 
 var _result: Dictionary
 var _trail: TrailData
@@ -62,6 +64,10 @@ func _fill() -> void:
 		lines.append(tr("RESULTS_TP_PHOTOS") % int(_result.get("photos", 0)))
 	if int(_result.get("find_tp", 0)) > 0:
 		lines.append(tr("RESULTS_TP_FINDS") % int(_result.get("find_tp", 0)))
+	if int(_result.get("challenge_tp", 0)) > 0:
+		lines.append(tr("RESULTS_TP_CHALLENGES") % [TrailChallenges.count(int(_result.get("new_challenges", 0))), int(_result.challenge_tp)])
+	if bool(_result.get("medal", false)):
+		lines.append(tr("RESULTS_MEDAL"))
 	var daily: Dictionary = _result.get("daily", {})
 	if not daily.is_empty():
 		lines.append(tr("RESULTS_DAILY_DONE") % [int(daily.bonus), int(daily.streak)] if daily.done else tr("RESULTS_DAILY_MISSED"))
@@ -116,6 +122,11 @@ func _land_stamp() -> void:
 	tween.parallel().tween_property(stamp, "scale", Vector2.ONE, 0.22).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	tween.tween_callback(_thump)
 	tween.tween_callback(_show_new_badges)
+	# The last trail of a season: after a moment, the season's ending.
+	var season: SeasonData = SeasonFinale.finished_season(_result, _trail)
+	if season != null:
+		tween.tween_interval(FINALE_DELAY)
+		tween.tween_callback(func() -> void: SeasonFinale.open(self, season))
 
 
 ## Newly earned badges slide down from the top as small pills.
@@ -181,12 +192,23 @@ func _to_trails() -> void:
 	SceneRouter.go_to(SceneRouter.TRAIL_SELECT)
 
 
+func _finale() -> SeasonFinale:
+	for child: Node in get_children():
+		if child is SeasonFinale and not child.is_queued_for_deletion():
+			return child as SeasonFinale
+	return null
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("pause"):
 		get_viewport().set_input_as_handled()
-		_to_trails()
+		if _finale() != null:
+			_finale().queue_free()
+		else:
+			_to_trails()
 
 
 func _notification(what: int) -> void:
-	if what == NOTIFICATION_WM_GO_BACK_REQUEST:
+	# Every node hears back; an open finale closes itself instead.
+	if what == NOTIFICATION_WM_GO_BACK_REQUEST and _finale() == null:
 		_to_trails()

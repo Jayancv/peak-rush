@@ -234,3 +234,48 @@ DAILY_CLOSE,Not now
 DAILY_DONE,Done for today - come back tomorrow!
 DAILY_STREAK,Streak: %d days
 DAILY_REWARD,Reward: +%d TP
+HINT_FINDS,"Flowers, mushrooms and lost things hide along the trail. Walk into one to collect it"
+HINT_ANIMAL,"An animal is near! Stand still a moment to spot it. Keep walking and it runs off"
+HINT_FORK,"A fork: jump up to the ridge boardwalk for a quicker route, or stay on the valley path"
+HINT_BACK,"Missed something? Hold Back to walk back, as far as this checkpoint"
+HINT_WATER,"Water is getting low. Stand at springs and streams to refill"
+SETTINGS_REDUCE_MOTION,Reduce motion
+ABOUT_TITLE,About Peak Rush
+ABOUT_VERSION,Version %s
+ABOUT_CREDITS,"Made by the Peak Rush team, with the Godot Engine."
+ABOUT_PRIVACY,"Your progress is saved only on this phone. The game collects no personal data."
+ABOUT_PRIVACY_LINK,Privacy policy
+ABOUT_LICENSES,Licences
+ABOUT_RESET,Reset progress
+ABOUT_RESET_CONFIRM,Tap again to erase
+FINALE_TITLE,Season complete!
+FINALE_SEASON,You hiked every trail of %s
+FINALE_POSTCARD,Every summit reached
+FINALE_STATS,"%d trails  ·  %d/%d stars
+%d/%d postcards  ·  %d/%d finds"
+FINALE_THANKS,"Thank you for hiking with us. New trails are on their way - and every star, postcard and find you missed is still out there."
+FINALE_CONTINUE,Continue
+ABOUT_CLOSE,Close
+DAILY_TWIST_THIRSTY,Dry spell: water runs out twice as fast
+DAILY_TWIST_HEAVY_PACK,Heavy pack: you tire faster
+DAILY_TWIST_GUSTY,Gusty day: strong gusts - stand still to brace
+DAILY_TWIST_PHOTO_HUNT,Photo hunt: photograph every viewpoint
+DAILY_TWIST_SURE_FOOTED,Sure-footed: reach the summit without falling
+SUMMIT_TITLE,Summit!
+SUMMIT_SUBTITLE,%s  ·  %s
+HUD_FLOW,Flow %d
+TOAST_FLOW_MAX,In the flow! Top speed - don't stumble now
+HINT_FLOW,"Steady hiking builds flow and you speed up. A stumble or a fall breaks it"
+CHALLENGE_ALL_FINDS,Forager: every find in one hike
+CHALLENGE_BEAT_PAR,Beat the par time
+CHALLENGE_CLEAN,Clean hike: no stumbles or falls
+RESULTS_TP_CHALLENGES,Challenges met: %d  +%d
+RESULTS_MEDAL,Trail medal earned!
+SELECT_CHALLENGES,Challenges %d/3
+SELECT_MEDAL,Trail medal
+PAUSE_CHALLENGES,Challenges
+TOAST_REINDEER,Reindeer on the path - wait for them to move on
+TOAST_REINDEER_BUMP,Oops! You startled the reindeer
+CHALLENGE_ALL_FINDS_SHORT,Finds
+CHALLENGE_BEAT_PAR_SHORT,Beat par
+CHALLENGE_CLEAN_SHORT,No stumbles

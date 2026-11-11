@@ -7,7 +7,7 @@ extends Control
 ## BOOTS..HEADLAMP follow GearData.Icon order (kind = BOOTS + icon).
 ## New kinds go at the end: scenes store the number.
 enum Kind { MOUNTAIN, WALK, JUMP, BACK, PAUSE, CAMERA, STAR, STAR_EMPTY, LOCK, GEAR, BOOTS, POLES, SHELL, THERMOS, HEADLAMP,
-	MUSIC, SOUND, NATURE, SWAP, VIBRATE, PERSON, CLOCK, DROP, LEAF, PAW }
+	MUSIC, SOUND, NATURE, SWAP, VIBRATE, PERSON, CLOCK, DROP, LEAF, PAW, MOTION, INFO }
 
 @export var kind: Kind = Kind.WALK:
 	set(v):
@@ -177,6 +177,16 @@ func _draw() -> void:
 			draw_colored_polygon(ShapeUtil.ellipse(c + Vector2(0, s * 0.16), Vector2(s * 0.22, s * 0.18), 16), color)
 			for p: Vector2 in [Vector2(-0.3, -0.08), Vector2(-0.12, -0.3), Vector2(0.12, -0.3), Vector2(0.3, -0.08)]:
 				draw_colored_polygon(ShapeUtil.ellipse(c + p * s, Vector2(s * 0.09, s * 0.11), 12), color)
+		Kind.MOTION:
+			# A ball with speed lines: "moving things".
+			draw_circle(c + Vector2(s * 0.18, 0), s * 0.2, color, true, -1.0, true)
+			for row: float in [-0.2, 0.0, 0.2]:
+				var len: float = 0.34 - absf(row) * 0.6
+				draw_line(c + Vector2(-s * 0.44, s * row), c + Vector2(-s * (0.44 - len), s * row), color, maxf(w * 0.8, 1.5), true)
+		Kind.INFO:
+			draw_arc(c, s * 0.4, 0.0, TAU, 32, color, w, true)
+			draw_circle(c + Vector2(0, -s * 0.19), s * 0.065, color, true, -1.0, true)
+			draw_line(c + Vector2(0, -s * 0.04), c + Vector2(0, s * 0.24), color, w * 1.1, true)
 		Kind.CAMERA:
 			var body: Rect2 = Rect2(c + Vector2(-s * 0.42, -s * 0.24), Vector2(s * 0.84, s * 0.58))
 			draw_rect(body, color, true)

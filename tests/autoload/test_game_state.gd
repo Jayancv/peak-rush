@@ -46,7 +46,10 @@ func test_tp_accumulates_and_stars_merge() -> void:
 	assert_eq(GameState.stars_mask(_t1.id), StarRating.STAR_SUMMIT | StarRating.STAR_PHOTOS)
 	var tp_after_first: int = GameState.tp
 	var photo_tp: int = _t1.viewpoints.size() * ContentDB.balance.tp_photo_good
-	assert_eq(tp_after_first, 50 + 50 + photo_tp)
+	# A fast, clean first hike also meets two trail challenges (par, clean).
+	var challenge_tp: int = TrailChallenges.count(int(GameState.record(_t1.id).challenges)) * ContentDB.balance.tp_per_challenge
+	assert_eq(challenge_tp, 2 * ContentDB.balance.tp_per_challenge)
+	assert_eq(tp_after_first, 50 + 50 + photo_tp + challenge_tp)
 	_finish(_t1, 95.0, true)
 	assert_eq(GameState.stars_mask(_t1.id), StarRating.ALL_STARS, "a dusk star earned on a later run is kept")
 	assert_eq(GameState.tp, tp_after_first + 50 + 25, "same photos again pay nothing extra")

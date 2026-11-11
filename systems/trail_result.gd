@@ -11,6 +11,10 @@ var viewpoint_total: int = 0
 var photos: Dictionary = {}
 ## Find ids collected on this hike.
 var finds: Array[StringName] = []
+## Times the hiker fell off the trail (the Sure-footed daily wants none).
+var falls: int = 0
+## Times the hiker stumbled (the Clean hike challenge wants none).
+var stumbles: int = 0
 
 
 func _init(id: StringName = &"") -> void:

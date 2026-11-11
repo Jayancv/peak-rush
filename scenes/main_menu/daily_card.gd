@@ -42,7 +42,7 @@ func _build() -> void:
 		return
 	var trail: TrailData = ContentDB.get_trail(d.trail_id)
 	box.add_child(_label(tr(trail.name_key), 30, ACCENT))
-	box.add_child(_label(tr(HikeTracker.TWIST_KEYS[int(d.twist)]), 24, INK))
+	box.add_child(_label(tr(DailyChallenge.TWIST_KEYS[int(d.twist)]), 24, INK))
 	var streak: int = GameState.profile.daily_streak
 	var next_streak: int = DailyChallenge.next_streak(GameState.profile.daily_last, d.date, streak)
 	if d.done:

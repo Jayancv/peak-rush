@@ -36,6 +36,10 @@ func setup(number: int, data: TrailData, record: Dictionary, unlocked: bool, the
 		stars[i].color = STAR_ON if earned else STAR_OFF
 	var best: float = float(record.get("best_time", 0.0))
 	detail_label.text = tr("SELECT_BEST") % TimeFormat.mmss(best) if best > 0.0 else tr("SELECT_NOT_HIKED")
+	if best > 0.0:
+		var challenges: int = int(record.get("challenges", 0))
+		var extra: String = tr("SELECT_MEDAL") if TrailChallenges.has_medal(challenges) else tr("SELECT_CHALLENGES") % TrailChallenges.count(challenges)
+		detail_label.text += "  ·  " + extra
 	disabled = not unlocked
 	lock_row.visible = not unlocked
 	detail_label.visible = unlocked

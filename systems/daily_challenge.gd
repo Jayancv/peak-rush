@@ -4,20 +4,118 @@ extends RefCounted
 ## how it plays (or what counts as done). Pure and deterministic, so everyone with the
 ## same trails gets the same challenge on the same day, and tests can pin dates.
 
-enum Twist { HEADWIND, FOG, SHORT_DAY, FORAGER, BEAT_PAR }
+## Append only: a day's twist is computed, never saved, but keep the order stable anyway.
+enum Twist { HEADWIND, FOG, SHORT_DAY, FORAGER, BEAT_PAR, THIRSTY, HEAVY_PACK, GUSTY, PHOTO_HUNT, SURE_FOOTED }
+
+## Short description of each twist (Twist order).
+const TWIST_KEYS: Array[String] = ["DAILY_TWIST_HEADWIND", "DAILY_TWIST_FOG", "DAILY_TWIST_SHORT_DAY",
+	"DAILY_TWIST_FORAGER", "DAILY_TWIST_BEAT_PAR", "DAILY_TWIST_THIRSTY", "DAILY_TWIST_HEAVY_PACK",
+	"DAILY_TWIST_GUSTY", "DAILY_TWIST_PHOTO_HUNT", "DAILY_TWIST_SURE_FOOTED"]
 
 const SECONDS_PER_DAY: int = 86400
+## Salts so the trail order and the twist order shuffle differently.
+const _TRAIL_SALT: int = 17
+const _TWIST_SALT: int = 53
 
 
 ## { "trail_id": StringName, "twist": Twist } for `date` ("YYYY-MM-DD").
-static func for_date(date: String, trail_ids: Array[StringName]) -> Dictionary:
-	if trail_ids.is_empty():
+## No repeats: trails and twists are each dealt from a shuffled deck, one card a day,
+## and a new deck never starts with the card the last one ended on. A twist that
+## doesn't suit the day's trail is swapped for the next one that does (and that isn't
+## yesterday's or tomorrow's).
+static func for_date(date: String, trails: Array[TrailData], balance: Balance) -> Dictionary:
+	if trails.is_empty():
 		return {}
-	# A simple stable hash of the date string (String.hash can differ between versions).
-	var h: int = 0
-	for c: int in date.to_utf8_buffer():
-		h = (h * 31 + c) % 1000003
-	return {"trail_id": trail_ids[h % trail_ids.size()], "twist": (h / 7) % Twist.size()}
+	var day: int = day_number(date)
+	var twist: int = _twist_for(day, trails, balance)
+	var yesterday: int = _twist_for(day - 1, trails, balance)
+	if twist == yesterday:
+		twist = _next_fitting(twist, [yesterday, _deal(day + 1, Twist.size(), _TWIST_SALT)], _trail_for(day, trails), balance)
+	return {"trail_id": _trail_for(day, trails).id, "twist": twist}
+
+
+## Whether `twist` makes sense on `trail` (a photo hunt needs viewpoints, and so on).
+static func fits(twist: int, trail: TrailData, balance: Balance) -> bool:
+	match twist:
+		Twist.FORAGER:
+			return trail.finds.size() >= balance.daily_forager_finds
+		Twist.PHOTO_HUNT:
+			return not trail.viewpoints.is_empty()
+		Twist.SHORT_DAY:
+			# Night trails are timed by the aurora, not the sun: shortening it reads oddly.
+			return not trail.night
+	return true
+
+
+static func _trail_for(day: int, trails: Array[TrailData]) -> TrailData:
+	return trails[_deal(day, trails.size(), _TRAIL_SALT)]
+
+
+## The day's twist from the deck, or the next one that suits the trail.
+static func _twist_for(day: int, trails: Array[TrailData], balance: Balance) -> int:
+	var twist: int = _deal(day, Twist.size(), _TWIST_SALT)
+	var trail: TrailData = _trail_for(day, trails)
+	if fits(twist, trail, balance):
+		return twist
+	return _next_fitting(twist, [_deal(day - 1, Twist.size(), _TWIST_SALT), _deal(day + 1, Twist.size(), _TWIST_SALT)], trail, balance)
+
+
+static func _next_fitting(from: int, avoid: Array, trail: TrailData, balance: Balance) -> int:
+	for step: int in range(1, Twist.size() + 1):
+		var t: int = (from + step) % Twist.size()
+		if not avoid.has(t) and fits(t, trail, balance):
+			return t
+	return from
+
+
+## Card `day` from a deck of `n`, reshuffled every n days.
+static func _deal(day: int, n: int, salt: int) -> int:
+	if n <= 1:
+		return 0
+	if n == 2:
+		# A two-card deck can't be reshuffled without risking a repeat: just alternate.
+		return posmod(day, 2)
+	var deck: int = floori(float(day) / n)
+	return _deck(deck, n, salt)[posmod(day, n)]
+
+
+## The shuffled order of deck `deck`. Swaps its first two cards if it would start with
+## the previous deck's last card (no repeat across the join).
+static func _deck(deck: int, n: int, salt: int) -> Array[int]:
+	var order: Array[int] = _shuffled(deck, n, salt)
+	if _shuffled(deck - 1, n, salt)[n - 1] == order[0]:
+		var first: int = order[0]
+		order[0] = order[1]
+		order[1] = first
+	return order
+
+
+## Fisher-Yates with a small fixed generator (engine RNGs may change between versions;
+## a daily must be the same for everyone, on every app version).
+static func _shuffled(deck: int, n: int, salt: int) -> Array[int]:
+	var order: Array[int] = []
+	for i: int in n:
+		order.append(i)
+	var state: int = posmod(deck * 7919 + salt * 104729, 2147483647) + 1
+	for i: int in range(n - 1, 0, -1):
+		state = (state * 48271) % 2147483647
+		var j: int = state % (i + 1)
+		var tmp: int = order[i]
+		order[i] = order[j]
+		order[j] = tmp
+	return order
+
+
+## Settles a hike against today's daily `d` (from GameState.daily_today): {} if this
+## hike wasn't today's open daily, {"done": false} if the goal was missed, else marks
+## the profile and returns {"done": true, "bonus": tp, "streak": n}.
+static func settle(d: Dictionary, result: TrailResult, trail: TrailData, profile: PlayerProfile, balance: Balance) -> Dictionary:
+	if d.is_empty() or d.trail_id != result.trail_id or d.done:
+		return {}
+	if not goal_met(d.twist, result, trail.par_time if trail != null else 0.0, balance):
+		return {"done": false}
+	var streak: int = profile.complete_daily(d.date)
+	return {"done": true, "bonus": reward(streak, balance), "streak": streak}
 
 
 ## Whether a finished hike meets the day's goal.
@@ -29,6 +127,10 @@ static func goal_met(twist: Twist, result: TrailResult, par_time: float, balance
 			return result.finds.size() >= balance.daily_forager_finds
 		Twist.BEAT_PAR:
 			return result.time_seconds <= par_time
+		Twist.PHOTO_HUNT:
+			return result.viewpoint_total > 0 and result.photos.size() >= result.viewpoint_total
+		Twist.SURE_FOOTED:
+			return result.falls == 0
 	return true
 
 

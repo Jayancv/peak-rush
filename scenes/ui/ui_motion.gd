@@ -20,6 +20,11 @@ const _TWEEN_META: StringName = &"_ui_motion_tween"
 const _ALPHA_META: StringName = &"_ui_motion_alpha"
 
 
+## The "Reduce motion" setting: no squish, bounce or ease-in, no camera shake, calm plants.
+static func reduced() -> bool:
+	return bool(GameState.settings.get("reduce_motion", false))
+
+
 ## Gives every button that ever enters `tree` the press squish (called once at boot).
 static func watch(tree: SceneTree) -> void:
 	tree.node_added.connect(func(node: Node) -> void:
@@ -32,7 +37,7 @@ static func watch(tree: SceneTree) -> void:
 ## A quick squish and spring back. It's a one-shot pulse rather than "hold while
 ## pressed", so a press cancelled by a scroll drag can never leave a button shrunk.
 static func press(control: Control) -> void:
-	if not control.is_inside_tree():
+	if not control.is_inside_tree() or reduced():
 		return
 	control.pivot_offset = control.size * 0.5
 	var tween: Tween = _restart(control)
@@ -43,6 +48,8 @@ static func press(control: Control) -> void:
 ## Eases `items` in one after another: fade up and grow from slightly small.
 ## Hidden items are skipped so the stagger has no gaps.
 static func intro(items: Array, delay: float = 0.0) -> void:
+	if reduced():
+		return
 	var i: int = 0
 	for item: Variant in items:
 		var control: Control = item as Control
@@ -65,7 +72,7 @@ static func intro(items: Array, delay: float = 0.0) -> void:
 
 ## A small bounce to draw the eye to something that just changed (a counter, a badge).
 static func bump(control: Control, amount: float = 1.18) -> void:
-	if not control.is_inside_tree():
+	if not control.is_inside_tree() or reduced():
 		return
 	control.pivot_offset = control.size * 0.5
 	var tween: Tween = _restart(control)

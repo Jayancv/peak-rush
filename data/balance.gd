@@ -92,6 +92,8 @@ extends Resource
 @export_group("Finds")
 ## TP for each find the first time it's collected.
 @export var tp_per_new_find: int = 15
+## TP for each trail challenge met for the first time (three per trail, then a medal).
+@export var tp_per_challenge: int = 40
 ## Seconds of standing still near an animal to spot it, and how long it tolerates a
 ## walking hiker before it runs off.
 @export var animal_spot_seconds: float = 1.2
@@ -107,6 +109,21 @@ extends Resource
 @export var daily_short_day_mult: float = 0.75
 @export var daily_forager_finds: int = 2
 @export var daily_fog_density: float = 0.55
+## Dry spell: water drain multiplier. Heavy pack: stamina drain multiplier.
+@export var daily_thirsty_water_mult: float = 2.0
+@export var daily_heavy_pack_mult: float = 1.3
+## Gusty day: gust strength (px/s) and seconds between gusts.
+@export var daily_gust_strength: float = 105.0
+@export var daily_gust_interval: Vector2 = Vector2(3.5, 6.0)
+
+@export_group("First-time hints")
+## How close (px) the hiker gets to a find or a fork sign before its hint shows.
+@export var hint_near_px: float = 280.0
+## How long a hint stays up, and the gap before the next one may show.
+@export var hint_seconds: float = 4.5
+## Water fraction that triggers the water hint; delay after the first checkpoint toast.
+@export var hint_water_fraction: float = 0.6
+@export var hint_back_delay: float = 2.6
 
 @export_group("Terrain effects")
 @export var mud_speed_mult: float = 0.6
@@ -173,6 +190,28 @@ extends Resource
 @export var shake_stumble_px: float = 7.0
 @export var shake_fall_px: float = 12.0
 @export var shake_seconds: float = 0.3
+
+@export_group("Flow")
+## Seconds of steady walking per flow level, the top level, and speed per level.
+@export var flow_step_seconds: float = 6.0
+@export var flow_max_level: int = 5
+@export var flow_speed_per_level: float = 0.025
+## Standing still: seconds before flow starts draining, then seconds per level lost.
+@export var flow_idle_grace: float = 1.2
+@export var flow_decay_seconds: float = 1.5
+
+@export_group("Wildlife moments")
+## How many wildlife moments (flock, eagle, reindeer) a hike gets, at random spots.
+@export var moments_min: int = 2
+@export var moments_max: int = 3
+
+@export_group("Summit moment")
+## How long the summit moment lasts before the results (a tap skips it sooner).
+@export var summit_seconds: float = 3.6
+## Camera pull-back: zoom level, and how far back along the trail / up it frames.
+@export var summit_zoom: float = 0.62
+@export var summit_pull_px: float = 380.0
+@export var summit_rise_px: float = 140.0
 
 @export_group("Feel")
 @export var jump_stretch: Vector2 = Vector2(0.85, 1.15)

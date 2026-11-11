@@ -5,9 +5,9 @@ extends Node
 ## one-time hints (benches, gusts, exposed ridge, sliding, thirst, tutorial triggers).
 
 var finds: Array[StringName] = []
-
-## Short description of each daily twist (DailyChallenge.Twist order).
-const TWIST_KEYS: Array[String] = ["DAILY_TWIST_HEADWIND", "DAILY_TWIST_FOG", "DAILY_TWIST_SHORT_DAY", "DAILY_TWIST_FORAGER", "DAILY_TWIST_BEAT_PAR"]
+## Falls and stumbles this hike (Sure-footed daily, Clean hike challenge).
+var falls: int = 0
+var stumbles: int = 0
 
 var _hiker: Hiker
 var _hud: Hud
@@ -31,6 +31,12 @@ func setup(hiker: Hiker, hud: Hud, trail: TrailData, level: Node, balance: Balan
 		if new_state == Hiker.State.SLIDE:
 			hint_once("TOAST_SLIDE"))
 	hiker.back_blocked.connect(hint_once.bind("TOAST_BACK_LIMIT"))
+	hiker.fell.connect(func() -> void: falls += 1)
+	hiker.stumbled.connect(func() -> void: stumbles += 1)
+	hiker.condition.flow.level_changed.connect(func(level: int) -> void:
+		hud.set_flow(level, balance.flow_max_level)
+		if level >= balance.flow_max_level:
+			hint_once("TOAST_FLOW_MAX"))
 	# Benches are explained the first time; after that the ×2 badge says it.
 	hiker.regen_changed.connect(func(mode: HikerCondition.Regen) -> void:
 		if mode == HikerCondition.Regen.BENCH:
@@ -55,7 +61,36 @@ func setup(hiker: Hiker, hud: Hud, trail: TrailData, level: Node, balance: Balan
 		for node: Node in get_tree().get_nodes_in_group(TutorialTrigger.GROUP):
 			if level.is_ancestor_of(node):
 				(node as TutorialTrigger).triggered.connect(func(key: String, secs: float) -> void: hud.show_toast(key, secs))
+	# A few wildlife moments, different every hike.
+	var wildlife: TrailMoments = TrailMoments.new()
+	wildlife.name = "TrailMoments"
+	level.add_child(wildlife)
+	wildlife.setup(level, hiker, hud, balance)
+	var first: FirstHints = FirstHints.new()
+	first.name = "FirstHints"
+	add_child(first)
+	first.setup(hiker, hud, level, balance)
 	_update_hud()
+
+
+## The pause card's challenge rows: saved ones done, the rest open or already missed
+## on this hike (a stumble, past par time).
+func challenge_rows(elapsed: float) -> Array:
+	var done: int = int(GameState.record(_trail.id).get("challenges", 0))
+	var rows: Array = []
+	for kind: int in TrailChallenges.Kind.values():
+		var state: int = PauseMenu.Goal.OPEN
+		if done & TrailChallenges.bit(kind) != 0:
+			state = PauseMenu.Goal.DONE
+		elif kind == TrailChallenges.Kind.CLEAN and stumbles + falls > 0:
+			state = PauseMenu.Goal.MISSED
+		elif kind == TrailChallenges.Kind.BEAT_PAR and elapsed > _trail.par_time:
+			state = PauseMenu.Goal.MISSED
+		var text: String = tr(TrailChallenges.SHORT_KEYS[kind])
+		if kind == TrailChallenges.Kind.ALL_FINDS and state == PauseMenu.Goal.OPEN:
+			text += " %d/%d" % [finds.size(), _trail.finds.size()]
+		rows.append([text, state])
+	return rows
 
 
 ## Wind is explained on the first gust; afterwards the streaks and the push say it.
@@ -74,19 +109,30 @@ static func daily_twist(trail: TrailData) -> int:
 	return int(d.twist)
 
 
-## The trail's weather, with thick fog added on a foggy daily.
+## The trail's weather, with thick fog or strong gusts added on those dailies.
 static func twisted_weather(base: WeatherProfile, twist: int, balance: Balance) -> WeatherProfile:
-	if twist != DailyChallenge.Twist.FOG:
+	if twist != DailyChallenge.Twist.FOG and twist != DailyChallenge.Twist.GUSTY:
 		return base
 	var w: WeatherProfile = base.duplicate() as WeatherProfile if base != null else WeatherProfile.new()
-	w.fog = true
-	w.fog_density = maxf(w.fog_density, balance.daily_fog_density)
+	if twist == DailyChallenge.Twist.FOG:
+		w.fog = true
+		w.fog_density = maxf(w.fog_density, balance.daily_fog_density)
+	else:
+		w.wind = true
+		w.gust_strength = maxf(w.gust_strength, balance.daily_gust_strength)
+		w.gust_interval = balance.daily_gust_interval
 	return w
 
 
-func announce_daily(twist: int) -> void:
-	if twist >= 0:
-		_hud.show_toast_text(tr("TOAST_DAILY") % tr(TWIST_KEYS[twist]), 3.5)
+## Applies the twists that change the hiker (water, pack weight) and announces the day's goal.
+func apply_daily(twist: int) -> void:
+	if twist < 0:
+		return
+	if twist == DailyChallenge.Twist.THIRSTY:
+		_hiker.condition.hydration.drain_scale = _balance.daily_thirsty_water_mult
+	elif twist == DailyChallenge.Twist.HEAVY_PACK:
+		_hiker.condition.weather_drain_mult *= _balance.daily_heavy_pack_mult
+	_hud.show_toast_text(tr("TOAST_DAILY") % tr(DailyChallenge.TWIST_KEYS[twist]), 3.5)
 
 
 ## Shows a hint the first time something happens on this hike.

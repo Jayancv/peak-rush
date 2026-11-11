@@ -18,8 +18,6 @@ extends Node2D
 ## a safety net in case a gap has no KillZone.
 const FALL_MARGIN: float = 200.0
 
-## Pause between touching the cairn and the results screen, to let the moment land.
-const SUMMIT_PAUSE: float = 1.2
 
 var trail: TrailData
 var hiker: Hiker
@@ -110,7 +108,7 @@ func _load_trail() -> void:
 	tracker.name = "HikeTracker"
 	add_child(tracker)
 	tracker.setup(hiker, hud, trail, level, _balance)
-	tracker.announce_daily(_twist)
+	tracker.apply_daily(_twist)
 	tracker.watch_weather(weather)
 	pause_menu.map.scan(level)
 	var bounds: Rect2 = TerrainStrip.bounds_under(level)
@@ -149,6 +147,7 @@ func pause() -> void:
 	var found: Array = (GameState.record(trail.id).get("finds", []) as Array).duplicate()
 	found.append_array(tracker.finds)
 	pause_menu.map.show_progress(hiker.global_position, hiker.back_limit_x, found)
+	pause_menu.set_challenges(tracker.challenge_rows(daylight.elapsed))
 	pause_menu.open_pause(tr(trail.name_key))
 
 
@@ -244,8 +243,15 @@ func _on_reached_finish() -> void:
 		if int(photos[id]) > StarRating.PhotoQuality.NONE:
 			result.photos[id] = photos[id]
 	result.finds = tracker.finds.duplicate()
+	result.falls = tracker.falls
+	result.stumbles = tracker.stumbles
 	GameState.record_result(result)
-	await get_tree().create_timer(SUMMIT_PAUSE).timeout
+	# The flag, the view back down the trail, the title: then the results.
+	touch_controls.set_enabled(false)
+	var moment: SummitMoment = SummitMoment.new()
+	world.add_child(moment)
+	moment.play(hiker, camera, hud, trail, result.time_seconds, _balance)
+	await moment.done
 	SceneRouter.go_to(SceneRouter.RESULTS)
 
 

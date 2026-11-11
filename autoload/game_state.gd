@@ -9,6 +9,7 @@ signal progress_changed
 const DEFAULT_SETTINGS: Dictionary = {
 	"left_handed": false,
 	"vibration": true,
+	"reduce_motion": false,
 	"music_volume": 0.8,
 	"sfx_volume": 0.8,
 	"ambience_volume": 0.8,
@@ -42,6 +43,14 @@ func reset() -> void:
 	last_result = {}
 
 
+## "Reset progress" in About: everything goes except the settings (volumes, controls).
+func reset_progress() -> void:
+	var keep: Dictionary = settings.duplicate()
+	reset()
+	settings = keep
+	progress_changed.emit()
+
+
 func set_setting(key: String, value: Variant) -> void:
 	settings[key] = value
 	settings_changed.emit()
@@ -70,6 +79,13 @@ func is_completed(trail_id: StringName) -> bool:
 func is_unlocked(trail: TrailData) -> bool:
 	var previous: TrailData = ContentDB.previous_trail(trail.id)
 	return previous == null or is_completed(previous.id)
+
+
+func unlocked_trails() -> Array[TrailData]:
+	var open: Array[TrailData] = []
+	for season: SeasonData in ContentDB.seasons():
+		open.append_array(season.ordered_trails().filter(is_unlocked))
+	return open
 
 
 func total_stars() -> int:
@@ -188,33 +204,24 @@ func today() -> String:
 
 
 ## Today's challenge: trail_id, twist, date, done (empty if nothing is unlocked).
+## Pinned for the day once worked out (unlocking a trail mustn't change it).
 func daily_today() -> Dictionary:
-	var ids: Array[StringName] = []
-	for season: SeasonData in ContentDB.seasons():
-		for trail: TrailData in season.ordered_trails():
-			if is_unlocked(trail):
-				ids.append(trail.id)
-	var c: Dictionary = DailyChallenge.for_date(today(), ids)
+	var date: String = today()
+	var c: Dictionary = profile.daily_for(date,
+		func() -> Dictionary: return DailyChallenge.for_date(date, unlocked_trails(), ContentDB.balance), ContentDB.has_trail)
 	if not c.is_empty():
-		c["date"] = today()
-		c["done"] = profile.daily_done_on(today())
+		c["date"] = date
+		c["done"] = profile.daily_done_on(date)
 	return c
 
 
 func _record_daily(result: TrailResult) -> void:
 	daily_active = false
-	var d: Dictionary = daily_today()
-	if d.is_empty() or d.trail_id != result.trail_id or d.done:
-		return
-	var trail: TrailData = ContentDB.get_trail(result.trail_id)
-	if not DailyChallenge.goal_met(d.twist, result, trail.par_time if trail != null else 0.0, ContentDB.balance):
-		last_result["daily"] = {"done": false}
-		return
-	var streak: int = profile.complete_daily(d.date)
-	var bonus: int = DailyChallenge.reward(streak, ContentDB.balance)
-	tp += bonus
-	last_result["daily"] = {"done": true, "bonus": bonus, "streak": streak}
-	last_result["total"] = int(last_result.get("total", 0)) + bonus
+	var out: Dictionary = DailyChallenge.settle(daily_today(), result, ContentDB.get_trail(result.trail_id), profile, ContentDB.balance)
+	if not out.is_empty():
+		last_result["daily"] = out
+		tp += int(out.get("bonus", 0))
+		last_result["total"] = int(last_result.get("total", 0)) + int(out.get("bonus", 0))
 
 
 # --- Recording a hike ---
@@ -227,13 +234,15 @@ func record_result(result: TrailResult) -> Dictionary:
 	var rating: StarRating = StarRating.new(ContentDB.balance)
 	var award: Dictionary = rating.award(result, int(rec.stars), rec.photos)
 	var previous_best: float = float(rec.best_time)
-	var new_finds: int = 0
-	var find_tp: int = 0
+	var merged: Dictionary = {"new_finds": 0, "new_challenges": 0}
 	if result.finished:
-		new_finds = TrailRecord.merge_finished(rec, result, int(award.stars_mask))
+		merged = TrailRecord.merge_finished(rec, result, int(award.stars_mask), ContentDB.get_trail(result.trail_id))
 		trails[key] = rec
-		find_tp = new_finds * ContentDB.balance.tp_per_new_find
-		tp += int(award.total) + find_tp
+	var new_finds: int = merged.new_finds
+	var challenge_tp: int = TrailChallenges.count(merged.new_challenges) * ContentDB.balance.tp_per_challenge
+	var find_tp: int = new_finds * ContentDB.balance.tp_per_new_find
+	# Unfinished hikes earn nothing: award and merged are all zeros then.
+	tp += int(award.total) + find_tp + challenge_tp
 	profile.add_hike(result.time_seconds)
 	var new_badges: Array[String] = []
 	for badge: BadgeData in refresh_badges():
@@ -250,8 +259,11 @@ func record_result(result: TrailResult) -> Dictionary:
 		"new_badges": new_badges,
 		"new_finds": new_finds,
 		"find_tp": find_tp,
+		"new_challenges": merged.new_challenges,
+		"challenge_tp": challenge_tp,
+		"medal": TrailChallenges.has_medal(int(rec.get("challenges", 0))) and merged.new_challenges != 0,
 	})
-	last_result["total"] = int(last_result.get("total", 0)) + find_tp
+	last_result["total"] = int(last_result.get("total", 0)) + find_tp + challenge_tp
 	if daily_active:
 		_record_daily(result)
 	progress_changed.emit()

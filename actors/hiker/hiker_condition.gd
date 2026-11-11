@@ -11,6 +11,8 @@ signal regen_changed(mode: Regen)
 
 var stamina: Stamina
 var hydration: Hydration
+## Steady-hiking bonus (stumbles and falls break it).
+var flow: Flow
 var regen: Regen = Regen.NONE
 var modifiers: HikeModifiers
 var is_dusk: bool = false
@@ -35,6 +37,7 @@ func _init(balance: Balance) -> void:
 	_balance = balance
 	stamina = Stamina.new(balance)
 	hydration = Hydration.new(balance)
+	flow = Flow.new(balance)
 	modifiers = HikeModifiers.new(balance)
 
 
@@ -43,13 +46,14 @@ func effective_surface(ground: TerrainStrip.Surface) -> TerrainStrip.Surface:
 
 
 func speed_multiplier(grade: float, ground: TerrainStrip.Surface) -> float:
-	return modifiers.speed_multiplier(grade, effective_surface(ground), is_dusk, stamina.recovering)
+	return modifiers.speed_multiplier(grade, effective_surface(ground), is_dusk, stamina.recovering) * flow.speed_multiplier()
 
 
 ## Called every physics tick by the hiker with what it's currently doing.
 func tick(delta: float, walking: bool, resting: bool, grade: float, ground: TerrainStrip.Surface) -> void:
 	wet_feet_left = maxf(wet_feet_left - delta, 0.0)
 	hydration.tick(delta, walking, is_refilling())
+	flow.tick(delta, walking)
 	if walking:
 		var drain: float = modifiers.drain_multiplier(grade, effective_surface(ground), has_wet_feet(), weather_drain_mult)
 		stamina.walk(delta, drain * hydration.drain_multiplier())
@@ -133,6 +137,7 @@ func exposed_wind(weather_push: float) -> float:
 
 ## Respawning clears whatever the hiker was standing in.
 func clear_location_effects() -> void:
+	flow.break_flow()
 	_bench_count = 0
 	_spring_count = 0
 	_patches.clear()

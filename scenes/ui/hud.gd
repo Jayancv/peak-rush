@@ -7,6 +7,9 @@ signal pause_pressed
 signal photo_pressed
 
 const TOAST_SECONDS: float = 2.2
+const TITLE_FONT: Font = preload("res://shared_art/title_font.tres")
+## Longer toasts (first-time hints) wrap at this width instead of running off a 4:3 screen.
+const TOAST_MAX_WIDTH: float = 760.0
 
 @export var stamina_bar: StaminaBar
 @export var sun_arc: SunArc
@@ -22,6 +25,7 @@ const TOAST_SECONDS: float = 2.2
 var _toast_tween: Tween
 var _water: WaterGauge
 var _finds_label: Label
+var _flow_label: Label
 
 
 func _ready() -> void:
@@ -65,6 +69,14 @@ func _build_extra_pills() -> void:
 	_water = WaterGauge.new()
 	_water.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	water_pill.get_node("Row").add_child(_water)
+	var flow_pill: Control = photo_pill.duplicate() as Control
+	top.add_child(flow_pill)
+	top.move_child(flow_pill, water_pill.get_index() + 1)
+	var chevrons: UiIcon = flow_pill.get_node("Row/Icon") as UiIcon
+	chevrons.kind = UiIcon.Kind.WALK
+	chevrons.color = UiIcon.ACCENT
+	_flow_label = flow_pill.get_node("Row/Count") as Label
+	flow_pill.visible = false
 
 
 func set_water(value: float, max_value: float, low_fraction: float) -> void:
@@ -78,6 +90,21 @@ func set_finds(found: int, total: int) -> void:
 		UiMotion.bump(_finds_label.get_parent() as Control)
 	_finds_label.text = text
 	(_finds_label.get_parent().get_parent() as Control).visible = total > 0
+
+
+## Flow level from steady hiking; hidden at 0, gold at the top level.
+func set_flow(level: int, max_level: int) -> void:
+	var pill: Control = _flow_label.get_parent().get_parent() as Control
+	var grew: bool = level > int(_flow_label.get_meta(&"level", 0))
+	_flow_label.set_meta(&"level", level)
+	_flow_label.text = tr("HUD_FLOW") % level
+	pill.visible = level > 0
+	if level >= max_level:
+		_flow_label.add_theme_color_override("font_color", Color("#C98A12"))
+	else:
+		_flow_label.remove_theme_color_override("font_color")
+	if grew:
+		UiMotion.bump(pill, 1.12)
 
 
 func set_stamina(value: float, max_value: float, recovering: bool) -> void:
@@ -136,6 +163,50 @@ func set_photos(taken: int, total: int) -> void:
 	photo_label.text = text
 
 
+## The big "Summit!" title, the trail's name and the time, over the middle of the screen.
+func show_summit(trail_name: String, time_text: String) -> void:
+	var center: CenterContainer = CenterContainer.new()
+	center.name = "Summit"
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(center)
+	var box: VBoxContainer = VBoxContainer.new()
+	box.alignment = BoxContainer.ALIGNMENT_CENTER
+	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	center.add_child(box)
+	var title: Label = _summit_label(tr("SUMMIT_TITLE"), 104)
+	title.add_theme_font_override("font", TITLE_FONT)
+	box.add_child(title)
+	box.add_child(_summit_label(tr("SUMMIT_SUBTITLE") % [trail_name, time_text], 32))
+	box.modulate.a = 0.0
+	# The bars and counters step aside: the view is the reward now.
+	var bars: Control = get_node_or_null("SafeArea") as Control
+	if bars != null:
+		create_tween().tween_property(bars, "modulate:a", 0.0, 0.4)
+	var tween: Tween = create_tween()
+	tween.tween_interval(0.35)
+	# The size is only right after layout, so set the pivot when the motion starts.
+	tween.tween_callback(func() -> void:
+		box.pivot_offset = box.size * 0.5
+		box.scale = Vector2.ONE if UiMotion.reduced() else Vector2(0.6, 0.6))
+	tween.tween_property(box, "modulate:a", 1.0, 0.25)
+	tween.parallel().tween_property(box, "scale", Vector2.ONE, 0.5).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+
+func _summit_label(text: String, size: int) -> Label:
+	var label: Label = Label.new()
+	label.text = text
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", size)
+	label.add_theme_color_override("font_color", Color("#FFF6E5"))
+	label.add_theme_color_override("font_shadow_color", Color(0.168627, 0.176471, 0.258824, 0.55))
+	label.add_theme_constant_override("shadow_offset_x", 0)
+	label.add_theme_constant_override("shadow_offset_y", 5)
+	label.add_theme_constant_override("outline_size", 10)
+	label.add_theme_color_override("font_outline_color", Color(0.168627, 0.176471, 0.258824, 0.35))
+	return label
+
+
 ## Short message under the top bar ("Checkpoint", "Dusk falls"...). `key` is a translation key.
 func show_toast(key: String, seconds: float = TOAST_SECONDS) -> void:
 	show_toast_text(tr(key), seconds)
@@ -144,6 +215,15 @@ func show_toast(key: String, seconds: float = TOAST_SECONDS) -> void:
 ## Like show_toast, for text that's already translated and filled in.
 func show_toast_text(text: String, seconds: float = TOAST_SECONDS) -> void:
 	toast_label.text = text
+	# Measure the one-line width; wrap only when it wouldn't fit.
+	toast_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	toast_label.custom_minimum_size.x = 0.0
+	var font: Font = toast_label.get_theme_font("font")
+	var one_line: float = font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, toast_label.get_theme_font_size("font_size")).x
+	if one_line > TOAST_MAX_WIDTH:
+		toast_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		toast_label.custom_minimum_size.x = TOAST_MAX_WIDTH
+	toast.reset_size()
 	if _toast_tween != null:
 		_toast_tween.kill()
 	toast.modulate.a = 0.0

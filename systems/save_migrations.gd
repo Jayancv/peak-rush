@@ -14,6 +14,8 @@ static func step(from_version: int, data: Dictionary) -> Dictionary:
 			return _v2_to_v3(data)
 		3:
 			return _v3_to_v4(data)
+		4:
+			return _v4_to_v5(data)
 	push_error("SaveMigrations: no step from version %d" % from_version)
 	return data
 
@@ -72,4 +74,26 @@ static func _v3_to_v4(data: Dictionary) -> Dictionary:
 	if not profile.has("daily_streak"):
 		profile["daily_streak"] = 0
 	out["profile"] = profile
+	return out
+
+
+## v5: first-time hints are remembered across hikes (profile.hints_seen), and the day's
+## daily is pinned (profile.daily_pick), and trail records get "challenges". Existing players start with no hints seen: the
+## hints cover mechanics added after their first hikes.
+static func _v4_to_v5(data: Dictionary) -> Dictionary:
+	var out: Dictionary = data.duplicate(true)
+	var profile: Variant = out.get("profile", {})
+	if not (profile is Dictionary):
+		profile = {}
+	if not profile.has("hints_seen"):
+		profile["hints_seen"] = []
+	if not profile.has("daily_pick"):
+		profile["daily_pick"] = {}
+	out["profile"] = profile
+	# Trail challenges (bitmask per trail record), none met yet.
+	var trails: Variant = out.get("trails", {})
+	if trails is Dictionary:
+		for id: Variant in trails:
+			if trails[id] is Dictionary and not trails[id].has("challenges"):
+				trails[id]["challenges"] = 0
 	return out

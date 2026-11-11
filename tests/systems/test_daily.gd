@@ -2,18 +2,102 @@ extends GutTest
 ## Daily trail: deterministic pick, goals, streaks and rewards.
 
 var _b: Balance = Balance.new()
-var _ids: Array[StringName] = [&"a", &"b", &"c", &"d", &"e"]
 
 
-func test_same_date_same_challenge_and_dates_vary() -> void:
-	var one: Dictionary = DailyChallenge.for_date("2026-11-10", _ids)
-	assert_eq(DailyChallenge.for_date("2026-11-10", _ids), one)
-	var seen: Dictionary = {}
-	for d: int in range(1, 29):
-		var c: Dictionary = DailyChallenge.for_date("2026-02-%02d" % d, _ids)
-		seen[String(c.trail_id) + str(c.twist)] = true
-		assert_true(_ids.has(c.trail_id))
-	assert_gt(seen.size(), 6, "a month of dailies isn't the same few repeated")
+func _trail(id: StringName, viewpoints: int = 2, finds: int = 4, night: bool = false) -> TrailData:
+	var t: TrailData = TrailData.new()
+	t.id = id
+	t.night = night
+	for i: int in viewpoints:
+		t.viewpoints.append(ViewpointData.new())
+	for i: int in finds:
+		t.finds.append(FindData.new())
+	return t
+
+
+func _trails(n: int) -> Array[TrailData]:
+	var out: Array[TrailData] = []
+	for i: int in n:
+		out.append(_trail(StringName("t%d" % i)))
+	return out
+
+
+func _date(day_offset: int) -> String:
+	return Time.get_date_string_from_unix_time(Time.get_unix_time_from_datetime_string("2026-01-01T00:00:00") + day_offset * DailyChallenge.SECONDS_PER_DAY)
+
+
+func test_same_date_same_challenge() -> void:
+	var trails: Array[TrailData] = _trails(5)
+	assert_eq(DailyChallenge.for_date("2026-11-10", trails, _b), DailyChallenge.for_date("2026-11-10", trails, _b))
+
+
+func test_no_trail_or_twist_two_days_running() -> void:
+	for n: int in [2, 3, 5, 8]:
+		var trails: Array[TrailData] = _trails(n)
+		var prev: Dictionary = DailyChallenge.for_date(_date(-1), trails, _b)
+		for d: int in 730:
+			var c: Dictionary = DailyChallenge.for_date(_date(d), trails, _b)
+			assert_ne(c.trail_id, prev.trail_id, "%d trails: same trail on %s and the day before" % [n, _date(d)])
+			assert_ne(c.twist, prev.twist, "%d trails: same twist on %s and the day before" % [n, _date(d)])
+			prev = c
+
+
+func test_every_trail_and_twist_comes_round_fairly() -> void:
+	var trails: Array[TrailData] = _trails(5)
+	var trail_count: Dictionary = {}
+	var twist_count: Dictionary = {}
+	for d: int in 365:
+		var c: Dictionary = DailyChallenge.for_date(_date(d), trails, _b)
+		trail_count[c.trail_id] = int(trail_count.get(c.trail_id, 0)) + 1
+		twist_count[c.twist] = int(twist_count.get(c.twist, 0)) + 1
+	assert_eq(trail_count.size(), 5)
+	assert_eq(twist_count.size(), DailyChallenge.Twist.size(), "every twist shows up within a year")
+	for id: Variant in trail_count:
+		assert_between(int(trail_count[id]), 55, 90, "%s comes round about once in 5 days" % id)
+	for tw: Variant in twist_count:
+		assert_between(int(twist_count[tw]), 20, 60, "twist %d comes round about once in 10 days" % tw)
+
+
+func test_twists_only_land_where_they_fit() -> void:
+	var bare: TrailData = _trail(&"bare", 0, 1, true)
+	assert_false(DailyChallenge.fits(DailyChallenge.Twist.PHOTO_HUNT, bare, _b), "no viewpoints, no photo hunt")
+	assert_false(DailyChallenge.fits(DailyChallenge.Twist.FORAGER, bare, _b), "one find can't make two")
+	assert_false(DailyChallenge.fits(DailyChallenge.Twist.SHORT_DAY, bare, _b), "night trails keep their aurora")
+	var only: Array[TrailData] = [bare]
+	for d: int in 120:
+		var tw: int = int(DailyChallenge.for_date(_date(d), only, _b).twist)
+		assert_true(DailyChallenge.fits(tw, bare, _b), "%s picked twist %d" % [_date(d), tw])
+
+
+func test_every_twist_has_text() -> void:
+	assert_eq(DailyChallenge.TWIST_KEYS.size(), DailyChallenge.Twist.size())
+	for key: String in DailyChallenge.TWIST_KEYS:
+		assert_ne(tr(key), key)
+
+
+func test_new_goals() -> void:
+	var r: TrailResult = TrailResult.new(&"a")
+	r.finished = true
+	r.viewpoint_total = 2
+	r.photos = {"v1": 2}
+	assert_false(DailyChallenge.goal_met(DailyChallenge.Twist.PHOTO_HUNT, r, 0.0, _b))
+	r.photos["v2"] = 1
+	assert_true(DailyChallenge.goal_met(DailyChallenge.Twist.PHOTO_HUNT, r, 0.0, _b))
+	assert_true(DailyChallenge.goal_met(DailyChallenge.Twist.SURE_FOOTED, r, 0.0, _b))
+	r.falls = 1
+	assert_false(DailyChallenge.goal_met(DailyChallenge.Twist.SURE_FOOTED, r, 0.0, _b))
+
+
+func test_gusty_and_dry_spell_change_the_hike() -> void:
+	var w: WeatherProfile = HikeTracker.twisted_weather(WeatherProfile.new(), DailyChallenge.Twist.GUSTY, _b)
+	assert_true(w.wind)
+	assert_eq(w.gust_strength, _b.daily_gust_strength)
+	var h: Hydration = Hydration.new(_b)
+	var plain: Hydration = Hydration.new(_b)
+	h.drain_scale = _b.daily_thirsty_water_mult
+	h.tick(1.0, true, false)
+	plain.tick(1.0, true, false)
+	assert_almost_eq(h.max_value - h.value, (plain.max_value - plain.value) * _b.daily_thirsty_water_mult, 0.001)
 
 
 func test_goals() -> void:
@@ -61,6 +145,24 @@ func test_completing_today_pays_once_and_starts_a_streak() -> void:
 	GameState.daily_active = true
 	var again: Dictionary = GameState.record_result(r)
 	assert_false(again.has("daily"), "no second payout on the same day")
+	GameState.from_dict(saved)
+
+
+func test_unlocking_a_trail_does_not_change_todays_daily() -> void:
+	var saved: Dictionary = GameState.to_dict()
+	GameState.reset()
+	var before: Dictionary = GameState.daily_today()
+	# Finishing trail 1 opens trail 2: more trails to pick from, but today stays today.
+	var r: TrailResult = TrailResult.new(ContentDB.first_trail().id)
+	r.finished = true
+	r.time_seconds = 100.0
+	GameState.record_result(r)
+	var after: Dictionary = GameState.daily_today()
+	assert_eq(after.trail_id, before.trail_id)
+	assert_eq(after.twist, before.twist)
+	var reloaded: PlayerProfile = PlayerProfile.new()
+	reloaded.from_dict(GameState.profile.to_dict())
+	assert_eq(reloaded.daily_pick, GameState.profile.daily_pick, "and it survives a restart")
 	GameState.from_dict(saved)
 
 

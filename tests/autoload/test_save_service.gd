@@ -112,10 +112,19 @@ func test_full_game_state_survives_save_and_load() -> void:
 func test_migrates_v3_save_to_v4_with_a_fresh_daily_streak() -> void:
 	var v3: Dictionary = {"save_version": 3, "tp": 9, "profile": {"name": "Aino", "hikes": 4}}
 	var out: Dictionary = SaveService.migrate(v3)
-	assert_eq(int(out.save_version), 4)
+	assert_eq(int(out.save_version), SaveService.SAVE_VERSION)
 	assert_eq(str(out.profile.daily_last), "")
 	assert_eq(int(out.profile.daily_streak), 0)
 	assert_eq(int(out.profile.hikes), 4, "the rest of the profile is untouched")
+
+
+func test_migrates_v4_save_to_v5_with_no_hints_seen() -> void:
+	var v4: Dictionary = {"save_version": 4, "tp": 9, "profile": {"name": "Aino", "daily_streak": 3}}
+	var out: Dictionary = SaveService.migrate(v4)
+	assert_eq(int(out.save_version), 5)
+	assert_eq(out.profile.hints_seen, [])
+	assert_eq(out.profile.daily_pick, {})
+	assert_eq(int(out.profile.daily_streak), 3, "the rest of the profile is untouched")
 
 
 func _write_raw(text: String) -> void:

@@ -48,13 +48,14 @@ static func _shutter() -> AudioStreamWAV:
 ## A footstep per surface: soft thud on dirt, click on rock, squelch in mud,
 ## sharp tick on ice, crunch in snow (TerrainStrip.Surface order).
 static func _footstep(surface: int) -> AudioStreamWAV:
-	# length s, low-pass amount, decay rate, tone Hz, tone mix, wobble Hz, crunch
+	# length s, low-pass amount, decay rate, tone Hz, tone mix, wobble Hz, crunch, gain
+	# (gain evens out loudness: soft dirt and mud measured 4-9 dB under rock and snow)
 	var presets: Array = [
-		[0.09, 0.16, 45.0, 0.0, 0.0, 0.0, false],
-		[0.05, 0.6, 90.0, 1100.0, 0.3, 0.0, false],
-		[0.15, 0.07, 22.0, 0.0, 0.0, 28.0, false],
-		[0.04, 0.85, 140.0, 2400.0, 0.25, 0.0, false],
-		[0.11, 0.45, 32.0, 0.0, 0.0, 0.0, true],
+		[0.09, 0.16, 45.0, 0.0, 0.0, 0.0, false, 1.4],
+		[0.05, 0.6, 90.0, 1100.0, 0.3, 0.0, false, 1.0],
+		[0.15, 0.07, 22.0, 0.0, 0.0, 28.0, false, 2.0],
+		[0.04, 0.85, 140.0, 2400.0, 0.25, 0.0, false, 1.0],
+		[0.11, 0.45, 32.0, 0.0, 0.0, 0.0, true, 1.0],
 	]
 	var p: Array = presets[clampi(surface, 0, presets.size() - 1)]
 	var rng: RandomNumberGenerator = _rng(11 + surface)
@@ -72,7 +73,7 @@ static func _footstep(surface: int) -> AudioStreamWAV:
 			s *= 0.6 + 0.4 * sin(TAU * float(p[5]) * t)
 		if bool(p[6]) and i % 40 == 0:
 			gate = 1.0 if rng.randf() > 0.35 else 0.25
-		out[i] = s * env * gate * 1.6
+		out[i] = s * env * gate * 1.6 * float(p[7])
 	return _wav(out, SFX_RATE, false)
 
 

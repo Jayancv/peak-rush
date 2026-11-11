@@ -44,6 +44,8 @@ func snap_to_target() -> void:
 
 ## A short decaying jolt (stumbles, falls).
 func shake(strength_px: float) -> void:
+	if UiMotion.reduced():
+		return
 	_shake_px = maxf(_shake_px if _shake_left > 0.0 else 0.0, strength_px)
 	_shake_left = _balance.shake_seconds
 

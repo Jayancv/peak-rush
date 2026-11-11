@@ -21,6 +21,10 @@ static func make(key: String) -> AudioStreamWAV:
 			return _splash()
 		"pebble":
 			return _pebble()
+		"flutter":
+			return _flutter()
+		"cry":
+			return _cry()
 	return null
 
 
@@ -105,6 +109,39 @@ static func _pebble() -> AudioStreamWAV:
 		for i: int in range(start, n):
 			var t: float = float(i - start) / RATE
 			out[i] += sin(TAU * (1900.0 - 300.0 * k) * t) * exp(-t * 180.0) * (0.5 - 0.2 * k)
+	return SynthSounds._wav(out, RATE, false)
+
+
+## A flock taking off: a quick burst of soft wingbeats (filtered noise pulses).
+static func _flutter() -> AudioStreamWAV:
+	var rng: RandomNumberGenerator = SynthSounds._rng(61)
+	var n: int = int(RATE * 0.7)
+	var out: PackedFloat32Array = _empty(n)
+	var smooth: float = 0.0
+	for i: int in n:
+		var t: float = float(i) / RATE
+		# Many birds beating out of step: fast pulses that thin out as they fly off.
+		var beat: float = maxf(sin(TAU * 19.0 * t) * sin(TAU * 13.0 * t + 1.0), 0.0)
+		smooth = lerpf(smooth, rng.randf_range(-1.0, 1.0), 0.35)
+		out[i] = smooth * beat * exp(-t * 3.2) * minf(t * 60.0, 1.0) * 0.9
+	return SynthSounds._wav(out, RATE, false)
+
+
+## A distant eagle: a high, thin whistle that falls away with a little waver.
+static func _cry() -> AudioStreamWAV:
+	var n: int = int(RATE * 1.1)
+	var out: PackedFloat32Array = _empty(n)
+	var phase: float = 0.0
+	for k: int in 2:
+		var start: int = int(RATE * 0.42 * k)
+		var length: float = 0.55 - 0.15 * k
+		phase = 0.0
+		for i: int in range(start, mini(start + int(RATE * length), n)):
+			var t: float = float(i - start) / RATE
+			var f: float = (2300.0 - 900.0 * t / length) * (1.0 + 0.02 * sin(TAU * 28.0 * t))
+			phase += TAU * f / RATE
+			var env: float = minf(t * 40.0, 1.0) * pow(1.0 - t / length, 1.5)
+			out[i] += (sin(phase) + 0.25 * sin(phase * 2.0)) * env * (0.32 - 0.1 * k)
 	return SynthSounds._wav(out, RATE, false)
 
 

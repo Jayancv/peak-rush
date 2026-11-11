@@ -18,6 +18,12 @@ signal quit_pressed
 
 var _tween: Tween
 var _closing: bool = false
+var _challenges: HBoxContainer
+
+## Challenge row states for set_challenges().
+enum Goal { OPEN, DONE, MISSED }
+const GOLD: Color = Color("#F2B33D")
+const FADED: Color = Color(0.168627, 0.176471, 0.258824, 0.35)
 
 
 func _ready() -> void:
@@ -53,6 +59,34 @@ func close() -> void:
 		visible = false
 		_closing = false
 	)
+
+
+## The trail's challenges under the map, on one line: [short text, Goal] per challenge.
+func set_challenges(rows: Array) -> void:
+	if _challenges == null:
+		_challenges = HBoxContainer.new()
+		_challenges.alignment = BoxContainer.ALIGNMENT_CENTER
+		_challenges.add_theme_constant_override("separation", 22)
+		map.get_parent().add_child(_challenges)
+		map.get_parent().move_child(_challenges, map.get_index() + 1)
+	for old: Node in _challenges.get_children():
+		old.queue_free()
+	for row: Array in rows:
+		var line: HBoxContainer = HBoxContainer.new()
+		line.add_theme_constant_override("separation", 5)
+		var star: UiIcon = UiIcon.new()
+		star.custom_minimum_size = Vector2(22, 22)
+		star.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		star.kind = UiIcon.Kind.STAR if row[1] == Goal.DONE else UiIcon.Kind.STAR_EMPTY
+		star.color = GOLD if row[1] == Goal.DONE else FADED
+		line.add_child(star)
+		var label: Label = Label.new()
+		label.text = row[0]
+		label.add_theme_font_size_override("font_size", 19)
+		if row[1] == Goal.MISSED:
+			label.add_theme_color_override("font_color", FADED)
+		line.add_child(label)
+		_challenges.add_child(line)
 
 
 func is_open() -> bool:

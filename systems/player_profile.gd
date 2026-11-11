@@ -15,6 +15,11 @@ var badges: Array[String] = []
 ## Daily trail: the last date ("YYYY-MM-DD") it was completed, and the streak.
 var daily_last: String = ""
 var daily_streak: int = 0
+## Today's daily, pinned when first worked out ({date, trail_id, twist}), so finishing a
+## trail (which unlocks the next) can't swap the daily for another one mid-day.
+var daily_pick: Dictionary = {}
+## First-time hints already shown (hint keys), so each explains itself only once ever.
+var hints_seen: Array[String] = []
 
 
 static func slot_key(slot: CosmeticData.Slot) -> String:
@@ -49,6 +54,26 @@ func complete_daily(today: String) -> int:
 	return daily_streak
 
 
+## The daily for `date`: the pinned one if it's for that date (and `still_valid` accepts
+## its trail id), else `pick_new` is called and its answer pinned.
+func daily_for(date: String, pick_new: Callable, still_valid: Callable) -> Dictionary:
+	if daily_pick.get("date", "") == date and still_valid.call(StringName(daily_pick.trail_id)):
+		return {"trail_id": StringName(daily_pick.trail_id), "twist": int(daily_pick.twist)}
+	var c: Dictionary = pick_new.call()
+	if not c.is_empty():
+		daily_pick = {"date": date, "trail_id": String(c.trail_id), "twist": int(c.twist)}
+	return c
+
+
+func has_seen_hint(key: String) -> bool:
+	return hints_seen.has(key)
+
+
+func mark_hint_seen(key: String) -> void:
+	if not hints_seen.has(key):
+		hints_seen.append(key)
+
+
 func add_hike(seconds: float) -> void:
 	hikes += 1
 	hike_seconds += maxf(seconds, 0.0)
@@ -63,6 +88,8 @@ func to_dict() -> Dictionary:
 		"badges": badges.duplicate(),
 		"daily_last": daily_last,
 		"daily_streak": daily_streak,
+		"hints_seen": hints_seen.duplicate(),
+		"daily_pick": daily_pick.duplicate(),
 	}
 
 
@@ -78,6 +105,11 @@ func from_dict(data: Dictionary) -> void:
 	hike_seconds = maxf(float(data.get("hike_seconds", 0.0)), 0.0)
 	daily_last = str(data.get("daily_last", ""))
 	daily_streak = maxi(int(data.get("daily_streak", 0)), 0)
+	hints_seen = TrailRecord.string_list(data.get("hints_seen", []))
+	var pick: Variant = data.get("daily_pick", {})
+	daily_pick = {}
+	if pick is Dictionary and pick.has("date") and pick.has("trail_id") and pick.has("twist"):
+		daily_pick = {"date": str(pick.date), "trail_id": str(pick.trail_id), "twist": int(pick.twist)}
 	badges = []
 	var saved_badges: Variant = data.get("badges", [])
 	if saved_badges is Array:

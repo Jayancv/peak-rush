@@ -85,7 +85,7 @@ docs/                GAME_DESIGN.md, PLAN.md
 - At the end of each session, update **Current status** below and tick the boxes in `docs/PLAN.md`.
 
 ## Current status
-- Milestone: **M7.5 (trail depth) + polish (sounds, trail map, finds page, daily trail) built, 253 tests green; M7.6 automated part done (phone checklist, low-end phone, playtest open)**. M7 non-release part done. Release steps
+- Milestone: **M7.5 (trail depth) + polish (sounds, trail map, finds page, daily trail) built, 288 tests green; M7.6 automated part done (phone checklist, low-end phone, playtest open); M7.7 done**. M7 non-release part done. Release steps
   (keystore, AAB, stores, iOS, screenshots, 1.0.0) deliberately not started; low-end phone profiling still open.
   M5/M6 full-season phone playtest still open. Launch plan in PLAN.md: M7.6 stabilisation -> M7.7 launch features -> M7.8 ads -> M7.9 Google Play (Android first, free with ads, iOS after launch in M8).
 - Godot 4.7.2-stable (not on PATH; ask the user for the executable path if unknown); GUT 9.7.1.
@@ -187,6 +187,24 @@ docs/                GAME_DESIGN.md, PLAN.md
   ~30 s for all trails, exit 1 on failure). CI: .github/workflows/checks.yml (GUT + bot). `tools/*` is excluded from export.
   `TrailRecord` (systems/) = record shape/clean/merge. Buttons inside a ScrollContainer use `ScrollTap.connect_tap`
   (swipes pass through; a press that scrolled isn't a tap) — test_touch_audit checks every menu screen.
+  M7.7: `FirstHints` (trail runner, via HikeTracker) shows each HINT_* once ever (profile.hints_seen, save v5), one at a time.
+  Settings: Reduce motion (settings.reduce_motion; `UiMotion.reduced()` gates UI motion, camera shake, plant sway, menu pan)
+  and an About popup (`AboutCard`: version from application/config/version, credits, privacy summary, licences,
+  two-tap Reset progress = GameState.reset_progress, keeps settings; AboutCard.PRIVACY_URL set in M7.9).
+  `SeasonFinale` on results when a first completion finishes a season. Long HUD toasts wrap at Hud.TOAST_MAX_WIDTH.
+  Audio levels: AudioManager.AMBIENCE_DB per ambience kind; footstep presets carry a gain column.
+  Popups opened over a screen must stop that screen's back handler (every node gets WM_GO_BACK_REQUEST).
+  Excitement pass: `SummitMoment` (flag + camera pull-back + Hud.show_summit title; Balance summit_*; tap skips).
+  `Flow` (systems/, in HikerCondition): steady walking adds levels (speed bonus), stumble/fall breaks it, idle drains;
+  HUD "Flow N" pill. `TrailChallenges` (systems/): ALL_FINDS / BEAT_PAR / CLEAN per trail, record "challenges" bitmask
+  (save v5), TP each once (tp_per_challenge), all three = medal; shown on trail cards, pause card row, results.
+  Wildlife: `TrailMoments` (world/fx, added by HikeTracker under the level) places 2-3 `WildlifeMoment`s (FLOCK,
+  EAGLE, REINDEER) per hike on open ground (clear of anything from world/obstacles|interactables and of real gaps,
+  before the summit); reindeer graze on the path and a hiker who barges in stumbles. Sounds: flutter, cry.
+  Daily pick: trails and twists are dealt from shuffled decks per day (no repeats; `_shuffled` uses its own LCG so every
+  app version agrees), `DailyChallenge.fits` keeps twists on trails that suit them, and the day's pick is pinned in
+  profile.daily_pick (save v5) so unlocking a trail mid-day can't change it. 10 twists (DailyChallenge.TWIST_KEYS);
+  HikeTracker.apply_daily applies hiker ones (Hydration.drain_scale, weather_drain_mult), twisted_weather the fog/gusts.
   Daily: `DailyChallenge.is_done` keeps a daily done if the clock moves back <= 2 days. A save from a newer app is copied
   to save.v<N>-backup.json before use. Phone-only checks: docs/PHONE_CHECKLIST.md.
   Water: SteppingStones uses `world/obstacles/water.gdshader` (waves/depth/glints in local px). GroundPatch art follows the TerrainStrip slope.
