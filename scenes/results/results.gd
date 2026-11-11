@@ -29,6 +29,10 @@ const BADGE_SHOW_SECONDS: float = 3.5
 const FINALE_DELAY: float = 2.2
 
 var _result: Dictionary
+## "Watch an ad: +N TP" (built in code; shown only when an ad is ready).
+var _ad_button: Button
+var _ad_tp: int = 0
+var _leaving: bool = false
 var _trail: TrailData
 var _next: TrailData
 
@@ -48,6 +52,9 @@ func _ready() -> void:
 		next_button.grab_focus()
 	_fill()
 	_animate()
+	if bool(_result.get("finished", false)):
+		Ads.note_hike_finished()
+	_add_ad_button()
 
 
 func _fill() -> void:
@@ -184,12 +191,56 @@ func _thump() -> void:
 
 
 func _play(trail: TrailData) -> void:
-	GameState.current_trail_id = trail.id
-	SceneRouter.go_to(SceneRouter.TRAIL_RUNNER)
+	_leave(func() -> void:
+		GameState.current_trail_id = trail.id
+		SceneRouter.go_to(SceneRouter.TRAIL_RUNNER))
 
 
 func _to_trails() -> void:
-	SceneRouter.go_to(SceneRouter.TRAIL_SELECT)
+	_leave(SceneRouter.go_to.bind(SceneRouter.TRAIL_SELECT))
+
+
+## Every way off this screen goes through here: the one place an interstitial may show.
+func _leave(go: Callable) -> void:
+	if _leaving or Ads.is_showing():
+		return
+	_leaving = true
+	Ads.between_hikes(self, _trail.tutorial, go)
+
+
+func _add_ad_button() -> void:
+	_ad_tp = Ads.policy.reward_tp(int(_result.get("total", 0))) if Ads.policy != null else 0
+	if _ad_tp <= 0 or _result.has("ad_bonus"):
+		return
+	_ad_button = Button.new()
+	_ad_button.text = tr("RESULTS_AD_REWARD") % _ad_tp
+	_ad_button.custom_minimum_size = Vector2(0, 64)
+	_ad_button.add_theme_font_size_override("font_size", 22)
+	_ad_button.visible = Ads.rewarded_ready()
+	_ad_button.pressed.connect(func() -> void:
+		Ads.show_rewarded(self, _on_ad_reward))
+	# In the button row, not a row of its own: a busy results card is already tall.
+	var buttons: Node = next_button.get_parent()
+	buttons.add_child(_ad_button)
+	buttons.move_child(_ad_button, 0)
+
+
+func _process(_delta: float) -> void:
+	# Ads load in the background: offer the reward as soon as one is ready.
+	if _ad_button != null and not _ad_button.visible and Ads.rewarded_ready():
+		_ad_button.visible = true
+		UiMotion.intro([_ad_button])
+
+
+func _on_ad_reward() -> void:
+	GameState.add_bonus_tp(_ad_tp)
+	_result = GameState.last_result
+	tp_breakdown.text += "
+" + tr("RESULTS_TP_AD") % _ad_tp
+	_set_tp(int(_result.get("total", 0)) + _ad_tp)
+	UiMotion.bump(tp_total)
+	_ad_button.queue_free()
+	_ad_button = null
 
 
 func _finale() -> SeasonFinale:
@@ -202,6 +253,8 @@ func _finale() -> SeasonFinale:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("pause"):
 		get_viewport().set_input_as_handled()
+		if Ads.is_showing():
+			return
 		if _finale() != null:
 			_finale().queue_free()
 		else:
@@ -210,5 +263,5 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _notification(what: int) -> void:
 	# Every node hears back; an open finale closes itself instead.
-	if what == NOTIFICATION_WM_GO_BACK_REQUEST and _finale() == null:
+	if what == NOTIFICATION_WM_GO_BACK_REQUEST and _finale() == null and not Ads.is_showing():
 		_to_trails()

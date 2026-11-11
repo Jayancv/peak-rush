@@ -121,6 +121,11 @@ static func quarantine(path: String) -> String:
 	return backup
 
 
+## True under GUT (tests must not touch real saves, show ads, ...).
+static func is_test_run() -> bool:
+	return _running_tests()
+
+
 static func _running_tests() -> bool:
 	for arg: String in OS.get_cmdline_args():
 		if arg.ends_with("gut_cmdln.gd"):

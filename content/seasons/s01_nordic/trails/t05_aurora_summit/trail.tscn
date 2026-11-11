@@ -19,6 +19,7 @@
 [ext_resource type="PackedScene" path="res://world/interactables/fork_sign.tscn" id="p_sign"]
 [ext_resource type="PackedScene" path="res://world/interactables/find.tscn" id="p_find"]
 [ext_resource type="PackedScene" path="res://world/interactables/spring.tscn" id="p_spring"]
+[ext_resource type="PackedScene" path="res://world/obstacles/rope_bridge.tscn" id="x_bridge"]
 
 [node name="AuroraSummit" type="Node2D"]
 
@@ -27,7 +28,7 @@
 [node name="Scenery" type="Node2D" parent="."]
 
 [node name="Lookout" parent="Scenery" instance=ExtResource("p_board")]
-points = PackedVector2Array(3830, 272, 3950, 272)
+points = PackedVector2Array(8630, 152, 8750, 152)
 
 [node name="Ridgewalk" parent="Scenery" instance=ExtResource("p_board")]
 points = PackedVector2Array(790, 466.82, 1460, 465.7)
@@ -97,7 +98,25 @@ position = Vector2(160, 550)
 [node name="Ground" type="Node2D" parent="."]
 
 [node name="Strip2" type="Line2D" parent="Ground"]
-points = PackedVector2Array(-300, 560, 500, 560, 550, 557.1, 600, 549.2, 650, 538, 700, 526.1, 750, 516.3, 800, 510.7, 850, 510.7, 900, 516.3, 950, 526.1, 1000, 538, 1050, 549.2, 1100, 557.1, 1150, 560, 1200, 557.1, 1250, 549.2, 1300, 538, 1350, 526.1, 1400, 516.3, 1450, 510.7, 1500, 510.7, 1550, 516.3, 1600, 526.1, 1650, 538, 1700, 549.2, 1750, 557.1, 1800, 560, 2400, 560, 2460.9, 558.9, 2521.7, 555.7, 2582.6, 550.5, 2643.5, 543.3, 2704.3, 534.2, 2765.2, 523.5, 2826.1, 511.3, 2887, 497.9, 2947.8, 483.5, 3008.7, 468.4, 3069.6, 452.8, 3130.4, 437.2, 3191.3, 421.6, 3252.2, 406.5, 3313, 392.1, 3373.9, 378.7, 3434.8, 366.5, 3495.7, 355.8, 3556.5, 346.7, 3617.4, 339.5, 3678.3, 334.3, 3739.1, 331.1, 3800, 330, 4200, 330)
+points = PackedVector2Array(-300, 560, 500, 560, 550, 557.1, 600, 549.2, 650, 538, 700, 526.1, 750, 516.3, 800, 510.7, 850, 510.7, 900, 516.3, 950, 526.1, 1000, 538, 1050, 549.2, 1100, 557.1, 1150, 560, 1200, 557.1, 1250, 549.2, 1300, 538, 1350, 526.1, 1400, 516.3, 1450, 510.7, 1500, 510.7, 1550, 516.3, 1600, 526.1, 1650, 538, 1700, 549.2, 1750, 557.1, 1800, 560, 2400, 560, 2460.9, 558.9, 2521.7, 555.7, 2582.6, 550.5, 2643.5, 543.3, 2700, 534.844)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("strip")
+surface = 4
+fill_color = Color(0.8667, 0.9059, 0.9412, 1.0)
+fill_bottom_color = Color(0.5608, 0.6392, 0.7216, 1.0)
+tuft_color = Color(1.0000, 1.0000, 1.0000, 1.0)
+decor_seed = 4
+side_trees = 1
+side_tree_spacing = Vector2(300, 700)
+side_tree_height = Vector2(160, 280)
+side_tree_color = Color(0.16, 0.3, 0.28, 1)
+side_tree_snow = true
+
+[node name="Strip2_r11" type="Line2D" parent="Ground"]
+points = PackedVector2Array(7500, 414.844, 7504.3, 414.2, 7565.2, 403.5, 7626.1, 391.3, 7687, 377.9, 7747.8, 363.5, 7808.7, 348.4, 7869.6, 332.8, 7930.4, 317.2, 7991.3, 301.6, 8052.2, 286.5, 8113, 272.1, 8173.9, 258.7, 8234.8, 246.5, 8295.7, 235.8, 8356.5, 226.7, 8417.4, 219.5, 8478.3, 214.3, 8539.1, 211.1, 8600, 210, 9000, 210)
 width = 14.0
 joint_mode = 2
 begin_cap_mode = 2
@@ -115,7 +134,7 @@ side_tree_color = Color(0.16, 0.3, 0.28, 1)
 side_tree_snow = true
 
 [node name="Strip3" type="Line2D" parent="Ground"]
-points = PackedVector2Array(4200, 330, 4261.9, 328.5, 4323.8, 324.2, 4385.7, 317.1, 4447.6, 307.4, 4509.5, 295.3, 4571.4, 281.1, 4633.3, 265, 4695.2, 247.5, 4757.1, 228.9, 4819, 209.7, 4881, 190.3, 4942.9, 171.1, 5004.8, 152.5, 5066.7, 135, 5128.6, 118.9, 5190.5, 104.7, 5252.4, 92.6, 5314.3, 82.9, 5376.2, 75.8, 5438.1, 71.5, 5500, 70, 5504, 30)
+points = PackedVector2Array(9000, 210, 9061.9, 208.5, 9123.8, 204.2, 9185.7, 197.1, 9247.6, 187.4, 9309.5, 175.3, 9371.4, 161.1, 9433.3, 145, 9495.2, 127.5, 9557.1, 108.9, 9619, 89.7, 9681, 70.3, 9742.9, 51.1, 9804.8, 32.5, 9866.7, 15, 9928.6, -1.1, 9990.5, -15.3, 10052.4, -27.4, 10114.3, -37.1, 10176.2, -44.2, 10238.1, -48.5, 10300, -50, 10304, -90)
 width = 14.0
 joint_mode = 2
 begin_cap_mode = 2
@@ -128,7 +147,25 @@ tuft_color = Color(1.0000, 1.0000, 1.0000, 1.0)
 decor_seed = 5
 
 [node name="Strip4" type="Line2D" parent="Ground"]
-points = PackedVector2Array(5504, 30, 6104, 30, 6164, 28.3, 6224, 23.1, 6284, 14.7, 6344, 3.5, 6404, -10, 6464, -25.3, 6524, -41.6, 6584, -58.4, 6644, -74.7, 6704, -90, 6764, -103.5, 6824, -114.7, 6884, -123.1, 6944, -128.3, 7004, -130, 7304, -130)
+points = PackedVector2Array(10304, -90, 10904, -90, 10964, -91.7, 11024, -96.9, 11084, -105.3, 11144, -116.5, 11204, -130, 11224, -135.1)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("strip")
+surface = 4
+fill_color = Color(0.8667, 0.9059, 0.9412, 1.0)
+fill_bottom_color = Color(0.5608, 0.6392, 0.7216, 1.0)
+tuft_color = Color(1.0000, 1.0000, 1.0000, 1.0)
+decor_seed = 6
+side_trees = 1
+side_tree_spacing = Vector2(300, 700)
+side_tree_height = Vector2(160, 280)
+side_tree_color = Color(0.16, 0.3, 0.28, 1)
+side_tree_snow = true
+
+[node name="Strip4_r0" type="Line2D" parent="Ground"]
+points = PackedVector2Array(15924, -275.1, 15964, -285.3, 16024, -301.6, 16084, -318.4, 16144, -334.7, 16204, -350, 16264, -363.5, 16324, -374.7, 16384, -383.1, 16444, -388.3, 16504, -390, 16804, -390)
 width = 14.0
 joint_mode = 2
 begin_cap_mode = 2
@@ -146,7 +183,7 @@ side_tree_color = Color(0.16, 0.3, 0.28, 1)
 side_tree_snow = true
 
 [node name="Strip5" type="Line2D" parent="Ground"]
-points = PackedVector2Array(7368, -130, 7430.5, -132.3, 7493, -138.8, 7555.5, -148.5, 7618, -160, 7680.5, -171.5, 7743, -181.2, 7805.5, -187.7, 7868, -190, 8268, -190, 8868, -190)
+points = PackedVector2Array(16868, -390, 16930.5, -392.3, 16993, -398.8, 17055.5, -408.5, 17118, -420, 17180.5, -431.5, 17243, -441.2, 17305.5, -447.7, 17368, -450, 17768, -450, 18368, -450)
 width = 14.0
 joint_mode = 2
 begin_cap_mode = 2
@@ -163,10 +200,64 @@ side_tree_height = Vector2(160, 280)
 side_tree_color = Color(0.16, 0.3, 0.28, 1)
 side_tree_snow = true
 
+[node name="Ext0_0" type="Line2D" parent="Ground"]
+points = PackedVector2Array(11224, -135.1, 11474, -138.6, 11724, -141.1, 11974, -164.2, 12224, -189.3, 12474, -181.5, 12724, -167.2, 12974, -179.1, 13224, -186.1, 13474, -179.5, 13724, -205.4, 13974, -251, 14224, -252, 14474, -222.2, 14724, -221.8, 14974, -242.4, 15224, -250.8, 15474, -258.6, 15724, -271.6, 15924, -275.1)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("strip")
+surface = 4
+fill_color = Color(0.8667, 0.9059, 0.9412, 1.0)
+fill_bottom_color = Color(0.5608, 0.6392, 0.7216, 1.0)
+tuft_color = Color(1.0000, 1.0000, 1.0000, 1.0)
+decor_seed = 93
+side_trees = 1
+side_tree_spacing = Vector2(300, 700)
+side_tree_height = Vector2(160, 280)
+side_tree_color = Color(0.16, 0.3, 0.28, 1)
+side_tree_snow = true
+
+[node name="Ext1_0" type="Line2D" parent="Ground"]
+points = PackedVector2Array(2700, 534.844, 2950, 524, 3200, 516.7, 3450, 511.2, 3700, 507.9, 3950, 529.2, 4200, 522.9, 4450, 465.7, 4700, 449.9, 5004, 483.153)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("strip")
+surface = 4
+fill_color = Color(0.8667, 0.9059, 0.9412, 1.0)
+fill_bottom_color = Color(0.5608, 0.6392, 0.7216, 1.0)
+tuft_color = Color(1.0000, 1.0000, 1.0000, 1.0)
+decor_seed = 974
+side_trees = 1
+side_tree_spacing = Vector2(300, 700)
+side_tree_height = Vector2(160, 280)
+side_tree_color = Color(0.16, 0.3, 0.28, 1)
+side_tree_snow = true
+
+[node name="Ext1_1" type="Line2D" parent="Ground"]
+points = PackedVector2Array(5244, 480.059, 5494, 484.9, 5744, 483.7, 5994, 435.4, 6244, 412.4, 6494, 440.5, 6744, 447.4, 6994, 431.8, 7244, 423.2, 7500, 414.844)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("strip")
+surface = 4
+fill_color = Color(0.8667, 0.9059, 0.9412, 1.0)
+fill_bottom_color = Color(0.5608, 0.6392, 0.7216, 1.0)
+tuft_color = Color(1.0000, 1.0000, 1.0000, 1.0)
+decor_seed = 201
+side_trees = 1
+side_tree_spacing = Vector2(300, 700)
+side_tree_height = Vector2(160, 280)
+side_tree_color = Color(0.16, 0.3, 0.28, 1)
+side_tree_snow = true
+
 [node name="Pieces" type="Node2D" parent="."]
 
 [node name="Kill1" parent="Pieces" instance=ExtResource("kill")]
-position = Vector2(7336, 130)
+position = Vector2(16836, -130)
 size = Vector2(104, 300)
 
 [node name="Ice1" parent="Pieces" instance=ExtResource("ice")]
@@ -190,17 +281,17 @@ position = Vector2(2150, 560)
 position = Vector2(2320, 560)
 
 [node name="Ice2" parent="Pieces" instance=ExtResource("ice")]
-position = Vector2(3000, 470.557)
+position = Vector2(7800, 350.557)
 width = 160.0
 
 [node name="Rock1" parent="Pieces" instance=ExtResource("rock")]
-position = Vector2(3500, 355.156)
+position = Vector2(8300, 235.156)
 
 [node name="Checkpoint2" parent="Pieces" instance=ExtResource("checkpoint")]
-position = Vector2(4050, 330)
+position = Vector2(8850, 210)
 
 [node name="Vp2" parent="Pieces" instance=ExtResource("vp")]
-position = Vector2(5584, 30)
+position = Vector2(10384, -90)
 viewpoint_id = &"aurora"
 frame_offset = Vector2(260, -260)
 subject_kind = 3
@@ -209,24 +300,24 @@ subject_speed = 210
 subject_size = 1.0
 
 [node name="Ice3" parent="Pieces" instance=ExtResource("ice")]
-position = Vector2(5954, 30)
+position = Vector2(10754, -90)
 width = 200.0
 
 [node name="Bench2" parent="Pieces" instance=ExtResource("bench")]
-position = Vector2(7054, -130)
+position = Vector2(16554, -390)
 
 [node name="Checkpoint3" parent="Pieces" instance=ExtResource("checkpoint")]
-position = Vector2(7204, -130)
+position = Vector2(16704, -390)
 
 [node name="Finish1" parent="Pieces" instance=ExtResource("finish")]
-position = Vector2(8068, -190)
+position = Vector2(17568, -450)
 
 [node name="Slide1" parent="Pieces" instance=ExtResource("p_slide")]
 position = Vector2(1490, 510.7)
 width = 330.0
 
 [node name="Ridge1" parent="Pieces" instance=ExtResource("p_wind")]
-position = Vector2(7400, -131.178)
+position = Vector2(16900, -391.178)
 width = 640.0
 
 [node name="ForkSign" parent="Pieces" instance=ExtResource("p_sign")]
@@ -239,22 +330,116 @@ kind = 2
 color = Color(0.7843, 0.2588, 0.2314, 1)
 
 [node name="Find_purple_saxifrage" parent="Pieces" instance=ExtResource("p_find")]
-position = Vector2(3900, 272)
+position = Vector2(8700, 152)
 find_id = &"purple_saxifrage"
 kind = 0
 color = Color(0.6275, 0.3529, 0.7843, 1)
 
 [node name="Find_moss_campion" parent="Pieces" instance=ExtResource("p_find")]
-position = Vector2(6200, 25.18)
+position = Vector2(11000, -94.82)
 find_id = &"moss_campion"
 kind = 0
 color = Color(0.8784, 0.4784, 0.6588, 1)
 
 [node name="Find_arctic_fox_aurora" parent="Pieces" instance=ExtResource("p_find")]
-position = Vector2(6900, -124.487)
+position = Vector2(16400, -384.487)
 find_id = &"arctic_fox_aurora"
 kind = 3
 color = Color(0.8902, 0.9059, 0.9333, 1)
 
 [node name="Spring1" parent="Pieces" instance=ExtResource("p_spring")]
 position = Vector2(2470, 558.421)
+
+[node name="Ext0_Root0" parent="Pieces" instance=ExtResource("root")]
+position = Vector2(11647, -139)
+
+[node name="Ext0_Ice1" parent="Pieces" instance=ExtResource("ice")]
+position = Vector2(12061, -175.2)
+width = 140.0
+
+[node name="Ext0_Checkpoint2" parent="Pieces" instance=ExtResource("checkpoint")]
+position = Vector2(12413, -186.1)
+
+[node name="Ext0_Vp3" parent="Pieces" instance=ExtResource("vp")]
+position = Vector2(12864, -171.6)
+viewpoint_id = &"frozen_lake"
+frame_offset = Vector2(280, -240)
+subject_kind = 3
+subject_path = PackedVector2Array(-320, -120, 320, 40)
+subject_speed = 190
+subject_size = 1.0
+
+[node name="Ext0_Wind4" parent="Pieces" instance=ExtResource("p_wind")]
+position = Vector2(13146, -186.6)
+width = 600.0
+
+[node name="Ext0_Rock5" parent="Pieces" instance=ExtResource("rock")]
+position = Vector2(13612, -188.1)
+size = Vector2(57, 42)
+
+[node name="Ext0_Bench6" parent="Pieces" instance=ExtResource("bench")]
+position = Vector2(13983, -252.1)
+
+[node name="Ext0_Ice7" parent="Pieces" instance=ExtResource("ice")]
+position = Vector2(14373, -233.3)
+width = 160.0
+
+[node name="Ext0_Root8" parent="Pieces" instance=ExtResource("root")]
+position = Vector2(14740, -223)
+
+[node name="Ext0_Rock9" parent="Pieces" instance=ExtResource("rock")]
+position = Vector2(15205, -250.5)
+size = Vector2(66, 43)
+
+[node name="Ext0_Spring10" parent="Pieces" instance=ExtResource("p_spring")]
+position = Vector2(15618, -266.6)
+
+[node name="Ext1_Rock11" parent="Pieces" instance=ExtResource("rock")]
+position = Vector2(3084, 518.7)
+size = Vector2(66, 40)
+
+[node name="Ext1_Ice12" parent="Pieces" instance=ExtResource("ice")]
+position = Vector2(3444, 511.4)
+width = 160.0
+
+[node name="Ext1_Root13" parent="Pieces" instance=ExtResource("root")]
+position = Vector2(3876, 521.9)
+
+[node name="Ext1_Checkpoint14" parent="Pieces" instance=ExtResource("checkpoint")]
+position = Vector2(4222, 519.1)
+
+[node name="Ext1_Bench15" parent="Pieces" instance=ExtResource("bench")]
+position = Vector2(4505, 455.7)
+
+[node name="Ext1_Bridge16" parent="Pieces" instance=ExtResource("x_bridge")]
+position = Vector2(5004, 483.2)
+span = 240
+end_drop = -3.1
+
+[node name="Ext1_Bridge16Kill" parent="Pieces" instance=ExtResource("kill")]
+position = Vector2(5124, 743)
+size = Vector2(280, 300)
+
+[node name="Ext1_Ice17" parent="Pieces" instance=ExtResource("ice")]
+position = Vector2(5384, 479.8)
+width = 140.0
+
+[node name="Find_snow_bunting" parent="Pieces" instance=ExtResource("p_find")]
+position = Vector2(5638, 489.8)
+find_id = &"snow_bunting"
+kind = 3
+color = Color(0.9294, 0.9294, 0.9294, 1)
+
+[node name="Ext1_Rock19" parent="Pieces" instance=ExtResource("rock")]
+position = Vector2(6070, 421.5)
+size = Vector2(56, 41)
+
+[node name="Ext1_Spring20" parent="Pieces" instance=ExtResource("p_spring")]
+position = Vector2(6329, 419.6)
+
+[node name="Ext1_Root21" parent="Pieces" instance=ExtResource("root")]
+position = Vector2(6761, 446.5)
+
+[node name="Ext1_Ice22" parent="Pieces" instance=ExtResource("ice")]
+position = Vector2(7044, 429.6)
+width = 160.0

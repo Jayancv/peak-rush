@@ -10,6 +10,8 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"left_handed": false,
 	"vibration": true,
 	"reduce_motion": false,
+	## "" until asked, then "personalized" / "non_personalized" (Ads.ensure_consent).
+	"ad_consent": "",
 	"music_volume": 0.8,
 	"sfx_volume": 0.8,
 	"ambience_volume": 0.8,
@@ -157,12 +159,9 @@ func set_hiker_name(raw: String) -> void:
 	progress_changed.emit()
 
 
-## What the hiker wears in a slot; unknown or still-locked choices fall back to the default.
+## What the hiker wears in a slot (locked or unknown choices fall back to the default).
 func worn(slot: CosmeticData.Slot) -> CosmeticData:
-	var item: CosmeticData = ContentDB.get_cosmetic(profile.worn_id(slot))
-	if item == null or item.slot != slot or not PlayerProfile.is_unlocked(item, total_stars()):
-		return ContentDB.default_cosmetic(slot)
-	return item
+	return profile.worn_item(slot, total_stars(), ContentDB.get_cosmetic, ContentDB.default_cosmetic)
 
 
 ## False (and nothing changes) if the item is still locked.
@@ -174,14 +173,8 @@ func wear(item: CosmeticData) -> bool:
 	return true
 
 
-## CosmeticData.Slot -> Color for every slot (what HikerVisual paints).
 func look_colors() -> Dictionary:
-	var out: Dictionary = {}
-	for slot: int in CosmeticData.Slot.values():
-		var item: CosmeticData = worn(slot)
-		if item != null:
-			out[slot] = item.color
-	return out
+	return profile.look_colors(total_stars(), ContentDB.get_cosmetic, ContentDB.default_cosmetic)
 
 
 ## Totals the badges are judged on (see BadgeRules / ProfileFacts).
@@ -268,6 +261,13 @@ func record_result(result: TrailResult) -> Dictionary:
 		_record_daily(result)
 	progress_changed.emit()
 	return last_result
+
+
+## TP from a watched rewarded ad on the results screen (Ads / AdPolicy decide the amount).
+func add_bonus_tp(amount: int) -> void:
+	tp += maxi(amount, 0)
+	last_result["ad_bonus"] = amount
+	progress_changed.emit()
 
 
 # --- Save format ---

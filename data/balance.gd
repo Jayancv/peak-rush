@@ -205,6 +205,16 @@ extends Resource
 @export var moments_min: int = 2
 @export var moments_max: int = 3
 
+@export_group("Ads")
+## Rewarded ad on the results screen: share of the hike's TP it adds, and a floor.
+@export var ad_reward_tp_mult: float = 0.5
+@export var ad_reward_min_tp: int = 20
+## Interstitials: at most one every N finished hikes, this many seconds apart, and none
+## until the player has done this many hikes in total.
+@export var ad_interstitial_every: int = 3
+@export var ad_interstitial_min_seconds: float = 180.0
+@export var ad_grace_hikes: int = 5
+
 @export_group("Summit moment")
 ## How long the summit moment lasts before the results (a tap skips it sooner).
 @export var summit_seconds: float = 3.6

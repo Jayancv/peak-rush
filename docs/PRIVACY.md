@@ -15,6 +15,20 @@ on Android and iOS.
 - The game does not use the network, camera, microphone, location or contacts.
   The in-game "camera" only takes pictures of the game world; nothing is saved to your photo library.
 
+## Advertising (from the version that ships with ads)
+> Draft for M7.8/M7.9: this section replaces the "No advertising" line above once real ads ship.
+> Fill in the final ad partner details before publishing.
+
+Peak Rush is free and shows ads from **Google AdMob**: an optional ad you can watch on the results
+screen for bonus trail points, and an occasional ad between hikes (never during a hike).
+
+- On first launch you choose **personalised** or **non-personalised** ads. You can change this any
+  time in Settings > About > Ad privacy choices.
+- AdMob may collect your device's **advertising ID**, approximate location (from the IP address),
+  and ad interaction data to show and measure ads. See Google's policy: https://policies.google.com/privacy
+- You can reset or delete your advertising ID in your phone's settings.
+- The game itself still stores your progress only on your device.
+
 ## What stays on your device
 Your progress (completed trails, stars, best times, journal photos, gear and settings) is saved
 in a file inside the app's private storage on your device. It never leaves the device

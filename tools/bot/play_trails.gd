@@ -82,6 +82,7 @@ func _play(id: StringName, photos: bool) -> void:
 	var next_jump: int = 0
 	var resting: bool = false
 	var blocked: float = 0.0
+	var blocked_from_x: float = hiker.global_position.x
 	var t: float = 0.0
 	var best_x: float = hiker.global_position.x
 	var since_progress: float = 0.0
@@ -116,13 +117,20 @@ func _play(id: StringName, photos: bool) -> void:
 		if next_jump < jumps.size() and x >= float(jumps[next_jump]) and hiker.is_on_floor():
 			want = true
 			next_jump += 1
-		if hiker.is_on_floor() and absf(hiker.velocity.x) < 5.0 and hiker.state == Hiker.State.WALK:
+		# Blocked = pushing forward but not getting anywhere (speed can flicker against a rock,
+		# so judge by distance covered, like a player would).
+		if hiker.is_on_floor() and hiker.state == Hiker.State.WALK:
 			blocked += STEP
+			if x > blocked_from_x + 6.0:
+				blocked = 0.0
+				blocked_from_x = x
 		else:
 			blocked = 0.0
+			blocked_from_x = x
 		if blocked > 0.25:
 			want = true
 			blocked = 0.0
+			blocked_from_x = x
 		if want:
 			await _tap_jump()
 			t += STEP

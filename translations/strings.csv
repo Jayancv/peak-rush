@@ -243,7 +243,7 @@ SETTINGS_REDUCE_MOTION,Reduce motion
 ABOUT_TITLE,About Peak Rush
 ABOUT_VERSION,Version %s
 ABOUT_CREDITS,"Made by the Peak Rush team, with the Godot Engine."
-ABOUT_PRIVACY,"Your progress is saved only on this phone. The game collects no personal data."
+ABOUT_PRIVACY,"Your progress is saved only on this phone. Ads are shown by Google AdMob, which may use your advertising ID; you choose personalised or not in Ad privacy choices."
 ABOUT_PRIVACY_LINK,Privacy policy
 ABOUT_LICENSES,Licences
 ABOUT_RESET,Reset progress
@@ -279,3 +279,28 @@ TOAST_REINDEER_BUMP,Oops! You startled the reindeer
 CHALLENGE_ALL_FINDS_SHORT,Finds
 CHALLENGE_BEAT_PAR_SHORT,Beat par
 CHALLENGE_CLEAN_SHORT,No stumbles
+AD_TEST_TITLE,TEST AD
+AD_TEST_REWARDED,Mock rewarded ad - the real ad network comes later
+AD_TEST_INTERSTITIAL,Mock ad between hikes - the real ad network comes later
+AD_REWARD_IN,Reward in %d
+AD_CLOSE_IN,Close in %d
+AD_REWARD_EARNED,Reward earned!
+AD_SKIP,Skip (no reward)
+AD_CLOSE,Close
+CONSENT_TITLE,Ad privacy choices
+CONSENT_BODY,"Peak Rush is free and shows a few ads between hikes. May our ad partner use your advertising ID to show ads that suit you? You can change this any time in Settings > About."
+CONSENT_PERSONALIZED,Personalised ads
+CONSENT_NON_PERSONALIZED,Non-personalised
+RESULTS_AD_REWARD,Watch an ad: +%d TP
+RESULTS_TP_AD,Ad bonus  +%d
+ABOUT_AD_CHOICES,Ad privacy choices
+FIND_MUSSEL_SHELL,Blue mussel shell
+FIND_MUSSEL_SHELL_FACT,Mussels hold fast to the rocks with tough threads called byssus.
+FIND_BEARBERRY,Bearberry
+FIND_BEARBERRY_FACT,Bearberry leaves turn deep red in autumn and paint the open fells.
+VP_GLACIER,Glacier tongue
+FIND_TRAIL_MAP,Lost trail map
+FIND_TRAIL_MAP_FACT,Folded so often the creases have worn through - someone knew this ridge well.
+VP_FROZEN_LAKE,Frozen lake
+FIND_SNOW_BUNTING,Snow bunting
+FIND_SNOW_BUNTING_FACT,Snow buntings nest further north than almost any other songbird.

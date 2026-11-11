@@ -47,18 +47,31 @@ kind = 3
 color = Color(0.8902, 0.9059, 0.9333, 1)
 appear_chance = 0.65
 
+[sub_resource type="Resource" id="Find_snow_bunting"]
+script = ExtResource("9_find")
+id = &"snow_bunting"
+name_key = "FIND_SNOW_BUNTING"
+kind = 3
+color = Color(0.9294, 0.9294, 0.9294, 1)
+appear_chance = 0.65
+
+[sub_resource type="Resource" id="Viewpoint_frozen_lake"]
+script = ExtResource("3_vp")
+id = &"frozen_lake"
+name_key = "VP_FROZEN_LAKE"
+
 [resource]
 script = ExtResource("1_trail")
 id = &"t05_aurora_summit"
 name_key = "TRAIL_T05_NAME"
 season_id = &"s01_nordic"
 scene_path = "res://content/seasons/s01_nordic/trails/t05_aurora_summit/trail.tscn"
-length_m = 3600
-daylight_seconds = 170.0
-par_time = 125.0
+length_m = 7300
+daylight_seconds = 330.0
+par_time = 240.0
 weather = ExtResource("2_weather")
-viewpoints = Array[ExtResource("3_vp")]([SubResource("Viewpoint_1"), SubResource("Viewpoint_2")])
+viewpoints = Array[ExtResource("3_vp")]([SubResource("Viewpoint_1"), SubResource("Viewpoint_2"), SubResource("Viewpoint_frozen_lake")])
 unlock_order = 4
 night = true
 star3_key = "RESULTS_STAR_AURORA"
-finds = Array[ExtResource("9_find")]([SubResource("Find_lost_mitten"), SubResource("Find_purple_saxifrage"), SubResource("Find_moss_campion"), SubResource("Find_arctic_fox_aurora")])
+finds = Array[ExtResource("9_find")]([SubResource("Find_lost_mitten"), SubResource("Find_purple_saxifrage"), SubResource("Find_moss_campion"), SubResource("Find_arctic_fox_aurora"), SubResource("Find_snow_bunting")])

@@ -51,6 +51,9 @@ func _build() -> void:
 	if not PRIVACY_URL.is_empty():
 		links.add_child(_button(tr("ABOUT_PRIVACY_LINK"), func() -> void: OS.shell_open(PRIVACY_URL)))
 	links.add_child(_button(tr("ABOUT_LICENSES"), _show_licenses))
+	Ads._ensure()
+	if Ads.provider.needs_consent():
+		links.add_child(_button(tr("ABOUT_AD_CHOICES"), func() -> void: Ads.open_consent(self)))
 	var actions: HBoxContainer = _row()
 	_reset = _button(tr("ABOUT_RESET"), _on_reset)
 	actions.add_child(_reset)

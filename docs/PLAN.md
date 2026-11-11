@@ -219,15 +219,15 @@ Small things players and the store expect. Keep the list short; bigger ideas wai
 Ads must never interrupt a hike. Rewarded ads are opt-in; interstitials are rare.
 - [ ] **Decide (user):** AdMob account; target audience 13+ (simplest) or also under-13s (Families policy:
       certified ad SDKs only, child-directed settings)
-- [ ] **Decide (user):** where the ad code lives — `AdService` would be a sixth autoload (ask first), or a plain
+- [x] **Decided:** no sixth autoload: a static `Ads` class holds the provider (where the ad code lives — `AdService` would be a sixth autoload (ask first), or a plain
       class owned by an existing autoload
-- [ ] AdMob through a Godot Android plugin (v2), with a desktop/GUT stub so the editor and tests never load ads
-- [ ] **Consent:** Google UMP consent form (EEA/UK) on first launch + "Privacy choices" in Settings
-- [ ] **Rewarded (opt-in):** "Watch an ad: +50% TP" on the results screen; double the daily-trail reward
-- [ ] **Interstitial (rare):** only between hikes, at most one every 3 hikes, never in the first session or the tutorial trail
-- [ ] Ad rules (cooldowns, caps, first-session grace) as a pure `AdPolicy` system with tests; numbers in `balance.tres`
-- [ ] Game works fully offline and with ads failing to load (rewards simply aren't offered)
-- [ ] Privacy policy updated (advertising ID, AdMob), `AD_ID` permission, data-safety answers updated
+- [x] Provider seam with a **mock** (`MockAdProvider`, debug builds only) and a no-ads stub for tests/release; real AdMob plugin still to plug in (M7.9). Was: AdMob through a Godot Android plugin (v2), with a desktop/GUT stub so the editor and tests never load ads
+- [~] **Consent** (mock form + About > Ad privacy choices; real UMP with the SDK): Google UMP consent form (EEA/UK) on first launch + "Privacy choices" in Settings
+- [x] **Rewarded (opt-in)** (results +50% TP; the daily doubling folded into it, the bonus includes the daily): "Watch an ad: +50% TP" on the results screen; double the daily-trail reward
+- [x] **Interstitial (rare):** only between hikes, at most one every 3 hikes, never in the first session or the tutorial trail
+- [x] Ad rules (cooldowns, caps, first-session grace) as a pure `AdPolicy` system with tests; numbers in `balance.tres`
+- [x] Game works fully offline and with ads failing to load (rewards simply aren't offered)
+- [~] Privacy policy drafted in docs/PRIVACY.md (advertising ID, AdMob); AD_ID permission + data safety at release. Was: Privacy policy updated (advertising ID, AdMob), `AD_ID` permission, data-safety answers updated
 - [ ] *(Later)* "Remove ads" in-app purchase (Google Play Billing plugin)
 
 **Done when:** test ads show on the phone at the right moments only, consent works, and tests cover the ad rules.

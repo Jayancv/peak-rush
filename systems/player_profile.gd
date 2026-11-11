@@ -39,6 +39,25 @@ func worn_id(slot: CosmeticData.Slot) -> StringName:
 	return StringName(str(look.get(slot_key(slot), "")))
 
 
+## What the hiker wears in `slot`: the chosen item, or the default if it's unknown or
+## still locked. `lookup(id)` and `fallback(slot)` come from ContentDB.
+func worn_item(slot: CosmeticData.Slot, total_stars: int, lookup: Callable, fallback: Callable) -> CosmeticData:
+	var item: CosmeticData = lookup.call(worn_id(slot)) as CosmeticData
+	if item == null or item.slot != slot or not is_unlocked(item, total_stars):
+		return fallback.call(slot) as CosmeticData
+	return item
+
+
+## CosmeticData.Slot -> Color for every slot (what HikerVisual paints).
+func look_colors(total_stars: int, lookup: Callable, fallback: Callable) -> Dictionary:
+	var out: Dictionary = {}
+	for slot: int in CosmeticData.Slot.values():
+		var item: CosmeticData = worn_item(slot, total_stars, lookup, fallback)
+		if item != null:
+			out[slot] = item.color
+	return out
+
+
 func wear(item: CosmeticData) -> void:
 	look[slot_key(item.slot)] = String(item.id)
 

@@ -47,16 +47,24 @@ kind = 3
 color = Color(0.6118, 0.5176, 0.4039, 1)
 appear_chance = 0.65
 
+[sub_resource type="Resource" id="Find_mussel_shell"]
+script = ExtResource("9_find")
+id = &"mussel_shell"
+name_key = "FIND_MUSSEL_SHELL"
+kind = 2
+color = Color(0.2431, 0.3608, 0.5412, 1)
+appear_chance = 1.0
+
 [resource]
 script = ExtResource("1_trail")
 id = &"t02_archipelago_rocks"
 name_key = "TRAIL_T02_NAME"
 season_id = &"s01_nordic"
 scene_path = "res://content/seasons/s01_nordic/trails/t02_archipelago_rocks/trail.tscn"
-length_m = 2600
-daylight_seconds = 170.0
-par_time = 125.0
+length_m = 3300
+daylight_seconds = 195.0
+par_time = 145.0
 weather = ExtResource("2_weather")
 viewpoints = Array[ExtResource("3_vp")]([SubResource("Viewpoint_1"), SubResource("Viewpoint_2")])
 unlock_order = 1
-finds = Array[ExtResource("9_find")]([SubResource("Find_brass_whistle"), SubResource("Find_sea_thrift"), SubResource("Find_sea_campion"), SubResource("Find_mountain_hare")])
+finds = Array[ExtResource("9_find")]([SubResource("Find_brass_whistle"), SubResource("Find_sea_thrift"), SubResource("Find_sea_campion"), SubResource("Find_mountain_hare"), SubResource("Find_mussel_shell")])
