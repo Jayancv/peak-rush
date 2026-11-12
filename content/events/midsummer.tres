@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EventData" format=3]
+
+[ext_resource type="Script" path="res://data/event_data.gd" id="1_event"]
+
+[resource]
+script = ExtResource("1_event")
+id = &"midsummer"
+name_key = "EVENT_MIDSUMMER"
+token_key = "EVENT_TOKEN_BERRY"
+start = "06-15"
+end = "07-31"
+token = 3
+token_color = Color(0.86, 0.18, 0.2, 1)
+particles = 4
+particle_color = Color(1, 0.95, 0.5, 1)
+goal = 25

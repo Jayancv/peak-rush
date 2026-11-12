@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Only the game's share folder (user://share on Android = files/share). -->
+<paths>
+    <files-path name="share" path="share/" />
+</paths>

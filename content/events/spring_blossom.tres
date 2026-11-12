@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EventData" format=3]
+
+[ext_resource type="Script" path="res://data/event_data.gd" id="1_event"]
+
+[resource]
+script = ExtResource("1_event")
+id = &"spring_blossom"
+name_key = "EVENT_SPRING"
+token_key = "EVENT_TOKEN_BLOSSOM"
+start = "03-15"
+end = "05-15"
+token = 2
+token_color = Color(0.98, 0.7, 0.8, 1)
+particles = 3
+particle_color = Color(1, 0.78, 0.86, 1)
+goal = 25

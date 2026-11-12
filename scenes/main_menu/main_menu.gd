@@ -81,6 +81,9 @@ func _setup_banner() -> void:
 		return
 	var newest: SeasonData = seasons[seasons.size() - 1]
 	banner_label.text = tr("MENU_SEASON") % seasons.size() + "  ·  " + tr(newest.title_key)
+	var ev: EventData = SeasonalEvents.active(ContentDB.events(), GameState.today())
+	if ev != null:
+		banner_label.text += "  ·  " + tr(ev.name_key)
 	var box: StyleBoxFlat = StyleBoxFlat.new()
 	box.bg_color = newest.theme_color
 	box.set_corner_radius_all(BANNER_RADIUS)

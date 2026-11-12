@@ -37,9 +37,14 @@ func setup(number: int, data: TrailData, record: Dictionary, unlocked: bool, the
 	var best: float = float(record.get("best_time", 0.0))
 	detail_label.text = tr("SELECT_BEST") % TimeFormat.mmss(best) if best > 0.0 else tr("SELECT_NOT_HIKED")
 	if best > 0.0:
+		# Three short lines: best + Gold, challenges, hidden shortcut.
+		var gold: float = TrailRecord.gold_time(data, ContentDB.balance)
+		var has_gold: bool = TrailRecord.has_gold(record, data, ContentDB.balance)
+		detail_label.text += "  ·  " + (tr("SELECT_GOLD_DONE") if has_gold else tr("SELECT_GOLD") % TimeFormat.mmss(gold))
 		var challenges: int = int(record.get("challenges", 0))
-		var extra: String = tr("SELECT_MEDAL") if TrailChallenges.has_medal(challenges) else tr("SELECT_CHALLENGES") % TrailChallenges.count(challenges)
-		detail_label.text += "\n" + extra
+		detail_label.text += "\n" + (tr("SELECT_MEDAL") if TrailChallenges.has_medal(challenges) else tr("SELECT_CHALLENGES") % TrailChallenges.count(challenges))
+		if data.shortcut_count > 0:
+			detail_label.text += "\n" + tr("SELECT_SHORTCUTS") % [(record.get("shortcuts", []) as Array).size(), data.shortcut_count]
 	disabled = not unlocked
 	lock_row.visible = not unlocked
 	detail_label.visible = unlocked

@@ -20,12 +20,19 @@
 [ext_resource type="PackedScene" path="res://world/interactables/find.tscn" id="p_find"]
 [ext_resource type="PackedScene" path="res://world/interactables/spring.tscn" id="p_spring"]
 [ext_resource type="PackedScene" path="res://world/obstacles/low_branch.tscn" id="p_branch"]
+[ext_resource type="PackedScene" path="res://world/interactables/shortcut_marker.tscn" id="p_shortcut"]
 
 [node name="CraneMire" type="Node2D"]
 
 [node name="Backdrop" parent="." instance=ExtResource("backdrop")]
 
 [node name="Scenery" type="Node2D" parent="."]
+
+[node name="ShortcutDeck" parent="Scenery" instance=ExtResource("p_board")]
+points = PackedVector2Array(11460, 274.6, 12100, 274.6)
+
+[node name="ShortcutLedge" type="Marker2D" parent="Scenery" groups=["high_ledge"]]
+position = Vector2(11400, 392.6)
 
 [node name="DuckboardsA" parent="Scenery" instance=ExtResource("p_board")]
 points = PackedVector2Array(7560, 372, 8560, 372)
@@ -535,3 +542,7 @@ leaf_color = Color(0.47, 0.58, 0.29, 1)
 [node name="Branch2" parent="Pieces" instance=ExtResource("p_branch")]
 position = Vector2(6950, 366.3)
 leaf_color = Color(0.47, 0.58, 0.29, 1)
+
+[node name="Shortcut" parent="Pieces" instance=ExtResource("p_shortcut")]
+position = Vector2(11780, 274.6)
+shortcut_id = &"shortcut"

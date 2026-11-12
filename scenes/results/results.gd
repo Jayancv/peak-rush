@@ -67,6 +67,8 @@ func _fill() -> void:
 	star3_caption.text = tr(_trail.star3_key)
 	time_label.text = tr("RESULTS_TIME") % TimeFormat.mmss(float(_result.get("time", 0.0)))
 	par_label.text = tr("RESULTS_PAR") % TimeFormat.mmss(_trail.par_time)
+	if bool(_result.get("stroll", false)):
+		par_label.text = tr("RESULTS_STROLL_TAG")
 	best_tag.visible = bool(_result.get("new_best", false))
 	var lines: PackedStringArray = PackedStringArray()
 	lines.append(tr("RESULTS_TP_FINISH") % int(_result.get("finish", 0)))
@@ -80,6 +82,18 @@ func _fill() -> void:
 		lines.append(tr("RESULTS_TP_CHALLENGES") % [TrailChallenges.count(int(_result.get("new_challenges", 0))), int(_result.challenge_tp)])
 	if bool(_result.get("medal", false)):
 		lines.append(tr("RESULTS_MEDAL"))
+	if int(_result.get("gold_tp", 0)) > 0:
+		lines.append(tr("RESULTS_GOLD") % int(_result.gold_tp))
+	if int(_result.get("shortcut_tp", 0)) > 0:
+		lines.append(tr("RESULTS_SHORTCUT") % int(_result.shortcut_tp))
+	if bool(_result.get("stroll", false)):
+		lines.append(tr("RESULTS_STROLL"))
+	var ev: Dictionary = _result.get("event", {})
+	if not ev.is_empty():
+		if bool(ev.done_now):
+			lines.append(tr("RESULTS_EVENT_DONE") % [tr(ev.name_key), int(ev.tp)])
+		else:
+			lines.append(tr("RESULTS_EVENT") % [tr(ev.token_key), int(ev.tp), int(ev.count), int(ev.goal)])
 	var weekly: Dictionary = _result.get("weekly", {})
 	if int(weekly.get("tp", 0)) > 0:
 		lines.append(tr("RESULTS_WEEKLY_ALL" if bool(weekly.bonus) else "RESULTS_WEEKLY") % [(weekly.done as Array).size(), int(weekly.tp)])

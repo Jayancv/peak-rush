@@ -30,6 +30,19 @@ Choose trail → Hike (pace stamina, jump obstacles, rest, photograph viewpoints
 | Tap in photo mode | Take the photo |
 A **left-handed** setting swaps the two halves. On desktop: D/Right = walk, Space = jump.
 
+**Stroll mode** (trail select switch): no daylight clock or dusk; finds and photos count, TP x0.5;
+no best time, Gold, beat-par goal or dusk star. The daily trail is never a stroll.
+**Racing your best:** Gold time = par x 0.85 (one-time TP); a ghost replays your best run (cached
+in user://ghosts/, not the save); every trail hides one shortcut on a high boardwalk (TP once, save v8).
+
+**Seasonal events** (calendar, every year, no update needed; content/events/*.tres): Autumn on the
+trails (Oct–Nov, falling leaves, golden leaves), Winter lights (Dec–mid Jan, snow, lanterns), Spring blossom
+(mid Mar–mid May, petals, blossoms), Midsummer (mid Jun–Jul, fireflies, wild strawberries). 4 collectibles per
+hike on open ground, TP each, goal 25 per event-year pays a bonus (save v9). Shown in the Daily card,
+results and the main menu banner.
+**Share a postcard:** Journal > enlarge a postcard > Share renders a picture (card + game name) and opens
+the Android share sheet (PeakRushSteps.sharePicture via FileProvider).
+
 **Extra moves** (added after launch prep; no new buttons except Duck):
 - **Hold to jump higher:** a tap is the normal jump (~96 px); holding past tap length (0.12 s) softens
   gravity on the way up (~144 px). High lookouts with hidden finds sit ~115–120 px up.

@@ -48,6 +48,51 @@ func add_world_fog(profile: WeatherProfile, level: Node, after: Node, camera: Ca
 	return bank
 
 
+## A seasonal touch on top of the weather: falling leaves, extra snow, blossom petals or
+## fireflies (a copy of the snow emitter, recoloured and slowed).
+func add_seasonal(kind: EventData.Particles, color: Color, amount: int) -> CPUParticles2D:
+	if kind == EventData.Particles.NONE:
+		return null
+	var p: CPUParticles2D = snow.duplicate() as CPUParticles2D
+	p.name = "Seasonal"
+	p.amount = maxi(amount, 1)
+	p.color = color
+	p.emitting = true
+	match kind:
+		EventData.Particles.LEAVES, EventData.Particles.PETALS:
+			p.texture = _leaf_texture()
+			p.initial_velocity_min = 25.0
+			p.initial_velocity_max = 55.0
+			p.angular_velocity_min = -160.0
+			p.angular_velocity_max = 160.0
+			p.scale_amount_min = 1.2
+			p.scale_amount_max = 2.0
+		EventData.Particles.FIREFLIES:
+			p.direction = Vector2(0.2, -1)
+			p.gravity = Vector2(0, -6)
+			p.initial_velocity_min = 8.0
+			p.initial_velocity_max = 20.0
+			p.scale_amount_min = 0.5
+			p.scale_amount_max = 0.9
+			var size: Vector2 = get_viewport().get_visible_rect().size
+			p.position = Vector2(size.x * 0.5, size.y * 0.75)
+			p.emission_rect_extents = Vector2(size.x * 0.6, size.y * 0.2)
+	add_child(p)
+	return p
+
+
+## A small pointed oval, white (the emitter colours it): tumbling, it reads as a leaf or petal.
+static func _leaf_texture() -> ImageTexture:
+	var img: Image = Image.create(14, 8, false, Image.FORMAT_RGBA8)
+	for y: int in 8:
+		for x: int in 14:
+			var u: float = (x - 6.5) / 7.0
+			var v: float = (y - 3.5) / 4.0
+			if u * u + v * v * (1.0 + absf(u)) <= 1.0:
+				img.set_pixel(x, y, Color.WHITE)
+	return ImageTexture.create_from_image(img)
+
+
 func set_gusting(on: bool) -> void:
 	gusts.emitting = on
 

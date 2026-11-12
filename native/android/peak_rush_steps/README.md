@@ -12,6 +12,7 @@ The `native/` folder has a `.gdignore`, so Godot never imports or exports it.
 | `requestAccess()` | signal `access_result(granted: bool)` |
 | `readDays(id: int, request_json: String)` with `{"dates": [...], "since_unix": n}` | signal `days_read(id: int, totals_json: String, ok: bool)` |
 | `openStore()` | opens Health Connect's Play Store page |
+| `sharePicture(path: String, text: String) -> bool` | opens the share sheet for a file under the app's `files/share/` (postcards) |
 
 ## Build the AAR (after changing the Kotlin code)
 From this folder, in Git Bash:

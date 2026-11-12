@@ -205,6 +205,28 @@ extends Resource
 ## The "double-tap to hurry" hint waits for this much walking.
 @export var hint_hurry_after_seconds: float = 45.0
 
+@export_group("Stroll mode and racing")
+## Stroll mode: the sun stays at this fraction of the day (night trails: night_fraction), no dusk.
+@export var stroll_day_fraction: float = 0.3
+@export var stroll_night_fraction: float = 0.15
+## Stroll hikes earn this share of the usual TP (finds and photos still count fully as progress).
+@export var stroll_tp_mult: float = 0.5
+## Gold time = par x this. Beating it the first time pays tp_gold.
+@export var gold_time_ratio: float = 0.85
+@export var tp_gold: int = 75
+## Ghost of your best run: one sample every this many seconds.
+@export var ghost_sample_seconds: float = 0.1
+## TP for finding a trail's hidden shortcut the first time.
+@export var tp_shortcut: int = 40
+
+@export_group("Seasonal events")
+## Collectibles placed per hike while an event is on, TP for each, and the reward for the goal.
+@export var event_tokens_per_hike: int = 4
+@export var event_token_tp: int = 5
+@export var event_goal_tp: int = 150
+## Falling leaves / petals / fireflies on screen during an event.
+@export var event_particles: int = 26
+
 @export_group("Weekly goals")
 ## Goals per week, TP for each, and a bonus for finishing them all.
 @export var weekly_goal_count: int = 3

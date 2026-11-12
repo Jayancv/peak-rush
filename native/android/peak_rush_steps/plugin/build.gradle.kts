@@ -10,6 +10,8 @@ plugins {
 // 1.1.0 final needs AGP 8.9.1; Godot 4.7.2's template has 8.6.1. beta01 is the newest that fits (needs 8.6.0).
 val healthConnectVersion = "1.1.0-beta01"
 val coroutinesVersion = "1.9.0"
+// FileProvider, for sharing postcard pictures (sharePicture).
+val coreVersion = "1.13.1"
 
 android {
     namespace = "org.jcv.peakrush.steps"
@@ -34,6 +36,7 @@ dependencies {
     compileOnly("org.godotengine:godot:4.7.2.stable")
     implementation("androidx.health.connect:connect-client:$healthConnectVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
+    implementation("androidx.core:core:$coreVersion")
 }
 
 // Copies the release AAR to where the Godot export plugin looks for it.

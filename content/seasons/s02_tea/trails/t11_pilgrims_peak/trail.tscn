@@ -21,12 +21,19 @@
 [ext_resource type="PackedScene" path="res://world/obstacles/ladder.tscn" id="ladder"]
 [ext_resource type="PackedScene" path="res://world/obstacles/low_branch.tscn" id="branch"]
 [ext_resource type="PackedScene" path="res://world/backdrop/backdrop_pilgrim.tscn" id="backdrop"]
+[ext_resource type="PackedScene" path="res://world/interactables/shortcut_marker.tscn" id="p_shortcut"]
 
 [node name="PilgrimsPeak" type="Node2D"]
 
 [node name="Backdrop" parent="." instance=ExtResource("backdrop")]
 
 [node name="Scenery" type="Node2D" parent="."]
+
+[node name="ShortcutDeck" parent="Scenery" instance=ExtResource("board")]
+points = PackedVector2Array(14740, -416.6, 15380, -416.6)
+
+[node name="ShortcutLedge" type="Marker2D" parent="Scenery" groups=["high_ledge"]]
+position = Vector2(14680, -298.6)
 
 [node name="Water4" type="Polygon2D" parent="Scenery"]
 color = Color(0.2235, 0.3294, 0.3490, 1.0)
@@ -3217,3 +3224,7 @@ subject_color = Color(0.2, 0.18, 0.2, 1)
 
 [node name="Finish1" parent="Pieces" instance=ExtResource("finish")]
 position = Vector2(16150, -330)
+
+[node name="Shortcut" parent="Pieces" instance=ExtResource("p_shortcut")]
+position = Vector2(15060, -416.6)
+shortcut_id = &"shortcut"

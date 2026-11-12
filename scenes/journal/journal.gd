@@ -20,6 +20,9 @@ const INK: Color = Color("#B8432C")
 @export var enlarged_card: Postcard
 
 var _season: SeasonData
+var _share_button: Button
+## Fills a Postcard like the one enlarged (for the share picture).
+var _share_card: Callable
 var _finds_grid: GridContainer
 var _finds_scroll: ScrollContainer
 var _page_buttons: Array[Button] = []
@@ -210,10 +213,29 @@ func _fill(card: Postcard, trail: TrailData, vp: ViewpointData, q: int, season: 
 
 func _enlarge(trail: TrailData, vp: ViewpointData, q: int, season: SeasonData, i: int) -> void:
 	_fill(enlarged_card, trail, vp, q, season, i)
+	_share_card = _fill.bind(trail, vp, q, season, i)
+	_ensure_share_button()
 	enlarged.visible = true
 	enlarged_card.pivot_offset = enlarged_card.size * 0.5
 	enlarged_card.scale = Vector2(0.7, 0.7)
 	create_tween().tween_property(enlarged_card, "scale", Vector2.ONE, 0.25).set_trans(Tween.TRANS_BACK)
+
+
+## "Share" under the enlarged postcard (PostcardShare renders it and opens the share sheet).
+func _ensure_share_button() -> void:
+	if _share_button != null:
+		return
+	_share_button = Button.new()
+	_share_button.text = tr("JOURNAL_SHARE")
+	_share_button.theme_type_variation = &"PrimaryButton"
+	_share_button.custom_minimum_size = Vector2(220, 64)
+	_share_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	_share_button.add_theme_font_size_override("font_size", 24)
+	_share_button.pressed.connect(func() -> void:
+		_share_button.disabled = true
+		await PostcardShare.share(self, _share_card)
+		_share_button.disabled = false)
+	enlarged_card.get_parent().add_child(_share_button)
 
 
 func _on_enlarged_input(event: InputEvent) -> void:

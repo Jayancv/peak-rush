@@ -423,3 +423,31 @@ HINT_HURRY,Running late? Double-tap and hold Walk to hurry - it tires you faster
 HINT_HIGH_JUMP,Hold Jump to jump higher
 HINT_CLIMB,Keep walking into the ladder to climb it
 HINT_DUCK,Low branch ahead - hold Duck to crouch under it
+SELECT_STROLL,Stroll
+SELECT_GOLD,Gold %s
+SELECT_GOLD_DONE,Gold!
+SELECT_SHORTCUTS,Shortcut %d/%d
+TOAST_STROLL,Stroll: no clock today - take your time
+TOAST_SHORTCUT,You found a hidden shortcut!
+RESULTS_GOLD,Gold time!  +%d
+RESULTS_SHORTCUT,Hidden shortcut found  +%d
+RESULTS_STROLL,Stroll: half TP
+RESULTS_STROLL_TAG,Stroll
+SELECT_GHOST,Ghost
+JOURNAL_SHARE,Share
+SHARE_CAPTION,A hiking journal on Google Play
+SHARE_TEXT,A postcard from my hike in Peak Rush
+EVENT_AUTUMN,Autumn on the trails
+EVENT_WINTER,Winter lights
+EVENT_SPRING,Spring blossom
+EVENT_MIDSUMMER,Midsummer
+EVENT_TOKEN_LEAF,Golden leaves
+EVENT_TOKEN_LANTERN,Winter lanterns
+EVENT_TOKEN_BLOSSOM,Blossoms
+EVENT_TOKEN_BERRY,Wild strawberries
+EVENT_CARD,"%s %d/%d  ·  %s, %s"
+EVENT_ENDS,ends in %d days
+EVENT_DONE,complete!
+TOAST_EVENT_TOKEN,%s %d/%d
+RESULTS_EVENT,%s +%d  (%d/%d)
+RESULTS_EVENT_DONE,%s complete!  +%d

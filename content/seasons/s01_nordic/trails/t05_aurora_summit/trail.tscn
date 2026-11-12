@@ -22,12 +22,19 @@
 [ext_resource type="PackedScene" path="res://world/obstacles/rope_bridge.tscn" id="x_bridge"]
 [ext_resource type="PackedScene" path="res://world/obstacles/low_branch.tscn" id="p_branch"]
 [ext_resource type="PackedScene" path="res://world/obstacles/ladder.tscn" id="p_ladder"]
+[ext_resource type="PackedScene" path="res://world/interactables/shortcut_marker.tscn" id="p_shortcut"]
 
 [node name="AuroraSummit" type="Node2D"]
 
 [node name="Backdrop" parent="." instance=ExtResource("backdrop")]
 
 [node name="Scenery" type="Node2D" parent="."]
+
+[node name="ShortcutDeck" parent="Scenery" instance=ExtResource("p_board")]
+points = PackedVector2Array(6400, 311.9, 7040, 311.9)
+
+[node name="ShortcutLedge" type="Marker2D" parent="Scenery" groups=["high_ledge"]]
+position = Vector2(6340, 429.9)
 
 [node name="Lookout" parent="Scenery" instance=ExtResource("p_board")]
 points = PackedVector2Array(8630, 152, 8750, 152)
@@ -457,3 +464,7 @@ leaf_color = Color(0.82, 0.88, 0.94, 1)
 position = Vector2(14130, -251.6)
 height = 130
 style = 1
+
+[node name="Shortcut" parent="Pieces" instance=ExtResource("p_shortcut")]
+position = Vector2(6720, 311.9)
+shortcut_id = &"shortcut"

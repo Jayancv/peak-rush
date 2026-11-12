@@ -10,3 +10,5 @@ extends Resource
 @export var cosmetics: CosmeticCatalog
 ## Achievements shown on the profile.
 @export var badges: BadgeCatalog
+## Seasonal events on the calendar (SeasonalEvents picks today's).
+@export var events: Array[EventData] = []

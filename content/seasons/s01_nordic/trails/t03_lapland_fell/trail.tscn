@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" path="res://world/obstacles/rope_bridge.tscn" id="x_bridge"]
 [ext_resource type="PackedScene" path="res://world/obstacles/kill_zone.tscn" id="x_kill"]
 [ext_resource type="PackedScene" path="res://world/obstacles/ladder.tscn" id="p_ladder"]
+[ext_resource type="PackedScene" path="res://world/interactables/shortcut_marker.tscn" id="p_shortcut"]
 
 [node name="LaplandFell" type="Node2D"]
 
@@ -27,6 +28,12 @@ position = Vector2(160, 550)
 
 
 [node name="Scenery" type="Node2D" parent="."]
+
+[node name="ShortcutDeck" parent="Scenery" instance=ExtResource("p_board")]
+points = PackedVector2Array(740, 419.3, 1380, 419.3)
+
+[node name="ShortcutLedge" type="Marker2D" parent="Scenery" groups=["high_ledge"]]
+position = Vector2(680, 537.3)
 
 [node name="TowerDeckA" parent="Scenery" instance=ExtResource("p_board")]
 points = PackedVector2Array(5086, 35.3, 5290, 35.3)
@@ -334,3 +341,7 @@ size = Vector2(60, 43)
 position = Vector2(5100, 175.3)
 height = 140
 style = 0
+
+[node name="Shortcut" parent="Pieces" instance=ExtResource("p_shortcut")]
+position = Vector2(1060, 419.3)
+shortcut_id = &"shortcut"

@@ -253,6 +253,8 @@ Ads must never interrupt a hike. Rewarded ads are opt-in; interstitials are rare
 ---
 
 ## M8 — Live seasons pipeline (after launch)
+- [x] **Seasonal events + share a postcard** (EventData/SeasonalEvents, EventToken, seasonal particles, save v9; PostcardShare + plugin sharePicture)
+- [x] **Stroll mode + racing** (research-led): Stroll switch, Gold times, ghost of your best run, one hidden shortcut per trail (save v8)
 - [x] **New moves** (GAME_DESIGN §4): hold to jump higher, double-tap hurry, ladders/scrambles, duck under low branches (+ Duck pad, hints, bot, tests)
 - [x] **Weekly goals** (3 rotating goals each Monday, TP + all-three bonus; Daily card + results; save v7)
 - [x] Turn Appendix A below into `docs/ADDING_CONTENT.md` (+ template rebuilt with every piece; validator now fails gaps over 75 px)

@@ -60,7 +60,7 @@ static func hike_counts(result: TrailResult, par_time: float, daily: bool) -> Di
 		Goal.FINDS: result.finds.size(),
 		Goal.GREAT_PHOTOS: great,
 		Goal.SUMMITS: 1,
-		Goal.BEAT_PAR: 1 if par_time > 0.0 and result.time_seconds <= par_time else 0,
+		Goal.BEAT_PAR: 1 if not result.stroll and par_time > 0.0 and result.time_seconds <= par_time else 0,
 		Goal.DAILIES: 1 if daily else 0,
 		Goal.CLEAN_HIKES: 1 if result.falls == 0 and result.stumbles == 0 else 0,
 	}

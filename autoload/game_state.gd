@@ -14,6 +14,10 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"ad_consent": "",
 	## Set once the store review request has been made (ReviewPrompt; never asked twice).
 	"review_asked": false,
+	## Trail select's Stroll switch: hikes without the daylight clock (never for the daily).
+	"stroll_mode": false,
+	## Show the ghost of your best run on a trail.
+	"show_ghost": true,
 	"music_volume": 0.8,
 	"sfx_volume": 0.8,
 	"ambience_volume": 0.8,
@@ -100,6 +104,11 @@ func total_stars() -> int:
 	for id: String in trails:
 		n += StarRating.count(int(trails[id].stars))
 	return n
+
+
+## Whether the hike being started is a stroll (the daily trail is always a real hike).
+func stroll_hike() -> bool:
+	return bool(settings.get("stroll_mode", false)) and not daily_active
 
 
 # --- Gear ---
@@ -237,11 +246,19 @@ func record_result(result: TrailResult) -> Dictionary:
 	if result.finished:
 		merged = TrailRecord.merge_finished(rec, result, int(award.stars_mask), ContentDB.get_trail(result.trail_id))
 		trails[key] = rec
+	var b: Balance = ContentDB.balance
 	var new_finds: int = merged.new_finds
-	var challenge_tp: int = TrailChallenges.count(merged.new_challenges) * ContentDB.balance.tp_per_challenge
-	var find_tp: int = new_finds * ContentDB.balance.tp_per_new_find
-	# Unfinished hikes earn nothing: award and merged are all zeros then.
-	tp += int(award.total) + find_tp + challenge_tp
+	var challenge_tp: int = TrailChallenges.count(merged.new_challenges) * b.tp_per_challenge
+	var find_tp: int = new_finds * b.tp_per_new_find
+	var shortcut_tp: int = int(merged.get("new_shortcuts", 0)) * b.tp_shortcut
+	var gold: float = TrailRecord.gold_time(ContentDB.get_trail(result.trail_id), b) if result.finished else 0.0
+	var gold_new: bool = result.finished and not result.stroll and result.time_seconds <= gold and (previous_best <= 0.0 or previous_best > gold)
+	var gold_tp: int = b.tp_gold if gold_new else 0
+	# Unfinished hikes earn nothing: award and merged are all zeros then. A stroll earns a share.
+	var earned: int = int(award.total) + find_tp + challenge_tp + shortcut_tp + gold_tp
+	if result.stroll:
+		earned = roundi(earned * b.stroll_tp_mult)
+	tp += earned
 	profile.add_hike(result.time_seconds)
 	var new_badges: Array[String] = []
 	for badge: BadgeData in refresh_badges():
@@ -253,7 +270,12 @@ func record_result(result: TrailResult) -> Dictionary:
 		"time": result.time_seconds,
 		"before_dusk": result.before_dusk,
 		"previous_best": previous_best,
-		"new_best": result.finished and (previous_best <= 0.0 or result.time_seconds < previous_best),
+		"new_best": result.finished and not result.stroll and (previous_best <= 0.0 or result.time_seconds < previous_best),
+		"stroll": result.stroll,
+		"gold_new": gold_new,
+		"gold_tp": gold_tp,
+		"new_shortcuts": int(merged.get("new_shortcuts", 0)),
+		"shortcut_tp": shortcut_tp,
 		"first_completion": result.finished and int(rec.completions) == 1,
 		"new_badges": new_badges,
 		"new_finds": new_finds,
@@ -262,12 +284,20 @@ func record_result(result: TrailResult) -> Dictionary:
 		"challenge_tp": challenge_tp,
 		"medal": TrailChallenges.has_medal(int(rec.get("challenges", 0))) and merged.new_challenges != 0,
 	})
-	last_result["total"] = int(last_result.get("total", 0)) + find_tp + challenge_tp
+	last_result["total"] = earned
 	if result.finished:
 		var weekly: Dictionary = WeeklyGoals.record(profile, result, ContentDB.get_trail(result.trail_id), daily_active, today(), ContentDB.balance)
 		tp += int(weekly.tp)
 		last_result["weekly"] = weekly
 		last_result["total"] = int(last_result.total) + int(weekly.tp)
+	var ev: EventData = SeasonalEvents.active(ContentDB.events(), today()) if result.finished else null
+	if ev != null and result.event_tokens > 0:
+		var gathered: Dictionary = SeasonalEvents.record(profile, ev, today(), result.event_tokens, b)
+		gathered["token_key"] = ev.token_key
+		gathered["name_key"] = ev.name_key
+		tp += int(gathered.tp)
+		last_result["event"] = gathered
+		last_result["total"] = int(last_result.total) + int(gathered.tp)
 	if daily_active:
 		_record_daily(result)
 	progress_changed.emit()

@@ -19,12 +19,19 @@
 [ext_resource type="PackedScene" path="res://world/interactables/fork_sign.tscn" id="p_sign"]
 [ext_resource type="PackedScene" path="res://world/interactables/find.tscn" id="p_find"]
 [ext_resource type="PackedScene" path="res://world/interactables/spring.tscn" id="p_spring"]
+[ext_resource type="PackedScene" path="res://world/interactables/shortcut_marker.tscn" id="p_shortcut"]
 
 [node name="ArchipelagoRocks" type="Node2D"]
 
 [node name="Backdrop" parent="." instance=ExtResource("backdrop")]
 
 [node name="Scenery" type="Node2D" parent="."]
+
+[node name="ShortcutDeck" parent="Scenery" instance=ExtResource("p_board")]
+points = PackedVector2Array(5200, 313.6, 5840, 313.6)
+
+[node name="ShortcutLedge" type="Marker2D" parent="Scenery" groups=["high_ledge"]]
+position = Vector2(5140, 431.6)
 
 [node name="Lookout" parent="Scenery" instance=ExtResource("p_board")]
 points = PackedVector2Array(4893, 314.5, 5013, 314.5)
@@ -700,3 +707,7 @@ position = Vector2(7975, 403.7)
 [node name="Ext0_Rock9" parent="Pieces" instance=ExtResource("rock")]
 position = Vector2(8230, 408.9)
 size = Vector2(59, 42)
+
+[node name="Shortcut" parent="Pieces" instance=ExtResource("p_shortcut")]
+position = Vector2(5520, 313.6)
+shortcut_id = &"shortcut"

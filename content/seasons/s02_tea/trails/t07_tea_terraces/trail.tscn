@@ -21,12 +21,19 @@
 [ext_resource type="PackedScene" path="res://world/obstacles/ladder.tscn" id="ladder"]
 [ext_resource type="PackedScene" path="res://world/obstacles/low_branch.tscn" id="branch"]
 [ext_resource type="PackedScene" path="res://world/backdrop/backdrop_tea.tscn" id="backdrop"]
+[ext_resource type="PackedScene" path="res://world/interactables/shortcut_marker.tscn" id="p_shortcut"]
 
 [node name="TeaTerraces" type="Node2D"]
 
 [node name="Backdrop" parent="." instance=ExtResource("backdrop")]
 
 [node name="Scenery" type="Node2D" parent="."]
+
+[node name="ShortcutDeck" parent="Scenery" instance=ExtResource("board")]
+points = PackedVector2Array(600, 442, 1240, 442)
+
+[node name="ShortcutLedge" type="Marker2D" parent="Scenery" groups=["high_ledge"]]
+position = Vector2(540, 560)
 
 [node name="Lookout" parent="Scenery" instance=ExtResource("board")]
 points = PackedVector2Array(2500, 285, 2620, 285)
@@ -392,3 +399,7 @@ position = Vector2(7900, 381.2)
 
 [node name="Finish1" parent="Pieces" instance=ExtResource("finish")]
 position = Vector2(8400, 380)
+
+[node name="Shortcut" parent="Pieces" instance=ExtResource("p_shortcut")]
+position = Vector2(920, 442)
+shortcut_id = &"shortcut"

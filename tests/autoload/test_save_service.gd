@@ -151,6 +151,29 @@ func test_migrates_v6_save_to_v7_with_fresh_weekly_goals() -> void:
 	GameState.reset()
 
 
+func test_migrates_v7_save_to_v8_with_no_shortcuts_found() -> void:
+	var v7: Dictionary = {"save_version": 7, "tp": 9, "trails": {"t01_forest_lake": {"stars": 7, "best_time": 99.0}}, "profile": {"weekly": {}}}
+	var out: Dictionary = SaveService.migrate(v7)
+	assert_eq(int(out.save_version), SaveService.SAVE_VERSION)
+	assert_eq(out.trails.t01_forest_lake.shortcuts, [])
+	assert_eq(int(out.trails.t01_forest_lake.stars), 7, "the rest of the record is untouched")
+	GameState.from_dict(out)
+	assert_eq(GameState.record(&"t01_forest_lake").shortcuts, [] as Array[String])
+	GameState.reset()
+
+
+func test_migrates_v8_save_to_v9_with_no_event_tokens() -> void:
+	var v8: Dictionary = {"save_version": 8, "tp": 9, "profile": {"name": "Aino", "hikes": 3}}
+	var out: Dictionary = SaveService.migrate(v8)
+	assert_eq(int(out.save_version), SaveService.SAVE_VERSION)
+	assert_eq(out.profile.events, {})
+	assert_eq(out.profile.events_done, [])
+	assert_eq(int(out.profile.hikes), 3, "the rest of the profile is untouched")
+	GameState.from_dict(out)
+	assert_eq(GameState.profile.events, {})
+	GameState.reset()
+
+
 func _write_raw(text: String) -> void:
 	var f: FileAccess = FileAccess.open(PATH, FileAccess.WRITE)
 	f.store_string(text)

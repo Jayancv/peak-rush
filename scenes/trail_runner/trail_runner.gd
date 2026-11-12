@@ -110,6 +110,7 @@ func _load_trail() -> void:
 	tracker.setup(hiker, hud, trail, level, _balance)
 	tracker.apply_daily(_twist)
 	tracker.watch_weather(weather)
+	tracker.start_run(daylight, GameState.stroll_hike(), weather_fx)
 	pause_menu.map.scan(level)
 	var bounds: Rect2 = TerrainStrip.bounds_under(level)
 	_fall_limit_y = bounds.end.y + FALL_MARGIN
@@ -237,7 +238,10 @@ func _on_reached_finish() -> void:
 	var result: TrailResult = TrailResult.new(trail.id)
 	result.finished = true
 	result.time_seconds = daylight.elapsed
-	result.before_dusk = not daylight.is_dusk()
+	result.stroll = tracker.stroll
+	result.before_dusk = not tracker.stroll and not daylight.is_dusk()
+	result.shortcuts = tracker.shortcuts.duplicate()
+	result.event_tokens = tracker.event_tokens
 	result.viewpoint_total = trail.viewpoints.size()
 	for id: String in photos:
 		if int(photos[id]) > StarRating.PhotoQuality.NONE:
@@ -246,6 +250,7 @@ func _on_reached_finish() -> void:
 	result.falls = tracker.falls
 	result.stumbles = tracker.stumbles
 	GameState.record_result(result)
+	tracker.finish_run(GameState.last_result)
 	# The flag, the view back down the trail, the title: then the results.
 	touch_controls.set_enabled(false)
 	var moment: SummitMoment = SummitMoment.new()

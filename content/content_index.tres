@@ -12,6 +12,11 @@
 [ext_resource type="Resource" path="res://content/gear/bright_headlamp.tres" id="g_bright_headlamp"]
 [ext_resource type="Resource" path="res://content/profile/cosmetics.tres" id="p_cosmetics"]
 [ext_resource type="Resource" path="res://content/profile/badges.tres" id="p_badges"]
+[ext_resource type="Script" path="res://data/event_data.gd" id="event_script"]
+[ext_resource type="Resource" path="res://content/events/autumn.tres" id="ev_autumn"]
+[ext_resource type="Resource" path="res://content/events/winter_lights.tres" id="ev_winter_lights"]
+[ext_resource type="Resource" path="res://content/events/spring_blossom.tres" id="ev_spring_blossom"]
+[ext_resource type="Resource" path="res://content/events/midsummer.tres" id="ev_midsummer"]
 
 [resource]
 script = ExtResource("1_index")
@@ -19,3 +24,4 @@ seasons = Array[ExtResource("2_season_script")]([ExtResource("3_s01"), ExtResour
 gear = Array[ExtResource("gear_script")]([ExtResource("g_grip_boots"), ExtResource("g_hiking_poles"), ExtResource("g_rain_shell"), ExtResource("g_thermos"), ExtResource("g_bright_headlamp")])
 cosmetics = ExtResource("p_cosmetics")
 badges = ExtResource("p_badges")
+events = Array[ExtResource("event_script")]([ExtResource("ev_autumn"), ExtResource("ev_winter_lights"), ExtResource("ev_spring_blossom"), ExtResource("ev_midsummer")])

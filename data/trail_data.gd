@@ -20,6 +20,8 @@ extends Resource
 @export var viewpoints: Array[ViewpointData] = []
 ## Things to discover on this trail (each matched by a `Find` piece in the level).
 @export var finds: Array[FindData] = []
+## Hidden shortcuts in the level (ShortcutMarker pieces; the validator checks the count).
+@export var shortcut_count: int = 0
 @export var postcard: Texture2D
 ## Trails unlock in this order within their season; the first is always open.
 @export var unlock_order: int = 0

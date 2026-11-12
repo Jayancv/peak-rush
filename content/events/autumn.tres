@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EventData" format=3]
+
+[ext_resource type="Script" path="res://data/event_data.gd" id="1_event"]
+
+[resource]
+script = ExtResource("1_event")
+id = &"autumn"
+name_key = "EVENT_AUTUMN"
+token_key = "EVENT_TOKEN_LEAF"
+start = "10-01"
+end = "11-30"
+token = 0
+token_color = Color(0.88, 0.58, 0.18, 1)
+particles = 1
+particle_color = Color(0.9, 0.55, 0.2, 1)
+goal = 25

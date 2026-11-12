@@ -20,6 +20,10 @@ static func step(from_version: int, data: Dictionary) -> Dictionary:
 			return _v5_to_v6(data)
 		6:
 			return _v6_to_v7(data)
+		7:
+			return _v7_to_v8(data)
+		8:
+			return _v8_to_v9(data)
 	push_error("SaveMigrations: no step from version %d" % from_version)
 	return data
 
@@ -116,4 +120,25 @@ static func _v6_to_v7(data: Dictionary) -> Dictionary:
 	var out: Dictionary = data.duplicate(true)
 	if out.get("profile") is Dictionary and not (out.profile.get("weekly") is Dictionary):
 		out.profile["weekly"] = {}
+	return out
+
+
+## v8: each trail record lists the hidden shortcuts found (none yet).
+static func _v7_to_v8(data: Dictionary) -> Dictionary:
+	var out: Dictionary = data.duplicate(true)
+	if out.get("trails") is Dictionary:
+		for id: Variant in out.trails:
+			if out.trails[id] is Dictionary and not (out.trails[id].get("shortcuts") is Array):
+				out.trails[id]["shortcuts"] = []
+	return out
+
+
+## v9: seasonal event collectibles in the profile (none gathered yet).
+static func _v8_to_v9(data: Dictionary) -> Dictionary:
+	var out: Dictionary = data.duplicate(true)
+	if out.get("profile") is Dictionary:
+		if not (out.profile.get("events") is Dictionary):
+			out.profile["events"] = {}
+		if not (out.profile.get("events_done") is Array):
+			out.profile["events_done"] = []
 	return out

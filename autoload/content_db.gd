@@ -106,6 +106,10 @@ func default_cosmetic(slot: CosmeticData.Slot) -> CosmeticData:
 	return null
 
 
+func events() -> Array[EventData]:
+	return index.events if index != null else [] as Array[EventData]
+
+
 func badge_list() -> Array[BadgeData]:
 	var out: Array[BadgeData] = []
 	if index.badges != null:

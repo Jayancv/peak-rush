@@ -79,16 +79,21 @@ static func validate_trail(trail: TrailData) -> Array[String]:
 	var finishes: int = 0
 	var scene_vps: Dictionary = {}
 	var scene_finds: Dictionary = {}
+	var shortcuts: int = 0
 	for node: Node in _all_nodes(level):
 		if node is Find:
 			scene_finds[(node as Find).find_id] = true
 		if node is TrailFinish:
 			finishes += 1
+		if node is ShortcutMarker:
+			shortcuts += 1
 		var vp_id: Variant = node.get("viewpoint_id")
 		if vp_id != null:
 			scene_vps[StringName(vp_id)] = true
 	if finishes == 0:
 		errors.append("%s level has no Finish" % who)
+	if shortcuts != trail.shortcut_count:
+		errors.append("%s has %d shortcut markers but its data says shortcut_count = %d" % [who, shortcuts, trail.shortcut_count])
 	for id: StringName in scene_vps:
 		if not vp_ids.has(id):
 			errors.append("%s level has viewpoint '%s' that isn't in its data" % [who, id])

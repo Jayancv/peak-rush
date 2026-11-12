@@ -63,6 +63,10 @@ Open it in the Godot editor. Structure (keep these names):
 - **Ladders** (`world/obstacles/ladder.tscn`): a vertical wall in the strip (two points 4 px apart)
   taller than a jump, with the ladder's foot on the lower ground just before the wall; `height` = wall
   height, `style` LADDER or SCRAMBLE. The bot climbs by walking into it.
+- **Hidden shortcut** (one per trail): a boardwalk ~118 px above the path (a held jump) over a slow
+  stretch, with a `ShortcutMarker` (`world/interactables/shortcut_marker.tscn`) on the deck and a
+  `high_ledge` Marker2D before it; set `shortcut_count` in trail.tres (the validator checks it).
+  Keep the ground under the deck at least 80 px below it so hikers on the path fit underneath.
 - **Low branches** (`world/obstacles/low_branch.tscn`) on the path; add a `"ducks": [[x - 115, x + 75]]`
   entry to the bot route for each.
 - **Checkpoints** every 1500–2500 px, **benches** before long climbs, a **spring** every

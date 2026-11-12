@@ -26,6 +26,8 @@ static func met(kind: Kind, result: TrailResult, trail: TrailData) -> bool:
 				if not result.finds.has(f.id):
 					return false
 			return true
+		Kind.BEAT_PAR when result.stroll:
+			return false
 		Kind.BEAT_PAR:
 			return result.time_seconds <= trail.par_time
 		Kind.CLEAN:

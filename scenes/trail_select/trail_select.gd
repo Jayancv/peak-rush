@@ -34,6 +34,8 @@ func show_season(season: SeasonData) -> void:
 	_season = season
 	for tab: Node in tabs.get_children():
 		var button: Button = tab as Button
+		if button == null or not button.has_meta("season_id"):
+			continue
 		var active: bool = button.get_meta("season_id") == season.id
 		button.theme_type_variation = &"PrimaryButton" if active else &""
 	for old: Node in cards.get_children():
@@ -71,6 +73,46 @@ func _build_tabs() -> void:
 		tab.set_meta("season_id", season.id)
 		tab.pressed.connect(show_season.bind(season))
 		tabs.add_child(tab)
+	_add_stroll_switch()
+
+
+## "Stroll" at the end of the tabs row: hikes without the daylight clock (the daily is never a stroll).
+func _add_stroll_switch() -> void:
+	var spacer: Control = Control.new()
+	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	tabs.add_child(spacer)
+	var label: Label = Label.new()
+	label.text = tr("SELECT_STROLL")
+	label.add_theme_font_size_override("font_size", 24)
+	label.add_theme_color_override("font_color", Color("#FFF6E5"))
+	label.add_theme_color_override("font_outline_color", Color("#2B2D42"))
+	label.add_theme_constant_override("outline_size", 6)
+	tabs.add_child(label)
+	var toggle: ToggleSwitch = ToggleSwitch.new()
+	toggle.name = "StrollSwitch"
+	toggle.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	tabs.add_child(toggle)
+	toggle.set_pressed_no_signal(bool(GameState.settings.get("stroll_mode", false)))
+	toggle.sync()
+	toggle.toggled.connect(func(on: bool) -> void: GameState.set_setting("stroll_mode", on))
+	_add_switch("SELECT_GHOST", "show_ghost", true, "GhostSwitch")
+
+
+func _add_switch(label_key: String, setting: String, default: bool, node_name: String) -> void:
+	var label: Label = Label.new()
+	label.text = tr(label_key)
+	label.add_theme_font_size_override("font_size", 24)
+	label.add_theme_color_override("font_color", Color("#FFF6E5"))
+	label.add_theme_color_override("font_outline_color", Color("#2B2D42"))
+	label.add_theme_constant_override("outline_size", 6)
+	tabs.add_child(label)
+	var toggle: ToggleSwitch = ToggleSwitch.new()
+	toggle.name = node_name
+	toggle.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	tabs.add_child(toggle)
+	toggle.set_pressed_no_signal(bool(GameState.settings.get(setting, default)))
+	toggle.sync()
+	toggle.toggled.connect(func(on: bool) -> void: GameState.set_setting(setting, on))
 
 
 func _scroll_to(card: Control) -> void:

@@ -15,6 +15,15 @@ var _trail: TrailData
 var _balance: Balance
 var _hints_shown: Dictionary = {}
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
+## Hidden shortcuts taken this hike (ShortcutMarker ids).
+var shortcuts: Array[StringName] = []
+## Stroll mode for this hike (set by start_run).
+var stroll: bool = false
+var ghost: GhostTrack
+## Today's seasonal event (null when none) and its collectibles gathered this hike.
+var event: EventData
+var event_tokens: int = 0
+var _level: Node
 
 
 func setup(hiker: Hiker, hud: Hud, trail: TrailData, level: Node, balance: Balance) -> void:
@@ -22,7 +31,10 @@ func setup(hiker: Hiker, hud: Hud, trail: TrailData, level: Node, balance: Balan
 	_hud = hud
 	_trail = trail
 	_balance = balance
+	_level = level
 	_rng.randomize()
+	for node: Node in level.find_children("*", "ShortcutMarker", true, false):
+		(node as ShortcutMarker).taken.connect(_on_shortcut)
 	hiker.water_changed.connect(func(v: float, m: float) -> void: hud.set_water(v, m, balance.water_low_fraction))
 	hiker.thirst_changed.connect(func(thirsty: bool) -> void:
 		if thirsty:
@@ -136,6 +148,68 @@ func apply_daily(twist: int) -> void:
 
 
 ## Shows a hint the first time something happens on this hike.
+## Called once the daylight exists: stroll mode, and the ghost of your best run.
+func start_run(daylight: Daylight, is_stroll: bool, fx: WeatherFx = null) -> void:
+	stroll = is_stroll
+	_start_event(fx)
+	if stroll:
+		daylight.freeze(_balance.stroll_night_fraction if _trail.night else _balance.stroll_day_fraction)
+		_hud.show_toast("TOAST_STROLL")
+	ghost = GhostTrack.new()
+	ghost.name = "Ghost"
+	_level.add_child(ghost)
+	ghost.setup(_hiker, _trail.id, daylight, _balance.ghost_sample_seconds,
+		not stroll and bool(GameState.settings.get("show_ghost", true)))
+
+
+## After the hike is recorded: a new best time becomes the ghost.
+func finish_run(result: Dictionary) -> void:
+	if ghost != null and not stroll and bool(result.get("new_best", false)):
+		ghost.keep_run()
+
+
+## A seasonal event: falling leaves (etc.) on screen and a few collectibles on open ground.
+func _start_event(fx: WeatherFx) -> void:
+	event = SeasonalEvents.active(ContentDB.events(), GameState.today())
+	if event == null:
+		return
+	if fx != null:
+		fx.add_seasonal(event.particles, event.particle_color, _balance.event_particles)
+	var finder: TrailMoments = TrailMoments.new()
+	var spots: Array[Vector2] = finder.open_ground(_level, _hiker.global_position.x)
+	finder.free()
+	if spots.is_empty():
+		return
+	var count: int = mini(_balance.event_tokens_per_hike, spots.size())
+	var stride: float = float(spots.size()) / float(count)
+	for i: int in count:
+		var at: Vector2 = spots[mini(int(stride * (i + _rng.randf_range(0.2, 0.8))), spots.size() - 1)]
+		var token: EventToken = EventToken.new()
+		token.kind = event.token
+		token.color = event.token_color
+		_level.add_child(token)
+		token.global_position = at
+		token.collected.connect(_on_event_token)
+
+
+func _on_event_token() -> void:
+	event_tokens += 1
+	AudioManager.play_find()
+	var key: String = SeasonalEvents.key_for(event, GameState.today())
+	var total: int = mini(int(GameState.profile.events.get(key, 0)) + event_tokens, event.goal)
+	_hud.show_toast_text(tr("TOAST_EVENT_TOKEN") % [tr(event.token_key), total, event.goal])
+
+
+func _on_shortcut(id: StringName) -> void:
+	if shortcuts.has(id):
+		return
+	shortcuts.append(id)
+	var known: bool = GameState.record(_trail.id).get("shortcuts", []).has(String(id))
+	if not known:
+		AudioManager.play_find()
+		_hud.show_toast("TOAST_SHORTCUT")
+
+
 func hint_once(key: String) -> void:
 	if not _hints_shown.has(key):
 		_hints_shown[key] = true

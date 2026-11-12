@@ -85,7 +85,7 @@ docs/                GAME_DESIGN.md, PLAN.md
 - At the end of each session, update **Current status** below and tick the boxes in `docs/PLAN.md`.
 
 ## Current status
-- Milestone: **M7.5 (trail depth) + polish (sounds, trail map, finds page, daily trail) built, 350 tests green; M7.6 automated part done (phone checklist, low-end phone, playtest open); M7.7 done**. M7 non-release part done. Release steps
+- Milestone: **M7.5 (trail depth) + polish (sounds, trail map, finds page, daily trail) built, 366 tests green; M7.6 automated part done (phone checklist, low-end phone, playtest open); M7.7 done**. M7 non-release part done. Release steps
   (keystore, AAB, stores, iOS, screenshots, 1.0.0) deliberately not started; low-end phone profiling still open.
   M5/M6 full-season phone playtest still open. Launch plan in PLAN.md: M7.6 stabilisation -> M7.7 launch features -> M7.8 ads -> M7.9 Google Play (Android first, free with ads, iOS after launch in M8).
 - Godot 4.7.2-stable (not on PATH; ask the user for the executable path if unknown); GUT 9.7.1.
@@ -264,4 +264,17 @@ docs/                GAME_DESIGN.md, PLAN.md
   HikerCondition.effort_mult (hurry/climb drain). FirstHints: HINT_HURRY (after walking), HIGH_JUMP (group high_ledge), CLIMB, DUCK.
   Bot routes may list "ducks" ranges. Placed: T2 high lookout, T4/T6 branches, T7 high lookout, T8 ladder + branches,
   T9 branches, T11 scramble.
+  Stroll + racing: settings stroll_mode/show_ghost (switches on trail select); GameState.stroll_hike() (never the daily);
+  HikeTracker.start_run freezes Daylight (Daylight.freeze) and makes a `GhostTrack` (records every ghost_sample_seconds,
+  replays user://ghosts/<trail>.json, keeps a new best via finish_run). TrailResult.stroll/shortcuts; TrailRecord.gold_time/
+  has_gold (par x gold_time_ratio, tp_gold once), record "shortcuts" (save v8), TrailData.shortcut_count (validated);
+  `ShortcutMarker` pieces on high "ShortcutDeck" boardwalks (placed by a scratch script, one per trail).
+  game_state.gd is ~355 lines: split record_result out if it grows again.
+  Seasonal events: `EventData` (data/, content/events/*.tres, ContentIndex.events, ContentDB.events()), `SeasonalEvents`
+  (systems/: active by "MM-DD" (wraps New Year), key_for = id_startyear, days_left, record -> profile.events/events_done, save v9).
+  HikeTracker._start_event places `EventToken`s via TrailMoments.open_ground and WeatherFx.add_seasonal particles; paid in
+  GameState.record_result (last_result.event); Daily card + results line + menu banner. Balance event_*.
+  Share: `PostcardShare` (scenes/journal) renders card + name into user://share/postcard.png (headless: blank) and calls
+  PeakRushSteps.sharePicture (Kotlin, FileProvider authority <pkg>.peakrush.share, res/xml/peak_rush_share_paths.xml,
+  androidx.core 1.13.1 added to plugin deps + export_plugin DEPENDENCIES; AAR rebuilt). Journal enlarged card has Share.
   Water: SteppingStones uses `world/obstacles/water.gdshader` (waves/depth/glints in local px). GroundPatch art follows the TerrainStrip slope.

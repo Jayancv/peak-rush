@@ -23,12 +23,19 @@
 [ext_resource type="PackedScene" path="res://world/interactables/find.tscn" id="p_find"]
 [ext_resource type="PackedScene" path="res://world/interactables/spring.tscn" id="p_spring"]
 [ext_resource type="PackedScene" path="res://world/obstacles/low_branch.tscn" id="p_branch"]
+[ext_resource type="PackedScene" path="res://world/interactables/shortcut_marker.tscn" id="p_shortcut"]
 
 [node name="FjordRidge" type="Node2D"]
 
 [node name="Backdrop" parent="." instance=ExtResource("backdrop")]
 
 [node name="Scenery" type="Node2D" parent="."]
+
+[node name="ShortcutDeck" parent="Scenery" instance=ExtResource("p_board")]
+points = PackedVector2Array(4980, 43.3, 5620, 43.3)
+
+[node name="ShortcutLedge" type="Marker2D" parent="Scenery" groups=["high_ledge"]]
+position = Vector2(4920, 161.3)
 
 [node name="Lookout" parent="Scenery" instance=ExtResource("p_board")]
 points = PackedVector2Array(14500, -166, 14620, -166)
@@ -492,3 +499,7 @@ leaf_color = Color(0.22, 0.4, 0.3, 1)
 [node name="Branch2" parent="Pieces" instance=ExtResource("p_branch")]
 position = Vector2(5400, 154.9)
 leaf_color = Color(0.22, 0.4, 0.3, 1)
+
+[node name="Shortcut" parent="Pieces" instance=ExtResource("p_shortcut")]
+position = Vector2(5300, 43.3)
+shortcut_id = &"shortcut"

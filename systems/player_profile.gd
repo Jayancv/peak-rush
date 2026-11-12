@@ -22,6 +22,10 @@ var daily_pick: Dictionary = {}
 var hints_seen: Array[String] = []
 ## This week's goals and progress (WeeklyGoals; save v7).
 var weekly: Dictionary = {}
+## Seasonal collectibles per event-year ("autumn_2026": 12) and the event-years whose goal
+## was paid (SeasonalEvents; save v9).
+var events: Dictionary = {}
+var events_done: Array[String] = []
 
 
 static func slot_key(slot: CosmeticData.Slot) -> String:
@@ -112,6 +116,8 @@ func to_dict() -> Dictionary:
 		"hints_seen": hints_seen.duplicate(),
 		"daily_pick": daily_pick.duplicate(),
 		"weekly": weekly.duplicate(true),
+		"events": events.duplicate(),
+		"events_done": events_done.duplicate(),
 	}
 
 
@@ -129,6 +135,12 @@ func from_dict(data: Dictionary) -> void:
 	daily_streak = maxi(int(data.get("daily_streak", 0)), 0)
 	hints_seen = TrailRecord.string_list(data.get("hints_seen", []))
 	weekly = WeeklyGoals.clean(data.get("weekly", {}))
+	events = {}
+	var saved_events: Variant = data.get("events", {})
+	if saved_events is Dictionary:
+		for k: Variant in saved_events:
+			events[str(k)] = maxi(int(saved_events[k]), 0)
+	events_done = TrailRecord.string_list(data.get("events_done", []))
 	var pick: Variant = data.get("daily_pick", {})
 	daily_pick = {}
 	if pick is Dictionary and pick.has("date") and pick.has("trail_id") and pick.has("twist"):

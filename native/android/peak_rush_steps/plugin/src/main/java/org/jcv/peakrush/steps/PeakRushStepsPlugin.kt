@@ -1,6 +1,8 @@
 package org.jcv.peakrush.steps
 
 import android.content.Intent
+import androidx.core.content.FileProvider
+import java.io.File
 import android.net.Uri
 import android.util.Log
 import androidx.health.connect.client.HealthConnectClient
@@ -51,6 +53,31 @@ class PeakRushStepsPlugin(godot: Godot) : GodotPlugin(godot) {
         SignalInfo("access_result", Boolean::class.javaObjectType),
         SignalInfo("days_read", Int::class.javaObjectType, String::class.java, Boolean::class.javaObjectType),
     )
+
+    /**
+     * Opens the system share sheet with a picture from the app's files (user://share/...)
+     * and a line of text. Returns false if there's nothing to share or no activity.
+     */
+    @UsedByGodot
+    fun sharePicture(path: String, text: String): Boolean {
+        val ctx = activity ?: return false
+        val file = File(path)
+        if (!file.exists()) return false
+        return try {
+            val uri = FileProvider.getUriForFile(ctx, ctx.packageName + ".peakrush.share", file)
+            val send = Intent(Intent.ACTION_SEND).apply {
+                type = "image/png"
+                putExtra(Intent.EXTRA_STREAM, uri)
+                putExtra(Intent.EXTRA_TEXT, text)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+            ctx.runOnUiThread { ctx.startActivity(Intent.createChooser(send, null)) }
+            true
+        } catch (e: Exception) {
+            Log.w(TAG, "sharePicture failed", e)
+            false
+        }
+    }
 
     @UsedByGodot
     fun getStatus(): Int {

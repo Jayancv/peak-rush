@@ -15,6 +15,8 @@ var night: bool = false
 ## Night trails that end at dawn (a sunrise climb): the dark lifts to sunrise colours
 ## over the last part of the window instead of deepening.
 var sunrise: bool = false
+## Stroll mode: the light stays at this fraction of the day (-1 = the sun moves as normal).
+var frozen_at: float = -1.0
 
 var _balance: Balance
 var _phase: Phase = Phase.MORNING
@@ -36,7 +38,14 @@ func advance(delta: float) -> void:
 
 
 ## 0 at the start, 1 when dusk begins; keeps growing after dusk.
+## Stroll mode: hold the light at `at` (fraction of the day); dusk never comes.
+func freeze(at: float) -> void:
+	frozen_at = clampf(at, 0.0, 0.9)
+
+
 func fraction() -> float:
+	if frozen_at >= 0.0:
+		return frozen_at
 	return elapsed / daylight_seconds
 
 

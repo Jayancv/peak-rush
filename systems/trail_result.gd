@@ -15,6 +15,12 @@ var finds: Array[StringName] = []
 var falls: int = 0
 ## Times the hiker stumbled (the Clean hike challenge wants none).
 var stumbles: int = 0
+## Stroll mode: no clock, so no best time, Gold, beat-par goals or dusk star.
+var stroll: bool = false
+## Hidden shortcut ids taken on this hike.
+var shortcuts: Array[StringName] = []
+## Seasonal event collectibles gathered on this hike.
+var event_tokens: int = 0
 
 
 func _init(id: StringName = &"") -> void:

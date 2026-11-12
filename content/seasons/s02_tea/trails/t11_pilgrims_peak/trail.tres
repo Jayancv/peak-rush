@@ -76,3 +76,4 @@ finds = Array[ExtResource("9_find")]([SubResource("Find_lotus_offering"), SubRes
 night = true
 sunrise = true
 star3_key = "RESULTS_STAR_SUNRISE"
+shortcut_count = 1

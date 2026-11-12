@@ -33,7 +33,7 @@ func _build() -> void:
 	panel.custom_minimum_size = Vector2(520, 0)
 	center.add_child(panel)
 	var box: VBoxContainer = VBoxContainer.new()
-	box.add_theme_constant_override("separation", 10)
+	box.add_theme_constant_override("separation", 6)
 	panel.add_child(box)
 	var d: Dictionary = GameState.daily_today()
 	box.add_child(_label(tr("DAILY_TITLE"), 40, INK))
@@ -51,6 +51,7 @@ func _build() -> void:
 		box.add_child(_label(tr("DAILY_REWARD") % DailyChallenge.reward(next_streak, ContentDB.balance), 22, MUTED))
 	box.add_child(_label(tr("DAILY_STREAK") % streak, 22, MUTED))
 	_add_weekly(box)
+	_add_event(box)
 	var row: HBoxContainer = HBoxContainer.new()
 	row.add_theme_constant_override("separation", 12)
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -91,6 +92,19 @@ func _add_weekly(box: VBoxContainer) -> void:
 		box.add_child(_label(tr("WEEKLY_ALL_DONE"), 20, ACCENT))
 	else:
 		box.add_child(_label(tr("WEEKLY_BONUS") % b.weekly_all_bonus_tp, 18, MUTED))
+
+
+## Today's seasonal event: collectibles so far and days left.
+func _add_event(box: VBoxContainer) -> void:
+	var date: String = GameState.today()
+	var ev: EventData = SeasonalEvents.active(ContentDB.events(), date)
+	if ev == null:
+		return
+	var key: String = SeasonalEvents.key_for(ev, date)
+	var count: int = int(GameState.profile.events.get(key, 0))
+	box.add_child(HSeparator.new())
+	var state: String = tr("EVENT_DONE") if GameState.profile.events_done.has(key) else tr("EVENT_ENDS") % SeasonalEvents.days_left(ev, date)
+	box.add_child(_label(tr("EVENT_CARD") % [tr(ev.token_key), count, ev.goal, tr(ev.name_key), state], 20, ACCENT))
 
 
 func _label(text: String, size: int, color: Color) -> Label:
