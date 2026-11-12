@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="WeatherProfile" format=3]
+
+[ext_resource type="Script" path="res://data/weather_profile.gd" id="1_weather"]
+
+[resource]
+script = ExtResource("1_weather")
+id = &"monsoon"
+name_key = "WEATHER_MONSOON"
+drain_multiplier = 1.12
+fog = true
+fog_density = 0.22
+fog_color = Color(0.86, 0.88, 0.88, 1)
+rain = true
+rain_amount = 260
+wind = true
+wind_base = 5.0
+gust_strength = 55.0
+gust_interval = Vector2(7.0, 12.0)
+gust_seconds = 1.6

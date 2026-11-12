@@ -124,3 +124,29 @@ static func boat(body: Node2D) -> void:
 	ShapeUtil.add_poly(body, PackedVector2Array([Vector2(-32, -2), Vector2(32, -2), Vector2(24, 11), Vector2(-25, 11)]), HULL)
 	ShapeUtil.add_poly(body, PackedVector2Array([Vector2(-31, -2), Vector2(31, -2), Vector2(30, 1), Vector2(-30, 1)]), HULL_STRIPE)
 	ShapeUtil.add_poly(body, PackedVector2Array([Vector2(-25, 11), Vector2(24, 11), Vector2(26, 8), Vector2(-27, 8)]), HULL.darkened(0.3))
+
+
+## A hill-country train: blue diesel engine and two red carriages, facing right.
+## About 150 px long at size 1, centred on its origin.
+static func train(root: Node2D) -> void:
+	# Centred on the middle carriage, so "subject in the centre" frames the whole train.
+	var body: Node2D = Node2D.new()
+	body.position = Vector2(75, 0)
+	root.add_child(body, false, Node.INTERNAL_MODE_BACK)
+	var blue: Color = Color("#2F5D8C")
+	var red: Color = Color("#A63A2E")
+	var roof: Color = Color("#E6D9C0")
+	var window: Color = Color("#F6E7B0")
+	for c: int in 2:
+		var x0: float = -150.0 + c * 52.0
+		ShapeUtil.add_poly(body, PackedVector2Array([Vector2(x0, -4), Vector2(x0 + 48, -4), Vector2(x0 + 48, -26), Vector2(x0, -26)]), red)
+		ShapeUtil.add_poly(body, PackedVector2Array([Vector2(x0 - 1, -26), Vector2(x0 + 49, -26), Vector2(x0 + 46, -30), Vector2(x0 + 2, -30)]), roof)
+		for w: int in 4:
+			var wx: float = x0 + 5 + w * 11
+			ShapeUtil.add_poly(body, PackedVector2Array([Vector2(wx, -15), Vector2(wx + 7, -15), Vector2(wx + 7, -22), Vector2(wx, -22)]), window)
+		ShapeUtil.add_poly(body, PackedVector2Array([Vector2(x0, -6), Vector2(x0 + 48, -6), Vector2(x0 + 48, -9), Vector2(x0, -9)]), red.darkened(0.3))
+	ShapeUtil.add_poly(body, PackedVector2Array([Vector2(-46, -4), Vector2(0, -4), Vector2(6, -14), Vector2(6, -24), Vector2(-4, -32), Vector2(-46, -32)]), blue)
+	ShapeUtil.add_poly(body, PackedVector2Array([Vector2(-12, -18), Vector2(1, -18), Vector2(-4, -28), Vector2(-12, -28)]), window)
+	ShapeUtil.add_poly(body, PackedVector2Array([Vector2(-46, -9), Vector2(4, -9), Vector2(3, -12), Vector2(-46, -12)]), Color("#E8B83A"))
+	for wx: float in [-140.0, -110.0, -88.0, -58.0, -38.0, -10.0]:
+		ShapeUtil.add_poly(body, ShapeUtil.ellipse(Vector2(wx, -3), Vector2(4, 4), 8), INK)

@@ -33,6 +33,9 @@ const BENCH_SPARKLE_COLOR: Color = Color(0.45, 1.0, 0.4, 1.0)
 ## Dust colour per TerrainStrip.Surface.
 const DUST_COLORS: Array[Color] = [Color("#C9B28F"), Color("#B5B3AA"), Color("#6E5440"), Color("#E6F5FA"), Color("#FFFFFF")]
 const SLIDE_CROUCH: float = 7.0
+## Ducking squashes the body towards the feet by this much; hurrying adds this lean.
+const CROUCH_SQUASH: float = 0.32
+const HURRY_LEAN: float = 0.14
 const SLIDE_SPRAY_SECONDS: float = 0.07
 const CELEBRATE_SECONDS: float = 1.6
 const CELEBRATE_HOP_PX: float = 9.0
@@ -44,6 +47,8 @@ signal stepped(surface: TerrainStrip.Surface)
 var _balance: Balance
 var _mug: Node2D
 var _was_sliding: bool = false
+## 0 standing .. 1 ducked (eased, so ducking doesn't snap).
+var _crouch: float = 0.0
 var _spray_left: float = 0.0
 var _mug_angle: float = 0.0
 var _mug_spin: float = 0.0
@@ -182,7 +187,7 @@ func update_pose(delta: float, hiker: Hiker) -> void:
 	_was_sliding = hiker.state == Hiker.State.SLIDE
 	match hiker.state:
 		Hiker.State.WALK:
-			var speed_ratio: float = clampf(absf(hiker.velocity.x) / _balance.walk_speed, 0.0, 1.3)
+			var speed_ratio: float = clampf(absf(hiker.velocity.x) / _balance.walk_speed, 0.0, 1.7)
 			_phase += delta * TAU * _balance.walk_bob_hz * 0.5 * speed_ratio
 			var step: int = floori(_phase / PI)
 			if step != _last_step and hiker.is_on_floor():
@@ -193,8 +198,11 @@ func update_pose(delta: float, hiker: Hiker) -> void:
 			back = swing * _balance.walk_leg_swing
 			arm_angle = swing * _balance.walk_arm_swing - 0.1
 			bob = -absf(cos(_phase)) * _balance.walk_bob_px
-			# Lean into climbs, sit back on descents.
-			lean = clampf(hiker.signed_grade, -0.6, 0.8) * _balance.slope_lean
+			# Lean into climbs, sit back on descents; hurrying leans further forward.
+			lean = clampf(hiker.signed_grade, -0.6, 0.8) * _balance.slope_lean + (HURRY_LEAN if hiker.actions.hurrying else 0.0)
+			if hiker.actions.crouching:
+				front *= 0.5
+				back *= 0.5
 		Hiker.State.JUMP:
 			front = -0.8
 			back = 0.45
@@ -223,6 +231,13 @@ func update_pose(delta: float, hiker: Hiker) -> void:
 			if _spray_left <= 0.0 and on_floor_now:
 				_spray_left = SLIDE_SPRAY_SECONDS
 				_footstep(TerrainStrip.Surface.SNOW, false)
+		Hiker.State.CLIMB:
+			# Hand over hand: arms reach up in turn, knees come up under the body.
+			_phase += delta * TAU * 1.6 * clampf(-hiker.velocity.y / maxf(_balance.climb_speed, 1.0), 0.0, 1.0)
+			arm_angle = -2.5 + sin(_phase) * 0.35
+			front = -0.9 + sin(_phase) * 0.5
+			back = -0.2 - sin(_phase) * 0.5
+			lean = -0.06
 		Hiker.State.REST when hiker.condition.is_on_bench():
 			front = SIT_FRONT_LEG
 			back = SIT_BACK_LEG
@@ -254,7 +269,8 @@ func update_pose(delta: float, hiker: Hiker) -> void:
 	arm.rotation = lerp_angle(arm.rotation, arm_angle, blend)
 	# Mirrored when walking back down the trail; lean follows the way it faces.
 	rotation = lerp_angle(rotation, lean * hiker.facing, blend)
-	scale = Vector2(_squash.x * hiker.facing, _squash.y * (1.0 + breath))
+	_crouch = lerpf(_crouch, 1.0 if hiker.actions.crouching else 0.0, blend)
+	scale = Vector2(_squash.x * hiker.facing, _squash.y * (1.0 + breath) * (1.0 - CROUCH_SQUASH * _crouch))
 	# Ease the height too, so sitting down and standing up don't snap.
 	position.y = bob if hiker.state == Hiker.State.WALK else lerpf(position.y, bob, blend)
 

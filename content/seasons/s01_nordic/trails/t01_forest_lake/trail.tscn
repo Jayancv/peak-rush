@@ -19,6 +19,7 @@
 [ext_resource type="PackedScene" path="res://world/interactables/fork_sign.tscn" id="p_sign"]
 [ext_resource type="PackedScene" path="res://world/interactables/find.tscn" id="p_find"]
 [ext_resource type="PackedScene" path="res://world/interactables/spring.tscn" id="p_spring"]
+[ext_resource type="PackedScene" path="res://world/obstacles/low_branch.tscn" id="p_branch"]
 
 [node name="ForestLakeLoop" type="Node2D"]
 
@@ -323,3 +324,7 @@ position = Vector2(7074, 313.8)
 [node name="Ext0_Mud1" parent="Pieces" instance=ExtResource("mud")]
 position = Vector2(7347, 347.7)
 width = 120.0
+
+[node name="BranchA" parent="Pieces" instance=ExtResource("p_branch")]
+position = Vector2(4600, 520.7)
+leaf_color = Color(0.24, 0.45, 0.3, 1)

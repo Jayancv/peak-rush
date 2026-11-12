@@ -263,6 +263,11 @@ func record_result(result: TrailResult) -> Dictionary:
 		"medal": TrailChallenges.has_medal(int(rec.get("challenges", 0))) and merged.new_challenges != 0,
 	})
 	last_result["total"] = int(last_result.get("total", 0)) + find_tp + challenge_tp
+	if result.finished:
+		var weekly: Dictionary = WeeklyGoals.record(profile, result, ContentDB.get_trail(result.trail_id), daily_active, today(), ContentDB.balance)
+		tp += int(weekly.tp)
+		last_result["weekly"] = weekly
+		last_result["total"] = int(last_result.total) + int(weekly.tp)
 	if daily_active:
 		_record_daily(result)
 	progress_changed.emit()

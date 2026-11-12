@@ -50,6 +50,7 @@ func _build() -> void:
 	else:
 		box.add_child(_label(tr("DAILY_REWARD") % DailyChallenge.reward(next_streak, ContentDB.balance), 22, MUTED))
 	box.add_child(_label(tr("DAILY_STREAK") % streak, 22, MUTED))
+	_add_weekly(box)
 	var row: HBoxContainer = HBoxContainer.new()
 	row.add_theme_constant_override("separation", 12)
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -70,6 +71,26 @@ func _build() -> void:
 			SceneRouter.go_to(SceneRouter.TRAIL_RUNNER))
 		row.add_child(start)
 	UiMotion.intro([panel])
+
+
+## This week's goals with progress (WeeklyGoals; read-only here, results pays them).
+func _add_weekly(box: VBoxContainer) -> void:
+	var b: Balance = ContentDB.balance
+	var week: int = WeeklyGoals.week_of(GameState.today())
+	var state: Dictionary = WeeklyGoals.current(GameState.profile.weekly, week)
+	var line: HSeparator = HSeparator.new()
+	box.add_child(line)
+	box.add_child(_label(tr("WEEKLY_TITLE") % (b.weekly_goal_tp), 26, INK))
+	for goal: int in WeeklyGoals.goals_for(week, b):
+		var target: int = WeeklyGoals.target(goal, b)
+		var have: int = int(state.progress.get(str(goal), 0))
+		var done: bool = (state.done as Array).has(goal)
+		var text: String = (tr(WeeklyGoals.KEYS[goal]) % target) + "   " + (tr("WEEKLY_DONE") if done else "%d/%d" % [have, target])
+		box.add_child(_label(text, 21, ACCENT if done else MUTED))
+	if bool(state.bonus):
+		box.add_child(_label(tr("WEEKLY_ALL_DONE"), 20, ACCENT))
+	else:
+		box.add_child(_label(tr("WEEKLY_BONUS") % b.weekly_all_bonus_tp, 18, MUTED))
 
 
 func _label(text: String, size: int, color: Color) -> Label:

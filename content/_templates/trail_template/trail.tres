@@ -1,7 +1,29 @@
 [gd_resource type="Resource" script_class="TrailData" format=3]
 
 [ext_resource type="Script" path="res://data/trail_data.gd" id="1_trail"]
+[ext_resource type="Script" path="res://data/viewpoint_data.gd" id="3_vp"]
+[ext_resource type="Script" path="res://data/find_data.gd" id="4_find"]
 [ext_resource type="Resource" path="res://content/weather/clear.tres" id="2_weather"]
+
+[sub_resource type="Resource" id="Viewpoint_template_view"]
+script = ExtResource("3_vp")
+id = &"template_view"
+name_key = "VP_TEMPLATE_VIEW"
+motif = 1
+
+[sub_resource type="Resource" id="Find_template_flower"]
+script = ExtResource("4_find")
+id = &"template_flower"
+name_key = "FIND_TEMPLATE_FLOWER"
+kind = 0
+color = Color(0.851, 0.4235, 0.5569, 1)
+
+[sub_resource type="Resource" id="Find_template_item"]
+script = ExtResource("4_find")
+id = &"template_item"
+name_key = "FIND_TEMPLATE_ITEM"
+kind = 2
+color = Color(0.4314, 0.2902, 0.1804, 1)
 
 [resource]
 script = ExtResource("1_trail")
@@ -9,8 +31,10 @@ id = &"template"
 name_key = "TRAIL_TEMPLATE_NAME"
 season_id = &"s00_template"
 scene_path = "res://content/_templates/trail_template/trail.tscn"
-length_m = 400
-daylight_seconds = 60.0
-par_time = 20.0
+length_m = 1600
+daylight_seconds = 120.0
+par_time = 80.0
 weather = ExtResource("2_weather")
+viewpoints = Array[ExtResource("3_vp")]([SubResource("Viewpoint_template_view")])
+finds = Array[ExtResource("4_find")]([SubResource("Find_template_flower"), SubResource("Find_template_item")])
 unlock_order = 0

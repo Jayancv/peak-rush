@@ -28,6 +28,8 @@ extends Resource
 ## Night trail: dark from the start, headlamp on; `daylight_seconds` is then the
 ## window (e.g. the aurora) to summit within for the third star.
 @export var night: bool = false
+## Night trails only: the dark lifts to a sunrise as the window runs out (a dawn climb).
+@export var sunrise: bool = false
 ## Caption of the third star on the results screen.
 @export var star3_key: String = "RESULTS_STAR_DUSK"
 

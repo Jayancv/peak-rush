@@ -253,11 +253,13 @@ Ads must never interrupt a hike. Rewarded ads are opt-in; interstitials are rare
 ---
 
 ## M8 — Live seasons pipeline (after launch)
-- [ ] Turn Appendix A below into `docs/ADDING_CONTENT.md`
+- [x] **New moves** (GAME_DESIGN §4): hold to jump higher, double-tap hurry, ladders/scrambles, duck under low branches (+ Duck pad, hints, bot, tests)
+- [x] **Weekly goals** (3 rotating goals each Monday, TP + all-three bonus; Daily card + results; save v7)
+- [x] Turn Appendix A below into `docs/ADDING_CONTENT.md` (+ template rebuilt with every piece; validator now fails gaps over 75 px)
 - [ ] A "What's new" banner on the main menu (compares `season.release_version` with the last version the player has seen)
 - [ ] Version scheme: `1.x` = new trails or fixes within a season, `2.0` = Season 2, and so on
 - [ ] A save migration test for every release
-- [ ] **Season 2 – Tea Country** (see GAME_DESIGN §7)
+- [x] **Season 2 – Tea Country** (GAME_DESIGN §6b; 5 trails, ships at launch with Season 1; palms/tea-bush art, 4 backdrops, monsoon weather, train subject, sunrise nights)
 - [x] Decide on monetisation: **free with ads** (M7.8); a "Remove ads" purchase can follow (Google Play Billing / StoreKit plugins)
 - [ ] **iOS release** (needs a Mac with Xcode, or a cloud Mac build service):
   - [ ] Join the Apple Developer Program
@@ -296,6 +298,7 @@ button disappears, no TP); check the game still plays normally throughout.
 ---
 
 ## Appendix A — Adding content
+The full, current guide is **`docs/ADDING_CONTENT.md`**; this is the short version.
 
 ### Add a new trail
 1. Copy `content/_templates/trail_template/` to `content/seasons/<season>/trails/tNN_<name>/`.

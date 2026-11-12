@@ -18,6 +18,8 @@ var modifiers: HikeModifiers
 var is_dusk: bool = false
 ## Multiplier from weather; gear (M6) plugs in the same way.
 var weather_drain_mult: float = 1.0
+## Set by the hiker each tick: extra cost of hurrying or climbing (1 = a normal walk).
+var effort_mult: float = 1.0
 ## Wind pushing back (px/s, negative = towards the trailhead). Only applied while
 ## walking or airborne: standing still braces the hiker against it.
 var wind_push: float = 0.0
@@ -56,7 +58,7 @@ func tick(delta: float, walking: bool, resting: bool, grade: float, ground: Terr
 	flow.tick(delta, walking)
 	if walking:
 		var drain: float = modifiers.drain_multiplier(grade, effective_surface(ground), has_wet_feet(), weather_drain_mult)
-		stamina.walk(delta, drain * hydration.drain_multiplier())
+		stamina.walk(delta, drain * hydration.drain_multiplier() * effort_mult)
 	elif resting:
 		stamina.rest(delta, is_on_bench(), modifiers.gear.rest_regen_scale * hydration.regen_multiplier())
 	var mode: Regen = Regen.NONE

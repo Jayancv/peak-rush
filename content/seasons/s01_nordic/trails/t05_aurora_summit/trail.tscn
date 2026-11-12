@@ -20,6 +20,8 @@
 [ext_resource type="PackedScene" path="res://world/interactables/find.tscn" id="p_find"]
 [ext_resource type="PackedScene" path="res://world/interactables/spring.tscn" id="p_spring"]
 [ext_resource type="PackedScene" path="res://world/obstacles/rope_bridge.tscn" id="x_bridge"]
+[ext_resource type="PackedScene" path="res://world/obstacles/low_branch.tscn" id="p_branch"]
+[ext_resource type="PackedScene" path="res://world/obstacles/ladder.tscn" id="p_ladder"]
 
 [node name="AuroraSummit" type="Node2D"]
 
@@ -91,6 +93,9 @@ polygon = PackedVector2Array(-48, -34, -16, -34, -16, -64, -48, -64)
 color = Color(0.4196, 0.2902, 0.2000, 1.0)
 antialiased = true
 polygon = PackedVector2Array(36, -120, 52, -120, 52, -150, 36, -150)
+
+[node name="TowerDeckA" parent="Scenery" instance=ExtResource("p_board")]
+points = PackedVector2Array(14116, -381.6, 14320, -381.6)
 
 [node name="Trailhead" type="Marker2D" parent="."]
 position = Vector2(160, 550)
@@ -443,3 +448,12 @@ position = Vector2(6761, 446.5)
 [node name="Ext1_Ice22" parent="Pieces" instance=ExtResource("ice")]
 position = Vector2(7044, 429.6)
 width = 160.0
+
+[node name="BranchA" parent="Pieces" instance=ExtResource("p_branch")]
+position = Vector2(6550, 442)
+leaf_color = Color(0.82, 0.88, 0.94, 1)
+
+[node name="TowerA" parent="Pieces" instance=ExtResource("p_ladder")]
+position = Vector2(14130, -251.6)
+height = 130
+style = 1

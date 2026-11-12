@@ -85,7 +85,7 @@ docs/                GAME_DESIGN.md, PLAN.md
 - At the end of each session, update **Current status** below and tick the boxes in `docs/PLAN.md`.
 
 ## Current status
-- Milestone: **M7.5 (trail depth) + polish (sounds, trail map, finds page, daily trail) built, 309 tests green; M7.6 automated part done (phone checklist, low-end phone, playtest open); M7.7 done**. M7 non-release part done. Release steps
+- Milestone: **M7.5 (trail depth) + polish (sounds, trail map, finds page, daily trail) built, 350 tests green; M7.6 automated part done (phone checklist, low-end phone, playtest open); M7.7 done**. M7 non-release part done. Release steps
   (keystore, AAB, stores, iOS, screenshots, 1.0.0) deliberately not started; low-end phone profiling still open.
   M5/M6 full-season phone playtest still open. Launch plan in PLAN.md: M7.6 stabilisation -> M7.7 launch features -> M7.8 ads -> M7.9 Google Play (Android first, free with ads, iOS after launch in M8).
 - Godot 4.7.2-stable (not on PATH; ask the user for the executable path if unknown); GUT 9.7.1.
@@ -246,4 +246,22 @@ docs/                GAME_DESIGN.md, PLAN.md
   Menu claim = `StepsButton` (scenes/main_menu; re-reads on app focus-in/resume, count-up, badge pills). New-badge pills are
   shared: `BadgePills.show(parent, ids)` (results + step claims). Health Connect's rationale text lives in the plugin's
   res/values/strings.xml (runs outside the game, so not strings.csv). UI tests: tests/ui/test_steps_ui.gd (mock phone).
+  Adding content: docs/ADDING_CONTENT.md. The template (content/_templates/trail_template) uses every common piece and is
+  validated by the tests; ContentValidator._check_gaps fails open gaps over MAX_JUMP_GAP (75 px) not covered by stones/bridge/log/boardwalk.
+  Weekly goals: `WeeklyGoals` (systems/) = 3 of 6 goals per Monday-week (seeded via DailyChallenge._shuffled), progress
+  capped at targets, TP per goal + all-three bonus (Balance weekly_*); state in profile.weekly (save v7); paid in
+  GameState.record_result (last_result.weekly), shown in the Daily card and the results TP breakdown.
+  Season 2 Tea Country (s02_tea, ships at launch): t07 Tea Terraces, t08 Ella Rock, t09 Nine Arches (monsoon, viaduct art +
+  TRAIN subject), t10 World's End (fog, cliff edge with Lowlands strip so the camera can frame the drop), t11 Pilgrim's Peak
+  (night + TrailData.sunrise: Daylight lifts tint_night -> tint_sunrise from Balance.sunrise_start). Art: TreeKind/TreeStyle PALM, TEA
+  (TreeArt.palm/tea_bush; RidgeLayer TEA lays bush rows), backdrops tea/monsoon/plains/pilgrim, weather monsoon.tres.
+  Continue = keep going in a started season (newest first), else earliest season (new players start Season 1).
+  Bot: S2 114 / 154 / 163 / 183 / 195 s. Postcard tool renders sunrise trails at the par-pace time of night.
+  New moves: `HikerActions` (actors/hiker; hurrying/crouching/ladder + speed/effort mults; hiker.actions), HikerInput
+  hurry double-tap + jump_held + duck (new input action `duck`, S/Down; Duck pad above Jump in TouchControls, UiIcon.DUCK).
+  Hold jump: HikerState.apply_jump_gravity softens gravity only after Balance.jump_tap_seconds (taps unchanged ~96 px, held ~144).
+  Hiker.State.CLIMB (HikerClimbState) via `Ladder` pieces (style LADDER/SCRAMBLE); `LowBranch` stumbles a non-crouching hiker.
+  HikerCondition.effort_mult (hurry/climb drain). FirstHints: HINT_HURRY (after walking), HIGH_JUMP (group high_ledge), CLIMB, DUCK.
+  Bot routes may list "ducks" ranges. Placed: T2 high lookout, T4/T6 branches, T7 high lookout, T8 ladder + branches,
+  T9 branches, T11 scramble.
   Water: SteppingStones uses `world/obstacles/water.gdshader` (waves/depth/glints in local px). GroundPatch art follows the TerrainStrip slope.

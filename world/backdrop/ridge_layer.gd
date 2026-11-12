@@ -49,7 +49,9 @@ extends Polygon2D
 
 @export_group("Trees")
 ## Pines for evergreen forest, birches (round crowns) for ruska autumn, or a mix.
-enum TreeStyle { PINE, BIRCH, MIXED }
+## New styles go at the END (scenes store the number). TEA lays clipped bushes in terrace
+## rows down the hillside; PALM mixes palms with the alt-colour broadleaf (birch shape).
+enum TreeStyle { PINE, BIRCH, MIXED, PALM, TEA }
 @export var tree_style: TreeStyle = TreeStyle.PINE:
 	set(v):
 		tree_style = v
@@ -159,6 +161,13 @@ func _build_trees() -> void:
 	var batch: TreeArt.Batch = TreeArt.Batch.new()
 	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 	rng.seed = seed_value * 7919 + 13
+	if tree_style == TreeStyle.TEA:
+		_build_tea_rows(batch, rng)
+		_trees.polygon = batch.pts
+		_trees.vertex_colors = batch.cols
+		_trees.polygons = batch.polys
+		_trees.color = Color.WHITE
+		return
 	var places: Array[Vector3] = []
 	for i: int in tree_count:
 		var tx: float = rng.randf() * width
@@ -169,9 +178,11 @@ func _build_trees() -> void:
 		var tx: float = place.x
 		var h: float = place.y
 		var ground: float = height_at(tx) + h * 0.08
-		var birch: bool = tree_style == TreeStyle.BIRCH or (tree_style == TreeStyle.MIXED and int(place.z) % 2 == 1)
-		if birch:
-			var crown: Color = tree_color_alt if tree_style == TreeStyle.MIXED else tree_color
+		var birch: bool = tree_style == TreeStyle.BIRCH or (tree_style in [TreeStyle.MIXED, TreeStyle.PALM] and int(place.z) % 2 == 1)
+		if tree_style == TreeStyle.PALM and not birch:
+			TreeArt.palm(tx, ground, h, tree_color, rng, batch)
+		elif birch:
+			var crown: Color = tree_color_alt if tree_style in [TreeStyle.MIXED, TreeStyle.PALM] else tree_color
 			TreeArt.birch(tx, ground, h, crown, haze_color, rng, batch)
 		else:
 			TreeArt.pine(tx, ground, h, tree_color, rng, batch, tree_snow)
@@ -179,6 +190,20 @@ func _build_trees() -> void:
 	_trees.vertex_colors = batch.cols
 	_trees.polygons = batch.polys
 	_trees.color = Color.WHITE
+
+
+## Tea estates: rows of clipped bushes following the hill's contour, one row under another.
+## tree_count = rows, tree_height = bush height range.
+func _build_tea_rows(batch: TreeArt.Batch, rng: RandomNumberGenerator) -> void:
+	var rows: int = clampi(tree_count, 1, 8)
+	var gap: float = tree_height.y * 1.25
+	for row: int in rows:
+		var x: float = rng.randf_range(0.0, tree_height.y)
+		while x < width:
+			var h: float = rng.randf_range(tree_height.x, tree_height.y)
+			var ground: float = height_at(x) + tree_height.y * 0.6 + row * gap
+			TreeArt.tea_bush(x, ground, h, tree_color.darkened(row * 0.04), rng, batch)
+			x += h * rng.randf_range(1.5, 1.9)
 
 
 func _build_snow() -> void:

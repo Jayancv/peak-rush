@@ -5,6 +5,10 @@ extends RefCounted
 ## Instantiates each level once, so it's meant for tests and tools, not gameplay.
 
 
+## Widest open gap a hiker can jump at the slowest normal speed (85% on snow), with margin.
+const MAX_JUMP_GAP: float = 75.0
+
+
 static func validate_index(index: ContentIndex) -> Array[String]:
 	var errors: Array[String] = []
 	if index == null:
@@ -97,8 +101,57 @@ static func validate_trail(trail: TrailData) -> Array[String]:
 	for id: StringName in find_ids:
 		if not scene_finds.has(id):
 			errors.append("%s data lists find '%s' that isn't in the level" % [who, id])
+	errors.append_array(_check_gaps(level, who))
 	level.free()
 	return errors
+
+
+## Every open gap between ground strips must be jumpable at the slowest normal speed
+## (snow); wider crossings need stepping stones, a bridge, a log or a boardwalk.
+static func _check_gaps(level: Node, who: String) -> Array[String]:
+	var errors: Array[String] = []
+	var spans: Array[Vector2] = []
+	var crossings: Array[Vector2] = []
+	for node: Node in _all_nodes(level):
+		var at: Vector2 = _level_position(node, level)
+		if node is TerrainStrip and (node as TerrainStrip).points.size() >= 2:
+			var pts: PackedVector2Array = (node as TerrainStrip).points
+			spans.append(Vector2(at.x + pts[0].x, at.x + pts[pts.size() - 1].x))
+		elif node is SteppingStones:
+			crossings.append(Vector2(at.x, at.x + (node as SteppingStones).total_width()))
+		elif node is RopeBridge:
+			crossings.append(Vector2(at.x, at.x + (node as RopeBridge).span))
+		elif node is FallenLog:
+			crossings.append(Vector2(at.x, at.x + (node as FallenLog).length))
+		elif node is Boardwalk and (node as Boardwalk).points.size() >= 2:
+			var deck: PackedVector2Array = (node as Boardwalk).points
+			crossings.append(Vector2(at.x + deck[0].x, at.x + deck[deck.size() - 1].x))
+	spans.sort_custom(func(a: Vector2, b: Vector2) -> bool: return a.x < b.x)
+	var reach: float = -INF
+	for span: Vector2 in spans:
+		var gap: float = span.x - reach
+		if reach > -INF and gap > MAX_JUMP_GAP and not _crossed(reach, span.x, crossings):
+			errors.append("%s has a %d px gap at x=%d, wider than a jump (max %d): add stones, a bridge or a log" % [who, int(gap), int(reach), int(MAX_JUMP_GAP)])
+		reach = maxf(reach, span.y)
+	return errors
+
+
+static func _crossed(from_x: float, to_x: float, crossings: Array[Vector2]) -> bool:
+	for c: Vector2 in crossings:
+		if c.x <= from_x + 20.0 and c.y >= to_x - 20.0:
+			return true
+	return false
+
+
+## Position relative to the level root (the level isn't in the tree, so no global transforms).
+static func _level_position(node: Node, level: Node) -> Vector2:
+	var at: Vector2 = Vector2.ZERO
+	var n: Node = node
+	while n != null and n != level:
+		if n is Node2D:
+			at += (n as Node2D).position
+		n = n.get_parent()
+	return at
 
 
 static func _all_nodes(root: Node) -> Array[Node]:

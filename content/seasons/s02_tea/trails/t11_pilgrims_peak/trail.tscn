@@ -1,0 +1,3219 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/terrain_strip.gd" id="strip"]
+[ext_resource type="PackedScene" path="res://world/obstacles/root.tscn" id="root"]
+[ext_resource type="PackedScene" path="res://world/obstacles/rock.tscn" id="rock"]
+[ext_resource type="PackedScene" path="res://world/obstacles/mud_patch.tscn" id="mud"]
+[ext_resource type="PackedScene" path="res://world/obstacles/kill_zone.tscn" id="kill"]
+[ext_resource type="PackedScene" path="res://world/obstacles/stepping_stones.tscn" id="stones"]
+[ext_resource type="PackedScene" path="res://world/interactables/bench.tscn" id="bench"]
+[ext_resource type="PackedScene" path="res://world/interactables/checkpoint.tscn" id="checkpoint"]
+[ext_resource type="PackedScene" path="res://world/interactables/finish.tscn" id="finish"]
+[ext_resource type="PackedScene" path="res://world/interactables/viewpoint.tscn" id="vp"]
+[ext_resource type="PackedScene" path="res://world/obstacles/fallen_log.tscn" id="log"]
+[ext_resource type="PackedScene" path="res://world/obstacles/rope_bridge.tscn" id="bridge"]
+[ext_resource type="PackedScene" path="res://world/obstacles/wind_zone.tscn" id="wind"]
+[ext_resource type="PackedScene" path="res://world/obstacles/boardwalk.tscn" id="board"]
+[ext_resource type="PackedScene" path="res://world/interactables/fork_sign.tscn" id="sign"]
+[ext_resource type="PackedScene" path="res://world/interactables/find.tscn" id="find"]
+[ext_resource type="PackedScene" path="res://world/interactables/spring.tscn" id="spring"]
+[ext_resource type="PackedScene" path="res://world/obstacles/rolling_boulder.tscn" id="boulder"]
+[ext_resource type="PackedScene" path="res://world/obstacles/ladder.tscn" id="ladder"]
+[ext_resource type="PackedScene" path="res://world/obstacles/low_branch.tscn" id="branch"]
+[ext_resource type="PackedScene" path="res://world/backdrop/backdrop_pilgrim.tscn" id="backdrop"]
+
+[node name="PilgrimsPeak" type="Node2D"]
+
+[node name="Backdrop" parent="." instance=ExtResource("backdrop")]
+
+[node name="Scenery" type="Node2D" parent="."]
+
+[node name="Water4" type="Polygon2D" parent="Scenery"]
+color = Color(0.2235, 0.3294, 0.3490, 1.0)
+antialiased = true
+polygon = PackedVector2Array(13288, -86, 13562, -86, 13562, 780, 13288, 780)
+
+[node name="Shine5" type="Polygon2D" parent="Scenery"]
+color = Color(0.5765, 0.6980, 0.7490, 0.8)
+antialiased = true
+polygon = PackedVector2Array(13288, -86, 13562, -86, 13562, -80, 13288, -80)
+
+[node name="Lantern473" type="Node2D" parent="Scenery"]
+position = Vector2(1000, 599.2)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern473"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern473"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern473"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern474" type="Node2D" parent="Scenery"]
+position = Vector2(1420, 581.4)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern474"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern474"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern474"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern475" type="Node2D" parent="Scenery"]
+position = Vector2(1840, 544.1)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern475"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern475"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern475"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern476" type="Node2D" parent="Scenery"]
+position = Vector2(2260, 497.6)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern476"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern476"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern476"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern477" type="Node2D" parent="Scenery"]
+position = Vector2(2680, 454.4)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern477"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern477"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern477"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern478" type="Node2D" parent="Scenery"]
+position = Vector2(3100, 426.3)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern478"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern478"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern478"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern479" type="Node2D" parent="Scenery"]
+position = Vector2(3520, 420)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern479"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern479"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern479"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern480" type="Node2D" parent="Scenery"]
+position = Vector2(3800, 419.1)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern480"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern480"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern480"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern481" type="Node2D" parent="Scenery"]
+position = Vector2(4220, 398.7)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern481"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern481"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern481"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern482" type="Node2D" parent="Scenery"]
+position = Vector2(4640, 355.1)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern482"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern482"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern482"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern483" type="Node2D" parent="Scenery"]
+position = Vector2(5060, 298.6)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern483"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern483"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern483"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern484" type="Node2D" parent="Scenery"]
+position = Vector2(5480, 242.5)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern484"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern484"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern484"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern485" type="Node2D" parent="Scenery"]
+position = Vector2(5900, 199.8)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern485"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern485"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern485"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern486" type="Node2D" parent="Scenery"]
+position = Vector2(6320, 180.6)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern486"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern486"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern486"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern487" type="Node2D" parent="Scenery"]
+position = Vector2(7304.76, 179.1)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern487"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern487"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern487"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern488" type="Node2D" parent="Scenery"]
+position = Vector2(7724.76, 171.9)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern488"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern488"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern488"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern489" type="Node2D" parent="Scenery"]
+position = Vector2(8144.76, 157.8)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern489"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern489"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern489"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern490" type="Node2D" parent="Scenery"]
+position = Vector2(8564.76, 137.1)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern490"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern490"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern490"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern491" type="Node2D" parent="Scenery"]
+position = Vector2(8984.76, 111.1)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern491"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern491"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern491"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern492" type="Node2D" parent="Scenery"]
+position = Vector2(9404.76, 81)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern492"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern492"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern492"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern493" type="Node2D" parent="Scenery"]
+position = Vector2(9824.76, 48.4)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern493"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern493"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern493"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern494" type="Node2D" parent="Scenery"]
+position = Vector2(10244.8, 15)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern494"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern494"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern494"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern495" type="Node2D" parent="Scenery"]
+position = Vector2(10664.8, -17.8)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern495"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern495"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern495"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern496" type="Node2D" parent="Scenery"]
+position = Vector2(11084.8, -48.2)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern496"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern496"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern496"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern497" type="Node2D" parent="Scenery"]
+position = Vector2(11504.8, -74.7)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern497"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern497"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern497"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern498" type="Node2D" parent="Scenery"]
+position = Vector2(11924.8, -96)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern498"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern498"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern498"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern499" type="Node2D" parent="Scenery"]
+position = Vector2(12344.8, -110.9)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern499"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern499"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern499"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern500" type="Node2D" parent="Scenery"]
+position = Vector2(12764.8, -118.8)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern500"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern500"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern500"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern501" type="Node2D" parent="Scenery"]
+position = Vector2(13184.8, -120)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern501"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern501"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern501"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern502" type="Node2D" parent="Scenery"]
+position = Vector2(13600, -120.5)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern502"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern502"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern502"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern503" type="Node2D" parent="Scenery"]
+position = Vector2(14020, -149.2)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern503"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern503"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern503"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern504" type="Node2D" parent="Scenery"]
+position = Vector2(14440, -290.2)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern504"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern504"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern504"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern505" type="Node2D" parent="Scenery"]
+position = Vector2(14860, -304.8)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern505"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern505"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern505"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lantern506" type="Node2D" parent="Scenery"]
+position = Vector2(15280, -326.1)
+
+[node name="Post" type="Polygon2D" parent="Scenery/Lantern506"]
+color = Color(0.25, 0.2, 0.17, 1)
+antialiased = true
+polygon = PackedVector2Array(-2, 0, 2, 0, 2, -64, -2, -64)
+
+[node name="Glow" type="Polygon2D" parent="Scenery/Lantern506"]
+color = Color(1, 0.8, 0.45, 0.28)
+antialiased = true
+polygon = PackedVector2Array(26, -70, 23.4252, -58.719, 16.2107, -49.6724, 5.78554, -44.6519, -5.78554, -44.6519, -16.2107, -49.6724, -23.4252, -58.719, -26, -70, -23.4252, -81.281, -16.2107, -90.3276, -5.78554, -95.3481, 5.78554, -95.3481, 16.2107, -90.3276, 23.4252, -81.281)
+
+[node name="Lamp" type="Polygon2D" parent="Scenery/Lantern506"]
+color = Color(1, 0.86, 0.55, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -62, 6, -62, 5, -76, -5, -76)
+
+[node name="Lookout" parent="Scenery" instance=ExtResource("board")]
+points = PackedVector2Array(5540, 175.3, 5660, 175.3)
+
+[node name="Shrine" type="Node2D" parent="Scenery" groups=["tree_clear"]]
+position = Vector2(13050, -330)
+metadata/tree_clear_radius = 200
+
+[node name="Base" type="Polygon2D" parent="Scenery/Shrine"]
+color = Color(0.95, 0.93, 0.88, 1)
+antialiased = true
+polygon = PackedVector2Array(-70, 0, 70, 0, 60, -30, -60, -30)
+
+[node name="Dome" type="Polygon2D" parent="Scenery/Shrine"]
+color = Color(0.97, 0.96, 0.92, 1)
+antialiased = true
+polygon = PackedVector2Array(46, -30, 44.4326, -42.941, 39.8372, -55, 32.5269, -65.3553, 23, -73.3013, 11.9057, -78.2963, 2.81669e-15, -80, -11.9057, -78.2963, -23, -73.3013, -32.5269, -65.3553, -39.8372, -55, -44.4326, -42.941, -46, -30)
+
+[node name="Spire" type="Polygon2D" parent="Scenery/Shrine"]
+color = Color(0.9, 0.75, 0.3, 1)
+antialiased = true
+polygon = PackedVector2Array(-6, -78, 6, -78, 2, -130, -2, -130)
+
+[node name="Trailhead" type="Marker2D" parent="."]
+position = Vector2(160, 590)
+
+[node name="Ground" type="Node2D" parent="."]
+
+[node name="Village" type="Line2D" parent="Ground"]
+points = PackedVector2Array(-300, 600, 900, 600)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("strip")
+surface = 0
+fill_color = Color(0.36, 0.42, 0.33, 1)
+fill_bottom_color = Color(0.18, 0.2, 0.18, 1)
+tuft_color = Color(0.45, 0.55, 0.38, 1)
+decor_seed = 17
+side_trees = 4
+side_tree_spacing = Vector2(380, 800)
+side_tree_height = Vector2(150, 230)
+side_tree_color = Color(0.2, 0.33, 0.24, 1)
+side_tree_color_alt = Color(0.4, 0.45, 0.3, 1)
+
+[node name="Steps1" type="Line2D" parent="Ground"]
+points = PackedVector2Array(900, 600, 961, 599.7, 1022, 598.9, 1082.9, 597.6, 1143.9, 595.8, 1204.9, 593.5, 1265.9, 590.7, 1326.8, 587.4, 1387.8, 583.6, 1448.8, 579.4, 1509.8, 574.8, 1570.7, 569.9, 1631.7, 564.6, 1692.7, 558.9, 1753.7, 553, 1814.6, 546.8, 1875.6, 540.4, 1936.6, 533.8, 1997.6, 527.1, 2058.5, 520.3, 2119.5, 513.4, 2180.5, 506.6, 2241.5, 499.7, 2302.4, 492.9, 2363.4, 486.2, 2424.4, 479.6, 2485.4, 473.2, 2546.3, 467, 2607.3, 461.1, 2668.3, 455.4, 2729.3, 450.1, 2790.2, 445.2, 2851.2, 440.6, 2912.2, 436.4, 2973.2, 432.6, 3034.1, 429.3, 3095.1, 426.5, 3156.1, 424.2, 3217.1, 422.4, 3278, 421.1, 3339, 420.3, 3400, 420, 3700, 420)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("strip")
+surface = 0
+fill_color = Color(0.36, 0.42, 0.33, 1)
+fill_bottom_color = Color(0.18, 0.2, 0.18, 1)
+tuft_color = Color(0.45, 0.55, 0.38, 1)
+decor_seed = 30
+side_trees = 3
+side_tree_spacing = Vector2(320, 720)
+side_tree_height = Vector2(140, 230)
+side_tree_color = Color(0.2, 0.33, 0.24, 1)
+side_tree_color_alt = Color(0.4, 0.45, 0.3, 1)
+
+[node name="Steps2" type="Line2D" parent="Ground"]
+points = PackedVector2Array(3700, 420, 3760, 419.7, 3820, 418.8, 3880, 417.4, 3940, 415.4, 4000, 412.8, 4060, 409.6, 4120, 406, 4180, 401.8, 4240, 397.1, 4300, 391.9, 4360, 386.3, 4420, 380.3, 4480, 373.9, 4540, 367.1, 4600, 360, 4660, 352.6, 4720, 345, 4780, 337.1, 4840, 329, 4900, 320.8, 4960, 312.5, 5020, 304.2, 5080, 295.8, 5140, 287.5, 5200, 279.2, 5260, 271, 5320, 262.9, 5380, 255, 5440, 247.4, 5500, 240, 5560, 232.9, 5620, 226.1, 5680, 219.7, 5740, 213.7, 5800, 208.1, 5860, 202.9, 5920, 198.2, 5980, 194, 6040, 190.4, 6100, 187.2, 6160, 184.6, 6220, 182.6, 6280, 181.2, 6340, 180.3, 6400, 180, 6700, 180)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("strip")
+surface = 0
+fill_color = Color(0.36, 0.42, 0.33, 1)
+fill_bottom_color = Color(0.18, 0.2, 0.18, 1)
+tuft_color = Color(0.45, 0.55, 0.38, 1)
+decor_seed = 43
+side_trees = 3
+side_tree_spacing = Vector2(320, 720)
+side_tree_height = Vector2(140, 230)
+side_tree_color = Color(0.2, 0.33, 0.24, 1)
+side_tree_color_alt = Color(0.4, 0.45, 0.3, 1)
+
+[node name="Steps3" type="Line2D" parent="Ground"]
+points = PackedVector2Array(7112, 180, 7245.84, 179.6, 7379.68, 178.5, 7513.51, 176.6, 7647.35, 173.9, 7781.19, 170.5, 7914.81, 166.4, 8048.65, 161.7, 8182.49, 156.2, 8316.32, 150.1, 8450.16, 143.4, 8584, 136.1, 8717.84, 128.2, 8851.68, 119.9, 8985.51, 111.1, 9119.35, 101.9, 9253.19, 92.3, 9386.81, 82.4, 9520.65, 72.3, 9654.49, 61.9, 9788.32, 51.3, 9922.16, 40.7, 10056, 30, 10189.8, 19.3, 10323.7, 8.7, 10457.5, -1.9, 10591.4, -12.3, 10725.2, -22.4, 10858.8, -32.3, 10992.6, -41.9, 11126.5, -51.1, 11260.3, -59.9, 11394.2, -68.2, 11528, -76.1, 11661.8, -83.4, 11795.7, -90.1, 11929.5, -96.2, 12063.4, -101.7, 12197.2, -106.4, 12330.8, -110.5, 12464.6, -113.9, 12598.5, -116.6, 12732.3, -118.5, 12866.2, -119.6, 13000, -120, 13300, -120)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("strip")
+surface = 0
+fill_color = Color(0.36, 0.42, 0.33, 1)
+fill_bottom_color = Color(0.18, 0.2, 0.18, 1)
+tuft_color = Color(0.45, 0.55, 0.38, 1)
+decor_seed = 56
+side_trees = 3
+side_tree_spacing = Vector2(320, 720)
+side_tree_height = Vector2(140, 230)
+side_tree_color = Color(0.2, 0.33, 0.24, 1)
+side_tree_color_alt = Color(0.4, 0.45, 0.3, 1)
+
+[node name="Final" type="Line2D" parent="Ground"]
+points = PackedVector2Array(13550, -120, 13610.7, -120.6, 13671.4, -122.5, 13732.1, -125.5, 13792.9, -129.4, 13853.6, -134.2, 13914.3, -139.4, 13975, -145, 14035.7, -150.6, 14096.4, -155.8, 14157.1, -160.6, 14217.9, -164.5, 14278.6, -167.5, 14339.3, -169.4, 14400, -170, 14404, -290, 14464.9, -290.3, 14525.8, -291.2, 14586.7, -292.7, 14647.6, -294.7, 14708.4, -297.1, 14769.3, -300, 14830.2, -303.2, 14891.1, -306.5, 14952, -310, 15012.9, -313.5, 15073.8, -316.8, 15134.7, -320, 15195.6, -322.9, 15256.4, -325.3, 15317.3, -327.3, 15378.2, -328.8, 15439.1, -329.7, 15500, -330, 16500, -330)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("strip")
+surface = 1
+fill_color = Color(0.36, 0.42, 0.33, 1)
+fill_bottom_color = Color(0.18, 0.2, 0.18, 1)
+tuft_color = Color(0.45, 0.55, 0.38, 1)
+decor_seed = 69
+
+[node name="Front" type="Node2D" parent="."]
+
+[node name="Step6" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1000, 598.2, 1018, 598.2, 1018, 601.2, 1000, 601.2)
+
+[node name="Step7" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1026, 597.8, 1044, 597.8, 1044, 600.8, 1026, 600.8)
+
+[node name="Step8" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1052, 597.3, 1070, 597.3, 1070, 600.3, 1052, 600.3)
+
+[node name="Step9" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1078, 596.7, 1096, 596.7, 1096, 599.7, 1078, 599.7)
+
+[node name="Step10" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1104, 596, 1122, 596, 1122, 599, 1104, 599)
+
+[node name="Step11" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1130, 595.2, 1148, 595.2, 1148, 598.2, 1130, 598.2)
+
+[node name="Step12" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1156, 594.3, 1174, 594.3, 1174, 597.3, 1156, 597.3)
+
+[node name="Step13" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1182, 593.4, 1200, 593.4, 1200, 596.4, 1182, 596.4)
+
+[node name="Step14" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1208, 592.4, 1226, 592.4, 1226, 595.4, 1208, 595.4)
+
+[node name="Step15" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1234, 591.2, 1252, 591.2, 1252, 594.2, 1234, 594.2)
+
+[node name="Step16" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1260, 590, 1278, 590, 1278, 593, 1260, 593)
+
+[node name="Step17" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1286, 588.6, 1304, 588.6, 1304, 591.6, 1286, 591.6)
+
+[node name="Step18" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1312, 587.2, 1330, 587.2, 1330, 590.2, 1312, 590.2)
+
+[node name="Step19" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1338, 585.7, 1356, 585.7, 1356, 588.7, 1338, 588.7)
+
+[node name="Step20" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1364, 584.1, 1382, 584.1, 1382, 587.1, 1364, 587.1)
+
+[node name="Step21" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1390, 582.4, 1408, 582.4, 1408, 585.4, 1390, 585.4)
+
+[node name="Step22" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1416, 580.7, 1434, 580.7, 1434, 583.7, 1416, 583.7)
+
+[node name="Step23" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1442, 578.9, 1460, 578.9, 1460, 581.9, 1442, 581.9)
+
+[node name="Step24" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1468, 577, 1486, 577, 1486, 580, 1468, 580)
+
+[node name="Step25" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1494, 575, 1512, 575, 1512, 578, 1494, 578)
+
+[node name="Step26" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1520, 573, 1538, 573, 1538, 576, 1520, 576)
+
+[node name="Step27" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1546, 570.9, 1564, 570.9, 1564, 573.9, 1546, 573.9)
+
+[node name="Step28" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1572, 568.8, 1590, 568.8, 1590, 571.8, 1572, 571.8)
+
+[node name="Step29" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1598, 566.5, 1616, 566.5, 1616, 569.5, 1598, 569.5)
+
+[node name="Step30" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1624, 564.3, 1642, 564.3, 1642, 567.3, 1624, 567.3)
+
+[node name="Step31" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1650, 561.9, 1668, 561.9, 1668, 564.9, 1650, 564.9)
+
+[node name="Step32" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1676, 559.5, 1694, 559.5, 1694, 562.5, 1676, 562.5)
+
+[node name="Step33" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1702, 557, 1720, 557, 1720, 560, 1702, 560)
+
+[node name="Step34" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1728, 554.5, 1746, 554.5, 1746, 557.5, 1728, 557.5)
+
+[node name="Step35" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1754, 552, 1772, 552, 1772, 555, 1754, 555)
+
+[node name="Step36" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1780, 549.3, 1798, 549.3, 1798, 552.3, 1780, 552.3)
+
+[node name="Step37" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1806, 546.7, 1824, 546.7, 1824, 549.7, 1806, 549.7)
+
+[node name="Step38" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1832, 544, 1850, 544, 1850, 547, 1832, 547)
+
+[node name="Step39" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1858, 541.2, 1876, 541.2, 1876, 544.2, 1858, 544.2)
+
+[node name="Step40" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1884, 538.5, 1902, 538.5, 1902, 541.5, 1884, 541.5)
+
+[node name="Step41" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1910, 535.7, 1928, 535.7, 1928, 538.7, 1910, 538.7)
+
+[node name="Step42" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1936, 532.9, 1954, 532.9, 1954, 535.9, 1936, 535.9)
+
+[node name="Step43" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1962, 530, 1980, 530, 1980, 533, 1962, 533)
+
+[node name="Step44" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(1988, 527.2, 2006, 527.2, 2006, 530.2, 1988, 530.2)
+
+[node name="Step45" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2014, 524.3, 2032, 524.3, 2032, 527.3, 2014, 527.3)
+
+[node name="Step46" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2040, 521.4, 2058, 521.4, 2058, 524.4, 2040, 524.4)
+
+[node name="Step47" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2066, 518.5, 2084, 518.5, 2084, 521.5, 2066, 521.5)
+
+[node name="Step48" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2092, 515.5, 2110, 515.5, 2110, 518.5, 2092, 518.5)
+
+[node name="Step49" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2118, 512.6, 2136, 512.6, 2136, 515.6, 2118, 515.6)
+
+[node name="Step50" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2144, 509.7, 2162, 509.7, 2162, 512.7, 2144, 512.7)
+
+[node name="Step51" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2170, 506.8, 2188, 506.8, 2188, 509.8, 2170, 509.8)
+
+[node name="Step52" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2196, 503.8, 2214, 503.8, 2214, 506.8, 2196, 506.8)
+
+[node name="Step53" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2222, 500.9, 2240, 500.9, 2240, 503.9, 2222, 503.9)
+
+[node name="Step54" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2248, 498, 2266, 498, 2266, 501, 2248, 501)
+
+[node name="Step55" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2274, 495.1, 2292, 495.1, 2292, 498.1, 2274, 498.1)
+
+[node name="Step56" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2300, 492.2, 2318, 492.2, 2318, 495.2, 2300, 495.2)
+
+[node name="Step57" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2326, 489.3, 2344, 489.3, 2344, 492.3, 2326, 492.3)
+
+[node name="Step58" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2352, 486.5, 2370, 486.5, 2370, 489.5, 2352, 489.5)
+
+[node name="Step59" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2378, 483.6, 2396, 483.6, 2396, 486.6, 2378, 486.6)
+
+[node name="Step60" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2404, 480.8, 2422, 480.8, 2422, 483.8, 2404, 483.8)
+
+[node name="Step61" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2430, 478, 2448, 478, 2448, 481, 2430, 481)
+
+[node name="Step62" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2456, 475.3, 2474, 475.3, 2474, 478.3, 2456, 478.3)
+
+[node name="Step63" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2482, 472.6, 2500, 472.6, 2500, 475.6, 2482, 475.6)
+
+[node name="Step64" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2508, 469.9, 2526, 469.9, 2526, 472.9, 2508, 472.9)
+
+[node name="Step65" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2534, 467.3, 2552, 467.3, 2552, 470.3, 2534, 470.3)
+
+[node name="Step66" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2560, 464.7, 2578, 464.7, 2578, 467.7, 2560, 467.7)
+
+[node name="Step67" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2586, 462.2, 2604, 462.2, 2604, 465.2, 2586, 465.2)
+
+[node name="Step68" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2612, 459.7, 2630, 459.7, 2630, 462.7, 2612, 462.7)
+
+[node name="Step69" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2638, 457.2, 2656, 457.2, 2656, 460.2, 2638, 460.2)
+
+[node name="Step70" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2664, 454.8, 2682, 454.8, 2682, 457.8, 2664, 457.8)
+
+[node name="Step71" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2690, 452.5, 2708, 452.5, 2708, 455.5, 2690, 455.5)
+
+[node name="Step72" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2716, 450.3, 2734, 450.3, 2734, 453.3, 2716, 453.3)
+
+[node name="Step73" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2742, 448.1, 2760, 448.1, 2760, 451.1, 2742, 451.1)
+
+[node name="Step74" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2768, 446, 2786, 446, 2786, 449, 2768, 449)
+
+[node name="Step75" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2794, 443.9, 2812, 443.9, 2812, 446.9, 2794, 446.9)
+
+[node name="Step76" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2820, 442, 2838, 442, 2838, 445, 2820, 445)
+
+[node name="Step77" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2846, 440, 2864, 440, 2864, 443, 2846, 443)
+
+[node name="Step78" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2872, 438.2, 2890, 438.2, 2890, 441.2, 2872, 441.2)
+
+[node name="Step79" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2898, 436.4, 2916, 436.4, 2916, 439.4, 2898, 439.4)
+
+[node name="Step80" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2924, 434.7, 2942, 434.7, 2942, 437.7, 2924, 437.7)
+
+[node name="Step81" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2950, 433, 2968, 433, 2968, 436, 2950, 436)
+
+[node name="Step82" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(2976, 431.4, 2994, 431.4, 2994, 434.4, 2976, 434.4)
+
+[node name="Step83" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(3002, 430, 3020, 430, 3020, 433, 3002, 433)
+
+[node name="Step84" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(3028, 428.6, 3046, 428.6, 3046, 431.6, 3028, 431.6)
+
+[node name="Step85" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(3054, 427.4, 3072, 427.4, 3072, 430.4, 3054, 430.4)
+
+[node name="Step86" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(3080, 426.2, 3098, 426.2, 3098, 429.2, 3080, 429.2)
+
+[node name="Step87" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(3106, 425.1, 3124, 425.1, 3124, 428.1, 3106, 428.1)
+
+[node name="Step88" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(3132, 424.1, 3150, 424.1, 3150, 427.1, 3132, 427.1)
+
+[node name="Step89" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(3158, 423.1, 3176, 423.1, 3176, 426.1, 3158, 426.1)
+
+[node name="Step90" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(3184, 422.4, 3202, 422.4, 3202, 425.4, 3184, 425.4)
+
+[node name="Step91" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(3210, 421.6, 3228, 421.6, 3228, 424.6, 3210, 424.6)
+
+[node name="Step92" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(3236, 421, 3254, 421, 3254, 424, 3236, 424)
+
+[node name="Step93" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(3262, 420.4, 3280, 420.4, 3280, 423.4, 3262, 423.4)
+
+[node name="Step94" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(3288, 420, 3306, 420, 3306, 423, 3288, 423)
+
+[node name="Step95" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(3800, 418.1, 3818, 418.1, 3818, 421.1, 3800, 421.1)
+
+[node name="Step96" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(3826, 417.7, 3844, 417.7, 3844, 420.7, 3826, 420.7)
+
+[node name="Step97" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(3852, 417.1, 3870, 417.1, 3870, 420.1, 3852, 420.1)
+
+[node name="Step98" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(3878, 416.4, 3896, 416.4, 3896, 419.4, 3878, 419.4)
+
+[node name="Step99" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(3904, 415.6, 3922, 415.6, 3922, 418.6, 3904, 418.6)
+
+[node name="Step100" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(3930, 414.7, 3948, 414.7, 3948, 417.7, 3930, 417.7)
+
+[node name="Step101" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(3956, 413.7, 3974, 413.7, 3974, 416.7, 3956, 416.7)
+
+[node name="Step102" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(3982, 412.6, 4000, 412.6, 4000, 415.6, 3982, 415.6)
+
+[node name="Step103" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4008, 411.4, 4026, 411.4, 4026, 414.4, 4008, 414.4)
+
+[node name="Step104" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4034, 410, 4052, 410, 4052, 413, 4034, 413)
+
+[node name="Step105" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4060, 408.6, 4078, 408.6, 4078, 411.6, 4060, 411.6)
+
+[node name="Step106" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4086, 407, 4104, 407, 4104, 410, 4086, 410)
+
+[node name="Step107" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4112, 405.5, 4130, 405.5, 4130, 408.5, 4112, 408.5)
+
+[node name="Step108" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4138, 403.7, 4156, 403.7, 4156, 406.7, 4138, 406.7)
+
+[node name="Step109" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4164, 401.9, 4182, 401.9, 4182, 404.9, 4164, 404.9)
+
+[node name="Step110" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4190, 400, 4208, 400, 4208, 403, 4190, 403)
+
+[node name="Step111" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4216, 398, 4234, 398, 4234, 401, 4216, 401)
+
+[node name="Step112" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4242, 395.9, 4260, 395.9, 4260, 398.9, 4242, 398.9)
+
+[node name="Step113" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4268, 393.7, 4286, 393.7, 4286, 396.7, 4268, 396.7)
+
+[node name="Step114" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4294, 391.4, 4312, 391.4, 4312, 394.4, 4294, 394.4)
+
+[node name="Step115" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4320, 389, 4338, 389, 4338, 392, 4320, 392)
+
+[node name="Step116" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4346, 386.6, 4364, 386.6, 4364, 389.6, 4346, 389.6)
+
+[node name="Step117" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4372, 384.1, 4390, 384.1, 4390, 387.1, 4372, 387.1)
+
+[node name="Step118" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4398, 381.5, 4416, 381.5, 4416, 384.5, 4398, 384.5)
+
+[node name="Step119" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4424, 378.9, 4442, 378.9, 4442, 381.9, 4424, 381.9)
+
+[node name="Step120" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4450, 376.1, 4468, 376.1, 4468, 379.1, 4450, 379.1)
+
+[node name="Step121" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4476, 373.3, 4494, 373.3, 4494, 376.3, 4476, 376.3)
+
+[node name="Step122" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4502, 370.4, 4520, 370.4, 4520, 373.4, 4502, 373.4)
+
+[node name="Step123" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4528, 367.5, 4546, 367.5, 4546, 370.5, 4528, 370.5)
+
+[node name="Step124" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4554, 364.4, 4572, 364.4, 4572, 367.4, 4554, 367.4)
+
+[node name="Step125" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4580, 361.4, 4598, 361.4, 4598, 364.4, 4580, 364.4)
+
+[node name="Step126" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4606, 358.3, 4624, 358.3, 4624, 361.3, 4606, 361.3)
+
+[node name="Step127" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4632, 355.1, 4650, 355.1, 4650, 358.1, 4632, 358.1)
+
+[node name="Step128" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4658, 351.8, 4676, 351.8, 4676, 354.8, 4658, 354.8)
+
+[node name="Step129" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4684, 348.6, 4702, 348.6, 4702, 351.6, 4684, 351.6)
+
+[node name="Step130" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4710, 345.3, 4728, 345.3, 4728, 348.3, 4710, 348.3)
+
+[node name="Step131" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4736, 341.9, 4754, 341.9, 4754, 344.9, 4736, 344.9)
+
+[node name="Step132" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4762, 338.5, 4780, 338.5, 4780, 341.5, 4762, 341.5)
+
+[node name="Step133" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4788, 335, 4806, 335, 4806, 338, 4788, 338)
+
+[node name="Step134" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4814, 331.5, 4832, 331.5, 4832, 334.5, 4814, 334.5)
+
+[node name="Step135" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4840, 328, 4858, 328, 4858, 331, 4840, 331)
+
+[node name="Step136" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4866, 324.4, 4884, 324.4, 4884, 327.4, 4866, 327.4)
+
+[node name="Step137" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4892, 320.9, 4910, 320.9, 4910, 323.9, 4892, 323.9)
+
+[node name="Step138" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4918, 317.3, 4936, 317.3, 4936, 320.3, 4918, 320.3)
+
+[node name="Step139" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4944, 313.7, 4962, 313.7, 4962, 316.7, 4944, 316.7)
+
+[node name="Step140" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4970, 310.1, 4988, 310.1, 4988, 313.1, 4970, 313.1)
+
+[node name="Step141" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(4996, 306.5, 5014, 306.5, 5014, 309.5, 4996, 309.5)
+
+[node name="Step142" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5022, 302.9, 5040, 302.9, 5040, 305.9, 5022, 305.9)
+
+[node name="Step143" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5048, 299.3, 5066, 299.3, 5066, 302.3, 5048, 302.3)
+
+[node name="Step144" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5074, 295.6, 5092, 295.6, 5092, 298.6, 5074, 298.6)
+
+[node name="Step145" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5100, 292, 5118, 292, 5118, 295, 5100, 295)
+
+[node name="Step146" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5126, 288.4, 5144, 288.4, 5144, 291.4, 5126, 291.4)
+
+[node name="Step147" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5152, 284.8, 5170, 284.8, 5170, 287.8, 5152, 287.8)
+
+[node name="Step148" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5178, 281.2, 5196, 281.2, 5196, 284.2, 5178, 284.2)
+
+[node name="Step149" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5204, 277.7, 5222, 277.7, 5222, 280.7, 5204, 280.7)
+
+[node name="Step150" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5230, 274.1, 5248, 274.1, 5248, 277.1, 5230, 277.1)
+
+[node name="Step151" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5256, 270.5, 5274, 270.5, 5274, 273.5, 5256, 273.5)
+
+[node name="Step152" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5282, 267, 5300, 267, 5300, 270, 5282, 270)
+
+[node name="Step153" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5308, 263.5, 5326, 263.5, 5326, 266.5, 5308, 266.5)
+
+[node name="Step154" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5334, 260.1, 5352, 260.1, 5352, 263.1, 5334, 263.1)
+
+[node name="Step155" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5360, 256.6, 5378, 256.6, 5378, 259.6, 5360, 259.6)
+
+[node name="Step156" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5386, 253.2, 5404, 253.2, 5404, 256.2, 5386, 256.2)
+
+[node name="Step157" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5412, 249.9, 5430, 249.9, 5430, 252.9, 5412, 252.9)
+
+[node name="Step158" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5438, 246.7, 5456, 246.7, 5456, 249.7, 5438, 249.7)
+
+[node name="Step159" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5464, 243.4, 5482, 243.4, 5482, 246.4, 5464, 246.4)
+
+[node name="Step160" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5490, 240.2, 5508, 240.2, 5508, 243.2, 5490, 243.2)
+
+[node name="Step161" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5516, 237.1, 5534, 237.1, 5534, 240.1, 5516, 240.1)
+
+[node name="Step162" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5542, 234, 5560, 234, 5560, 237, 5542, 237)
+
+[node name="Step163" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5568, 231, 5586, 231, 5586, 234, 5568, 234)
+
+[node name="Step164" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5594, 228, 5612, 228, 5612, 231, 5594, 231)
+
+[node name="Step165" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5620, 225.1, 5638, 225.1, 5638, 228.1, 5620, 228.1)
+
+[node name="Step166" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5646, 222.3, 5664, 222.3, 5664, 225.3, 5646, 225.3)
+
+[node name="Step167" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5672, 219.6, 5690, 219.6, 5690, 222.6, 5672, 222.6)
+
+[node name="Step168" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5698, 216.9, 5716, 216.9, 5716, 219.9, 5698, 219.9)
+
+[node name="Step169" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5724, 214.3, 5742, 214.3, 5742, 217.3, 5724, 217.3)
+
+[node name="Step170" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5750, 211.8, 5768, 211.8, 5768, 214.8, 5750, 214.8)
+
+[node name="Step171" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5776, 209.3, 5794, 209.3, 5794, 212.3, 5776, 212.3)
+
+[node name="Step172" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5802, 206.9, 5820, 206.9, 5820, 209.9, 5802, 209.9)
+
+[node name="Step173" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5828, 204.7, 5846, 204.7, 5846, 207.7, 5828, 207.7)
+
+[node name="Step174" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5854, 202.4, 5872, 202.4, 5872, 205.4, 5854, 205.4)
+
+[node name="Step175" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5880, 200.3, 5898, 200.3, 5898, 203.3, 5880, 203.3)
+
+[node name="Step176" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5906, 198.3, 5924, 198.3, 5924, 201.3, 5906, 201.3)
+
+[node name="Step177" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5932, 196.4, 5950, 196.4, 5950, 199.4, 5932, 199.4)
+
+[node name="Step178" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5958, 194.5, 5976, 194.5, 5976, 197.5, 5958, 197.5)
+
+[node name="Step179" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(5984, 192.8, 6002, 192.8, 6002, 195.8, 5984, 195.8)
+
+[node name="Step180" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(6010, 191.2, 6028, 191.2, 6028, 194.2, 6010, 194.2)
+
+[node name="Step181" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(6036, 189.6, 6054, 189.6, 6054, 192.6, 6036, 192.6)
+
+[node name="Step182" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(6062, 188.2, 6080, 188.2, 6080, 191.2, 6062, 191.2)
+
+[node name="Step183" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(6088, 186.8, 6106, 186.8, 6106, 189.8, 6088, 189.8)
+
+[node name="Step184" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(6114, 185.6, 6132, 185.6, 6132, 188.6, 6114, 188.6)
+
+[node name="Step185" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(6140, 184.5, 6158, 184.5, 6158, 187.5, 6140, 187.5)
+
+[node name="Step186" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(6166, 183.4, 6184, 183.4, 6184, 186.4, 6166, 186.4)
+
+[node name="Step187" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(6192, 182.5, 6210, 182.5, 6210, 185.5, 6192, 185.5)
+
+[node name="Step188" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(6218, 181.7, 6236, 181.7, 6236, 184.7, 6218, 184.7)
+
+[node name="Step189" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(6244, 181, 6262, 181, 6262, 184, 6244, 184)
+
+[node name="Step190" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(6270, 180.4, 6288, 180.4, 6288, 183.4, 6270, 183.4)
+
+[node name="Step191" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(6296, 180, 6314, 180, 6314, 183, 6296, 183)
+
+[node name="Step192" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(7304.76, 178.1, 7322.76, 178.1, 7322.76, 181.1, 7304.76, 181.1)
+
+[node name="Step193" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(7330.76, 177.9, 7348.76, 177.9, 7348.76, 180.9, 7330.76, 180.9)
+
+[node name="Step194" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(7356.76, 177.7, 7374.76, 177.7, 7374.76, 180.7, 7356.76, 180.7)
+
+[node name="Step195" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(7382.76, 177.5, 7400.76, 177.5, 7400.76, 180.5, 7382.76, 180.5)
+
+[node name="Step196" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(7408.76, 177.1, 7426.76, 177.1, 7426.76, 180.1, 7408.76, 180.1)
+
+[node name="Step197" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(7434.76, 176.7, 7452.76, 176.7, 7452.76, 179.7, 7434.76, 179.7)
+
+[node name="Step198" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(7460.76, 176.3, 7478.76, 176.3, 7478.76, 179.3, 7460.76, 179.3)
+
+[node name="Step199" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(7486.76, 176, 7504.76, 176, 7504.76, 179, 7486.76, 179)
+
+[node name="Step200" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(7512.76, 175.6, 7530.76, 175.6, 7530.76, 178.6, 7512.76, 178.6)
+
+[node name="Step201" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(7538.76, 175.1, 7556.76, 175.1, 7556.76, 178.1, 7538.76, 178.1)
+
+[node name="Step202" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(7564.76, 174.6, 7582.76, 174.6, 7582.76, 177.6, 7564.76, 177.6)
+
+[node name="Step203" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(7590.76, 174, 7608.76, 174, 7608.76, 177, 7590.76, 177)
+
+[node name="Step204" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(7616.76, 173.5, 7634.76, 173.5, 7634.76, 176.5, 7616.76, 176.5)
+
+[node name="Step205" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(7642.76, 173, 7660.76, 173, 7660.76, 176, 7642.76, 176)
+
+[node name="Step206" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(7668.76, 172.4, 7686.76, 172.4, 7686.76, 175.4, 7668.76, 175.4)
+
+[node name="Step207" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(7694.76, 171.7, 7712.76, 171.7, 7712.76, 174.7, 7694.76, 174.7)
+
+[node name="Step208" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(7720.76, 171, 7738.76, 171, 7738.76, 174, 7720.76, 174)
+
+[node name="Step209" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(7746.76, 170.4, 7764.76, 170.4, 7764.76, 173.4, 7746.76, 173.4)
+
+[node name="Step210" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(7772.76, 169.7, 7790.76, 169.7, 7790.76, 172.7, 7772.76, 172.7)
+
+[node name="Step211" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(7798.76, 169, 7816.76, 169, 7816.76, 172, 7798.76, 172)
+
+[node name="Step212" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(7824.76, 168.2, 7842.76, 168.2, 7842.76, 171.2, 7824.76, 171.2)
+
+[node name="Step213" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(7850.76, 167.4, 7868.76, 167.4, 7868.76, 170.4, 7850.76, 170.4)
+
+[node name="Step214" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(7876.76, 166.6, 7894.76, 166.6, 7894.76, 169.6, 7876.76, 169.6)
+
+[node name="Step215" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(7902.76, 165.8, 7920.76, 165.8, 7920.76, 168.8, 7902.76, 168.8)
+
+[node name="Step216" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(7928.76, 164.9, 7946.76, 164.9, 7946.76, 167.9, 7928.76, 167.9)
+
+[node name="Step217" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(7954.76, 164, 7972.76, 164, 7972.76, 167, 7954.76, 167)
+
+[node name="Step218" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(7980.76, 163.1, 7998.76, 163.1, 7998.76, 166.1, 7980.76, 166.1)
+
+[node name="Step219" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8006.76, 162.2, 8024.76, 162.2, 8024.76, 165.2, 8006.76, 165.2)
+
+[node name="Step220" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8032.76, 161.3, 8050.76, 161.3, 8050.76, 164.3, 8032.76, 164.3)
+
+[node name="Step221" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8058.76, 160.3, 8076.76, 160.3, 8076.76, 163.3, 8058.76, 163.3)
+
+[node name="Step222" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8084.76, 159.2, 8102.76, 159.2, 8102.76, 162.2, 8084.76, 162.2)
+
+[node name="Step223" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8110.76, 158.1, 8128.76, 158.1, 8128.76, 161.1, 8110.76, 161.1)
+
+[node name="Step224" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8136.76, 157.1, 8154.76, 157.1, 8154.76, 160.1, 8136.76, 160.1)
+
+[node name="Step225" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8162.76, 156, 8180.76, 156, 8180.76, 159, 8162.76, 159)
+
+[node name="Step226" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8188.76, 154.9, 8206.76, 154.9, 8206.76, 157.9, 8188.76, 157.9)
+
+[node name="Step227" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8214.76, 153.7, 8232.76, 153.7, 8232.76, 156.7, 8214.76, 156.7)
+
+[node name="Step228" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8240.76, 152.5, 8258.76, 152.5, 8258.76, 155.5, 8240.76, 155.5)
+
+[node name="Step229" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8266.76, 151.4, 8284.76, 151.4, 8284.76, 154.4, 8266.76, 154.4)
+
+[node name="Step230" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8292.76, 150.2, 8310.76, 150.2, 8310.76, 153.2, 8292.76, 153.2)
+
+[node name="Step231" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8318.76, 149, 8336.76, 149, 8336.76, 152, 8318.76, 152)
+
+[node name="Step232" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8344.76, 147.7, 8362.76, 147.7, 8362.76, 150.7, 8344.76, 150.7)
+
+[node name="Step233" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8370.76, 146.4, 8388.76, 146.4, 8388.76, 149.4, 8370.76, 149.4)
+
+[node name="Step234" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8396.76, 145.1, 8414.76, 145.1, 8414.76, 148.1, 8396.76, 148.1)
+
+[node name="Step235" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8422.76, 143.8, 8440.76, 143.8, 8440.76, 146.8, 8422.76, 146.8)
+
+[node name="Step236" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8448.76, 142.5, 8466.76, 142.5, 8466.76, 145.5, 8448.76, 145.5)
+
+[node name="Step237" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8474.76, 141.1, 8492.76, 141.1, 8492.76, 144.1, 8474.76, 144.1)
+
+[node name="Step238" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8500.76, 139.6, 8518.76, 139.6, 8518.76, 142.6, 8500.76, 142.6)
+
+[node name="Step239" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8526.76, 138.2, 8544.76, 138.2, 8544.76, 141.2, 8526.76, 141.2)
+
+[node name="Step240" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8552.76, 136.8, 8570.76, 136.8, 8570.76, 139.8, 8552.76, 139.8)
+
+[node name="Step241" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8578.76, 135.4, 8596.76, 135.4, 8596.76, 138.4, 8578.76, 138.4)
+
+[node name="Step242" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8604.76, 133.9, 8622.76, 133.9, 8622.76, 136.9, 8604.76, 136.9)
+
+[node name="Step243" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8630.76, 132.3, 8648.76, 132.3, 8648.76, 135.3, 8630.76, 135.3)
+
+[node name="Step244" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8656.76, 130.8, 8674.76, 130.8, 8674.76, 133.8, 8656.76, 133.8)
+
+[node name="Step245" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8682.76, 129.3, 8700.76, 129.3, 8700.76, 132.3, 8682.76, 132.3)
+
+[node name="Step246" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8708.76, 127.7, 8726.76, 127.7, 8726.76, 130.7, 8708.76, 130.7)
+
+[node name="Step247" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8734.76, 126.2, 8752.76, 126.2, 8752.76, 129.2, 8734.76, 129.2)
+
+[node name="Step248" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8760.76, 124.5, 8778.76, 124.5, 8778.76, 127.5, 8760.76, 127.5)
+
+[node name="Step249" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8786.76, 122.9, 8804.76, 122.9, 8804.76, 125.9, 8786.76, 125.9)
+
+[node name="Step250" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8812.76, 121.3, 8830.76, 121.3, 8830.76, 124.3, 8812.76, 124.3)
+
+[node name="Step251" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8838.76, 119.7, 8856.76, 119.7, 8856.76, 122.7, 8838.76, 122.7)
+
+[node name="Step252" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8864.76, 118, 8882.76, 118, 8882.76, 121, 8864.76, 121)
+
+[node name="Step253" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8890.76, 116.3, 8908.76, 116.3, 8908.76, 119.3, 8890.76, 119.3)
+
+[node name="Step254" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8916.76, 114.6, 8934.76, 114.6, 8934.76, 117.6, 8916.76, 117.6)
+
+[node name="Step255" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8942.76, 112.9, 8960.76, 112.9, 8960.76, 115.9, 8942.76, 115.9)
+
+[node name="Step256" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8968.76, 111.2, 8986.76, 111.2, 8986.76, 114.2, 8968.76, 114.2)
+
+[node name="Step257" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(8994.76, 109.5, 9012.76, 109.5, 9012.76, 112.5, 8994.76, 112.5)
+
+[node name="Step258" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9020.76, 107.7, 9038.76, 107.7, 9038.76, 110.7, 9020.76, 110.7)
+
+[node name="Step259" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9046.76, 105.9, 9064.76, 105.9, 9064.76, 108.9, 9046.76, 108.9)
+
+[node name="Step260" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9072.76, 104.1, 9090.76, 104.1, 9090.76, 107.1, 9072.76, 107.1)
+
+[node name="Step261" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9098.76, 102.3, 9116.76, 102.3, 9116.76, 105.3, 9098.76, 105.3)
+
+[node name="Step262" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9124.76, 100.5, 9142.76, 100.5, 9142.76, 103.5, 9124.76, 103.5)
+
+[node name="Step263" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9150.76, 98.6, 9168.76, 98.6, 9168.76, 101.6, 9150.76, 101.6)
+
+[node name="Step264" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9176.76, 96.8, 9194.76, 96.8, 9194.76, 99.8, 9176.76, 99.8)
+
+[node name="Step265" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9202.76, 94.9, 9220.76, 94.9, 9220.76, 97.9, 9202.76, 97.9)
+
+[node name="Step266" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9228.76, 93.1, 9246.76, 93.1, 9246.76, 96.1, 9228.76, 96.1)
+
+[node name="Step267" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9254.76, 91.2, 9272.76, 91.2, 9272.76, 94.2, 9254.76, 94.2)
+
+[node name="Step268" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9280.76, 89.3, 9298.76, 89.3, 9298.76, 92.3, 9280.76, 92.3)
+
+[node name="Step269" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9306.76, 87.3, 9324.76, 87.3, 9324.76, 90.3, 9306.76, 90.3)
+
+[node name="Step270" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9332.76, 85.4, 9350.76, 85.4, 9350.76, 88.4, 9332.76, 88.4)
+
+[node name="Step271" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9358.76, 83.5, 9376.76, 83.5, 9376.76, 86.5, 9358.76, 86.5)
+
+[node name="Step272" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9384.76, 81.6, 9402.76, 81.6, 9402.76, 84.6, 9384.76, 84.6)
+
+[node name="Step273" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9410.76, 79.6, 9428.76, 79.6, 9428.76, 82.6, 9410.76, 82.6)
+
+[node name="Step274" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9436.76, 77.6, 9454.76, 77.6, 9454.76, 80.6, 9436.76, 80.6)
+
+[node name="Step275" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9462.76, 75.7, 9480.76, 75.7, 9480.76, 78.7, 9462.76, 78.7)
+
+[node name="Step276" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9488.76, 73.7, 9506.76, 73.7, 9506.76, 76.7, 9488.76, 76.7)
+
+[node name="Step277" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9514.76, 71.7, 9532.76, 71.7, 9532.76, 74.7, 9514.76, 74.7)
+
+[node name="Step278" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9540.76, 69.7, 9558.76, 69.7, 9558.76, 72.7, 9540.76, 72.7)
+
+[node name="Step279" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9566.76, 67.7, 9584.76, 67.7, 9584.76, 70.7, 9566.76, 70.7)
+
+[node name="Step280" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9592.76, 65.7, 9610.76, 65.7, 9610.76, 68.7, 9592.76, 68.7)
+
+[node name="Step281" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9618.76, 63.7, 9636.76, 63.7, 9636.76, 66.7, 9618.76, 66.7)
+
+[node name="Step282" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9644.76, 61.7, 9662.76, 61.7, 9662.76, 64.7, 9644.76, 64.7)
+
+[node name="Step283" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9670.76, 59.6, 9688.76, 59.6, 9688.76, 62.6, 9670.76, 62.6)
+
+[node name="Step284" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9696.76, 57.6, 9714.76, 57.6, 9714.76, 60.6, 9696.76, 60.6)
+
+[node name="Step285" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9722.76, 55.5, 9740.76, 55.5, 9740.76, 58.5, 9722.76, 58.5)
+
+[node name="Step286" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9748.76, 53.4, 9766.76, 53.4, 9766.76, 56.4, 9748.76, 56.4)
+
+[node name="Step287" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9774.76, 51.4, 9792.76, 51.4, 9792.76, 54.4, 9774.76, 54.4)
+
+[node name="Step288" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9800.76, 49.3, 9818.76, 49.3, 9818.76, 52.3, 9800.76, 52.3)
+
+[node name="Step289" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9826.76, 47.3, 9844.76, 47.3, 9844.76, 50.3, 9826.76, 50.3)
+
+[node name="Step290" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9852.76, 45.2, 9870.76, 45.2, 9870.76, 48.2, 9852.76, 48.2)
+
+[node name="Step291" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9878.76, 43.1, 9896.76, 43.1, 9896.76, 46.1, 9878.76, 46.1)
+
+[node name="Step292" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9904.76, 41.1, 9922.76, 41.1, 9922.76, 44.1, 9904.76, 44.1)
+
+[node name="Step293" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9930.76, 39, 9948.76, 39, 9948.76, 42, 9930.76, 42)
+
+[node name="Step294" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9956.76, 36.9, 9974.76, 36.9, 9974.76, 39.9, 9956.76, 39.9)
+
+[node name="Step295" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(9982.76, 34.9, 10000.8, 34.9, 10000.8, 37.9, 9982.76, 37.9)
+
+[node name="Step296" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10008.8, 32.8, 10026.8, 32.8, 10026.8, 35.8, 10008.8, 35.8)
+
+[node name="Step297" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10034.8, 30.7, 10052.8, 30.7, 10052.8, 33.7, 10034.8, 33.7)
+
+[node name="Step298" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10060.8, 28.6, 10078.8, 28.6, 10078.8, 31.6, 10060.8, 31.6)
+
+[node name="Step299" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10086.8, 26.5, 10104.8, 26.5, 10104.8, 29.5, 10086.8, 29.5)
+
+[node name="Step300" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10112.8, 24.5, 10130.8, 24.5, 10130.8, 27.5, 10112.8, 27.5)
+
+[node name="Step301" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10138.8, 22.4, 10156.8, 22.4, 10156.8, 25.4, 10138.8, 25.4)
+
+[node name="Step302" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10164.8, 20.3, 10182.8, 20.3, 10182.8, 23.3, 10164.8, 23.3)
+
+[node name="Step303" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10190.8, 18.2, 10208.8, 18.2, 10208.8, 21.2, 10190.8, 21.2)
+
+[node name="Step304" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10216.8, 16.2, 10234.8, 16.2, 10234.8, 19.2, 10216.8, 19.2)
+
+[node name="Step305" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10242.8, 14.1, 10260.8, 14.1, 10260.8, 17.1, 10242.8, 17.1)
+
+[node name="Step306" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10268.8, 12, 10286.8, 12, 10286.8, 15, 10268.8, 15)
+
+[node name="Step307" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10294.8, 10, 10312.8, 10, 10312.8, 13, 10294.8, 13)
+
+[node name="Step308" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10320.8, 7.9, 10338.8, 7.9, 10338.8, 10.9, 10320.8, 10.9)
+
+[node name="Step309" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10346.8, 5.9, 10364.8, 5.9, 10364.8, 8.9, 10346.8, 8.9)
+
+[node name="Step310" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10372.8, 3.8, 10390.8, 3.8, 10390.8, 6.8, 10372.8, 6.8)
+
+[node name="Step311" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10398.8, 1.8, 10416.8, 1.8, 10416.8, 4.8, 10398.8, 4.8)
+
+[node name="Step312" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10424.8, -0.3, 10442.8, -0.3, 10442.8, 2.7, 10424.8, 2.7)
+
+[node name="Step313" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10450.8, -2.4, 10468.8, -2.4, 10468.8, 0.6, 10450.8, 0.6)
+
+[node name="Step314" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10476.8, -4.4, 10494.8, -4.4, 10494.8, -1.4, 10476.8, -1.4)
+
+[node name="Step315" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10502.8, -6.4, 10520.8, -6.4, 10520.8, -3.4, 10502.8, -3.4)
+
+[node name="Step316" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10528.8, -8.4, 10546.8, -8.4, 10546.8, -5.4, 10528.8, -5.4)
+
+[node name="Step317" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10554.8, -10.5, 10572.8, -10.5, 10572.8, -7.5, 10554.8, -7.5)
+
+[node name="Step318" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10580.8, -12.5, 10598.8, -12.5, 10598.8, -9.5, 10580.8, -9.5)
+
+[node name="Step319" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10606.8, -14.5, 10624.8, -14.5, 10624.8, -11.5, 10606.8, -11.5)
+
+[node name="Step320" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10632.8, -16.4, 10650.8, -16.4, 10650.8, -13.4, 10632.8, -13.4)
+
+[node name="Step321" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10658.8, -18.4, 10676.8, -18.4, 10676.8, -15.4, 10658.8, -15.4)
+
+[node name="Step322" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10684.8, -20.3, 10702.8, -20.3, 10702.8, -17.3, 10684.8, -17.3)
+
+[node name="Step323" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10710.8, -22.3, 10728.8, -22.3, 10728.8, -19.3, 10710.8, -19.3)
+
+[node name="Step324" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10736.8, -24.3, 10754.8, -24.3, 10754.8, -21.3, 10736.8, -21.3)
+
+[node name="Step325" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10762.8, -26.2, 10780.8, -26.2, 10780.8, -23.2, 10762.8, -23.2)
+
+[node name="Step326" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10788.8, -28.1, 10806.8, -28.1, 10806.8, -25.1, 10788.8, -25.1)
+
+[node name="Step327" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10814.8, -30, 10832.8, -30, 10832.8, -27, 10814.8, -27)
+
+[node name="Step328" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10840.8, -32, 10858.8, -32, 10858.8, -29, 10840.8, -29)
+
+[node name="Step329" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10866.8, -33.9, 10884.8, -33.9, 10884.8, -30.9, 10866.8, -30.9)
+
+[node name="Step330" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10892.8, -35.7, 10910.8, -35.7, 10910.8, -32.7, 10892.8, -32.7)
+
+[node name="Step331" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10918.8, -37.6, 10936.8, -37.6, 10936.8, -34.6, 10918.8, -34.6)
+
+[node name="Step332" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10944.8, -39.5, 10962.8, -39.5, 10962.8, -36.5, 10944.8, -36.5)
+
+[node name="Step333" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10970.8, -41.3, 10988.8, -41.3, 10988.8, -38.3, 10970.8, -38.3)
+
+[node name="Step334" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(10996.8, -43.2, 11014.8, -43.2, 11014.8, -40.2, 10996.8, -40.2)
+
+[node name="Step335" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11022.8, -45, 11040.8, -45, 11040.8, -42, 11022.8, -42)
+
+[node name="Step336" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11048.8, -46.8, 11066.8, -46.8, 11066.8, -43.8, 11048.8, -43.8)
+
+[node name="Step337" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11074.8, -48.5, 11092.8, -48.5, 11092.8, -45.5, 11074.8, -45.5)
+
+[node name="Step338" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11100.8, -50.3, 11118.8, -50.3, 11118.8, -47.3, 11100.8, -47.3)
+
+[node name="Step339" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11126.8, -52.1, 11144.8, -52.1, 11144.8, -49.1, 11126.8, -49.1)
+
+[node name="Step340" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11152.8, -53.8, 11170.8, -53.8, 11170.8, -50.8, 11152.8, -50.8)
+
+[node name="Step341" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11178.8, -55.5, 11196.8, -55.5, 11196.8, -52.5, 11178.8, -52.5)
+
+[node name="Step342" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11204.8, -57.2, 11222.8, -57.2, 11222.8, -54.2, 11204.8, -54.2)
+
+[node name="Step343" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11230.8, -59, 11248.8, -59, 11248.8, -56, 11230.8, -56)
+
+[node name="Step344" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11256.8, -60.7, 11274.8, -60.7, 11274.8, -57.7, 11256.8, -57.7)
+
+[node name="Step345" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11282.8, -62.3, 11300.8, -62.3, 11300.8, -59.3, 11282.8, -59.3)
+
+[node name="Step346" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11308.8, -63.9, 11326.8, -63.9, 11326.8, -60.9, 11308.8, -60.9)
+
+[node name="Step347" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11334.8, -65.5, 11352.8, -65.5, 11352.8, -62.5, 11334.8, -62.5)
+
+[node name="Step348" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11360.8, -67.1, 11378.8, -67.1, 11378.8, -64.1, 11360.8, -64.1)
+
+[node name="Step349" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11386.8, -68.7, 11404.8, -68.7, 11404.8, -65.7, 11386.8, -65.7)
+
+[node name="Step350" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11412.8, -70.3, 11430.8, -70.3, 11430.8, -67.3, 11412.8, -67.3)
+
+[node name="Step351" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11438.8, -71.8, 11456.8, -71.8, 11456.8, -68.8, 11438.8, -68.8)
+
+[node name="Step352" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11464.8, -73.4, 11482.8, -73.4, 11482.8, -70.4, 11464.8, -70.4)
+
+[node name="Step353" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11490.8, -74.9, 11508.8, -74.9, 11508.8, -71.9, 11490.8, -71.9)
+
+[node name="Step354" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11516.8, -76.4, 11534.8, -76.4, 11534.8, -73.4, 11516.8, -73.4)
+
+[node name="Step355" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11542.8, -77.9, 11560.8, -77.9, 11560.8, -74.9, 11542.8, -74.9)
+
+[node name="Step356" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11568.8, -79.3, 11586.8, -79.3, 11586.8, -76.3, 11568.8, -76.3)
+
+[node name="Step357" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11594.8, -80.7, 11612.8, -80.7, 11612.8, -77.7, 11594.8, -77.7)
+
+[node name="Step358" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11620.8, -82.2, 11638.8, -82.2, 11638.8, -79.2, 11620.8, -79.2)
+
+[node name="Step359" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11646.8, -83.6, 11664.8, -83.6, 11664.8, -80.6, 11646.8, -80.6)
+
+[node name="Step360" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11672.8, -84.9, 11690.8, -84.9, 11690.8, -81.9, 11672.8, -81.9)
+
+[node name="Step361" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11698.8, -86.2, 11716.8, -86.2, 11716.8, -83.2, 11698.8, -83.2)
+
+[node name="Step362" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11724.8, -87.5, 11742.8, -87.5, 11742.8, -84.5, 11724.8, -84.5)
+
+[node name="Step363" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11750.8, -88.9, 11768.8, -88.9, 11768.8, -85.9, 11750.8, -85.9)
+
+[node name="Step364" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11776.8, -90.2, 11794.8, -90.2, 11794.8, -87.2, 11776.8, -87.2)
+
+[node name="Step365" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11802.8, -91.4, 11820.8, -91.4, 11820.8, -88.4, 11802.8, -88.4)
+
+[node name="Step366" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11828.8, -92.6, 11846.8, -92.6, 11846.8, -89.6, 11828.8, -89.6)
+
+[node name="Step367" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11854.8, -93.8, 11872.8, -93.8, 11872.8, -90.8, 11854.8, -90.8)
+
+[node name="Step368" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11880.8, -95, 11898.8, -95, 11898.8, -92, 11880.8, -92)
+
+[node name="Step369" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11906.8, -96.2, 11924.8, -96.2, 11924.8, -93.2, 11906.8, -93.2)
+
+[node name="Step370" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11932.8, -97.3, 11950.8, -97.3, 11950.8, -94.3, 11932.8, -94.3)
+
+[node name="Step371" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11958.8, -98.4, 11976.8, -98.4, 11976.8, -95.4, 11958.8, -95.4)
+
+[node name="Step372" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(11984.8, -99.5, 12002.8, -99.5, 12002.8, -96.5, 11984.8, -96.5)
+
+[node name="Step373" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12010.8, -100.5, 12028.8, -100.5, 12028.8, -97.5, 12010.8, -97.5)
+
+[node name="Step374" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12036.8, -101.6, 12054.8, -101.6, 12054.8, -98.6, 12036.8, -98.6)
+
+[node name="Step375" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12062.8, -102.7, 12080.8, -102.7, 12080.8, -99.7, 12062.8, -99.7)
+
+[node name="Step376" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12088.8, -103.6, 12106.8, -103.6, 12106.8, -100.6, 12088.8, -100.6)
+
+[node name="Step377" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12114.8, -104.5, 12132.8, -104.5, 12132.8, -101.5, 12114.8, -101.5)
+
+[node name="Step378" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12140.8, -105.4, 12158.8, -105.4, 12158.8, -102.4, 12140.8, -102.4)
+
+[node name="Step379" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12166.8, -106.3, 12184.8, -106.3, 12184.8, -103.3, 12166.8, -103.3)
+
+[node name="Step380" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12192.8, -107.2, 12210.8, -107.2, 12210.8, -104.2, 12192.8, -104.2)
+
+[node name="Step381" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12218.8, -108.1, 12236.8, -108.1, 12236.8, -105.1, 12218.8, -105.1)
+
+[node name="Step382" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12244.8, -108.9, 12262.8, -108.9, 12262.8, -105.9, 12244.8, -105.9)
+
+[node name="Step383" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12270.8, -109.7, 12288.8, -109.7, 12288.8, -106.7, 12270.8, -106.7)
+
+[node name="Step384" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12296.8, -110.5, 12314.8, -110.5, 12314.8, -107.5, 12296.8, -107.5)
+
+[node name="Step385" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12322.8, -111.3, 12340.8, -111.3, 12340.8, -108.3, 12322.8, -108.3)
+
+[node name="Step386" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12348.8, -112, 12366.8, -112, 12366.8, -109, 12348.8, -109)
+
+[node name="Step387" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12374.8, -112.6, 12392.8, -112.6, 12392.8, -109.6, 12374.8, -109.6)
+
+[node name="Step388" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12400.8, -113.3, 12418.8, -113.3, 12418.8, -110.3, 12400.8, -110.3)
+
+[node name="Step389" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12426.8, -113.9, 12444.8, -113.9, 12444.8, -110.9, 12426.8, -110.9)
+
+[node name="Step390" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12452.8, -114.6, 12470.8, -114.6, 12470.8, -111.6, 12452.8, -111.6)
+
+[node name="Step391" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12478.8, -115.2, 12496.8, -115.2, 12496.8, -112.2, 12478.8, -112.2)
+
+[node name="Step392" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12504.8, -115.7, 12522.8, -115.7, 12522.8, -112.7, 12504.8, -112.7)
+
+[node name="Step393" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12530.8, -116.2, 12548.8, -116.2, 12548.8, -113.2, 12530.8, -113.2)
+
+[node name="Step394" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12556.8, -116.8, 12574.8, -116.8, 12574.8, -113.8, 12556.8, -113.8)
+
+[node name="Step395" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12582.8, -117.3, 12600.8, -117.3, 12600.8, -114.3, 12582.8, -114.3)
+
+[node name="Step396" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12608.8, -117.7, 12626.8, -117.7, 12626.8, -114.7, 12608.8, -114.7)
+
+[node name="Step397" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12634.8, -118.1, 12652.8, -118.1, 12652.8, -115.1, 12634.8, -115.1)
+
+[node name="Step398" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12660.8, -118.5, 12678.8, -118.5, 12678.8, -115.5, 12660.8, -115.5)
+
+[node name="Step399" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12686.8, -118.9, 12704.8, -118.9, 12704.8, -115.9, 12686.8, -115.9)
+
+[node name="Step400" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12712.8, -119.2, 12730.8, -119.2, 12730.8, -116.2, 12712.8, -116.2)
+
+[node name="Step401" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12738.8, -119.6, 12756.8, -119.6, 12756.8, -116.6, 12738.8, -116.6)
+
+[node name="Step402" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(12764.8, -119.8, 12782.8, -119.8, 12782.8, -116.8, 12764.8, -116.8)
+
+[node name="Step403" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(13600, -121.5, 13618, -121.5, 13618, -118.5, 13600, -118.5)
+
+[node name="Step404" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(13626, -122.1, 13644, -122.1, 13644, -119.1, 13626, -119.1)
+
+[node name="Step405" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(13652, -122.9, 13670, -122.9, 13670, -119.9, 13652, -119.9)
+
+[node name="Step406" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(13678, -123.8, 13696, -123.8, 13696, -120.8, 13678, -120.8)
+
+[node name="Step407" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(13704, -125.1, 13722, -125.1, 13722, -122.1, 13704, -122.1)
+
+[node name="Step408" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(13730, -126.4, 13748, -126.4, 13748, -123.4, 13730, -123.4)
+
+[node name="Step409" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(13756, -128, 13774, -128, 13774, -125, 13756, -125)
+
+[node name="Step410" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(13782, -129.7, 13800, -129.7, 13800, -126.7, 13782, -126.7)
+
+[node name="Step411" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(13808, -131.6, 13826, -131.6, 13826, -128.6, 13808, -128.6)
+
+[node name="Step412" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(13834, -133.7, 13852, -133.7, 13852, -130.7, 13834, -130.7)
+
+[node name="Step413" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(13860, -135.7, 13878, -135.7, 13878, -132.7, 13860, -132.7)
+
+[node name="Step414" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(13886, -138, 13904, -138, 13904, -135, 13886, -135)
+
+[node name="Step415" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(13912, -140.2, 13930, -140.2, 13930, -137.2, 13912, -137.2)
+
+[node name="Step416" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(13938, -142.6, 13956, -142.6, 13956, -139.6, 13938, -139.6)
+
+[node name="Step417" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(13964, -145, 13982, -145, 13982, -142, 13964, -142)
+
+[node name="Step418" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(13990, -147.4, 14008, -147.4, 14008, -144.4, 13990, -144.4)
+
+[node name="Step419" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14016, -149.8, 14034, -149.8, 14034, -146.8, 14016, -146.8)
+
+[node name="Step420" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14042, -152.1, 14060, -152.1, 14060, -149.1, 14042, -149.1)
+
+[node name="Step421" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14068, -154.4, 14086, -154.4, 14086, -151.4, 14068, -151.4)
+
+[node name="Step422" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14094, -156.6, 14112, -156.6, 14112, -153.6, 14094, -153.6)
+
+[node name="Step423" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14120, -158.7, 14138, -158.7, 14138, -155.7, 14120, -155.7)
+
+[node name="Step424" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14146, -160.7, 14164, -160.7, 14164, -157.7, 14146, -157.7)
+
+[node name="Step425" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14172, -162.6, 14190, -162.6, 14190, -159.6, 14172, -159.6)
+
+[node name="Step426" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14198, -164.2, 14216, -164.2, 14216, -161.2, 14198, -161.2)
+
+[node name="Step427" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14224, -165.8, 14242, -165.8, 14242, -162.8, 14224, -162.8)
+
+[node name="Step428" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14250, -167.1, 14268, -167.1, 14268, -164.1, 14250, -164.1)
+
+[node name="Step429" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14276, -168.4, 14294, -168.4, 14294, -165.4, 14276, -165.4)
+
+[node name="Step430" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14302, -169.2, 14320, -169.2, 14320, -166.2, 14302, -166.2)
+
+[node name="Step431" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14328, -170, 14346, -170, 14346, -167, 14328, -167)
+
+[node name="Step432" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14354, -170.5, 14372, -170.5, 14372, -167.5, 14354, -167.5)
+
+[node name="Step433" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14380, -170.8, 14398, -170.8, 14398, -167.8, 14380, -167.8)
+
+[node name="Step434" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14406, -291, 14424, -291, 14424, -288, 14406, -288)
+
+[node name="Step435" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14432, -291.1, 14450, -291.1, 14450, -288.1, 14432, -288.1)
+
+[node name="Step436" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14458, -291.3, 14476, -291.3, 14476, -288.3, 14458, -288.3)
+
+[node name="Step437" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14484, -291.6, 14502, -291.6, 14502, -288.6, 14484, -288.6)
+
+[node name="Step438" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14510, -292, 14528, -292, 14528, -289, 14510, -289)
+
+[node name="Step439" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14536, -292.5, 14554, -292.5, 14554, -289.5, 14536, -289.5)
+
+[node name="Step440" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14562, -293.1, 14580, -293.1, 14580, -290.1, 14562, -290.1)
+
+[node name="Step441" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14588, -293.7, 14606, -293.7, 14606, -290.7, 14588, -290.7)
+
+[node name="Step442" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14614, -294.6, 14632, -294.6, 14632, -291.6, 14614, -291.6)
+
+[node name="Step443" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14640, -295.5, 14658, -295.5, 14658, -292.5, 14640, -292.5)
+
+[node name="Step444" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14666, -296.4, 14684, -296.4, 14684, -293.4, 14666, -293.4)
+
+[node name="Step445" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14692, -297.5, 14710, -297.5, 14710, -294.5, 14692, -294.5)
+
+[node name="Step446" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14718, -298.6, 14736, -298.6, 14736, -295.6, 14718, -295.6)
+
+[node name="Step447" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14744, -299.8, 14762, -299.8, 14762, -296.8, 14744, -296.8)
+
+[node name="Step448" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14770, -301, 14788, -301, 14788, -298, 14770, -298)
+
+[node name="Step449" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14796, -302.4, 14814, -302.4, 14814, -299.4, 14796, -299.4)
+
+[node name="Step450" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14822, -303.8, 14840, -303.8, 14840, -300.8, 14822, -300.8)
+
+[node name="Step451" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14848, -305.2, 14866, -305.2, 14866, -302.2, 14848, -302.2)
+
+[node name="Step452" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14874, -306.6, 14892, -306.6, 14892, -303.6, 14874, -303.6)
+
+[node name="Step453" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14900, -308, 14918, -308, 14918, -305, 14900, -305)
+
+[node name="Step454" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14926, -309.5, 14944, -309.5, 14944, -306.5, 14926, -306.5)
+
+[node name="Step455" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14952, -311, 14970, -311, 14970, -308, 14952, -308)
+
+[node name="Step456" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(14978, -312.5, 14996, -312.5, 14996, -309.5, 14978, -309.5)
+
+[node name="Step457" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(15004, -314, 15022, -314, 15022, -311, 15004, -311)
+
+[node name="Step458" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(15030, -315.4, 15048, -315.4, 15048, -312.4, 15030, -312.4)
+
+[node name="Step459" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(15056, -316.8, 15074, -316.8, 15074, -313.8, 15056, -313.8)
+
+[node name="Step460" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(15082, -318.2, 15100, -318.2, 15100, -315.2, 15082, -315.2)
+
+[node name="Step461" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(15108, -319.6, 15126, -319.6, 15126, -316.6, 15108, -316.6)
+
+[node name="Step462" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(15134, -321, 15152, -321, 15152, -318, 15134, -318)
+
+[node name="Step463" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(15160, -322.2, 15178, -322.2, 15178, -319.2, 15160, -319.2)
+
+[node name="Step464" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(15186, -323.4, 15204, -323.4, 15204, -320.4, 15186, -320.4)
+
+[node name="Step465" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(15212, -324.5, 15230, -324.5, 15230, -321.5, 15212, -321.5)
+
+[node name="Step466" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(15238, -325.6, 15256, -325.6, 15256, -322.6, 15238, -322.6)
+
+[node name="Step467" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(15264, -326.5, 15282, -326.5, 15282, -323.5, 15264, -323.5)
+
+[node name="Step468" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(15290, -327.4, 15308, -327.4, 15308, -324.4, 15290, -324.4)
+
+[node name="Step469" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(15316, -328.3, 15334, -328.3, 15334, -325.3, 15316, -325.3)
+
+[node name="Step470" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(15342, -328.9, 15360, -328.9, 15360, -325.9, 15342, -325.9)
+
+[node name="Step471" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(15368, -329.5, 15386, -329.5, 15386, -326.5, 15368, -326.5)
+
+[node name="Step472" type="Polygon2D" parent="Front"]
+color = Color(0.86, 0.83, 0.76, 0.9)
+antialiased = true
+polygon = PackedVector2Array(15394, -330, 15412, -330, 15412, -327, 15394, -327)
+
+[node name="Pieces" type="Node2D" parent="."]
+
+[node name="Stones1" parent="Pieces" instance=ExtResource("stones")]
+position = Vector2(6700, 180)
+stone_count = 3
+gap = 70
+
+[node name="Bridge2" parent="Pieces" instance=ExtResource("bridge")]
+position = Vector2(13300, -120)
+span = 250
+end_drop = 0
+
+[node name="BridgeKill3" parent="Pieces" instance=ExtResource("kill")]
+position = Vector2(13425, 140)
+size = Vector2(290, 300)
+
+[node name="Find_lotus_offering" parent="Pieces" instance=ExtResource("find")]
+position = Vector2(2000, 526.8)
+find_id = &"lotus_offering"
+kind = 0
+color = Color(0.95, 0.55, 0.7, 1)
+
+[node name="Root507" parent="Pieces" instance=ExtResource("root")]
+position = Vector2(2600, 461.8)
+
+[node name="Checkpoint1" parent="Pieces" instance=ExtResource("checkpoint")]
+position = Vector2(3300, 420.8)
+
+[node name="Vp_lantern_path" parent="Pieces" instance=ExtResource("vp")]
+position = Vector2(3450, 420)
+viewpoint_id = &"lantern_path"
+frame_offset = Vector2(300, -130)
+subject_kind = 3
+subject_path = PackedVector2Array(-320, -150, 320, -230)
+subject_speed = 150
+subject_size = 1.0
+subject_color = Color(1, 1, 1, 1)
+
+[node name="Spring508" parent="Pieces" instance=ExtResource("spring")]
+position = Vector2(3560, 420)
+
+[node name="Bench509" parent="Pieces" instance=ExtResource("bench")]
+position = Vector2(3660, 420)
+
+[node name="Root510" parent="Pieces" instance=ExtResource("root")]
+position = Vector2(4300, 391.9)
+
+[node name="Find_pilgrims_bell" parent="Pieces" instance=ExtResource("find")]
+position = Vector2(5000, 307)
+find_id = &"pilgrims_bell"
+kind = 2
+color = Color(0.8, 0.65, 0.25, 1)
+
+[node name="Root511" parent="Pieces" instance=ExtResource("root")]
+position = Vector2(5200, 279.2)
+
+[node name="Find_prayer_flag" parent="Pieces" instance=ExtResource("find")]
+position = Vector2(5600, 175.3)
+find_id = &"prayer_flag"
+kind = 2
+color = Color(0.2, 0.45, 0.85, 1)
+
+[node name="Rock512" parent="Pieces" instance=ExtResource("rock")]
+position = Vector2(5850, 203.8)
+
+[node name="Checkpoint2" parent="Pieces" instance=ExtResource("checkpoint")]
+position = Vector2(6450, 180)
+
+[node name="Bench513" parent="Pieces" instance=ExtResource("bench")]
+position = Vector2(6600, 180)
+
+[node name="Root514" parent="Pieces" instance=ExtResource("root")]
+position = Vector2(8619.05, 134)
+
+[node name="Find_slender_loris" parent="Pieces" instance=ExtResource("find")]
+position = Vector2(9495.24, 74.2)
+find_id = &"slender_loris"
+kind = 3
+color = Color(0.55, 0.42, 0.3, 1)
+
+[node name="Root515" parent="Pieces" instance=ExtResource("root")]
+position = Vector2(10371.4, 4.9)
+
+[node name="Spring516" parent="Pieces" instance=ExtResource("spring")]
+position = Vector2(11028.6, -44.4)
+
+[node name="Checkpoint3" parent="Pieces" instance=ExtResource("checkpoint")]
+position = Vector2(13050, -120)
+
+[node name="Bench517" parent="Pieces" instance=ExtResource("bench")]
+position = Vector2(13200, -120)
+
+[node name="Find_cloud_forest_fern" parent="Pieces" instance=ExtResource("find")]
+position = Vector2(14000, -147.3)
+find_id = &"cloud_forest_fern"
+kind = 0
+color = Color(0.4, 0.62, 0.4, 1)
+
+[node name="Ladder518" parent="Pieces" instance=ExtResource("ladder")]
+position = Vector2(14388, -169.9)
+height = 120
+style = 1
+
+[node name="Rock519" parent="Pieces" instance=ExtResource("rock")]
+position = Vector2(14800, -301.6)
+
+[node name="Vp_sunrise" parent="Pieces" instance=ExtResource("vp")]
+position = Vector2(15650, -330)
+viewpoint_id = &"sunrise"
+frame_offset = Vector2(320, -200)
+subject_kind = 0
+subject_path = PackedVector2Array(-320, 10, 0, -50, 320, 0)
+subject_speed = 70
+subject_size = 1.2
+subject_color = Color(0.2, 0.18, 0.2, 1)
+
+[node name="Finish1" parent="Pieces" instance=ExtResource("finish")]
+position = Vector2(16150, -330)

@@ -67,6 +67,12 @@ func _shoot(trail: TrailData, data: ViewpointData) -> bool:
 		push_error("no Viewpoint node for %s" % data.id)
 		return true
 	var photo: PhotoMode = r.get("photo_mode")
+	if trail.sunrise:
+		# A dawn climb: show the light a hiker on par would see at this point of the trail.
+		var finish: Node2D = _find_finish(r)
+		if finish != null:
+			var along: float = clampf(vp.global_position.x / finish.global_position.x, 0.0, 1.0)
+			(r.get("daylight") as Daylight).elapsed = trail.par_time * along
 	# Stand on the ground at the viewpoint and retry until photo mode opens (the hiker must
 	# have landed and the viewpoint must have noticed it).
 	var space: PhysicsDirectSpaceState2D = (r as Node2D).get_world_2d().direct_space_state if r is Node2D else hiker.get_world_2d().direct_space_state
@@ -129,6 +135,16 @@ func _hide_world_ui(node: Node) -> void:
 			(child as Control).visible = false
 		else:
 			_hide_world_ui(child)
+
+
+func _find_finish(node: Node) -> Node2D:
+	for child: Node in node.get_children():
+		if child is TrailFinish:
+			return child
+		var deeper: Node2D = _find_finish(child)
+		if deeper != null:
+			return deeper
+	return null
 
 
 func _find_viewpoint(node: Node, id: StringName) -> Viewpoint:

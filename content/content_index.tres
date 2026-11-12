@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://data/content_index.gd" id="1_index"]
 [ext_resource type="Script" path="res://data/season_data.gd" id="2_season_script"]
 [ext_resource type="Resource" path="res://content/seasons/s01_nordic/season.tres" id="3_s01"]
+[ext_resource type="Resource" path="res://content/seasons/s02_tea/season.tres" id="4_s02"]
 [ext_resource type="Script" path="res://data/gear_data.gd" id="gear_script"]
 [ext_resource type="Resource" path="res://content/gear/grip_boots.tres" id="g_grip_boots"]
 [ext_resource type="Resource" path="res://content/gear/hiking_poles.tres" id="g_hiking_poles"]
@@ -14,7 +15,7 @@
 
 [resource]
 script = ExtResource("1_index")
-seasons = Array[ExtResource("2_season_script")]([ExtResource("3_s01")])
+seasons = Array[ExtResource("2_season_script")]([ExtResource("3_s01"), ExtResource("4_s02")])
 gear = Array[ExtResource("gear_script")]([ExtResource("g_grip_boots"), ExtResource("g_hiking_poles"), ExtResource("g_rain_shell"), ExtResource("g_thermos"), ExtResource("g_bright_headlamp")])
 cosmetics = ExtResource("p_cosmetics")
 badges = ExtResource("p_badges")

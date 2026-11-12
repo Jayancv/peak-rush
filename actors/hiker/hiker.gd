@@ -21,7 +21,8 @@ signal thirst_changed(thirsty: bool)
 signal back_blocked
 signal landed
 
-enum State { IDLE, WALK, REST, JUMP, FALL, STUMBLE, EXHAUSTED, PHOTO, SLIDE }
+## New states go at the END (the _states list follows this order).
+enum State { IDLE, WALK, REST, JUMP, FALL, STUMBLE, EXHAUSTED, PHOTO, SLIDE, CLIMB }
 
 const STAY: int = -1
 ## How close to the back limit the hiker stops (px).
@@ -52,6 +53,8 @@ var back_limit_x: float = -INF
 var _states: Array[HikerState] = []
 var _coyote_left: float = 0.0
 var _input: HikerInput = HikerInput.new()
+## Hurry, duck and climb (see HikerActions).
+var actions: HikerActions = HikerActions.new()
 var _was_on_floor: bool = false
 var _surface_check_left: float = 0.0
 var _slide_zones: int = 0
@@ -84,6 +87,7 @@ func _ready() -> void:
 		HikerExhaustedState.new(self),
 		HikerPhotoState.new(self),
 		HikerSlideState.new(self),
+		HikerClimbState.new(self),
 	]
 	_states[state].enter()
 	if visual != null:
@@ -92,7 +96,8 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	state_time += delta
-	_input.update(delta, input_enabled and not finished, balance.jump_buffer_seconds)
+	_input.update(delta, input_enabled and not finished, balance.jump_buffer_seconds, balance.hurry_double_tap_seconds)
+	actions.update(self, _input, input_enabled and not finished)
 	_coyote_left = balance.coyote_seconds if is_on_floor() else maxf(_coyote_left - delta, 0.0)
 	_update_facing()
 	speed_multiplier = condition.speed_multiplier(signed_grade, surface)
@@ -103,7 +108,8 @@ func _physics_process(delta: float) -> void:
 	_update_floor_info(delta)
 	momentum.update(delta, signed_grade, state == State.WALK and wants_walk(), is_on_floor(),
 		condition.modifiers.surface_speed(effective_surface()))
-	var walking: bool = state == State.WALK and is_on_floor() and absf(velocity.x) > 1.0
+	var walking: bool = state == State.WALK and is_on_floor() and absf(velocity.x) > 1.0 or state == State.CLIMB and velocity.y < 0.0
+	condition.effort_mult = actions.effort_mult(state, balance)
 	# No regen during the forced exhausted rest: running dry has to cost the slow walk afterwards.
 	var resting: bool = state == State.IDLE or state == State.REST
 	condition.tick(delta, walking, resting and is_on_floor(), signed_grade, surface)
@@ -236,7 +242,19 @@ func has_buffered_jump() -> bool:
 
 ## `wind_scale` < 1 in the air: a gust mid-jump nudges, it can't drop you into a gap.
 func walk_target_speed(wind_scale: float = 1.0) -> float:
-	return (balance.walk_speed * speed_multiplier + momentum.bonus) * facing + condition.wind_push * wind_scale
+	return (balance.walk_speed * speed_multiplier * actions.speed_mult(balance) + momentum.bonus) * facing + condition.wind_push * wind_scale
+
+
+func jump_held() -> bool:
+	return _input.jump_held(input_enabled and not finished)
+
+
+func can_climb() -> bool:
+	return actions.can_climb(self, _input, input_enabled and not finished)
+
+
+func climb_direction() -> int:
+	return actions.climb_direction(_input, input_enabled and not finished)
 
 
 ## Grace time left to jump after walking off an edge.

@@ -27,6 +27,8 @@ func physics_update(_delta: float) -> int:
 
 ## Shared exits from the on-foot states: jumping, or walking off an edge.
 func grounded_transition() -> int:
+	if hiker.can_climb():
+		return Hiker.State.CLIMB
 	if hiker.has_buffered_jump() and hiker.coyote_left() > 0.0:
 		return Hiker.State.JUMP
 	if not hiker.is_on_floor() and hiker.coyote_left() <= 0.0:
@@ -58,6 +60,16 @@ func air_control(delta: float) -> void:
 		move_horizontal(hiker.walk_target_speed(hiker.balance.air_wind_scale), hiker.balance.air_accel, delta)
 	else:
 		move_horizontal(hiker.condition.wind_push * hiker.balance.air_wind_scale, hiker.balance.air_decel, delta)
+
+
+## Gravity on the way up a jump: softer while jump is held early in the rise, so a held
+## jump goes higher and a tap stays a normal jump.
+func apply_jump_gravity(delta: float) -> void:
+	var b: Balance = hiker.balance
+	# Only a press held past tap length counts: a quick finger tap stays the normal jump.
+	var t: float = hiker.state_time
+	var held: bool = hiker.jump_held() and t >= b.jump_tap_seconds and t < b.jump_tap_seconds + b.jump_hold_seconds
+	apply_gravity(delta * (b.jump_hold_gravity_scale if held else 1.0))
 
 
 func apply_gravity(delta: float) -> void:

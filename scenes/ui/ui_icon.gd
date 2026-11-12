@@ -7,7 +7,7 @@ extends Control
 ## BOOTS..HEADLAMP follow GearData.Icon order (kind = BOOTS + icon).
 ## New kinds go at the end: scenes store the number.
 enum Kind { MOUNTAIN, WALK, JUMP, BACK, PAUSE, CAMERA, STAR, STAR_EMPTY, LOCK, GEAR, BOOTS, POLES, SHELL, THERMOS, HEADLAMP,
-	MUSIC, SOUND, NATURE, SWAP, VIBRATE, PERSON, CLOCK, DROP, LEAF, PAW, MOTION, INFO }
+	MUSIC, SOUND, NATURE, SWAP, VIBRATE, PERSON, CLOCK, DROP, LEAF, PAW, MOTION, INFO, DUCK }
 
 @export var kind: Kind = Kind.WALK:
 	set(v):
@@ -52,6 +52,8 @@ func _draw() -> void:
 			_chevron(c + Vector2(0, s * 0.16), s * 0.26, Vector2.UP, w)
 		Kind.BACK:
 			_chevron(c + Vector2(-s * 0.06, 0), s * 0.3, Vector2.LEFT, w)
+		Kind.DUCK:
+			_chevron(c + Vector2(0, s * 0.06), s * 0.3, Vector2.DOWN, w)
 		Kind.MOUNTAIN:
 			_mountain_badge(c, s)
 		Kind.PAUSE:

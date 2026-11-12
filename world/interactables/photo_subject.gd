@@ -5,7 +5,7 @@ extends Node2D
 ## walking reindeer (art in SubjectArt) that moves back and forth along a path. Always moving, so it's visible (and timing
 ## matters) before the player even opens photo mode.
 
-enum Kind { BIRD, BOAT, REINDEER, STAR }
+enum Kind { BIRD, BOAT, REINDEER, STAR, TRAIN }
 
 const INK: Color = Color("#2B2D42")
 ## Reindeer stride: leg swing (radians) and steps per second at speed 60 px/s.
@@ -124,6 +124,8 @@ func _rebuild() -> void:
 			ShapeUtil.add_poly(_body, ShapeUtil.ellipse(Vector2.ZERO, Vector2(4.5, 4.5), 10), Color(1, 1, 0.95, 1))
 		Kind.BOAT:
 			SubjectArt.boat(_body)
+		Kind.TRAIN:
+			SubjectArt.train(_body)
 
 
 func _notification(what: int) -> void:

@@ -18,6 +18,8 @@ static func step(from_version: int, data: Dictionary) -> Dictionary:
 			return _v4_to_v5(data)
 		5:
 			return _v5_to_v6(data)
+		6:
+			return _v6_to_v7(data)
 	push_error("SaveMigrations: no step from version %d" % from_version)
 	return data
 
@@ -106,4 +108,12 @@ static func _v5_to_v6(data: Dictionary) -> Dictionary:
 	var out: Dictionary = data.duplicate(true)
 	if not (out.get("steps") is Dictionary):
 		out["steps"] = {"enabled": false, "opt_in_unix": 0, "opt_in_date": "", "claimed": {}, "lifetime_steps": 0, "last_sync_unix": 0}
+	return out
+
+
+## v7: weekly goals live in the profile (an empty state = this week's goals start at zero).
+static func _v6_to_v7(data: Dictionary) -> Dictionary:
+	var out: Dictionary = data.duplicate(true)
+	if out.get("profile") is Dictionary and not (out.profile.get("weekly") is Dictionary):
+		out.profile["weekly"] = {}
 	return out

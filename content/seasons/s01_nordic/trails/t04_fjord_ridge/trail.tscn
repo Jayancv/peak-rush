@@ -22,6 +22,7 @@
 [ext_resource type="PackedScene" path="res://world/interactables/fork_sign.tscn" id="p_sign"]
 [ext_resource type="PackedScene" path="res://world/interactables/find.tscn" id="p_find"]
 [ext_resource type="PackedScene" path="res://world/interactables/spring.tscn" id="p_spring"]
+[ext_resource type="PackedScene" path="res://world/obstacles/low_branch.tscn" id="p_branch"]
 
 [node name="FjordRidge" type="Node2D"]
 
@@ -483,3 +484,11 @@ position = Vector2(5212, 169.6)
 [node name="Ext1_Rock17" parent="Pieces" instance=ExtResource("rock")]
 position = Vector2(5529, 145.4)
 size = Vector2(61, 40)
+
+[node name="Branch1" parent="Pieces" instance=ExtResource("p_branch")]
+position = Vector2(1350, 401.2)
+leaf_color = Color(0.22, 0.4, 0.3, 1)
+
+[node name="Branch2" parent="Pieces" instance=ExtResource("p_branch")]
+position = Vector2(5400, 154.9)
+leaf_color = Color(0.22, 0.4, 0.3, 1)

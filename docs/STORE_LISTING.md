@@ -7,15 +7,17 @@ Images come from the screenshot script (see "Images" below); nothing here is fin
 Peak Rush: Hiking Journal
 
 ## Short description (max 80)
-Hike Nordic trails, beat the sunset and fill a travel journal with your photos.
+Hike Nordic peaks and tea country, beat the sunset and fill your travel journal.
 
 ## Full description (max 4000)
 Lace up your boots. Peak Rush is a calm, side-scrolling hiking game about pacing yourself
 from trailhead to summit before the sun goes down.
 
-HIKE SIX NORDIC TRAILS
-Forest lakes, island rocks, open fells, a rainy fjord ridge, a misty crane bog and a night
-climb under the northern lights. Every trail is longer and wilder than the last.
+TWO SEASONS, ELEVEN TRAILS
+Nordic Trails: forest lakes, island rocks, open fells, a rainy fjord ridge, a misty crane bog
+and a night climb under the northern lights.
+Tea Country: tea-estate terraces, a railway walk to Ella Rock, a train crossing a stone viaduct
+in the monsoon, the misty edge of World's End, and a lantern-lit pilgrimage to watch the sunrise.
 
 PACE YOUR ENERGY AND WATER
 Hold to walk, tap to jump roots and rocks. Uphill climbs drain your energy; rest on a bench

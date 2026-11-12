@@ -338,3 +338,88 @@ BADGE_MARATHON_LEGS_DESC,Walk 42 real km
 BADGE_LONG_WALKER,Long Walker
 BADGE_LONG_WALKER_DESC,Walk 200 real km
 STEPS_PILL_PENDING,Steps today: %d  ·  +%d TP
+WEEKLY_TITLE,This week (+%d TP each)
+WEEKLY_FINDS,Collect %d finds
+WEEKLY_GREAT_PHOTOS,Take %d great photos
+WEEKLY_SUMMITS,Reach %d summits
+WEEKLY_BEAT_PAR,Beat par %d times
+WEEKLY_DAILIES,Finish %d daily trails
+WEEKLY_CLEAN_HIKES,Finish %d hikes without a slip
+WEEKLY_BONUS,All three: +%d TP bonus
+WEEKLY_ALL_DONE,All done this week. New goals on Monday!
+RESULTS_WEEKLY,Weekly goals done: %d  +%d
+RESULTS_WEEKLY_ALL,Weekly goals: %d done + bonus  +%d
+WEEKLY_DONE,done
+SEASON_S02_TITLE,Tea Country
+TRAIL_T07_NAME,Tea Terraces
+TRAIL_T08_NAME,Ella Rock
+TRAIL_T09_NAME,Nine Arches
+TRAIL_T10_NAME,World's End
+TRAIL_T11_NAME,Pilgrim's Peak
+WEATHER_MONSOON,Monsoon
+RESULTS_STAR_SUNRISE,Before sunrise
+VP_TEA_PICKERS,Pickers' hillside
+VP_OLD_FACTORY,Old tea factory
+VP_ELLA_GAP,Ella Gap
+VP_ROCK_SUMMIT,Top of the rock
+VP_NINE_ARCHES,Train on the arches
+VP_JUNGLE_VALLEY,Jungle valley
+VP_BAKERS_FALLS,Baker's Falls
+VP_WORLDS_END,World's End
+VP_LANTERN_PATH,Lantern path
+VP_SUNRISE,Sunrise from the top
+FIND_PURPLE_ORCHID,Wild orchid
+FIND_PURPLE_ORCHID_FACT,"Hundreds of orchid species grow in the hill country, many found nowhere else."
+FIND_TEA_BUD,Two leaves and a bud
+FIND_TEA_BUD_FACT,Pickers take only the top two leaves and the bud: that's where the best tea comes from.
+FIND_PICKERS_BASKET,Picker's basket
+FIND_PICKERS_BASKET_FACT,"Carried on the back from a strap over the forehead, it holds a whole morning's picking."
+FIND_FRANGIPANI,Frangipani flowers
+FIND_FRANGIPANI_FACT,"Often planted near temples, their scent is strongest in the evening."
+FIND_GIANT_SQUIRREL,Giant squirrel
+FIND_GIANT_SQUIRREL_FACT,"This squirrel is nearly a metre long with its tail, and rarely comes down from the trees."
+FIND_TEA_FLOWER,Tea blossom
+FIND_TEA_FLOWER_FACT,"Tea is a camellia: left unclipped, the bushes grow into trees with white flowers."
+FIND_TOQUE_MACAQUE,Toque macaque
+FIND_TOQUE_MACAQUE_FACT,"Named for the cap of hair on its head, it lives only on this island."
+FIND_BEE_EATER_FEATHER,Bee-eater feather
+FIND_BEE_EATER_FEATHER_FACT,Bee-eaters knock the sting off a bee on a branch before swallowing it.
+FIND_RAILWAY_SPIKE,Old railway spike
+FIND_RAILWAY_SPIKE_FACT,The hill railway was built to carry tea down to the coast.
+FIND_WILD_GINGER,Wild ginger flower
+FIND_WILD_GINGER_FACT,Its bright red cones hold water that small frogs use as a pool.
+FIND_WATER_LILY,Blue water lily
+FIND_WATER_LILY_FACT,"The blue water lily is the national flower here, and opens each morning."
+FIND_JUNGLE_MUSHROOM,Jungle mushrooms
+FIND_JUNGLE_MUSHROOM_FACT,"After the monsoon rains, mushrooms push up through the leaf litter overnight."
+FIND_KINGFISHER_FEATHER,Kingfisher feather
+FIND_KINGFISHER_FEATHER_FACT,The blue isn't pigment: it's light scattered by the feather's tiny structure.
+FIND_RAILWAY_TICKET,Old train ticket
+FIND_RAILWAY_TICKET_FACT,A stiff card ticket punched by hand: some stations still use them.
+FIND_PURPLE_FACED_LANGUR,Purple-faced langur
+FIND_PURPLE_FACED_LANGUR_FACT,"A shy leaf-eating monkey of the wet forests, heard more often than seen."
+FIND_WHISTLING_THRUSH_FEATHER,Whistling thrush feather
+FIND_WHISTLING_THRUSH_FEATHER_FACT,"The island's whistling thrush hides in damp ravines and sings at dawn."
+FIND_LOST_BINOCULARS,Lost binoculars
+FIND_LOST_BINOCULARS_FACT,"Someone hoped to see the coast from the edge. On a clear morning, you can."
+FIND_RHODODENDRON,Rhododendron flowers
+FIND_RHODODENDRON_FACT,These red blooms cover the high plains early in the year.
+FIND_SAMBAR_DEER,Sambar deer
+FIND_SAMBAR_DEER_FACT,"The biggest deer here, it grazes the grasslands in the mist at dawn and dusk."
+FIND_HORTON_MUSHROOM,Grassland mushrooms
+FIND_HORTON_MUSHROOM_FACT,"Small brown mushrooms ring the cloud forest's edge, fed by the mist."
+FIND_LOTUS_OFFERING,Lotus offering
+FIND_LOTUS_OFFERING_FACT,Pilgrims carry flowers to leave at the shrine on the summit.
+FIND_PILGRIMS_BELL,Pilgrim's bell
+FIND_PILGRIMS_BELL_FACT,"At the top, pilgrims ring a bell once for every climb they've made."
+FIND_PRAYER_FLAG,Prayer flag
+FIND_PRAYER_FLAG_FACT,The wind is said to carry the flag's blessings across the mountains.
+FIND_SLENDER_LORIS,Slender loris
+FIND_SLENDER_LORIS_FACT,This tiny night animal moves slowly and silently through the branches.
+FIND_CLOUD_FOREST_FERN,Cloud forest fern
+FIND_CLOUD_FOREST_FERN_FACT,"Ferns here drink from the clouds, catching mist on their fronds."
+TOUCH_HINT_DUCK,Duck
+HINT_HURRY,Running late? Double-tap and hold Walk to hurry - it tires you faster
+HINT_HIGH_JUMP,Hold Jump to jump higher
+HINT_CLIMB,Keep walking into the ladder to climb it
+HINT_DUCK,Low branch ahead - hold Duck to crouch under it

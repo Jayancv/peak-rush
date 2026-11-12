@@ -1,0 +1,78 @@
+[gd_resource type="Resource" script_class="TrailData" format=3]
+
+[ext_resource type="Script" path="res://data/trail_data.gd" id="1_trail"]
+[ext_resource type="Script" path="res://data/find_data.gd" id="9_find"]
+[ext_resource type="Script" path="res://data/viewpoint_data.gd" id="3_vp"]
+[ext_resource type="Resource" path="res://content/weather/clear.tres" id="2_weather"]
+[ext_resource type="Texture2D" path="res://content/seasons/s02_tea/trails/t11_pilgrims_peak/postcards/lantern_path.webp" id="pc_lantern_path"]
+[ext_resource type="Texture2D" path="res://content/seasons/s02_tea/trails/t11_pilgrims_peak/postcards/sunrise.webp" id="pc_sunrise"]
+
+[sub_resource type="Resource" id="Viewpoint_lantern_path"]
+script = ExtResource("3_vp")
+id = &"lantern_path"
+name_key = "VP_LANTERN_PATH"
+postcard = ExtResource("pc_lantern_path")
+
+[sub_resource type="Resource" id="Viewpoint_sunrise"]
+script = ExtResource("3_vp")
+id = &"sunrise"
+name_key = "VP_SUNRISE"
+postcard = ExtResource("pc_sunrise")
+
+[sub_resource type="Resource" id="Find_lotus_offering"]
+script = ExtResource("9_find")
+id = &"lotus_offering"
+name_key = "FIND_LOTUS_OFFERING"
+kind = 0
+color = Color(0.95, 0.55, 0.7, 1)
+appear_chance = 1
+
+[sub_resource type="Resource" id="Find_pilgrims_bell"]
+script = ExtResource("9_find")
+id = &"pilgrims_bell"
+name_key = "FIND_PILGRIMS_BELL"
+kind = 2
+color = Color(0.8, 0.65, 0.25, 1)
+appear_chance = 1
+
+[sub_resource type="Resource" id="Find_prayer_flag"]
+script = ExtResource("9_find")
+id = &"prayer_flag"
+name_key = "FIND_PRAYER_FLAG"
+kind = 2
+color = Color(0.2, 0.45, 0.85, 1)
+appear_chance = 1
+
+[sub_resource type="Resource" id="Find_slender_loris"]
+script = ExtResource("9_find")
+id = &"slender_loris"
+name_key = "FIND_SLENDER_LORIS"
+kind = 3
+color = Color(0.55, 0.42, 0.3, 1)
+appear_chance = 0.6
+
+[sub_resource type="Resource" id="Find_cloud_forest_fern"]
+script = ExtResource("9_find")
+id = &"cloud_forest_fern"
+name_key = "FIND_CLOUD_FOREST_FERN"
+kind = 0
+color = Color(0.4, 0.62, 0.4, 1)
+appear_chance = 1
+
+[resource]
+script = ExtResource("1_trail")
+id = &"t11_pilgrims_peak"
+name_key = "TRAIL_T11_NAME"
+season_id = &"s02_tea"
+scene_path = "res://content/seasons/s02_tea/trails/t11_pilgrims_peak/trail.tscn"
+length_m = 5600
+daylight_seconds = 285.0
+par_time = 210.0
+weather = ExtResource("2_weather")
+ambience = 0
+viewpoints = Array[ExtResource("3_vp")]([SubResource("Viewpoint_lantern_path"), SubResource("Viewpoint_sunrise")])
+unlock_order = 4
+finds = Array[ExtResource("9_find")]([SubResource("Find_lotus_offering"), SubResource("Find_pilgrims_bell"), SubResource("Find_prayer_flag"), SubResource("Find_slender_loris"), SubResource("Find_cloud_forest_fern")])
+night = true
+sunrise = true
+star3_key = "RESULTS_STAR_SUNRISE"

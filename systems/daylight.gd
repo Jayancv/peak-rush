@@ -12,15 +12,19 @@ var elapsed: float = 0.0
 var daylight_seconds: float
 ## Night trails stay dark; "dusk" then means the window (e.g. the aurora) has closed.
 var night: bool = false
+## Night trails that end at dawn (a sunrise climb): the dark lifts to sunrise colours
+## over the last part of the window instead of deepening.
+var sunrise: bool = false
 
 var _balance: Balance
 var _phase: Phase = Phase.MORNING
 
 
-func _init(balance: Balance, seconds_of_daylight: float, is_night: bool = false) -> void:
+func _init(balance: Balance, seconds_of_daylight: float, is_night: bool = false, ends_at_sunrise: bool = false) -> void:
 	_balance = balance
 	daylight_seconds = maxf(seconds_of_daylight, 1.0)
 	night = is_night
+	sunrise = is_night and ends_at_sunrise
 
 
 func advance(delta: float) -> void:
@@ -61,6 +65,9 @@ func is_dusk() -> bool:
 func tint() -> Color:
 	var f: float = fraction()
 	var b: Balance = _balance
+	if sunrise:
+		var dawn: float = smoothstep(b.sunrise_start, 1.0, f)
+		return b.tint_night.lerp(b.tint_sunrise, dawn) if dawn < 0.999 else b.tint_sunrise
 	if night:
 		return b.tint_night.lerp(b.tint_night_late, smoothstep(1.0 - b.dusk_fade, 1.0, f))
 	if f < b.midday_start:

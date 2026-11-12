@@ -3,6 +3,9 @@ extends Node
 ## known obstacles from routes/<trail_id>.json or when blocked, rests when tired, takes
 ## one photo per viewpoint) and fails loudly when a trail breaks.
 ##
+## Routes may also list "ducks": [[from_x, to_x], ...] to crouch under low branches; ladders
+## need nothing (walking into one climbs it).
+##
 ## Usage (from the project folder):
 ##   godot --headless --path . --fixed-fps 60 tools/bot/bot.tscn                 # every trail
 ##   godot --headless --path . --fixed-fps 60 tools/bot/bot.tscn -- t03_lapland_fell no_photos
@@ -49,13 +52,22 @@ func _run() -> void:
 	get_tree().quit(1 if _failures > 0 else 0)
 
 
-func _route(id: StringName) -> Array:
+func _route_data(id: StringName) -> Dictionary:
 	var path: String = ROUTES + String(id) + ".json"
 	if not FileAccess.file_exists(path):
 		print("  (no route file for %s: jumping only when blocked)" % id)
-		return []
+		return {}
 	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
-	return (data as Dictionary).get("jumps", []) if data is Dictionary else []
+	return data if data is Dictionary else {}
+
+
+func _route(id: StringName) -> Array:
+	return _route_data(id).get("jumps", [])
+
+
+## [from_x, to_x] stretches to walk through ducked (low branches).
+func _ducks(id: StringName) -> Array:
+	return _route_data(id).get("ducks", [])
 
 
 func _tap_jump() -> void:
@@ -66,6 +78,7 @@ func _tap_jump() -> void:
 
 func _play(id: StringName, photos: bool) -> void:
 	var jumps: Array = _route(id)
+	var ducks: Array = _ducks(id)
 	var trail: TrailData = ContentDB.get_trail(id)
 	GameState.current_trail_id = id
 	get_tree().change_scene_to_file("res://scenes/trail_runner/trail_runner.tscn")
@@ -111,6 +124,14 @@ func _play(id: StringName, photos: bool) -> void:
 			Input.action_release(&"walk")
 			continue
 		Input.action_press(&"walk")
+		var duck_here: bool = false
+		for span: Variant in ducks:
+			if x >= float(span[0]) and x <= float(span[1]):
+				duck_here = true
+		if duck_here:
+			Input.action_press(&"duck")
+		else:
+			Input.action_release(&"duck")
 		while next_jump < jumps.size() and x > float(jumps[next_jump]) + 30.0:
 			next_jump += 1
 		var want: bool = false
@@ -135,6 +156,7 @@ func _play(id: StringName, photos: bool) -> void:
 			await _tap_jump()
 			t += STEP
 	Input.action_release(&"walk")
+	Input.action_release(&"duck")
 	var elapsed: float = float(day.get("elapsed"))
 	var dusk: bool = bool(day.call("is_dusk"))
 	var problems: Array[String] = []

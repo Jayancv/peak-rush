@@ -1,0 +1,75 @@
+[gd_resource type="Resource" script_class="TrailData" format=3]
+
+[ext_resource type="Script" path="res://data/trail_data.gd" id="1_trail"]
+[ext_resource type="Script" path="res://data/find_data.gd" id="9_find"]
+[ext_resource type="Script" path="res://data/viewpoint_data.gd" id="3_vp"]
+[ext_resource type="Resource" path="res://content/weather/windy.tres" id="2_weather"]
+[ext_resource type="Texture2D" path="res://content/seasons/s02_tea/trails/t08_ella_rock/postcards/ella_gap.webp" id="pc_ella_gap"]
+[ext_resource type="Texture2D" path="res://content/seasons/s02_tea/trails/t08_ella_rock/postcards/rock_summit.webp" id="pc_rock_summit"]
+
+[sub_resource type="Resource" id="Viewpoint_ella_gap"]
+script = ExtResource("3_vp")
+id = &"ella_gap"
+name_key = "VP_ELLA_GAP"
+postcard = ExtResource("pc_ella_gap")
+
+[sub_resource type="Resource" id="Viewpoint_rock_summit"]
+script = ExtResource("3_vp")
+id = &"rock_summit"
+name_key = "VP_ROCK_SUMMIT"
+postcard = ExtResource("pc_rock_summit")
+
+[sub_resource type="Resource" id="Find_tea_flower"]
+script = ExtResource("9_find")
+id = &"tea_flower"
+name_key = "FIND_TEA_FLOWER"
+kind = 0
+color = Color(0.98, 0.97, 0.9, 1)
+appear_chance = 1
+
+[sub_resource type="Resource" id="Find_toque_macaque"]
+script = ExtResource("9_find")
+id = &"toque_macaque"
+name_key = "FIND_TOQUE_MACAQUE"
+kind = 3
+color = Color(0.62, 0.48, 0.34, 1)
+appear_chance = 0.65
+
+[sub_resource type="Resource" id="Find_bee_eater_feather"]
+script = ExtResource("9_find")
+id = &"bee_eater_feather"
+name_key = "FIND_BEE_EATER_FEATHER"
+kind = 2
+color = Color(0.3, 0.68, 0.45, 1)
+appear_chance = 1
+
+[sub_resource type="Resource" id="Find_railway_spike"]
+script = ExtResource("9_find")
+id = &"railway_spike"
+name_key = "FIND_RAILWAY_SPIKE"
+kind = 2
+color = Color(0.4, 0.38, 0.36, 1)
+appear_chance = 1
+
+[sub_resource type="Resource" id="Find_wild_ginger"]
+script = ExtResource("9_find")
+id = &"wild_ginger"
+name_key = "FIND_WILD_GINGER"
+kind = 0
+color = Color(0.85, 0.22, 0.25, 1)
+appear_chance = 1
+
+[resource]
+script = ExtResource("1_trail")
+id = &"t08_ella_rock"
+name_key = "TRAIL_T08_NAME"
+season_id = &"s02_tea"
+scene_path = "res://content/seasons/s02_tea/trails/t08_ella_rock/trail.tscn"
+length_m = 3300
+daylight_seconds = 225.0
+par_time = 165.0
+weather = ExtResource("2_weather")
+ambience = 1
+viewpoints = Array[ExtResource("3_vp")]([SubResource("Viewpoint_ella_gap"), SubResource("Viewpoint_rock_summit")])
+unlock_order = 1
+finds = Array[ExtResource("9_find")]([SubResource("Find_tea_flower"), SubResource("Find_toque_macaque"), SubResource("Find_bee_eater_feather"), SubResource("Find_railway_spike"), SubResource("Find_wild_ginger")])

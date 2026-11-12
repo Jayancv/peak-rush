@@ -30,6 +30,15 @@ Choose trail → Hike (pace stamina, jump obstacles, rest, photograph viewpoints
 | Tap in photo mode | Take the photo |
 A **left-handed** setting swaps the two halves. On desktop: D/Right = walk, Space = jump.
 
+**Extra moves** (added after launch prep; no new buttons except Duck):
+- **Hold to jump higher:** a tap is the normal jump (~96 px); holding past tap length (0.12 s) softens
+  gravity on the way up (~144 px). High lookouts with hidden finds sit ~115–120 px up.
+- **Hurry:** double-tap and hold Walk: x1.35 speed, x1.8 energy drain; not while exhausted.
+- **Climb:** walk into a `Ladder` (wooden or rock scramble) at a wall too tall to jump; release to cling,
+  Back climbs down, x1.6 energy; the hiker hops onto the ledge at the top.
+- **Duck:** the Duck pad (above Jump; S/Down on keyboards) crouch-walks at x0.55 under a `LowBranch`;
+  walking into one upright = stumble, jumping into one = bumped back down.
+
 ## 5. Systems
 All numbers are starting values. They live in `content/balance.tres` and will be tuned in playtests.
 
@@ -120,8 +129,17 @@ The player's real steps from the phone's health app become a small TP bonus, so 
 | 5 | Crane Mire | Misty autumn bog, light mist + gusts | Duckboard fork (dry boards vs muddy valley), bog pools, all mechanics mixed | Dancing cranes, fire lookout tower, misty pond |
 | 6 | Aurora Summit | Winter night, snow | Ice, headlamp; daylight = aurora window (the finale) | Aurora, snowy cabin |
 
+## 6b. Season 2 — Tea Country (also at launch)
+Hill country inspired by Sri Lanka. Its first trail is open from the start, like every season's.
+| # | Trail | Biome / weather | Teaches / special | Viewpoints |
+|---|---|---|---|---|
+| 1 | Tea Terraces | Tea estate, clear morning | Terrace ledges, stepping stones, tea factory | Pickers' hillside, old tea factory |
+| 2 | Ella Rock | Railway line and eucalyptus forest, breezy | Walking the rails, rope bridge, fork, steep climb, rolling boulder | Ella Gap, top of the rock |
+| 3 | Nine Arches | Jungle valley, monsoon rain | Mud, swollen stream, passing under the viaduct, gorge bridge | Train on the arches (TRAIN subject), jungle valley |
+| 4 | World's End | Misty grassland plains, fog | Open wind, log and stones, duckboard fork over the bog, the cliff edge | Baker's Falls, World's End |
+| 5 | Pilgrim's Peak | Night climb to sunrise | Lantern-lit steps, tea stalls (springs), rest houses; `sunrise` night = dark lifts to dawn, 3rd star = top before sunrise | Lantern path, sunrise from the top |
+
 ## 7. Future seasons (ideas)
-- **S2 Tea Country:** hill country inspired by Sri Lanka, with tea terraces, an Ella Rock-style climb, a sunrise pilgrimage peak, misty "World's End" plains, and monsoon rain.
 - **S3 Alpine:** passes, glacier walk, cable-car finish.
 - **S4 Canyon & Desert:** heat instead of cold (water bottle mechanic).
 - **S5 Volcano & Jungle:** steam vents, rope bridges.

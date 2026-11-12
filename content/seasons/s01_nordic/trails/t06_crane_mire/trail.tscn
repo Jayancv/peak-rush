@@ -19,6 +19,7 @@
 [ext_resource type="PackedScene" path="res://world/interactables/fork_sign.tscn" id="p_sign"]
 [ext_resource type="PackedScene" path="res://world/interactables/find.tscn" id="p_find"]
 [ext_resource type="PackedScene" path="res://world/interactables/spring.tscn" id="p_spring"]
+[ext_resource type="PackedScene" path="res://world/obstacles/low_branch.tscn" id="p_branch"]
 
 [node name="CraneMire" type="Node2D"]
 
@@ -526,3 +527,11 @@ width = 130.0
 
 [node name="Finish1" parent="Pieces" instance=ExtResource("finish")]
 position = Vector2(15400, 300.0)
+
+[node name="Branch1" parent="Pieces" instance=ExtResource("p_branch")]
+position = Vector2(6550, 331)
+leaf_color = Color(0.47, 0.58, 0.29, 1)
+
+[node name="Branch2" parent="Pieces" instance=ExtResource("p_branch")]
+position = Vector2(6950, 366.3)
+leaf_color = Color(0.47, 0.58, 0.29, 1)

@@ -1,0 +1,75 @@
+[gd_resource type="Resource" script_class="TrailData" format=3]
+
+[ext_resource type="Script" path="res://data/trail_data.gd" id="1_trail"]
+[ext_resource type="Script" path="res://data/find_data.gd" id="9_find"]
+[ext_resource type="Script" path="res://data/viewpoint_data.gd" id="3_vp"]
+[ext_resource type="Resource" path="res://content/weather/fog.tres" id="2_weather"]
+[ext_resource type="Texture2D" path="res://content/seasons/s02_tea/trails/t10_worlds_end/postcards/bakers_falls.webp" id="pc_bakers_falls"]
+[ext_resource type="Texture2D" path="res://content/seasons/s02_tea/trails/t10_worlds_end/postcards/worlds_end.webp" id="pc_worlds_end"]
+
+[sub_resource type="Resource" id="Viewpoint_bakers_falls"]
+script = ExtResource("3_vp")
+id = &"bakers_falls"
+name_key = "VP_BAKERS_FALLS"
+postcard = ExtResource("pc_bakers_falls")
+
+[sub_resource type="Resource" id="Viewpoint_worlds_end"]
+script = ExtResource("3_vp")
+id = &"worlds_end"
+name_key = "VP_WORLDS_END"
+postcard = ExtResource("pc_worlds_end")
+
+[sub_resource type="Resource" id="Find_whistling_thrush_feather"]
+script = ExtResource("9_find")
+id = &"whistling_thrush_feather"
+name_key = "FIND_WHISTLING_THRUSH_FEATHER"
+kind = 2
+color = Color(0.2, 0.3, 0.65, 1)
+appear_chance = 1
+
+[sub_resource type="Resource" id="Find_lost_binoculars"]
+script = ExtResource("9_find")
+id = &"lost_binoculars"
+name_key = "FIND_LOST_BINOCULARS"
+kind = 2
+color = Color(0.22, 0.22, 0.24, 1)
+appear_chance = 1
+
+[sub_resource type="Resource" id="Find_rhododendron"]
+script = ExtResource("9_find")
+id = &"rhododendron"
+name_key = "FIND_RHODODENDRON"
+kind = 0
+color = Color(0.85, 0.2, 0.25, 1)
+appear_chance = 1
+
+[sub_resource type="Resource" id="Find_sambar_deer"]
+script = ExtResource("9_find")
+id = &"sambar_deer"
+name_key = "FIND_SAMBAR_DEER"
+kind = 3
+color = Color(0.48, 0.36, 0.26, 1)
+appear_chance = 0.65
+
+[sub_resource type="Resource" id="Find_horton_mushroom"]
+script = ExtResource("9_find")
+id = &"horton_mushroom"
+name_key = "FIND_HORTON_MUSHROOM"
+kind = 1
+color = Color(0.6, 0.44, 0.3, 1)
+appear_chance = 1
+
+[resource]
+script = ExtResource("1_trail")
+id = &"t10_worlds_end"
+name_key = "TRAIL_T10_NAME"
+season_id = &"s02_tea"
+scene_path = "res://content/seasons/s02_tea/trails/t10_worlds_end/trail.tscn"
+length_m = 5000
+daylight_seconds = 265.0
+par_time = 195.0
+weather = ExtResource("2_weather")
+ambience = 3
+viewpoints = Array[ExtResource("3_vp")]([SubResource("Viewpoint_bakers_falls"), SubResource("Viewpoint_worlds_end")])
+unlock_order = 3
+finds = Array[ExtResource("9_find")]([SubResource("Find_whistling_thrush_feather"), SubResource("Find_lost_binoculars"), SubResource("Find_rhododendron"), SubResource("Find_sambar_deer"), SubResource("Find_horton_mushroom")])

@@ -34,7 +34,8 @@ func test_empty_roll_closes_photo_mode() -> void:
 		photo.shoot_at(photo.frame_center())
 		await wait_seconds(PhotoMode.SHOT_COOLDOWN + 0.05)
 	assert_false(photo.scoring.has_film())
-	await wait_seconds(PhotoMode.EMPTY_ROLL_CLOSE_DELAY + 0.1)
+	# Wait for the signal itself: a fixed wait was flaky when the whole suite runs.
+	await wait_for_signal(photo.closed, PhotoMode.EMPTY_ROLL_CLOSE_DELAY + 3.0)
 	assert_signal_emitted(photo, "closed")
 	assert_false(photo.is_open())
 

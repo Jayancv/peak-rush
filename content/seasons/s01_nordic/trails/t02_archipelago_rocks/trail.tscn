@@ -27,7 +27,7 @@
 [node name="Scenery" type="Node2D" parent="."]
 
 [node name="Lookout" parent="Scenery" instance=ExtResource("p_board")]
-points = PackedVector2Array(4893, 374.5, 5013, 374.5)
+points = PackedVector2Array(4893, 314.5, 5013, 314.5)
 
 [node name="Ridgewalk" parent="Scenery" instance=ExtResource("p_board")]
 points = PackedVector2Array(1512, 465.7, 2150, 465.7)
@@ -373,6 +373,9 @@ color = Color(0.1686, 0.1765, 0.2588, 1.0)
 antialiased = true
 polygon = PackedVector2Array(-18, -264, 18, -264, 0, -286)
 
+[node name="HighLedge" type="Marker2D" parent="Scenery" groups=["high_ledge"]]
+position = Vector2(4840, 432.5)
+
 [node name="Trailhead" type="Marker2D" parent="."]
 position = Vector2(160, 550)
 
@@ -636,7 +639,7 @@ kind = 2
 color = Color(0.5490, 0.5451, 0.5176, 1)
 
 [node name="Find_sea_thrift" parent="Pieces" instance=ExtResource("p_find")]
-position = Vector2(4963, 374.5)
+position = Vector2(4963, 314.5)
 find_id = &"sea_thrift"
 kind = 0
 color = Color(0.8980, 0.5451, 0.6902, 1)

@@ -80,6 +80,9 @@ func _fill() -> void:
 		lines.append(tr("RESULTS_TP_CHALLENGES") % [TrailChallenges.count(int(_result.get("new_challenges", 0))), int(_result.challenge_tp)])
 	if bool(_result.get("medal", false)):
 		lines.append(tr("RESULTS_MEDAL"))
+	var weekly: Dictionary = _result.get("weekly", {})
+	if int(weekly.get("tp", 0)) > 0:
+		lines.append(tr("RESULTS_WEEKLY_ALL" if bool(weekly.bonus) else "RESULTS_WEEKLY") % [(weekly.done as Array).size(), int(weekly.tp)])
 	var daily: Dictionary = _result.get("daily", {})
 	if not daily.is_empty():
 		lines.append(tr("RESULTS_DAILY_DONE") % [int(daily.bonus), int(daily.streak)] if daily.done else tr("RESULTS_DAILY_MISSED"))
@@ -143,7 +146,7 @@ func _land_stamp() -> void:
 
 ## Newly earned badges slide down from the top as small pills.
 func _show_new_badges() -> void:
-	BadgePills.show(card.get_parent().get_parent(), _result.get("new_badges", []))
+	BadgePills.show(self, _result.get("new_badges", []))
 
 
 func _thump() -> void:

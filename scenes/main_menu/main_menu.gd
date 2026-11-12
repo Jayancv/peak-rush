@@ -36,7 +36,7 @@ func _ready() -> void:
 	_add_daily_button()
 	_add_steps_button()
 	# Ad consent waits until ads matter (see Ads); this only catches players past the grace period.
-	Ads.ensure_consent.call_deferred(self)
+	_ask_consent.call_deferred()
 	_start_panning()
 	UiMotion.intro([$SafeArea/VBox/Card, banner, continue_button, play_button, journal_button, gear_button, settings_button, profile_button], 0.1)
 	if OS.is_debug_build() and not _startup_logged:
@@ -66,6 +66,12 @@ func _add_steps_button() -> void:
 		return
 	var button: StepsButton = StepsButton.create(profile_button.get_parent(), self)
 	UiMotion.intro([button], 0.55)
+
+
+## Deferred from _ready; skipped if the menu was left (and freed) in the same frame.
+func _ask_consent() -> void:
+	if is_inside_tree():
+		Ads.ensure_consent(self)
 
 
 func _setup_banner() -> void:

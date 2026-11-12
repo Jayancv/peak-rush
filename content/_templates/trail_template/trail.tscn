@@ -9,29 +9,170 @@
 [ext_resource type="PackedScene" path="res://world/interactables/bench.tscn" id="7_bench"]
 [ext_resource type="PackedScene" path="res://world/interactables/checkpoint.tscn" id="8_checkpoint"]
 [ext_resource type="PackedScene" path="res://world/interactables/finish.tscn" id="9_finish"]
+[ext_resource type="PackedScene" path="res://world/obstacles/mud_patch.tscn" id="10_mud"]
+[ext_resource type="PackedScene" path="res://world/interactables/spring.tscn" id="11_spring"]
+[ext_resource type="PackedScene" path="res://world/obstacles/rope_bridge.tscn" id="12_bridge"]
+[ext_resource type="PackedScene" path="res://world/interactables/viewpoint.tscn" id="13_vp"]
+[ext_resource type="PackedScene" path="res://world/interactables/find.tscn" id="14_find"]
+[ext_resource type="PackedScene" path="res://world/obstacles/boardwalk.tscn" id="15_board"]
+[ext_resource type="PackedScene" path="res://world/interactables/fork_sign.tscn" id="16_sign"]
 
 [node name="TrailTemplate" type="Node2D"]
 
 [node name="Backdrop" parent="." instance=ExtResource("2_backdrop")]
+
+[node name="Scenery" type="Node2D" parent="."]
+
+[node name="Ridgewalk" parent="Scenery" instance=ExtResource("15_board")]
+points = PackedVector2Array(2700, 422, 3380, 422)
+
+[node name="Lookout" parent="Scenery" instance=ExtResource("15_board")]
+points = PackedVector2Array(4700, 400, 4820, 400)
+
+[node name="Ditch" type="Polygon2D" parent="Scenery"]
+color = Color(0.2235, 0.3294, 0.3490, 1)
+polygon = PackedVector2Array(4288, 504, 4382, 504, 4382, 1370, 4288, 1370)
 
 [node name="Trailhead" type="Marker2D" parent="."]
 position = Vector2(160, 550)
 
 [node name="Ground" type="Node2D" parent="."]
 
-[node name="Path" type="Line2D" parent="Ground"]
-points = PackedVector2Array(-300, 560, 600, 560, 1000, 500, 1400, 500)
+[node name="Start" type="Line2D" parent="Ground"]
+points = PackedVector2Array(-300, 560, 1200, 560)
 width = 14.0
-default_color = Color(0.788235, 0.698039, 0.560784, 1)
 joint_mode = 2
 begin_cap_mode = 2
 end_cap_mode = 2
 script = ExtResource("1_strip")
+surface = 0
+fill_color = Color(0.2902, 0.4510, 0.3490, 1)
+fill_bottom_color = Color(0.1333, 0.2157, 0.1725, 1)
+tuft_color = Color(0.4353, 0.6118, 0.3725, 1)
+decor_seed = 3
+side_trees = 1
+side_tree_spacing = Vector2(280, 640)
+
+[node name="Hill" type="Line2D" parent="Ground"]
+points = PackedVector2Array(1200, 560, 1260, 559.4, 1320, 557.8, 1380, 555.1, 1440, 551.4, 1500, 546.8, 1560, 541.5, 1620, 535.4, 1680, 528.9, 1740, 522, 1800, 515, 1860, 508, 1920, 501.1, 1980, 494.6, 2040, 488.5, 2100, 483.2, 2160, 478.6, 2220, 474.9, 2280, 472.2, 2340, 470.6, 2400, 470)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("1_strip")
+surface = 0
+fill_color = Color(0.2902, 0.4510, 0.3490, 1)
+fill_bottom_color = Color(0.1333, 0.2157, 0.1725, 1)
+tuft_color = Color(0.4353, 0.6118, 0.3725, 1)
+decor_seed = 10
+side_trees = 1
+side_tree_spacing = Vector2(280, 640)
+
+[node name="Bank" type="Line2D" parent="Ground"]
+points = PackedVector2Array(2650, 470, 3400, 470)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("1_strip")
+surface = 1
+fill_color = Color(0.2902, 0.4510, 0.3490, 1)
+fill_bottom_color = Color(0.1333, 0.2157, 0.1725, 1)
+tuft_color = Color(0.4353, 0.6118, 0.3725, 1)
+decor_seed = 17
+
+[node name="Meadow" type="Line2D" parent="Ground"]
+points = PackedVector2Array(3812, 470, 4300, 470)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("1_strip")
+surface = 0
+fill_color = Color(0.2902, 0.4510, 0.3490, 1)
+fill_bottom_color = Color(0.1333, 0.2157, 0.1725, 1)
+tuft_color = Color(0.4353, 0.6118, 0.3725, 1)
+decor_seed = 24
+side_trees = 2
+side_tree_spacing = Vector2(280, 640)
+
+[node name="Summit" type="Line2D" parent="Ground"]
+points = PackedVector2Array(4370, 470, 5300, 470)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("1_strip")
+surface = 1
+fill_color = Color(0.2902, 0.4510, 0.3490, 1)
+fill_bottom_color = Color(0.1333, 0.2157, 0.1725, 1)
+tuft_color = Color(0.4353, 0.6118, 0.3725, 1)
+decor_seed = 31
 
 [node name="Pieces" type="Node2D" parent="."]
 
-[node name="Checkpoint" parent="Pieces" instance=ExtResource("8_checkpoint")]
-position = Vector2(700, 545)
+[node name="Rock" parent="Pieces" instance=ExtResource("3_rock")]
+position = Vector2(600, 560)
+
+[node name="Root" parent="Pieces" instance=ExtResource("4_root")]
+position = Vector2(900, 560)
+
+[node name="Mud" parent="Pieces" instance=ExtResource("10_mud")]
+position = Vector2(1500, 546.8)
+width = 140.0
+
+[node name="Bench" parent="Pieces" instance=ExtResource("7_bench")]
+position = Vector2(1900, 503.4)
+
+[node name="Spring" parent="Pieces" instance=ExtResource("11_spring")]
+position = Vector2(2100, 483.2)
+
+[node name="Checkpoint1" parent="Pieces" instance=ExtResource("8_checkpoint")]
+position = Vector2(2250, 473.5)
+
+[node name="Bridge" parent="Pieces" instance=ExtResource("12_bridge")]
+position = Vector2(2400, 470)
+span = 250.0
+end_drop = 0
+
+[node name="BridgeKill" parent="Pieces" instance=ExtResource("6_kill")]
+position = Vector2(2525, 730)
+size = Vector2(290, 300)
+
+[node name="ForkSign" parent="Pieces" instance=ExtResource("16_sign")]
+position = Vector2(2690, 470)
+
+[node name="Viewpoint" parent="Pieces" instance=ExtResource("13_vp")]
+position = Vector2(2900, 470)
+viewpoint_id = &"template_view"
+frame_offset = Vector2(260, -220)
+subject_kind = 0
+subject_path = PackedVector2Array(-260, 0, 260, -40)
+subject_speed = 90.0
+
+[node name="Find_template_flower" parent="Pieces" instance=ExtResource("14_find")]
+position = Vector2(3150, 470)
+find_id = &"template_flower"
+kind = 0
+color = Color(0.851, 0.4235, 0.5569, 1)
+
+[node name="Stones" parent="Pieces" instance=ExtResource("5_stones")]
+position = Vector2(3400, 470)
+stone_count = 3
+gap = 70
+
+[node name="Checkpoint2" parent="Pieces" instance=ExtResource("8_checkpoint")]
+position = Vector2(3900, 470)
+
+[node name="GapKill" parent="Pieces" instance=ExtResource("6_kill")]
+position = Vector2(4335, 730)
+size = Vector2(110, 300)
+
+[node name="Find_template_item" parent="Pieces" instance=ExtResource("14_find")]
+position = Vector2(4760, 400)
+find_id = &"template_item"
+kind = 2
+color = Color(0.4314, 0.2902, 0.1804, 1)
 
 [node name="Finish" parent="Pieces" instance=ExtResource("9_finish")]
-position = Vector2(1250, 500)
+position = Vector2(5000, 470)

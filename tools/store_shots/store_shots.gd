@@ -20,7 +20,7 @@ const CAPTIONS: Array[Array] = [
 	["mire", "Choose your path"],
 	["journal", "Fill your travel journal"],
 	["results", "Earn three stars on every trail"],
-	["fjord", "Brave rain, wind, fog and snow"],
+	["tea", "Two seasons: Nordic peaks and tea country"],
 ]
 const TITLE_FONT: Font = preload("res://shared_art/title_font.tres")
 const BG_TOP: Color = Color("#2F4A3F")
@@ -47,6 +47,7 @@ func _run() -> void:
 	await _trail_shot(&"t04_fjord_ridge", 0.3, "raw/fjord")
 	await _trail_shot(&"t05_aurora_summit", 0.5, "raw/aurora")
 	await _trail_shot(&"t06_crane_mire", 0.5, "raw/mire")
+	await _trail_shot(&"t07_tea_terraces", 0.24, "raw/tea")
 	await _photo_shot(&"t02_archipelago_rocks", "raw/photo")
 	await _menu_shot(SceneRouter.JOURNAL, "raw/journal")
 	await _menu_shot(SceneRouter.TRAIL_SELECT, "raw/trails")

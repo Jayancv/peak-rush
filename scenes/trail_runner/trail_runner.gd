@@ -51,7 +51,7 @@ func _ready() -> void:
 	_twist = HikeTracker.daily_twist(trail)
 	_weather_profile = HikeTracker.twisted_weather(trail.weather, _twist, _balance)
 	var day_mult: float = _balance.daily_short_day_mult if _twist == DailyChallenge.Twist.SHORT_DAY else 1.0
-	daylight = Daylight.new(_balance, trail.daylight_seconds * day_mult, trail.night)
+	daylight = Daylight.new(_balance, trail.daylight_seconds * day_mult, trail.night, trail.sunrise)
 	daylight.phase_changed.connect(_on_phase_changed)
 	weather = WeatherEffects.new(_weather_profile, hash(trail.id))
 	weather_fx.apply(_weather_profile)

@@ -101,10 +101,55 @@ static func birch(x: float, ground: float, h: float, crown: Color, haze: Color, 
 		_add(_blob(centre, Vector2(rx, ry) * c.z * 0.62, rng), col, out)
 
 
+## A coconut palm: a thin, gently curved trunk and a crown of drooping fronds.
+static func palm(x: float, ground: float, h: float, col: Color, rng: RandomNumberGenerator, out: Batch) -> void:
+	out.begin_plant(ground, h, rng.randf() * TAU)
+	var bend: float = rng.randf_range(-0.22, 0.22) * h
+	var bark: Color = Color("#7A6249").lerp(col, 0.25)
+	var segs: int = 6
+	var w0: float = maxf(h * 0.035, 1.2)
+	var prev_l: Vector2 = Vector2(x - w0, ground)
+	var prev_r: Vector2 = Vector2(x + w0, ground)
+	var top: Vector2 = Vector2.ZERO
+	for i: int in range(1, segs + 1):
+		var t: float = float(i) / segs
+		var c: Vector2 = Vector2(x + bend * t * t, ground - h * 0.86 * t)
+		var w: float = w0 * (1.0 - t * 0.45)
+		var l: Vector2 = c - Vector2(w, 0)
+		var r: Vector2 = c + Vector2(w, 0)
+		_add(PackedVector2Array([prev_l, prev_r, r, l]), bark if i % 2 == 0 else bark.darkened(0.12), out)
+		prev_l = l
+		prev_r = r
+		top = c
+	var fronds: int = 7
+	for k: int in fronds:
+		var a: float = PI + PI * (float(k) + 0.5) / fronds + rng.randf_range(-0.12, 0.12)
+		var reach: float = h * rng.randf_range(0.34, 0.46)
+		var tip: Vector2 = top + Vector2(cos(a) * reach, sin(a) * reach * 0.55 + reach * 0.35)
+		var mid: Vector2 = top.lerp(tip, 0.5) + Vector2(0, -reach * 0.18)
+		var side: Vector2 = (tip - top).normalized().orthogonal() * h * 0.045
+		var lit: bool = cos(a) < 0.0
+		_add(PackedVector2Array([top, mid + side, tip, mid - side * 0.6]), col.lightened(LIGHT) if lit else col.darkened(SHADE), out)
+	_add(_blob(top + Vector2(0, h * 0.03), Vector2(h * 0.05, h * 0.04), rng), Color("#5A4A2E"), out)
+
+
+## A clipped tea bush: a low, flat-topped hedge, lit along the top with paler new leaves.
+static func tea_bush(x: float, ground: float, h: float, col: Color, rng: RandomNumberGenerator, out: Batch) -> void:
+	out.begin_plant(ground, h, rng.randf() * TAU)
+	var w: float = h * rng.randf_range(1.5, 1.9)
+	var shade: Color = col.darkened(0.22)
+	_add_cols(PackedVector2Array([Vector2(x - w * 0.5, ground), Vector2(x - w * 0.52, ground - h * 0.55),
+		Vector2(x - w * 0.38, ground - h), Vector2(x + w * 0.38, ground - h), Vector2(x + w * 0.52, ground - h * 0.55),
+		Vector2(x + w * 0.5, ground)]), PackedColorArray([shade, col, col.lightened(0.12), col.lightened(0.06), col.darkened(0.08), shade]), out)
+	for k: int in 3:
+		var fx: float = x + rng.randf_range(-w * 0.32, w * 0.32)
+		_add(_blob(Vector2(fx, ground - h * 0.96), Vector2(h * 0.12, h * 0.06), rng), col.lightened(0.3), out)
+
+
 ## Big trees spaced along a stretch of trail (TerrainStrip's trail-side trees).
 ## `edge_y` gives the path height at an x; trees stand just behind it. No tree is
 ## placed inside a `clear` span (local x from..to). kind follows
-## TerrainStrip.TreeKind: 1 = pines, 2 = birches, 3 = mixed.
+## TerrainStrip.TreeKind: 1 = pines, 2 = birches, 3 = mixed, 4 = palms, 5 = tea bushes.
 static func along(edge_y: Callable, x0: float, x1: float, kind: int, spacing: Vector2, height: Vector2,
 		col: Color, alt: Color, snow: bool, seed_value: int, clear: Array[Vector2] = []) -> Batch:
 	var batch: Batch = Batch.new()
@@ -127,7 +172,11 @@ static func along(edge_y: Callable, x0: float, x1: float, kind: int, spacing: Ve
 		# Small colour shifts so neighbouring trees don't look stamped.
 		var shift: float = rng.randf_range(-0.06, 0.08)
 		var birch_here: bool = kind == 2 or (kind == 3 and i % 3 == 1)
-		if birch_here:
+		if kind == 4:
+			palm(x, ground, h, col.darkened(shift), rng, batch)
+		elif kind == 5:
+			tea_bush(x, ground - h * 0.04, h, col.darkened(shift), rng, batch)
+		elif birch_here:
 			birch(x, ground, h * 0.85, alt.darkened(shift), Color("#F2EEE4"), rng, batch)
 		else:
 			pine(x, ground, h, col.darkened(shift), rng, batch, snow)

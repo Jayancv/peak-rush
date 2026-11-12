@@ -130,12 +130,24 @@ func test_migrates_v4_save_to_v5_with_no_hints_seen() -> void:
 func test_migrates_v5_save_to_v6_with_the_step_counter_off() -> void:
 	var v5: Dictionary = {"save_version": 5, "tp": 9, "profile": {"name": "Aino"}}
 	var out: Dictionary = SaveService.migrate(v5)
-	assert_eq(int(out.save_version), 6)
+	assert_eq(int(out.save_version), SaveService.SAVE_VERSION)
 	assert_false(bool(out.steps.enabled))
 	assert_eq(int(out.steps.lifetime_steps), 0)
 	assert_eq(int(out.tp), 9)
 	GameState.from_dict(out)
 	assert_false(GameState.steps.enabled, "migrated players must opt in themselves")
+	GameState.reset()
+
+
+func test_migrates_v6_save_to_v7_with_fresh_weekly_goals() -> void:
+	var v6: Dictionary = {"save_version": 6, "tp": 9, "profile": {"name": "Aino", "hikes": 4}, "steps": {"enabled": true}}
+	var out: Dictionary = SaveService.migrate(v6)
+	assert_eq(int(out.save_version), SaveService.SAVE_VERSION)
+	assert_eq(out.profile.weekly, {})
+	assert_eq(int(out.profile.hikes), 4, "the rest of the profile is untouched")
+	assert_true(bool(out.steps.enabled), "and so is everything else")
+	GameState.from_dict(out)
+	assert_eq(GameState.profile.weekly, {})
 	GameState.reset()
 
 

@@ -153,6 +153,9 @@ extends Resource
 ## Night trails: the tint during the window, and after it closes.
 @export var tint_night: Color = Color("#7E8BC4")
 @export var tint_night_late: Color = Color("#4E5888")
+## Sunrise climbs (TrailData.sunrise): the night lifts to this from sunrise_start (fraction).
+@export var tint_sunrise: Color = Color("#F2C6A0")
+@export var sunrise_start: float = 0.35
 
 @export_group("Feedback")
 @export var stumble_vibrate_ms: int = 60
@@ -181,6 +184,39 @@ extends Resource
 @export var tp_photo_good: int = 10
 @export var tp_photo_great: int = 20
 @export var tp_photo_perfect: int = 30
+
+@export_group("Player actions")
+## Hold jump: gravity is softened while jump is held during the first part of the rise,
+## so a held jump goes higher (a tap is unchanged).
+## Presses shorter than this are taps (normal jump).
+@export var jump_tap_seconds: float = 0.12
+@export var jump_hold_seconds: float = 0.24
+@export var jump_hold_gravity_scale: float = 0.3
+## Hurry: double-tap and hold walk. Faster, and tiring faster.
+@export var hurry_double_tap_seconds: float = 0.32
+@export var hurry_speed_mult: float = 1.35
+@export var hurry_drain_mult: float = 1.8
+## Duck: crouch-walk under low branches.
+@export var crouch_speed_mult: float = 0.55
+## Ladders and scrambles: climbing speed (px/s), energy cost, and the hop onto the top.
+@export var climb_speed: float = 95.0
+@export var climb_drain_mult: float = 1.6
+@export var climb_top_hop: Vector2 = Vector2(110, 230)
+## The "double-tap to hurry" hint waits for this much walking.
+@export var hint_hurry_after_seconds: float = 45.0
+
+@export_group("Weekly goals")
+## Goals per week, TP for each, and a bonus for finishing them all.
+@export var weekly_goal_count: int = 3
+@export var weekly_goal_tp: int = 60
+@export var weekly_all_bonus_tp: int = 100
+## Targets: finds collected, great-or-better photos, summits, hikes under par, dailies, clean hikes.
+@export var weekly_finds: int = 6
+@export var weekly_great_photos: int = 4
+@export var weekly_summits: int = 5
+@export var weekly_beat_par: int = 3
+@export var weekly_dailies: int = 3
+@export var weekly_clean_hikes: int = 3
 
 @export_group("Real steps")
 ## Steps from the phone's health app (GAME_DESIGN §5.10): a small TP bonus, never the main source.

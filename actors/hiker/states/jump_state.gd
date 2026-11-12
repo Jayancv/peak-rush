@@ -9,7 +9,7 @@ func enter() -> void:
 
 func physics_update(delta: float) -> int:
 	air_control(delta)
-	apply_gravity(delta)
+	apply_jump_gravity(delta)
 	if hiker.velocity.y >= 0.0 or hiker.is_on_ceiling():
 		return Hiker.State.FALL
 	return Hiker.STAY

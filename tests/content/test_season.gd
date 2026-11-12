@@ -36,10 +36,19 @@ func test_continue_starts_at_trail_one_then_moves_on() -> void:
 	assert_eq(GameState.next_trail_to_play().id, &"t02_archipelago_rocks")
 
 
-func test_continue_is_empty_when_the_season_is_done() -> void:
+func test_continue_moves_to_the_next_season_then_is_empty() -> void:
 	for t: TrailData in ContentDB.get_season(&"s01_nordic").trails:
 		_complete(t.id)
+	assert_eq(GameState.next_trail_to_play().id, &"t07_tea_terraces", "Season 1 done: on to Tea Country")
+	for season: SeasonData in ContentDB.seasons():
+		for t: TrailData in season.trails:
+			_complete(t.id)
 	assert_null(GameState.next_trail_to_play())
+
+
+func test_continue_stays_in_the_season_being_played() -> void:
+	_complete(&"t07_tea_terraces")
+	assert_eq(GameState.next_trail_to_play().id, &"t08_ella_rock", "started Tea Country: keep going there")
 
 
 func test_only_forest_lake_is_a_tutorial() -> void:
@@ -75,3 +84,23 @@ func test_tutorial_hints_have_strings() -> void:
 			assert_ne(tr(key), key, "missing string %s" % key)
 	level.free()
 	assert_gte(found, 4, "walk, rest, jump and photo hints at least")
+
+
+func test_tea_country_has_its_five_trails_in_order() -> void:
+	var ids: Array[StringName] = []
+	for t: TrailData in ContentDB.get_season(&"s02_tea").ordered_trails():
+		ids.append(t.id)
+	assert_eq(ids, [&"t07_tea_terraces", &"t08_ella_rock", &"t09_nine_arches", &"t10_worlds_end", &"t11_pilgrims_peak"] as Array[StringName])
+
+
+func test_tea_country_weather_and_the_sunrise_climb() -> void:
+	assert_true(ContentDB.get_trail(&"t09_nine_arches").weather.rain, "monsoon rain on the viaduct trail")
+	assert_true(ContentDB.get_trail(&"t10_worlds_end").weather.fog, "World's End lies in mist")
+	var peak: TrailData = ContentDB.get_trail(&"t11_pilgrims_peak")
+	assert_true(peak.night and peak.sunrise)
+	assert_eq(peak.star3_key, "RESULTS_STAR_SUNRISE")
+	var b: Balance = ContentDB.balance
+	var day: Daylight = Daylight.new(b, 100.0, true, true)
+	assert_true(day.tint().is_equal_approx(b.tint_night), "starts in the dark")
+	day.advance(100.0)
+	assert_true(day.tint().is_equal_approx(b.tint_sunrise), "the window ends at sunrise")

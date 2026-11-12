@@ -20,6 +20,8 @@ var daily_streak: int = 0
 var daily_pick: Dictionary = {}
 ## First-time hints already shown (hint keys), so each explains itself only once ever.
 var hints_seen: Array[String] = []
+## This week's goals and progress (WeeklyGoals; save v7).
+var weekly: Dictionary = {}
 
 
 static func slot_key(slot: CosmeticData.Slot) -> String:
@@ -109,6 +111,7 @@ func to_dict() -> Dictionary:
 		"daily_streak": daily_streak,
 		"hints_seen": hints_seen.duplicate(),
 		"daily_pick": daily_pick.duplicate(),
+		"weekly": weekly.duplicate(true),
 	}
 
 
@@ -125,6 +128,7 @@ func from_dict(data: Dictionary) -> void:
 	daily_last = str(data.get("daily_last", ""))
 	daily_streak = maxi(int(data.get("daily_streak", 0)), 0)
 	hints_seen = TrailRecord.string_list(data.get("hints_seen", []))
+	weekly = WeeklyGoals.clean(data.get("weekly", {}))
 	var pick: Variant = data.get("daily_pick", {})
 	daily_pick = {}
 	if pick is Dictionary and pick.has("date") and pick.has("trail_id") and pick.has("twist"):

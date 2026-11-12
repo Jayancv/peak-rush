@@ -6,7 +6,8 @@ extends Line2D
 ## Points must run left to right.
 
 enum Surface { DIRT, ROCK, MUD, ICE, SNOW }
-enum TreeKind { NONE, PINE, BIRCH, MIXED }
+## New kinds go at the END (scenes store the number).
+enum TreeKind { NONE, PINE, BIRCH, MIXED, PALM, TEA }
 
 const GROUP: StringName = &"terrain_strip"
 const SWAY_SHADER: Shader = preload("res://world/fx/sway.gdshader")

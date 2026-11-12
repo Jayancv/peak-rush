@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" path="res://world/interactables/spring.tscn" id="p_spring"]
 [ext_resource type="PackedScene" path="res://world/obstacles/rope_bridge.tscn" id="x_bridge"]
 [ext_resource type="PackedScene" path="res://world/obstacles/kill_zone.tscn" id="x_kill"]
+[ext_resource type="PackedScene" path="res://world/obstacles/ladder.tscn" id="p_ladder"]
 
 [node name="LaplandFell" type="Node2D"]
 
@@ -26,6 +27,15 @@ position = Vector2(160, 550)
 
 
 [node name="Scenery" type="Node2D" parent="."]
+
+[node name="TowerDeckA" parent="Scenery" instance=ExtResource("p_board")]
+points = PackedVector2Array(5086, 35.3, 5290, 35.3)
+
+[node name="HighLookoutA" parent="Scenery" instance=ExtResource("p_board")]
+points = PackedVector2Array(7000, -238, 7120, -238)
+
+[node name="HighLedgeA" type="Marker2D" parent="Scenery" groups=["high_ledge"]]
+position = Vector2(6940, -120)
 
 [node name="Lookout" parent="Scenery" instance=ExtResource("p_board")]
 points = PackedVector2Array(300, 502, 420, 502)
@@ -247,7 +257,7 @@ kind = 1
 color = Color(0.5451, 0.3529, 0.1686, 1)
 
 [node name="Find_lost_glove" parent="Pieces" instance=ExtResource("p_find")]
-position = Vector2(7150, -131.25)
+position = Vector2(7060, -238)
 find_id = &"lost_glove"
 kind = 2
 color = Color(0.2431, 0.4196, 0.3098, 1)
@@ -319,3 +329,8 @@ color = Color(0.7529, 0.2235, 0.1686, 1)
 [node name="Ext1_Rock14" parent="Pieces" instance=ExtResource("3_rock")]
 position = Vector2(4949, 179.8)
 size = Vector2(60, 43)
+
+[node name="TowerA" parent="Pieces" instance=ExtResource("p_ladder")]
+position = Vector2(5100, 175.3)
+height = 140
+style = 0

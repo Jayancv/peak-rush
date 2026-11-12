@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="SeasonData" format=3]
+
+[ext_resource type="Script" path="res://data/season_data.gd" id="1_season"]
+[ext_resource type="Script" path="res://data/trail_data.gd" id="2_trail_script"]
+[ext_resource type="Resource" path="res://content/seasons/s02_tea/trails/t07_tea_terraces/trail.tres" id="t0"]
+[ext_resource type="Resource" path="res://content/seasons/s02_tea/trails/t08_ella_rock/trail.tres" id="t1"]
+[ext_resource type="Resource" path="res://content/seasons/s02_tea/trails/t09_nine_arches/trail.tres" id="t2"]
+[ext_resource type="Resource" path="res://content/seasons/s02_tea/trails/t10_worlds_end/trail.tres" id="t3"]
+[ext_resource type="Resource" path="res://content/seasons/s02_tea/trails/t11_pilgrims_peak/trail.tres" id="t4"]
+
+[resource]
+script = ExtResource("1_season")
+id = &"s02_tea"
+title_key = "SEASON_S02_TITLE"
+theme_color = Color(0.419608, 0.596078, 0.27451, 1)
+release_version = "1.0.0"
+trails = Array[ExtResource("2_trail_script")]([ExtResource("t0"), ExtResource("t1"), ExtResource("t2"), ExtResource("t3"), ExtResource("t4")])

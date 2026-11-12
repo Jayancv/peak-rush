@@ -117,10 +117,19 @@ func badge_list() -> Array[BadgeData]:
 
 ## The first unlocked trail not finished yet, newest season first (what "Continue"
 ## should open). Null when everything open has been finished.
+## Where "Continue" goes: keep going in a season the player has started (newest of those
+## first); otherwise start the earliest season with something left, so a new player
+## begins with Season 1's tutorial even when later seasons are already open.
 func next_unfinished_trail(is_unlocked: Callable, is_completed: Callable) -> TrailData:
-	var list: Array[SeasonData] = seasons()
-	list.reverse()
-	for s: SeasonData in list:
+	var started: Array[SeasonData] = []
+	var fresh: Array[SeasonData] = []
+	for s: SeasonData in seasons():
+		var any_done: bool = s.trails.any(func(t: TrailData) -> bool: return is_completed.call(t.id))
+		if any_done:
+			started.push_front(s)
+		else:
+			fresh.append(s)
+	for s: SeasonData in started + fresh:
 		for t: TrailData in s.ordered_trails():
 			if is_unlocked.call(t) and not is_completed.call(t.id):
 				return t

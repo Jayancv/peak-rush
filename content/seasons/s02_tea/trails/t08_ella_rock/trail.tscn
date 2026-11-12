@@ -1,0 +1,514 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/terrain_strip.gd" id="strip"]
+[ext_resource type="PackedScene" path="res://world/obstacles/root.tscn" id="root"]
+[ext_resource type="PackedScene" path="res://world/obstacles/rock.tscn" id="rock"]
+[ext_resource type="PackedScene" path="res://world/obstacles/mud_patch.tscn" id="mud"]
+[ext_resource type="PackedScene" path="res://world/obstacles/kill_zone.tscn" id="kill"]
+[ext_resource type="PackedScene" path="res://world/obstacles/stepping_stones.tscn" id="stones"]
+[ext_resource type="PackedScene" path="res://world/interactables/bench.tscn" id="bench"]
+[ext_resource type="PackedScene" path="res://world/interactables/checkpoint.tscn" id="checkpoint"]
+[ext_resource type="PackedScene" path="res://world/interactables/finish.tscn" id="finish"]
+[ext_resource type="PackedScene" path="res://world/interactables/viewpoint.tscn" id="vp"]
+[ext_resource type="PackedScene" path="res://world/obstacles/fallen_log.tscn" id="log"]
+[ext_resource type="PackedScene" path="res://world/obstacles/rope_bridge.tscn" id="bridge"]
+[ext_resource type="PackedScene" path="res://world/obstacles/wind_zone.tscn" id="wind"]
+[ext_resource type="PackedScene" path="res://world/obstacles/boardwalk.tscn" id="board"]
+[ext_resource type="PackedScene" path="res://world/interactables/fork_sign.tscn" id="sign"]
+[ext_resource type="PackedScene" path="res://world/interactables/find.tscn" id="find"]
+[ext_resource type="PackedScene" path="res://world/interactables/spring.tscn" id="spring"]
+[ext_resource type="PackedScene" path="res://world/obstacles/rolling_boulder.tscn" id="boulder"]
+[ext_resource type="PackedScene" path="res://world/obstacles/ladder.tscn" id="ladder"]
+[ext_resource type="PackedScene" path="res://world/obstacles/low_branch.tscn" id="branch"]
+[ext_resource type="PackedScene" path="res://world/backdrop/backdrop_tea.tscn" id="backdrop"]
+
+[node name="EllaRock" type="Node2D"]
+
+[node name="Backdrop" parent="." instance=ExtResource("backdrop")]
+
+[node name="Scenery" type="Node2D" parent="."]
+
+[node name="Water40" type="Polygon2D" parent="Scenery"]
+color = Color(0.2235, 0.3294, 0.3490, 1.0)
+antialiased = true
+polygon = PackedVector2Array(3188, 534, 3462, 534, 3462, 1400, 3188, 1400)
+
+[node name="Shine41" type="Polygon2D" parent="Scenery"]
+color = Color(0.5765, 0.6980, 0.7490, 0.8)
+antialiased = true
+polygon = PackedVector2Array(3188, 534, 3462, 534, 3462, 540, 3188, 540)
+
+[node name="RavanaFalls" type="Node2D" parent="Scenery" groups=["tree_clear"]]
+position = Vector2(3900, 500)
+metadata/tree_clear_radius = 260
+
+[node name="Cliff" type="Polygon2D" parent="Scenery/RavanaFalls"]
+color = Color(0.3608, 0.4196, 0.4000, 1.0)
+antialiased = true
+polygon = PackedVector2Array(-120, 0, -90, -350, 90, -370, 130, 0)
+
+[node name="Fall" type="Polygon2D" parent="Scenery/RavanaFalls"]
+color = Color(0.7490, 0.8902, 0.9412, 1.0)
+antialiased = true
+polygon = PackedVector2Array(-34, 0, -30, -320, 30, -320, 34, 0)
+
+[node name="Streak0" type="Polygon2D" parent="Scenery/RavanaFalls"]
+color = Color(1, 1, 1, 0.7)
+antialiased = true
+polygon = PackedVector2Array(-22, 0, -22, -320, -18, -320, -18, 0)
+
+[node name="Streak1" type="Polygon2D" parent="Scenery/RavanaFalls"]
+color = Color(1, 1, 1, 0.7)
+antialiased = true
+polygon = PackedVector2Array(-8, 0, -8, -320, -4, -320, -4, 0)
+
+[node name="Streak2" type="Polygon2D" parent="Scenery/RavanaFalls"]
+color = Color(1, 1, 1, 0.7)
+antialiased = true
+polygon = PackedVector2Array(6, 0, 6, -320, 10, -320, 10, 0)
+
+[node name="Streak3" type="Polygon2D" parent="Scenery/RavanaFalls"]
+color = Color(1, 1, 1, 0.7)
+antialiased = true
+polygon = PackedVector2Array(20, 0, 20, -320, 24, -320, 24, 0)
+
+[node name="Foam" type="Polygon2D" parent="Scenery/RavanaFalls"]
+color = Color(0.9490, 0.9843, 1.0000, 1.0)
+antialiased = true
+polygon = PackedVector2Array(-60, 0, -40, -18, 0, -24, 40, -18, 60, 0)
+
+[node name="RidgeTrail" parent="Scenery" instance=ExtResource("board")]
+points = PackedVector2Array(4400, 452, 5500, 452)
+
+[node name="Trailhead" type="Marker2D" parent="."]
+position = Vector2(160, 550)
+
+[node name="Ground" type="Node2D" parent="."]
+
+[node name="Village" type="Line2D" parent="Ground"]
+points = PackedVector2Array(-300, 560, 1000, 560)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("strip")
+surface = 0
+fill_color = Color(0.36, 0.5, 0.28, 1)
+fill_bottom_color = Color(0.2, 0.27, 0.15, 1)
+tuft_color = Color(0.5, 0.66, 0.32, 1)
+decor_seed = 17
+side_trees = 4
+side_tree_spacing = Vector2(380, 800)
+side_tree_height = Vector2(160, 240)
+side_tree_color = Color(0.25, 0.42, 0.28, 1)
+side_tree_color_alt = Color(0.56, 0.64, 0.48, 1)
+
+[node name="Railway" type="Line2D" parent="Ground"]
+points = PackedVector2Array(1000, 560, 2200, 560)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("strip")
+surface = 1
+fill_color = Color(0.36, 0.5, 0.28, 1)
+fill_bottom_color = Color(0.2, 0.27, 0.15, 1)
+tuft_color = Color(0.5, 0.66, 0.32, 1)
+decor_seed = 30
+side_trees = 3
+side_tree_spacing = Vector2(300, 700)
+side_tree_height = Vector2(140, 240)
+side_tree_color = Color(0.25, 0.42, 0.28, 1)
+side_tree_color_alt = Color(0.56, 0.64, 0.48, 1)
+
+[node name="Falls" type="Line2D" parent="Ground"]
+points = PackedVector2Array(2200, 560, 2262.5, 559.4, 2325, 557.7, 2387.5, 554.9, 2450, 551.2, 2512.5, 546.7, 2575, 541.5, 2637.5, 535.9, 2700, 530, 2762.5, 524.1, 2825, 518.5, 2887.5, 513.3, 2950, 508.8, 3012.5, 505.1, 3075, 502.3, 3137.5, 500.6, 3200, 500)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("strip")
+surface = 0
+fill_color = Color(0.36, 0.5, 0.28, 1)
+fill_bottom_color = Color(0.2, 0.27, 0.15, 1)
+tuft_color = Color(0.5, 0.66, 0.32, 1)
+decor_seed = 43
+side_trees = 3
+side_tree_spacing = Vector2(300, 700)
+side_tree_height = Vector2(140, 240)
+side_tree_color = Color(0.25, 0.42, 0.28, 1)
+side_tree_color_alt = Color(0.56, 0.64, 0.48, 1)
+
+[node name="Forest" type="Line2D" parent="Ground"]
+points = PackedVector2Array(3450, 500, 4300, 500)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("strip")
+surface = 0
+fill_color = Color(0.36, 0.5, 0.28, 1)
+fill_bottom_color = Color(0.2, 0.27, 0.15, 1)
+tuft_color = Color(0.5, 0.66, 0.32, 1)
+decor_seed = 56
+side_trees = 3
+side_tree_spacing = Vector2(260, 600)
+side_tree_height = Vector2(150, 250)
+side_tree_color = Color(0.25, 0.42, 0.28, 1)
+side_tree_color_alt = Color(0.56, 0.64, 0.48, 1)
+
+[node name="Valley" type="Line2D" parent="Ground"]
+points = PackedVector2Array(4300, 500, 4362.5, 502.3, 4425, 508.8, 4487.5, 518.5, 4550, 530, 4612.5, 541.5, 4675, 551.2, 4737.5, 557.7, 4800, 560, 5100, 560, 5166.7, 556, 5233.3, 545, 5300, 530, 5366.7, 515, 5433.3, 504, 5500, 500)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("strip")
+surface = 2
+fill_color = Color(0.36, 0.5, 0.28, 1)
+fill_bottom_color = Color(0.2, 0.27, 0.15, 1)
+tuft_color = Color(0.5, 0.66, 0.32, 1)
+decor_seed = 69
+
+[node name="Climb" type="Line2D" parent="Ground"]
+points = PackedVector2Array(5500, 500, 5561.9, 499.1, 5623.8, 496.2, 5685.7, 491.6, 5747.6, 485.2, 5809.5, 477.3, 5871.4, 468, 5933.3, 457.5, 5995.2, 446.1, 6057.1, 433.9, 6119, 421.4, 6181, 408.6, 6242.9, 396.1, 6304.8, 383.9, 6366.7, 372.5, 6428.6, 362, 6490.5, 352.7, 6552.4, 344.8, 6614.3, 338.4, 6676.2, 333.8, 6738.1, 330.9, 6800, 330, 6804, 190, 6866.3, 189.7, 6928.7, 188.8, 6991, 187.3, 7053.3, 185.3, 7115.7, 182.8, 7178, 179.7, 7240.3, 176.3, 7302.7, 172.5, 7365, 168.4, 7427.3, 164.1, 7489.7, 159.6, 7552, 155, 7614.3, 150.4, 7676.7, 145.9, 7739, 141.6, 7801.3, 137.5, 7863.7, 133.7, 7926, 130.3, 7988.3, 127.2, 8050.7, 124.7, 8113, 122.7, 8175.3, 121.2, 8237.7, 120.3, 8300, 120)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("strip")
+surface = 0
+fill_color = Color(0.36, 0.5, 0.28, 1)
+fill_bottom_color = Color(0.2, 0.27, 0.15, 1)
+tuft_color = Color(0.5, 0.66, 0.32, 1)
+decor_seed = 82
+side_trees = 3
+side_tree_spacing = Vector2(300, 700)
+side_tree_height = Vector2(140, 240)
+side_tree_color = Color(0.25, 0.42, 0.28, 1)
+side_tree_color_alt = Color(0.56, 0.64, 0.48, 1)
+
+[node name="Summit" type="Line2D" parent="Ground"]
+points = PackedVector2Array(8300, 120, 9600, 120)
+width = 14.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("strip")
+surface = 1
+fill_color = Color(0.36, 0.5, 0.28, 1)
+fill_bottom_color = Color(0.2, 0.27, 0.15, 1)
+tuft_color = Color(0.5, 0.66, 0.32, 1)
+decor_seed = 95
+
+[node name="Front" type="Node2D" parent="."]
+
+[node name="Sleeper1" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1040, 558, 1052, 558, 1052, 563, 1040, 563)
+
+[node name="Sleeper2" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1074, 558, 1086, 558, 1086, 563, 1074, 563)
+
+[node name="Sleeper3" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1108, 558, 1120, 558, 1120, 563, 1108, 563)
+
+[node name="Sleeper4" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1142, 558, 1154, 558, 1154, 563, 1142, 563)
+
+[node name="Sleeper5" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1176, 558, 1188, 558, 1188, 563, 1176, 563)
+
+[node name="Sleeper6" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1210, 558, 1222, 558, 1222, 563, 1210, 563)
+
+[node name="Sleeper7" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1244, 558, 1256, 558, 1256, 563, 1244, 563)
+
+[node name="Sleeper8" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1278, 558, 1290, 558, 1290, 563, 1278, 563)
+
+[node name="Sleeper9" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1312, 558, 1324, 558, 1324, 563, 1312, 563)
+
+[node name="Sleeper10" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1346, 558, 1358, 558, 1358, 563, 1346, 563)
+
+[node name="Sleeper11" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1380, 558, 1392, 558, 1392, 563, 1380, 563)
+
+[node name="Sleeper12" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1414, 558, 1426, 558, 1426, 563, 1414, 563)
+
+[node name="Sleeper13" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1448, 558, 1460, 558, 1460, 563, 1448, 563)
+
+[node name="Sleeper14" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1482, 558, 1494, 558, 1494, 563, 1482, 563)
+
+[node name="Sleeper15" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1516, 558, 1528, 558, 1528, 563, 1516, 563)
+
+[node name="Sleeper16" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1550, 558, 1562, 558, 1562, 563, 1550, 563)
+
+[node name="Sleeper17" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1584, 558, 1596, 558, 1596, 563, 1584, 563)
+
+[node name="Sleeper18" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1618, 558, 1630, 558, 1630, 563, 1618, 563)
+
+[node name="Sleeper19" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1652, 558, 1664, 558, 1664, 563, 1652, 563)
+
+[node name="Sleeper20" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1686, 558, 1698, 558, 1698, 563, 1686, 563)
+
+[node name="Sleeper21" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1720, 558, 1732, 558, 1732, 563, 1720, 563)
+
+[node name="Sleeper22" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1754, 558, 1766, 558, 1766, 563, 1754, 563)
+
+[node name="Sleeper23" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1788, 558, 1800, 558, 1800, 563, 1788, 563)
+
+[node name="Sleeper24" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1822, 558, 1834, 558, 1834, 563, 1822, 563)
+
+[node name="Sleeper25" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1856, 558, 1868, 558, 1868, 563, 1856, 563)
+
+[node name="Sleeper26" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1890, 558, 1902, 558, 1902, 563, 1890, 563)
+
+[node name="Sleeper27" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1924, 558, 1936, 558, 1936, 563, 1924, 563)
+
+[node name="Sleeper28" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1958, 558, 1970, 558, 1970, 563, 1958, 563)
+
+[node name="Sleeper29" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(1992, 558, 2004, 558, 2004, 563, 1992, 563)
+
+[node name="Sleeper30" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(2026, 558, 2038, 558, 2038, 563, 2026, 563)
+
+[node name="Sleeper31" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(2060, 558, 2072, 558, 2072, 563, 2060, 563)
+
+[node name="Sleeper32" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(2094, 558, 2106, 558, 2106, 563, 2094, 563)
+
+[node name="Sleeper33" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(2128, 558, 2140, 558, 2140, 563, 2128, 563)
+
+[node name="Sleeper34" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(2162, 558, 2174, 558, 2174, 563, 2162, 563)
+
+[node name="Sleeper35" type="Polygon2D" parent="Front"]
+color = Color(0.36, 0.27, 0.2, 1)
+antialiased = true
+polygon = PackedVector2Array(2196, 558, 2208, 558, 2208, 563, 2196, 563)
+
+[node name="Rail36" type="Polygon2D" parent="Front"]
+color = Color(0.38, 0.39, 0.43, 1)
+antialiased = true
+polygon = PackedVector2Array(1040, 555, 1080, 555, 1120, 555, 1160, 555, 1200, 555, 1240, 555, 1280, 555, 1320, 555, 1360, 555, 1400, 555, 1440, 555, 1480, 555, 1520, 555, 1560, 555, 1600, 555, 1640, 555, 1680, 555, 1720, 555, 1760, 555, 1800, 555, 1840, 555, 1880, 555, 1920, 555, 1960, 555, 2000, 555, 2040, 555, 2080, 555, 2120, 555, 2160, 555, 2200, 555, 2200, 557, 2160, 557, 2120, 557, 2080, 557, 2040, 557, 2000, 557, 1960, 557, 1920, 557, 1880, 557, 1840, 557, 1800, 557, 1760, 557, 1720, 557, 1680, 557, 1640, 557, 1600, 557, 1560, 557, 1520, 557, 1480, 557, 1440, 557, 1400, 557, 1360, 557, 1320, 557, 1280, 557, 1240, 557, 1200, 557, 1160, 557, 1120, 557, 1080, 557, 1040, 557)
+
+[node name="Rail37" type="Polygon2D" parent="Front"]
+color = Color(0.55, 0.56, 0.6, 1)
+antialiased = true
+polygon = PackedVector2Array(1040, 557, 1080, 557, 1120, 557, 1160, 557, 1200, 557, 1240, 557, 1280, 557, 1320, 557, 1360, 557, 1400, 557, 1440, 557, 1480, 557, 1520, 557, 1560, 557, 1600, 557, 1640, 557, 1680, 557, 1720, 557, 1760, 557, 1800, 557, 1840, 557, 1880, 557, 1920, 557, 1960, 557, 2000, 557, 2040, 557, 2080, 557, 2120, 557, 2160, 557, 2200, 557, 2200, 559, 2160, 559, 2120, 559, 2080, 559, 2040, 559, 2000, 559, 1960, 559, 1920, 559, 1880, 559, 1840, 559, 1800, 559, 1760, 559, 1720, 559, 1680, 559, 1640, 559, 1600, 559, 1560, 559, 1520, 559, 1480, 559, 1440, 559, 1400, 559, 1360, 559, 1320, 559, 1280, 559, 1240, 559, 1200, 559, 1160, 559, 1120, 559, 1080, 559, 1040, 559)
+
+[node name="Pieces" type="Node2D" parent="."]
+
+[node name="Bridge38" parent="Pieces" instance=ExtResource("bridge")]
+position = Vector2(3200, 500)
+span = 250
+end_drop = 0
+
+[node name="BridgeKill39" parent="Pieces" instance=ExtResource("kill")]
+position = Vector2(3325, 760)
+size = Vector2(290, 300)
+
+[node name="Root42" parent="Pieces" instance=ExtResource("root")]
+position = Vector2(700, 560)
+
+[node name="Find_tea_flower" parent="Pieces" instance=ExtResource("find")]
+position = Vector2(1800, 560)
+find_id = &"tea_flower"
+kind = 0
+color = Color(0.98, 0.97, 0.9, 1)
+
+[node name="Checkpoint1" parent="Pieces" instance=ExtResource("checkpoint")]
+position = Vector2(2050, 560)
+
+[node name="Vp_ella_gap" parent="Pieces" instance=ExtResource("vp")]
+position = Vector2(2500, 547.6)
+viewpoint_id = &"ella_gap"
+frame_offset = Vector2(300, -220)
+subject_kind = 0
+subject_path = PackedVector2Array(-300, 20, 0, -50, 300, 10)
+subject_speed = 90
+subject_size = 1.0
+subject_color = Color(0.36, 0.66, 0.3, 1)
+subject_accent = Color(0.85, 0.25, 0.2, 1)
+
+[node name="Find_toque_macaque" parent="Pieces" instance=ExtResource("find")]
+position = Vector2(3800, 500)
+find_id = &"toque_macaque"
+kind = 3
+color = Color(0.62, 0.48, 0.34, 1)
+
+[node name="Branch43" parent="Pieces" instance=ExtResource("branch")]
+position = Vector2(3650, 500)
+width = 90
+leaf_color = Color(0.5, 0.6, 0.45, 1)
+
+[node name="Branch44" parent="Pieces" instance=ExtResource("branch")]
+position = Vector2(4100, 500)
+width = 90
+leaf_color = Color(0.5, 0.6, 0.45, 1)
+
+[node name="ForkSign" parent="Pieces" instance=ExtResource("sign")]
+position = Vector2(4330, 501.1)
+
+[node name="Find_bee_eater_feather" parent="Pieces" instance=ExtResource("find")]
+position = Vector2(5000, 452)
+find_id = &"bee_eater_feather"
+kind = 2
+color = Color(0.3, 0.68, 0.45, 1)
+
+[node name="Mud45" parent="Pieces" instance=ExtResource("mud")]
+position = Vector2(4900, 560)
+width = 160.0
+
+[node name="Find_railway_spike" parent="Pieces" instance=ExtResource("find")]
+position = Vector2(4980, 560)
+find_id = &"railway_spike"
+kind = 2
+color = Color(0.4, 0.38, 0.36, 1)
+
+[node name="Checkpoint2" parent="Pieces" instance=ExtResource("checkpoint")]
+position = Vector2(5700, 490.1)
+
+[node name="Root46" parent="Pieces" instance=ExtResource("root")]
+position = Vector2(5950, 454.4)
+
+[node name="Find_wild_ginger" parent="Pieces" instance=ExtResource("find")]
+position = Vector2(6150, 415)
+find_id = &"wild_ginger"
+kind = 0
+color = Color(0.85, 0.22, 0.25, 1)
+
+[node name="Bench47" parent="Pieces" instance=ExtResource("bench")]
+position = Vector2(6250, 394.7)
+
+[node name="Root48" parent="Pieces" instance=ExtResource("root")]
+position = Vector2(6550, 345.1)
+
+[node name="Ladder49" parent="Pieces" instance=ExtResource("ladder")]
+position = Vector2(6788, 330.2)
+height = 140
+style = 0
+
+[node name="Spring50" parent="Pieces" instance=ExtResource("spring")]
+position = Vector2(6900, 189.2)
+
+[node name="Rock51" parent="Pieces" instance=ExtResource("rock")]
+position = Vector2(7150, 181.1)
+
+[node name="Checkpoint3" parent="Pieces" instance=ExtResource("checkpoint")]
+position = Vector2(7250, 175.7)
+
+[node name="Bench52" parent="Pieces" instance=ExtResource("bench")]
+position = Vector2(7350, 169.4)
+
+[node name="Boulder53" parent="Pieces" instance=ExtResource("boulder")]
+position = Vector2(7700, 144.3)
+trigger_from = -420.0
+
+[node name="Root54" parent="Pieces" instance=ExtResource("root")]
+position = Vector2(8000, 126.7)
+
+[node name="Vp_rock_summit" parent="Pieces" instance=ExtResource("vp")]
+position = Vector2(8550, 120)
+viewpoint_id = &"rock_summit"
+frame_offset = Vector2(300, -180)
+subject_kind = 0
+subject_path = PackedVector2Array(-320, 0, 0, -90, 320, -10)
+subject_speed = 75
+subject_size = 1.5
+subject_color = Color(0.35, 0.26, 0.2, 1)
+subject_accent = Color(0.95, 0.95, 0.92, 1)
+
+[node name="Finish1" parent="Pieces" instance=ExtResource("finish")]
+position = Vector2(9150, 120)

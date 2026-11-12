@@ -1,0 +1,53 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://world/backdrop/backdrop.tscn" id="1_base"]
+
+[sub_resource type="Gradient" id="Gradient_sky"]
+offsets = PackedFloat32Array(0, 0.6, 1)
+colors = PackedColorArray(0.6667, 0.7451, 0.7843, 1, 0.8431, 0.8745, 0.8706, 1, 0.9294, 0.9216, 0.8745, 1)
+
+[sub_resource type="GradientTexture2D" id="Texture_sky"]
+gradient = SubResource("Gradient_sky")
+width = 8
+height = 256
+fill_to = Vector2(0, 1)
+
+[node name="BackdropPlains" instance=ExtResource("1_base")]
+
+[node name="Gradient" parent="Sky" index="0"]
+texture = SubResource("Texture_sky")
+
+[node name="Shape" parent="Clouds" index="0"]
+color = Color(0.96, 0.96, 0.95, 1)
+
+[node name="Shape" parent="Mountains" index="0"]
+color = Color(0.5882, 0.6431, 0.6745, 1)
+ridged = false
+amplitude = 90.0
+base_y = 470.0
+octaves = 2
+base_frequency = 2
+haze_amount = 0.75
+snow_line_y = 0.0
+seed_value = 63
+
+[node name="Shape" parent="FarHills" index="0"]
+color = Color(0.7059, 0.6824, 0.4824, 1)
+tree_style = 2
+tree_color = Color(0.3686, 0.4431, 0.3020, 1)
+tree_count = 14
+tree_height = Vector2(10, 18)
+
+[node name="Shape" parent="MidHills" index="0"]
+color = Color(0.6275, 0.6078, 0.4000, 1)
+tree_style = 2
+tree_color = Color(0.3176, 0.4000, 0.2667, 1)
+tree_count = 12
+tree_height = Vector2(24, 44)
+
+[node name="Shape" parent="Treeline" index="0"]
+color = Color(0.5412, 0.5294, 0.3373, 1)
+tree_style = 0
+tree_color = Color(0.2667, 0.3608, 0.2353, 1)
+tree_count = 10
+tree_height = Vector2(40, 70)

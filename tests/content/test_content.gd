@@ -50,8 +50,11 @@ func test_validator_catches_viewpoint_mismatch() -> void:
 	vp.id = &"lake_mirror"
 	t.viewpoints = [vp] as Array[ViewpointData]
 	var errors: Array[String] = ContentValidator.validate_trail(t)
-	assert_eq(errors.size(), 1)
-	assert_string_contains(errors[0], "lake_mirror")
+	# Both directions are caught: data without a level node, and a level node without data.
+	assert_true(errors.any(func(e: String) -> bool: return e.contains("'lake_mirror' that isn't in the level")), "
+".join(errors))
+	assert_true(errors.any(func(e: String) -> bool: return e.contains("'template_view' that isn't in its data")), "
+".join(errors))
 
 
 func test_validator_catches_duplicate_ids_and_wrong_season() -> void:
@@ -73,3 +76,27 @@ func test_lookups_follow_unlock_order() -> void:
 	var second: TrailData = ContentDB.next_trail(first.id)
 	assert_not_null(second)
 	assert_eq(ContentDB.previous_trail(second.id), first)
+
+
+func _strip(from_x: float, to_x: float) -> TerrainStrip:
+	var strip: TerrainStrip = TerrainStrip.new()
+	strip.points = PackedVector2Array([Vector2(from_x, 0), Vector2(to_x, 0)])
+	return strip
+
+
+func test_validator_catches_a_gap_too_wide_to_jump() -> void:
+	var level: Node2D = Node2D.new()
+	level.add_child(_strip(0, 500))
+	level.add_child(_strip(500 + ContentValidator.MAX_JUMP_GAP - 5.0, 1000))
+	assert_eq(ContentValidator._check_gaps(level, "t").size(), 0, "a normal jump is fine")
+	level.add_child(_strip(1120, 1600))
+	var errors: Array[String] = ContentValidator._check_gaps(level, "t")
+	assert_eq(errors.size(), 1, "a 120 px gap can't be jumped")
+	assert_string_contains(errors[0], "x=1000")
+	var stones: SteppingStones = (load("res://world/obstacles/stepping_stones.tscn") as PackedScene).instantiate()
+	stones.stone_count = 1
+	stones.gap = 38.0
+	stones.position = Vector2(1000, 0)
+	level.add_child(stones)
+	assert_eq(ContentValidator._check_gaps(level, "t").size(), 0, "stepping stones make it crossable")
+	level.free()
