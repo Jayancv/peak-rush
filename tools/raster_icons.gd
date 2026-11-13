@@ -12,8 +12,8 @@ const CORNER_FRACTION: float = 0.22
 ## of the painting lands there: VIEW = fraction of the painting's width that is visible,
 ## CENTRE = where in the painting (0..1) that window is centred. Outside it, edge pixels
 ## are stretched (only seen during launcher parallax).
-const ADAPTIVE_VIEW: float = 0.86
-const ADAPTIVE_CENTRE := Vector2(0.47, 0.53)
+const ADAPTIVE_VIEW: float = 0.95
+const ADAPTIVE_CENTRE := Vector2(0.4, 0.56)
 
 
 func _initialize() -> void:
