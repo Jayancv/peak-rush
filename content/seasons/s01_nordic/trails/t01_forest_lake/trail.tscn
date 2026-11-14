@@ -339,3 +339,9 @@ leaf_color = Color(0.24, 0.45, 0.3, 1)
 [node name="Shortcut" parent="Pieces" instance=ExtResource("p_shortcut")]
 position = Vector2(10940, 422)
 shortcut_id = &"shortcut"
+
+[node name="Find_elsa_initials" parent="Pieces" instance=ExtResource("p_find")]
+position = Vector2(8750.0, 314.0)
+find_id = &"elsa_initials"
+kind = 4
+color = Color(0.7529, 0.2863, 0.1843, 1)

@@ -21,18 +21,39 @@ var _page_scroll: ScrollContainer
 var _prev: Button
 var _next: Button
 var _index: int = 0
+var _title: Label
+var _intro: Label
+var _replay: Button
+## Journeys the player can open: the finished ones and the one being walked.
+var _open_journeys: Array[JourneyData] = []
+var _tabs: Array[Button] = []
 
 
 func _ready() -> void:
 	AudioManager.enter_menu()
-	_journey = GameState.journey()
+	var active: JourneyData = GameState.journey()
+	for j: JourneyData in ContentDB.journeys():
+		if GameState.profile.journeys_done.has(String(j.id)) or j == active:
+			_open_journeys.append(j)
+	_journey = active if active != null else (_open_journeys[-1] if not _open_journeys.is_empty() else null)
 	_build()
 	if _journey == null:
 		_page_title.text = tr("JOURNEY_DONE_ALL")
 		return
+	_show_journey(_journey)
+	GameState.progress_changed.emit()
+
+
+func _show_journey(j: JourneyData) -> void:
+	_journey = j
+	_title.text = tr(j.name_key)
+	_intro.text = tr(j.intro_key)
+	# The opening is Elsa's attic: it belongs with the first journey.
+	_replay.visible = ContentDB.journeys().find(j) == 0
+	for i: int in _tabs.size():
+		_tabs[i].theme_type_variation = &"PrimaryButton" if _open_journeys[i] == j else &""
 	_refresh()
 	_show_page(_first_page())
-	GameState.progress_changed.emit()
 
 
 ## Opens on the newest unread page, else the last one reached.
@@ -108,10 +129,26 @@ func _build() -> void:
 	vbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	safe_area.add_child(vbox)
 	vbox.add_child(_header())
-	var intro: Label = _label(tr(_journey.intro_key) if _journey != null else "", 20, CREAM)
-	intro.add_theme_color_override("font_outline_color", INK)
-	intro.add_theme_constant_override("outline_size", 6)
-	vbox.add_child(intro)
+	var intro_row: HBoxContainer = HBoxContainer.new()
+	intro_row.add_theme_constant_override("separation", 10)
+	intro_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	vbox.add_child(intro_row)
+	_intro = _label("", 20, CREAM)
+	_intro.add_theme_color_override("font_outline_color", INK)
+	_intro.add_theme_constant_override("outline_size", 6)
+	_intro.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_intro.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	intro_row.add_child(_intro)
+	# Tabs once a journey is finished, so its pages can be read again.
+	if _open_journeys.size() > 1:
+		for j: JourneyData in _open_journeys:
+			var tab: Button = Button.new()
+			tab.text = tr(j.name_key)
+			tab.add_theme_font_size_override("font_size", 20)
+			tab.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+			tab.pressed.connect(_show_journey.bind(j))
+			intro_row.add_child(tab)
+			_tabs.append(tab)
 	var body: HBoxContainer = HBoxContainer.new()
 	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	body.add_theme_constant_override("separation", 18)
@@ -129,12 +166,20 @@ func _header() -> HBoxContainer:
 	var back: Button = _icon_button(false)
 	back.pressed.connect(_go_back)
 	row.add_child(back)
-	var title: Label = _label(tr(_journey.name_key) if _journey != null else tr("MENU_JOURNEY"), 52, CREAM)
-	title.add_theme_font_override("font", TITLE_FONT)
-	title.add_theme_color_override("font_shadow_color", Color(INK, 0.5))
-	title.add_theme_constant_override("shadow_offset_y", 3)
-	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.add_child(title)
+	_title = _label(tr("MENU_JOURNEY"), 52, CREAM)
+	_title.add_theme_font_override("font", TITLE_FONT)
+	_title.add_theme_color_override("font_shadow_color", Color(INK, 0.5))
+	_title.add_theme_constant_override("shadow_offset_y", 3)
+	_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(_title)
+	_replay = Button.new()
+	_replay.text = tr("JOURNEY_REPLAY")
+	_replay.add_theme_font_size_override("font_size", 22)
+	_replay.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	_replay.pressed.connect(func() -> void:
+		Prologue.return_to = SceneRouter.JOURNEY
+		SceneRouter.go_to(SceneRouter.PROLOGUE))
+	row.add_child(_replay)
 	var pill: PanelContainer = PanelContainer.new()
 	var box: StyleBoxFlat = StyleBoxFlat.new()
 	box.bg_color = Color(CREAM, 0.92)

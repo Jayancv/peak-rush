@@ -69,6 +69,14 @@ name_key = "VP_FROZEN_LAKE"
 postcard = ExtResource("pc_frozen_lake")
 motif = 12
 
+[sub_resource type="Resource" id="Find_elsa_jar"]
+script = ExtResource("9_find")
+id = &"elsa_jar"
+name_key = "FIND_ELSA_JAR"
+kind = 4
+color = Color(0.7529, 0.2863, 0.1843, 1)
+appear_chance = 1.0
+
 [resource]
 script = ExtResource("1_trail")
 id = &"t05_aurora_summit"
@@ -83,5 +91,5 @@ viewpoints = Array[ExtResource("3_vp")]([SubResource("Viewpoint_1"), SubResource
 unlock_order = 5
 night = true
 star3_key = "RESULTS_STAR_AURORA"
-finds = Array[ExtResource("9_find")]([SubResource("Find_lost_mitten"), SubResource("Find_purple_saxifrage"), SubResource("Find_moss_campion"), SubResource("Find_arctic_fox_aurora"), SubResource("Find_snow_bunting")])
+finds = Array[ExtResource("9_find")]([SubResource("Find_lost_mitten"), SubResource("Find_purple_saxifrage"), SubResource("Find_moss_campion"), SubResource("Find_arctic_fox_aurora"), SubResource("Find_snow_bunting"), SubResource("Find_elsa_jar")])
 shortcut_count = 1

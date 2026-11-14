@@ -502,3 +502,55 @@ RESULTS_JOURNEY_DONE,You finished %s!  +%d
 STEPS_JOURNEY,+%d km on %s
 BADGE_NOTEBOOK,The Notebook
 BADGE_NOTEBOOK_DESC,Finish a long journey.
+PROLOGUE_CAPTION,Grandma Elsa's attic. A box of her old hiking things.
+PROLOGUE_BOX,ELSA · FJÄLL
+PROLOGUE_NOTEBOOK,Kungsleden\n1974
+PROLOGUE_SKETCH,"Abisko, from the train"
+PROLOGUE_CLOSING,Walk it with her.
+PROLOGUE_START,Start walking
+PROLOGUE_SKIP,Skip
+JOURNEY_REPLAY,Watch the opening
+FIND_ELSA_INITIALS,Carved initials
+FIND_ELSA_INITIALS_FACT,"""E + K, 1971"" cut into a birch. In Elsa's notebook: ""Kerstin carved the K. Hers is crooked. Don't tell her."""
+FIND_ELSA_TIN,A rusty tea tin
+FIND_ELSA_TIN_FACT,"Wedged between two rocks, with a folded note inside: ""Swam to the third island. Freezing. Worth it. E."""
+FIND_ELSA_CAIRN,Elsa's cairn
+FIND_ELSA_CAIRN_FACT,"A little cairn with a flat red stone on top. Her notebook: ""I built one on every fell that summer. Red stone on top, so I'd know mine."""
+FIND_ELSA_MARK,A faded painted E
+FIND_ELSA_MARK_FACT,"An E painted on the rock, nearly gone. ""Norway, 1977. Lost in the fog, so I painted my way back down. Sorry, Norway."""
+FIND_ELSA_JAR,A letter in a jar
+FIND_ELSA_JAR_FACT,"Left up here years later: ""If you're reading this, you climbed in the dark too. Look up. Everything I loved is up there."""
+FIND_ELSA_FEATHER,A crane feather
+FIND_ELSA_FEATHER_FACT,"Tied to the boardwalk rail with string: ""Kerstin and I counted 41 cranes dancing here. I kept one feather. You keep one too."""
+JOURNAL_SKETCH_ELSA,Elsa's sketch
+JOURNAL_SKETCH_KERSTIN,Kerstin's sketch
+JOURNAL_SHOW_PHOTO,Your photo
+JOURNEY_PEKOE,The Pekoe Trail
+JOURNEY_PEKOE_INTRO,"Kerstin's letters from Sri Lanka, tucked in the back of Elsa's notebook. Read them as you walk the tea hills."
+LM_HANTHANA,Hanthana
+LM_HANTHANA_TITLE,"Kandy, March 1979"
+LM_HANTHANA_TEXT,"Dear Elsa, you'll laugh: the sister whose knee gave up at Kvikkjokk now teaches English on a tea estate above Kandy. The hills are green in a way I didn't know green could be, and everyone walks the estate paths. So I'm walking again. Slowly. Love, K."
+LM_LOOLECONDERA,Loolecondera
+LM_LOOLECONDERA_TITLE,"Loolecondera, April 1979"
+LM_LOOLECONDERA_TEXT,"Dear Elsa, today I found the estate where Sri Lanka's first tea was planted, back in 1867. The planter's bungalow is long gone, but his bushes are still here, still picked every week. Imagine leaving something that keeps on growing. K."
+LM_RAMBODA,Ramboda Falls
+LM_RAMBODA_TITLE,"Ramboda, May 1979"
+LM_RAMBODA_TEXT,"Dear Elsa, a waterfall so tall the bottom is just cloud. A monkey stole my lunch. All of it. I thought of Gustav the reindeer and laughed until a tea picker laughed with me. We share no language, only that. K."
+LM_HATTON,Hatton
+LM_HATTON_TITLE,"Hatton, July 1979"
+LM_HATTON_TEXT,"Dear Elsa, the pickers start before sunrise, baskets on their backs, quick as anything. Malini walks me home each evening and corrects my Sinhala. I'm getting better. My knee is getting better. Everything is getting better. K."
+LM_OHIYA,Ohiya
+LM_OHIYA_TITLE,"Ohiya, September 1979"
+LM_OHIYA_TEXT,"Dear Elsa, mist so thick I walked inside a cloud for an hour and came out above it. It was Tjäktja all over again, snow in July. Do you remember? I said it was the best day of my life. I still think so. K."
+LM_HAPUTALE,Haputale
+LM_HAPUTALE_TITLE,"Haputale, November 1979"
+LM_HAPUTALE_TEXT,"Dear Elsa, from Lipton's Seat they say you can see five provinces. I counted six, but one may have been a cloud. I drank tea grown on the hill I was standing on. You should be here. You should really be here. K."
+LM_ELLA,Ella
+LM_ELLA_TITLE,"Ella, January 1980"
+LM_ELLA_TEXT,"Dear Elsa, I climbed Little Adam's Peak at dawn. A boy selling king coconuts asked where my family was. I said my sister walks mountains in Sweden. He said, ""Then she should walk these."" There's a ticket in this envelope. Don't argue. K."
+LM_NINE_ARCHES,Nine Arches Bridge
+LM_NINE_ARCHES_TITLE,"Demodara, February 1980"
+LM_NINE_ARCHES_TEXT,"Dear Elsa, the train crosses the bridge every afternoon and every afternoon I wave at it like a child. In three weeks you'll be on it. I've planned the last stretch, and we'll walk it together, the way we always meant to. K."
+LM_NUWARA_ELIYA,Nuwara Eliya
+LM_NUWARA_ELIYA_TITLE,"Nuwara Eliya, March 1980"
+LM_NUWARA_ELIYA_TEXT,"No letter this time, just a photograph: two sisters at the end of a trail in the tea hills, laughing at something outside the frame. On the back, in Elsa's hand: ""Finished one together."" And now, so have you."

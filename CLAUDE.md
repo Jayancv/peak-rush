@@ -85,7 +85,7 @@ docs/                GAME_DESIGN.md, PLAN.md
 - At the end of each session, update **Current status** below and tick the boxes in `docs/PLAN.md`.
 
 ## Current status
-- Milestone: **M7.5 (trail depth) + polish (sounds, trail map, finds page, daily trail) built, 375 tests green; M7.6 automated part done (phone checklist, low-end phone, playtest open); M7.7 done**. M7 non-release part done. Release steps
+- Milestone: **M7.5 (trail depth) + polish (sounds, trail map, finds page, daily trail) built, 377 tests green; M7.6 automated part done (phone checklist, low-end phone, playtest open); M7.7 done**. M7 non-release part done. Release steps
   (keystore, AAB, stores, iOS, screenshots, 1.0.0) deliberately not started; low-end phone profiling still open.
   M5/M6 full-season phone playtest still open. Launch plan in PLAN.md: M7.6 stabilisation -> M7.7 launch features -> M7.8 ads -> M7.9 Google Play (Android first, free with ads, iOS after launch in M8).
 - Godot 4.7.2-stable (not on PATH; ask the user for the executable path if unknown); GUT 9.7.1.
@@ -288,3 +288,10 @@ docs/                GAME_DESIGN.md, PLAN.md
   (New page! while unread), results line, steps-claim note, badge rule JOURNEYS. Story = Elsa's 1974 notebook (LM_* strings).
   `HikeRewards` (systems/) now does all of record_result's sums; GameState keeps saving, badges and the daily (~325 lines).
   Results breakdown shrinks its font past 5 lines (Results._fit_breakdown).
+  Story pass: `Prologue` (scenes/prologue/: AtticArt + NotebookArt drawn in code; splash goes there when
+  Prologue.should_show() = new player and settings.prologue_seen unset; Prologue.return_to for replays from Journey).
+  Journeys: Kungsleden then pekoe_trail (JourneyData.hill_color/snowy style the map hills); Journey screen tabs for
+  finished journeys. Elsa's traces = FindData.Kind.TRACE (cairn + red stone art in Find/FindArt), one per S1 trail
+  (Find_elsa_*; placed via TrailMoments.open_ground ~45% along). Postcard sketch: `SketchView` + pencil_sketch.gdshader
+  (reads the screen under an overlay ColorRect on the enlarged card); Season 1 = Elsa, later seasons = Kerstin.
+  Translation CSV: write a line break inside a string as the two characters \n (Godot unescapes them).

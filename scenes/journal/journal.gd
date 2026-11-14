@@ -23,6 +23,8 @@ var _season: SeasonData
 var _share_button: Button
 ## Fills a Postcard like the one enlarged (for the share picture).
 var _share_card: Callable
+## Photo <-> Elsa's (or Kerstin's) pencil sketch on the enlarged card.
+var _sketch: SketchView
 var _finds_grid: GridContainer
 var _finds_scroll: ScrollContainer
 var _page_buttons: Array[Button] = []
@@ -215,6 +217,7 @@ func _enlarge(trail: TrailData, vp: ViewpointData, q: int, season: SeasonData, i
 	_fill(enlarged_card, trail, vp, q, season, i)
 	_share_card = _fill.bind(trail, vp, q, season, i)
 	_ensure_share_button()
+	_sketch.set_season(season, ContentDB.seasons())
 	enlarged.visible = true
 	enlarged_card.pivot_offset = enlarged_card.size * 0.5
 	enlarged_card.scale = Vector2(0.7, 0.7)
@@ -235,7 +238,13 @@ func _ensure_share_button() -> void:
 		_share_button.disabled = true
 		await PostcardShare.share(self, _share_card)
 		_share_button.disabled = false)
-	enlarged_card.get_parent().add_child(_share_button)
+	var row: HBoxContainer = HBoxContainer.new()
+	row.alignment = BoxContainer.ALIGNMENT_CENTER
+	row.add_theme_constant_override("separation", 16)
+	enlarged_card.get_parent().add_child(row)
+	_sketch = SketchView.new()
+	_sketch.attach(enlarged_card, row)
+	row.add_child(_share_button)
 
 
 func _on_enlarged_input(event: InputEvent) -> void:

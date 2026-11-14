@@ -49,10 +49,16 @@ func test_finishing_caps_at_the_end_and_pays_once() -> void:
 	assert_almost_eq(float(out.km), j.length_km, 0.001)
 	assert_eq(int(out.tp), (j.landmarks.size() - 1) * _b.journey_landmark_tp + _b.journey_finish_tp)
 	assert_true(p.journeys_done.has("kungsleden"))
-	assert_null(Journey.active(ContentDB.journeys(), p), "nothing left to walk")
-	assert_eq(Journey.advance(p, ContentDB.journeys(), 10.0, _b), {}, "no second payout")
+	assert_almost_eq(Journey.km(p, j), j.length_km, 0.001, "km stop at the end, nothing carries over")
+	var next: JourneyData = Journey.active(ContentDB.journeys(), p)
+	assert_eq(next.id, &"pekoe_trail", "the next journey (Kerstin's letters) opens")
+	var more: Dictionary = Journey.advance(p, ContentDB.journeys(), 10.0, _b)
+	assert_eq(more.journey_id, &"pekoe_trail", "further km walk the new journey, Kungsleden pays no more")
+	Journey.advance(p, ContentDB.journeys(), 5000.0, _b)
+	assert_null(Journey.active(ContentDB.journeys(), p), "every journey walked")
+	assert_eq(Journey.advance(p, ContentDB.journeys(), 10.0, _b), {}, "nothing left to pay")
 	var facts: Dictionary = ProfileFacts.build({}, p, 0, 0, ContentDB.get_trail)
-	assert_eq(int(facts.journeys_done), 1, "the badge fact")
+	assert_eq(int(facts.journeys_done), 2, "the badge fact counts both journeys")
 
 
 func test_real_steps_count_several_times_over() -> void:
@@ -113,6 +119,26 @@ func test_finished_hikes_and_claimed_steps_walk_the_journey() -> void:
 	assert_true(claim.has("journey"), "claimed steps move the journey on")
 	assert_almost_eq(float(claim.journey.added), Journey.km_from_steps(4000, ContentDB.balance), 0.001)
 	assert_gt(Journey.km(GameState.profile, _kungsleden()), ContentDB.balance.journey_km_per_hike - 0.001)
+
+
+func test_the_opening_shows_once_and_only_to_new_players() -> void:
+	assert_true(Prologue.should_show(), "a brand-new player sees the attic")
+	GameState.profile.hikes = 3
+	assert_false(Prologue.should_show(), "someone who already hiked isn't sent back to the start")
+	GameState.profile.hikes = 0
+	GameState.set_setting("prologue_seen", true)
+	assert_false(Prologue.should_show(), "once is enough")
+
+
+func test_elsas_traces_are_on_every_nordic_trail() -> void:
+	var season: SeasonData = ContentDB.seasons()[0]
+	for trail: TrailData in season.trails:
+		var traces: int = 0
+		for f: FindData in trail.finds:
+			if f.kind == FindData.Kind.TRACE:
+				traces += 1
+				assert_ne(tr(f.name_key + "_FACT"), f.name_key + "_FACT", "%s has Elsa's note" % f.id)
+		assert_eq(traces, 1, "%s has one of Elsa's traces" % trail.id)
 
 
 func test_migrates_v9_save_to_v10_with_no_journey_yet() -> void:

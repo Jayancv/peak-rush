@@ -468,3 +468,9 @@ style = 1
 [node name="Shortcut" parent="Pieces" instance=ExtResource("p_shortcut")]
 position = Vector2(6720, 311.9)
 shortcut_id = &"shortcut"
+
+[node name="Find_elsa_jar" parent="Pieces" instance=ExtResource("p_find")]
+position = Vector2(11824.0, -150.3)
+find_id = &"elsa_jar"
+kind = 4
+color = Color(0.7529, 0.2863, 0.1843, 1)

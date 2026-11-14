@@ -61,6 +61,12 @@ func _draw() -> void:
 				draw_circle(c + Vector2(0, 30) * s, 4.0 * s, INK, true, -1.0, true)
 				draw_circle(c + Vector2(-11, -2) * s, 3.5 * s, INK, true, -1.0, true)
 				draw_circle(c + Vector2(11, -2) * s, 3.5 * s, INK, true, -1.0, true)
+	if kind == FindData.Kind.TRACE:
+		var grey: Color = Color("#8F918F") if found else UNKNOWN
+		draw_colored_polygon(ShapeUtil.ellipse(c + Vector2(0, 24) * s, Vector2(36, 14) * s, 20), grey.darkened(0.2) if found else UNKNOWN)
+		draw_colored_polygon(ShapeUtil.ellipse(c + Vector2(2, 4) * s, Vector2(27, 12) * s, 18), grey)
+		draw_colored_polygon(ShapeUtil.ellipse(c + Vector2(-2, -14) * s, Vector2(19, 10) * s, 16), grey.lightened(0.12) if found else UNKNOWN)
+		draw_colored_polygon(ShapeUtil.ellipse(c + Vector2(0, -28) * s, Vector2(22, 6) * s, 16), main)
 	if not found:
 		var font: Font = get_theme_default_font()
 		var fs: int = int(40.0 * s)

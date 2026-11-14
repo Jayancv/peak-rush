@@ -146,7 +146,18 @@ Peak Rush's heart: **every step you take in real life walks you deeper into a st
 - **Rewards:** +30 TP per landmark (not the opening page), +300 TP and the **The Notebook** badge for finishing.
   A new page lights up the menu button ("Journey · New page!") until it's read.
 - **Data:** `JourneyData` + `LandmarkData` in `content/journeys/`, listed in ContentIndex.journeys and walked in
-  order; future seasons can add their own journey (a Sri Lankan pilgrim route for Tea Country, for example).
+  order. Finished journeys stay readable (tabs on the Journey screen).
+- **Second journey: the Pekoe Trail** (Sri Lanka's tea country, 300 km, 9 stops, Hanthana to Nuwara Eliya). Its
+  pages are **Kerstin's letters** to Elsa from 1979-80: her knee healed, she teaches on a tea estate, and she sends
+  Elsa a ticket. The last page is a photograph of the sisters finishing a trail together. Opens when Kungsleden is done.
+- **The opening:** new players (no hikes yet) see a short skippable scene once at first launch: Elsa's attic, a box
+  marked with her name, the notebook opening on its first page, "Walk it with her.", then straight onto the first
+  trail. "Watch the opening" on the Journey screen replays it (setting `prologue_seen`).
+- **Elsa's traces:** one find per Season 1 trail is something she left there (carved initials, a tea tin, her cairn
+  with a red stone, a painted E, a crane feather, a letter in a jar). They look like a small cairn topped with her red
+  stone; the Journal shows her margin note about each (FindData.Kind.TRACE).
+- **Her sketches:** an enlarged postcard can flip to "Elsa's sketch" (Season 1) or "Kerstin's sketch" (Season 2), a
+  pencil drawing of the same view (a shader over the card), so a photo becomes "see what she saw".
 
 ## 6. Season 1 — Nordic Trails (launch content)
 | # | Trail | Biome / weather | Teaches / special | Viewpoints |

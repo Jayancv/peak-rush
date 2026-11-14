@@ -1,0 +1,96 @@
+[gd_resource type="Resource" script_class="JourneyData" format=3]
+
+[ext_resource type="Script" path="res://data/journey_data.gd" id="1_journey"]
+[ext_resource type="Script" path="res://data/landmark_data.gd" id="2_landmark"]
+
+[sub_resource type="Resource" id="hanthana"]
+script = ExtResource("2_landmark")
+id = &"hanthana"
+name_key = "LM_HANTHANA"
+km = 0.0
+page_title_key = "LM_HANTHANA_TITLE"
+page_text_key = "LM_HANTHANA_TEXT"
+map_pos = Vector2(0.07, 0.18)
+
+[sub_resource type="Resource" id="loolecondera"]
+script = ExtResource("2_landmark")
+id = &"loolecondera"
+name_key = "LM_LOOLECONDERA"
+km = 45.0
+page_title_key = "LM_LOOLECONDERA_TITLE"
+page_text_key = "LM_LOOLECONDERA_TEXT"
+map_pos = Vector2(0.183, 0.42)
+
+[sub_resource type="Resource" id="ramboda"]
+script = ExtResource("2_landmark")
+id = &"ramboda"
+name_key = "LM_RAMBODA"
+km = 95.0
+page_title_key = "LM_RAMBODA_TITLE"
+page_text_key = "LM_RAMBODA_TEXT"
+map_pos = Vector2(0.299, 0.28)
+
+[sub_resource type="Resource" id="hatton"]
+script = ExtResource("2_landmark")
+id = &"hatton"
+name_key = "LM_HATTON"
+km = 140.0
+page_title_key = "LM_HATTON_TITLE"
+page_text_key = "LM_HATTON_TEXT"
+map_pos = Vector2(0.412, 0.55)
+
+[sub_resource type="Resource" id="ohiya"]
+script = ExtResource("2_landmark")
+id = &"ohiya"
+name_key = "LM_OHIYA"
+km = 180.0
+page_title_key = "LM_OHIYA_TITLE"
+page_text_key = "LM_OHIYA_TEXT"
+map_pos = Vector2(0.522, 0.78)
+
+[sub_resource type="Resource" id="haputale"]
+script = ExtResource("2_landmark")
+id = &"haputale"
+name_key = "LM_HAPUTALE"
+km = 215.0
+page_title_key = "LM_HAPUTALE_TITLE"
+page_text_key = "LM_HAPUTALE_TEXT"
+map_pos = Vector2(0.627, 0.6)
+
+[sub_resource type="Resource" id="ella"]
+script = ExtResource("2_landmark")
+id = &"ella"
+name_key = "LM_ELLA"
+km = 250.0
+page_title_key = "LM_ELLA_TITLE"
+page_text_key = "LM_ELLA_TEXT"
+map_pos = Vector2(0.733, 0.36)
+
+[sub_resource type="Resource" id="nine_arches"]
+script = ExtResource("2_landmark")
+id = &"nine_arches"
+name_key = "LM_NINE_ARCHES"
+km = 272.0
+page_title_key = "LM_NINE_ARCHES_TITLE"
+page_text_key = "LM_NINE_ARCHES_TEXT"
+map_pos = Vector2(0.829, 0.62)
+
+[sub_resource type="Resource" id="nuwara_eliya"]
+script = ExtResource("2_landmark")
+id = &"nuwara_eliya"
+name_key = "LM_NUWARA_ELIYA"
+km = 300.0
+page_title_key = "LM_NUWARA_ELIYA_TITLE"
+page_text_key = "LM_NUWARA_ELIYA_TEXT"
+map_pos = Vector2(0.93, 0.42)
+
+[resource]
+script = ExtResource("1_journey")
+id = &"pekoe_trail"
+name_key = "JOURNEY_PEKOE"
+intro_key = "JOURNEY_PEKOE_INTRO"
+length_km = 300.0
+landmarks = Array[ExtResource("2_landmark")]([SubResource("hanthana"), SubResource("loolecondera"), SubResource("ramboda"), SubResource("hatton"), SubResource("ohiya"), SubResource("haputale"), SubResource("ella"), SubResource("nine_arches"), SubResource("nuwara_eliya")])
+lakes = PackedVector4Array(0.2, 0.75, 0.05, 0.04, 0.47, 0.82, 0.04, 0.05, 0.62, 0.16, 0.05, 0.035, 0.9, 0.7, 0.04, 0.05)
+hill_color = Color(0.5216, 0.6588, 0.4392, 1)
+snowy = false

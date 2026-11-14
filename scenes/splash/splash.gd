@@ -139,7 +139,7 @@ func _leave() -> void:
 	if _leaving:
 		return
 	_leaving = true
-	SceneRouter.go_to(SceneRouter.MAIN_MENU)
+	SceneRouter.go_to(SceneRouter.PROLOGUE if Prologue.should_show() else SceneRouter.MAIN_MENU)
 
 
 func _gui_input(event: InputEvent) -> void:

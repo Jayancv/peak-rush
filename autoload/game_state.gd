@@ -18,6 +18,8 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"stroll_mode": false,
 	## Show the ghost of your best run on a trail.
 	"show_ghost": true,
+	## The opening (Elsa's attic) has been shown; it plays once for new players.
+	"prologue_seen": false,
 	"music_volume": 0.8,
 	"sfx_volume": 0.8,
 	"ambience_volume": 0.8,

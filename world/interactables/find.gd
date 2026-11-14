@@ -58,11 +58,22 @@ func build() -> void:
 			_compass()
 		FindData.Kind.ANIMAL:
 			_animal()
+		FindData.Kind.TRACE:
+			_trace()
 	_twinkle = ShapeUtil.add_poly(self, PackedVector2Array([Vector2(0, -5), Vector2(1.2, -1.2), Vector2(5, 0), Vector2(1.2, 1.2),
 		Vector2(0, 5), Vector2(-1.2, 1.2), Vector2(-5, 0), Vector2(-1.2, -1.2)]), Color(1, 1, 0.9, 0.0), 1)
 	_twinkle.position = Vector2(6, -26)
 	var reach: float = 70.0 if kind == FindData.Kind.ANIMAL else 18.0
 	ShapeUtil.add_rect_shape(self, Rect2(-reach, -50, reach * 2.0, 54))
+
+
+## Elsa's mark: a knee-high cairn with her flat red stone on top.
+func _trace() -> void:
+	var grey: Color = Color("#8F918F")
+	ShapeUtil.add_poly(_art, ShapeUtil.ellipse(Vector2(0, -6), Vector2(15, 7), 14), grey.darkened(0.2))
+	ShapeUtil.add_poly(_art, ShapeUtil.ellipse(Vector2(1, -16), Vector2(11, 6), 12), grey)
+	ShapeUtil.add_poly(_art, ShapeUtil.ellipse(Vector2(-1, -25), Vector2(8, 5), 12), grey.lightened(0.12))
+	ShapeUtil.add_poly(_art, ShapeUtil.ellipse(Vector2(0, -32), Vector2(9, 3), 12), color)
 
 
 func _process(delta: float) -> void:

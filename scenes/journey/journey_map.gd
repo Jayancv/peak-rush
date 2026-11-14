@@ -12,7 +12,6 @@ const PAPER_EDGE: Color = Color("#E2D2AE")
 const INK: Color = Color("#2B2D42")
 const PENCIL: Color = Color("#8C7B5E")
 const WATER: Color = Color("#9CC3D5")
-const FELL: Color = Color("#B9AE96")
 const SNOW: Color = Color("#FFFDF7")
 const WALKED: Color = Color("#E85D3F")
 const DOT_RADIUS: float = 11.0
@@ -100,14 +99,25 @@ func _draw() -> void:
 		var r: Vector2 = Vector2(lake.z, lake.w) * (size - MARGIN * 2.0)
 		draw_colored_polygon(ShapeUtil.ellipse(c, r, 20), WATER)
 	for f: Vector3 in _fells:
-		_draw_fell(to_local_px(Vector2(f.x, f.y)), 16.0 * f.z * scale_px)
+		_draw_fell(to_local_px(Vector2(f.x, f.y)), 16.0 * f.z * scale_px, journey.hill_color, journey.snowy)
 	_draw_trail()
 	_draw_compass(Vector2(size.x - 54, size.y - 56))
 
 
-func _draw_fell(at: Vector2, h: float) -> void:
-	draw_colored_polygon(PackedVector2Array([at + Vector2(-h, 0), at + Vector2(0, -h * 1.1), at + Vector2(h, 0)]), FELL)
-	draw_colored_polygon(PackedVector2Array([at + Vector2(-h * 0.32, -h * 0.75), at + Vector2(0, -h * 1.1), at + Vector2(h * 0.32, -h * 0.75)]), SNOW)
+func _draw_fell(at: Vector2, h: float, color: Color, snowy: bool) -> void:
+	if snowy:
+		draw_colored_polygon(PackedVector2Array([at + Vector2(-h, 0), at + Vector2(0, -h * 1.1), at + Vector2(h, 0)]), color)
+		draw_colored_polygon(PackedVector2Array([at + Vector2(-h * 0.32, -h * 0.75), at + Vector2(0, -h * 1.1), at + Vector2(h * 0.32, -h * 0.75)]), SNOW)
+	else:
+		# Rounded tea hills with a couple of rows of bushes.
+		var hill: PackedVector2Array = PackedVector2Array()
+		for i: int in 13:
+			var a: float = PI + PI * float(i) / 12.0
+			hill.append(at + Vector2(cos(a) * h * 1.1, sin(a) * h * 0.75))
+		draw_colored_polygon(hill, color)
+		for k: int in 2:
+			var y: float = -h * (0.22 + 0.24 * k)
+			draw_line(at + Vector2(-h * (0.8 - 0.25 * k), y), at + Vector2(h * (0.8 - 0.25 * k), y), color.darkened(0.2), 2.0)
 
 
 func _draw_trail() -> void:

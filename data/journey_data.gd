@@ -14,6 +14,9 @@ extends Resource
 @export var landmarks: Array[LandmarkData] = []
 ## Map decoration: lakes as (centre x, centre y, radius x, radius y) in map space (0..1).
 @export var lakes: PackedVector4Array = PackedVector4Array()
+## The little hills scattered on the map, and whether they wear snow caps (fells do, tea hills don't).
+@export var hill_color: Color = Color("#B9AE96")
+@export var snowy: bool = true
 
 
 func landmark(id_: StringName) -> LandmarkData:

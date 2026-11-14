@@ -4,7 +4,9 @@ extends Resource
 ## animal that only shows up on some hikes. Listed in TrailData.finds; the level holds
 ## a `Find` piece with the same id.
 
-enum Kind { FLOWER, MUSHROOM, ITEM, ANIMAL }
+## TRACE: something Grandma Elsa left on the trail (her cairn with a red stone on top);
+## its fact text is her note about it. New kinds go at the END (scenes store the number).
+enum Kind { FLOWER, MUSHROOM, ITEM, ANIMAL, TRACE }
 
 @export var id: StringName
 @export var name_key: String

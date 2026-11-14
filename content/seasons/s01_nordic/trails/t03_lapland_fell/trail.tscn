@@ -345,3 +345,9 @@ style = 0
 [node name="Shortcut" parent="Pieces" instance=ExtResource("p_shortcut")]
 position = Vector2(1060, 419.3)
 shortcut_id = &"shortcut"
+
+[node name="Find_elsa_cairn" parent="Pieces" instance=ExtResource("p_find")]
+position = Vector2(5530.0, 107.0)
+find_id = &"elsa_cairn"
+kind = 4
+color = Color(0.7529, 0.2863, 0.1843, 1)
