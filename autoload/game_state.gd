@@ -234,70 +234,20 @@ func _record_daily(result: TrailResult) -> void:
 
 # --- Recording a hike ---
 
-## Merges a finished hike into the trail's record and pays out TP.
+## Merges a finished hike into the trail's record and pays out TP (HikeRewards does the sums).
 ## Returns the breakdown the results screen shows (also kept in last_result).
 func record_result(result: TrailResult) -> Dictionary:
-	var key: String = String(result.trail_id)
 	var rec: Dictionary = record(result.trail_id).duplicate(true)
-	var rating: StarRating = StarRating.new(ContentDB.balance)
-	var award: Dictionary = rating.award(result, int(rec.stars), rec.photos)
-	var previous_best: float = float(rec.best_time)
-	var merged: Dictionary = {"new_finds": 0, "new_challenges": 0}
+	last_result = HikeRewards.settle(result, rec, ContentDB.get_trail(result.trail_id), profile, ContentDB.balance,
+		today(), daily_active, ContentDB.events(), ContentDB.journeys())
 	if result.finished:
-		merged = TrailRecord.merge_finished(rec, result, int(award.stars_mask), ContentDB.get_trail(result.trail_id))
-		trails[key] = rec
-	var b: Balance = ContentDB.balance
-	var new_finds: int = merged.new_finds
-	var challenge_tp: int = TrailChallenges.count(merged.new_challenges) * b.tp_per_challenge
-	var find_tp: int = new_finds * b.tp_per_new_find
-	var shortcut_tp: int = int(merged.get("new_shortcuts", 0)) * b.tp_shortcut
-	var gold: float = TrailRecord.gold_time(ContentDB.get_trail(result.trail_id), b) if result.finished else 0.0
-	var gold_new: bool = result.finished and not result.stroll and result.time_seconds <= gold and (previous_best <= 0.0 or previous_best > gold)
-	var gold_tp: int = b.tp_gold if gold_new else 0
-	# Unfinished hikes earn nothing: award and merged are all zeros then. A stroll earns a share.
-	var earned: int = int(award.total) + find_tp + challenge_tp + shortcut_tp + gold_tp
-	if result.stroll:
-		earned = roundi(earned * b.stroll_tp_mult)
-	tp += earned
+		trails[String(result.trail_id)] = rec
+	tp += int(last_result.total)
 	profile.add_hike(result.time_seconds)
 	var new_badges: Array[String] = []
 	for badge: BadgeData in refresh_badges():
 		new_badges.append(String(badge.id))
-	last_result = award.duplicate()
-	last_result.merge({
-		"trail_id": result.trail_id,
-		"finished": result.finished,
-		"time": result.time_seconds,
-		"before_dusk": result.before_dusk,
-		"previous_best": previous_best,
-		"new_best": result.finished and not result.stroll and (previous_best <= 0.0 or result.time_seconds < previous_best),
-		"stroll": result.stroll,
-		"gold_new": gold_new,
-		"gold_tp": gold_tp,
-		"new_shortcuts": int(merged.get("new_shortcuts", 0)),
-		"shortcut_tp": shortcut_tp,
-		"first_completion": result.finished and int(rec.completions) == 1,
-		"new_badges": new_badges,
-		"new_finds": new_finds,
-		"find_tp": find_tp,
-		"new_challenges": merged.new_challenges,
-		"challenge_tp": challenge_tp,
-		"medal": TrailChallenges.has_medal(int(rec.get("challenges", 0))) and merged.new_challenges != 0,
-	})
-	last_result["total"] = earned
-	if result.finished:
-		var weekly: Dictionary = WeeklyGoals.record(profile, result, ContentDB.get_trail(result.trail_id), daily_active, today(), ContentDB.balance)
-		tp += int(weekly.tp)
-		last_result["weekly"] = weekly
-		last_result["total"] = int(last_result.total) + int(weekly.tp)
-	var ev: EventData = SeasonalEvents.active(ContentDB.events(), today()) if result.finished else null
-	if ev != null and result.event_tokens > 0:
-		var gathered: Dictionary = SeasonalEvents.record(profile, ev, today(), result.event_tokens, b)
-		gathered["token_key"] = ev.token_key
-		gathered["name_key"] = ev.name_key
-		tp += int(gathered.tp)
-		last_result["event"] = gathered
-		last_result["total"] = int(last_result.total) + int(gathered.tp)
+	last_result["new_badges"] = new_badges
 	if daily_active:
 		_record_daily(result)
 	progress_changed.emit()
@@ -311,10 +261,16 @@ func add_bonus_tp(amount: int) -> void:
 	progress_changed.emit()
 
 
-## Pays out real-world steps read from the phone (`totals`: date -> steps). Returns {tp, steps, badges}.
+## Pays out real-world steps read from the phone (`totals`: date -> steps). Returns {tp, steps, badges}
+## and "journey" (Journey.advance) when the steps moved the journey on.
 func claim_steps(totals: Dictionary) -> Dictionary:
 	var out: Dictionary = steps.claim(totals, today(), int(Time.get_unix_time_from_system()), ContentDB.balance)
 	tp += int(out.tp)
+	# Real steps also walk the long journey (Journey).
+	var walked: Dictionary = Journey.advance(profile, ContentDB.journeys(), Journey.km_from_steps(int(out.steps), ContentDB.balance), ContentDB.balance)
+	if not walked.is_empty() and float(walked.added) > 0.0:
+		tp += int(walked.tp)
+		out["journey"] = walked
 	out["badges"] = refresh_badges()
 	progress_changed.emit()
 	return out
@@ -359,3 +315,11 @@ func from_dict(data: Dictionary) -> void:
 		steps.from_dict(saved_steps)
 	# Saves from before badges existed get what they've already earned, quietly.
 	refresh_badges()
+
+
+# --- The long journey ---
+
+## The journey being walked (null when all are done); opening it unlocks its first page.
+func journey() -> JourneyData:
+	Journey.advance(profile, ContentDB.journeys(), 0.0, ContentDB.balance)
+	return Journey.active(ContentDB.journeys(), profile)

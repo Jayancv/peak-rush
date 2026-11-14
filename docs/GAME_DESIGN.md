@@ -132,6 +132,22 @@ The player's real steps from the phone's health app become a small TP bonus, so 
 - **Badges:** Step Outside (10,000 steps), Marathon Legs (42 km), Long Walker (200 km).
 - **Privacy:** step data is used only on the device and never leaves it. The privacy policy and store forms must say so.
 
+### 5.11 The long journey and Elsa's notebook
+Peak Rush's heart: **every step you take in real life walks you deeper into a story.**
+- **The journey:** a famous long-distance trail walked over weeks. The first is **Kungsleden** (Abisko to Hemavan,
+  440 km, Swedish Lapland). A main-menu **Journey** screen shows a sketched map with the walked part, landmarks and
+  the walker.
+- **Kilometres come from two places:** claimed real steps count **4x** (steps x 0.75 m x `journey_real_km_mult`), and
+  every finished hike adds **8 km** (`journey_km_per_hike`; strolls count, giving up doesn't). So players without a
+  step source can still finish, and walkers get there in about three weeks of everyday walking.
+- **The story:** each landmark (11 on Kungsleden: huts, a pass, villages) unlocks a page of **Grandma Elsa's
+  notebook**. She walked Kungsleden in summer 1974 with her sister Kerstin, went on alone after Kvikkjokk, and had to
+  stop at Ammarnäs. Her last page asks someone to finish the trail for her; the Hemavan page is the player's own.
+- **Rewards:** +30 TP per landmark (not the opening page), +300 TP and the **The Notebook** badge for finishing.
+  A new page lights up the menu button ("Journey · New page!") until it's read.
+- **Data:** `JourneyData` + `LandmarkData` in `content/journeys/`, listed in ContentIndex.journeys and walked in
+  order; future seasons can add their own journey (a Sri Lankan pilgrim route for Tea Country, for example).
+
 ## 6. Season 1 — Nordic Trails (launch content)
 | # | Trail | Biome / weather | Teaches / special | Viewpoints |
 |---|---|---|---|---|

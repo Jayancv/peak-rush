@@ -219,6 +219,14 @@ extends Resource
 ## TP for finding a trail's hidden shortcut the first time.
 @export var tp_shortcut: int = 40
 
+@export_group("Long journey")
+## Each real km walked (steps) counts this many km on the journey; each finished hike adds a few.
+@export var journey_real_km_mult: float = 4.0
+@export var journey_km_per_hike: float = 8.0
+## TP for each landmark reached (not the opening page) and for finishing the journey.
+@export var journey_landmark_tp: int = 30
+@export var journey_finish_tp: int = 300
+
 @export_group("Seasonal events")
 ## Collectibles placed per hike while an event is on, TP for each, and the reward for the goal.
 @export var event_tokens_per_hike: int = 4

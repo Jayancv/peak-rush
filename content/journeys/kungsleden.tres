@@ -1,0 +1,112 @@
+[gd_resource type="Resource" script_class="JourneyData" format=3]
+
+[ext_resource type="Script" path="res://data/journey_data.gd" id="1_journey"]
+[ext_resource type="Script" path="res://data/landmark_data.gd" id="2_landmark"]
+
+[sub_resource type="Resource" id="abisko"]
+script = ExtResource("2_landmark")
+id = &"abisko"
+name_key = "LM_ABISKO"
+km = 0.0
+page_title_key = "LM_ABISKO_TITLE"
+page_text_key = "LM_ABISKO_TEXT"
+map_pos = Vector2(0.07, 0.16)
+
+[sub_resource type="Resource" id="abiskojaure"]
+script = ExtResource("2_landmark")
+id = &"abiskojaure"
+name_key = "LM_ABISKOJAURE"
+km = 15.0
+page_title_key = "LM_ABISKOJAURE_TITLE"
+page_text_key = "LM_ABISKOJAURE_TEXT"
+map_pos = Vector2(0.142, 0.197)
+
+[sub_resource type="Resource" id="alesjaure"]
+script = ExtResource("2_landmark")
+id = &"alesjaure"
+name_key = "LM_ALESJAURE"
+km = 35.0
+page_title_key = "LM_ALESJAURE_TITLE"
+page_text_key = "LM_ALESJAURE_TEXT"
+map_pos = Vector2(0.216, 0.228)
+
+[sub_resource type="Resource" id="tjaktja"]
+script = ExtResource("2_landmark")
+id = &"tjaktja"
+name_key = "LM_TJAKTJA"
+km = 48.0
+page_title_key = "LM_TJAKTJA_TITLE"
+page_text_key = "LM_TJAKTJA_TEXT"
+map_pos = Vector2(0.287, 0.241)
+
+[sub_resource type="Resource" id="singi"]
+script = ExtResource("2_landmark")
+id = &"singi"
+name_key = "LM_SINGI"
+km = 72.0
+page_title_key = "LM_SINGI_TITLE"
+page_text_key = "LM_SINGI_TEXT"
+map_pos = Vector2(0.363, 0.218)
+
+[sub_resource type="Resource" id="saltoluokta"]
+script = ExtResource("2_landmark")
+id = &"saltoluokta"
+name_key = "LM_SALTOLUOKTA"
+km = 122.0
+page_title_key = "LM_SALTOLUOKTA_TITLE"
+page_text_key = "LM_SALTOLUOKTA_TEXT"
+map_pos = Vector2(0.452, 0.209)
+
+[sub_resource type="Resource" id="aktse"]
+script = ExtResource("2_landmark")
+id = &"aktse"
+name_key = "LM_AKTSE"
+km = 160.0
+page_title_key = "LM_AKTSE_TITLE"
+page_text_key = "LM_AKTSE_TEXT"
+map_pos = Vector2(0.535, 0.248)
+
+[sub_resource type="Resource" id="kvikkjokk"]
+script = ExtResource("2_landmark")
+id = &"kvikkjokk"
+name_key = "LM_KVIKKJOKK"
+km = 196.0
+page_title_key = "LM_KVIKKJOKK_TITLE"
+page_text_key = "LM_KVIKKJOKK_TEXT"
+map_pos = Vector2(0.617, 0.356)
+
+[sub_resource type="Resource" id="jakkvik"]
+script = ExtResource("2_landmark")
+id = &"jakkvik"
+name_key = "LM_JAKKVIK"
+km = 270.0
+page_title_key = "LM_JAKKVIK_TITLE"
+page_text_key = "LM_JAKKVIK_TEXT"
+map_pos = Vector2(0.718, 0.492)
+
+[sub_resource type="Resource" id="ammarnas"]
+script = ExtResource("2_landmark")
+id = &"ammarnas"
+name_key = "LM_AMMARNAS"
+km = 350.0
+page_title_key = "LM_AMMARNAS_TITLE"
+page_text_key = "LM_AMMARNAS_TEXT"
+map_pos = Vector2(0.822, 0.634)
+
+[sub_resource type="Resource" id="hemavan"]
+script = ExtResource("2_landmark")
+id = &"hemavan"
+name_key = "LM_HEMAVAN"
+km = 440.0
+page_title_key = "LM_HEMAVAN_TITLE"
+page_text_key = "LM_HEMAVAN_TEXT"
+map_pos = Vector2(0.93, 0.84)
+
+[resource]
+script = ExtResource("1_journey")
+id = &"kungsleden"
+name_key = "JOURNEY_KUNGSLEDEN"
+intro_key = "JOURNEY_KUNGSLEDEN_INTRO"
+length_km = 440.0
+landmarks = Array[ExtResource("2_landmark")]([SubResource("abisko"), SubResource("abiskojaure"), SubResource("alesjaure"), SubResource("tjaktja"), SubResource("singi"), SubResource("saltoluokta"), SubResource("aktse"), SubResource("kvikkjokk"), SubResource("jakkvik"), SubResource("ammarnas"), SubResource("hemavan")])
+lakes = PackedVector4Array(0.2, 0.36, 0.035, 0.06, 0.47, 0.12, 0.06, 0.045, 0.6, 0.55, 0.03, 0.07, 0.76, 0.72, 0.03, 0.05, 0.9, 0.62, 0.045, 0.04, 0.08, 0.32, 0.05, 0.035)

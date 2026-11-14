@@ -106,6 +106,10 @@ func default_cosmetic(slot: CosmeticData.Slot) -> CosmeticData:
 	return null
 
 
+func journeys() -> Array[JourneyData]:
+	return index.journeys if index != null else [] as Array[JourneyData]
+
+
 func events() -> Array[EventData]:
 	return index.events if index != null else [] as Array[EventData]
 

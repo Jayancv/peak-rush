@@ -12,6 +12,7 @@ const JOURNAL: String = "res://scenes/journal/journal.tscn"
 const SETTINGS: String = "res://scenes/settings/settings.tscn"
 const GEAR: String = "res://scenes/gear/gear_screen.tscn"
 const PROFILE: String = "res://scenes/profile/profile.tscn"
+const JOURNEY: String = "res://scenes/journey/journey.tscn"
 
 ## UI timing, not gameplay tuning, so it stays here instead of balance.tres.
 const FADE_SECONDS: float = 0.25

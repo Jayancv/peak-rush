@@ -103,8 +103,11 @@ install_apk() {
 	local serial
 	serial=$("$ADB" devices | awk 'NR > 1 && $2 == "device" { if (index($1, ":")) wifi = wifi ? wifi : $1; else if (!usb) usb = $1 }
 		END { print usb ? usb : wifi }')
+	# Over Wi-Fi the streamed install drops out on this slow link; copying first is slow but works.
+	local mode=""
+	case "$serial" in *:*) mode="--no-streaming"; say "Wi-Fi install: this can take several minutes (a cable takes seconds)." ;; esac
 	say "Installing on $serial..."
-	"$ADB" -s "$serial" install -r "$APK" || fail "adb install failed."
+	"$ADB" -s "$serial" install -r $mode "$APK" || fail "adb install failed."
 	local updated
 	updated=$("$ADB" -s "$serial" shell dumpsys package "$PACKAGE" | grep -m1 lastUpdateTime | sed 's/^ *//')
 	say "Installed. $updated"

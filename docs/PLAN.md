@@ -253,6 +253,9 @@ Ads must never interrupt a hike. Rewarded ads are opt-in; interstitials are rare
 ---
 
 ## M8 — Live seasons pipeline (after launch)
+- [x] **The long journey + Elsa's notebook** (GAME_DESIGN §5.11): Kungsleden 440 km, real steps x4 + 8 km per hike,
+  11 notebook pages, Journey screen + map, results/steps lines, The Notebook badge, save v10; HikeRewards split out of GameState
+- [ ] A second journey for Season 2 (pilgrim route) + Elsa's sketches next to the player's postcards
 - [x] **Seasonal events + share a postcard** (EventData/SeasonalEvents, EventToken, seasonal particles, save v9; PostcardShare + plugin sharePicture)
 - [x] **Stroll mode + racing** (research-led): Stroll switch, Gold times, ghost of your best run, one hidden shortcut per trail (save v8)
 - [x] **New moves** (GAME_DESIGN §4): hold to jump higher, double-tap hurry, ladders/scrambles, duck under low branches (+ Duck pad, hints, bot, tests)

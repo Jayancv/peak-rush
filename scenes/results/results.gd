@@ -88,6 +88,16 @@ func _fill() -> void:
 		lines.append(tr("RESULTS_SHORTCUT") % int(_result.shortcut_tp))
 	if bool(_result.get("stroll", false)):
 		lines.append(tr("RESULTS_STROLL"))
+	var walked: Dictionary = _result.get("journey", {})
+	if not walked.is_empty():
+		var trail_name: String = tr(walked.name_key)
+		if bool(walked.finished):
+			lines.append(tr("RESULTS_JOURNEY_DONE") % [trail_name, int(walked.tp)])
+		else:
+			var line: String = tr("RESULTS_JOURNEY") % [roundi(float(walked.added)), trail_name, floori(float(walked.km)), roundi(float(walked.length))]
+			for lm: LandmarkData in walked.pages:
+				line += "  ·  " + tr("RESULTS_JOURNEY_PAGE") % tr(lm.name_key)
+			lines.append(line)
 	var ev: Dictionary = _result.get("event", {})
 	if not ev.is_empty():
 		if bool(ev.done_now):
@@ -101,6 +111,7 @@ func _fill() -> void:
 	if not daily.is_empty():
 		lines.append(tr("RESULTS_DAILY_DONE") % [int(daily.bonus), int(daily.streak)] if daily.done else tr("RESULTS_DAILY_MISSED"))
 	tp_breakdown.text = "\n".join(lines)
+	_fit_breakdown(lines.size())
 	tp_total.text = tr("HUD_TP") % 0
 	var date: Dictionary = Time.get_date_dict_from_system()
 	stamp.title = tr(_trail.name_key).to_upper()
@@ -215,6 +226,13 @@ func _process(_delta: float) -> void:
 	if _ad_button != null and not _ad_button.visible and Ads.can_offer_reward():
 		_ad_button.visible = true
 		UiMotion.intro([_ad_button])
+
+
+## A big hike can list many lines (gold, shortcut, journey, event, weekly, daily...): smaller
+## text keeps the card on screen.
+func _fit_breakdown(count: int) -> void:
+	var font_size: int = 22 if count <= 5 else (19 if count <= 7 else 16)
+	tp_breakdown.add_theme_font_size_override("font_size", font_size)
 
 
 func _on_ad_reward() -> void:

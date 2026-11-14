@@ -85,7 +85,7 @@ docs/                GAME_DESIGN.md, PLAN.md
 - At the end of each session, update **Current status** below and tick the boxes in `docs/PLAN.md`.
 
 ## Current status
-- Milestone: **M7.5 (trail depth) + polish (sounds, trail map, finds page, daily trail) built, 366 tests green; M7.6 automated part done (phone checklist, low-end phone, playtest open); M7.7 done**. M7 non-release part done. Release steps
+- Milestone: **M7.5 (trail depth) + polish (sounds, trail map, finds page, daily trail) built, 375 tests green; M7.6 automated part done (phone checklist, low-end phone, playtest open); M7.7 done**. M7 non-release part done. Release steps
   (keystore, AAB, stores, iOS, screenshots, 1.0.0) deliberately not started; low-end phone profiling still open.
   M5/M6 full-season phone playtest still open. Launch plan in PLAN.md: M7.6 stabilisation -> M7.7 launch features -> M7.8 ads -> M7.9 Google Play (Android first, free with ads, iOS after launch in M8).
 - Godot 4.7.2-stable (not on PATH; ask the user for the executable path if unknown); GUT 9.7.1.
@@ -280,3 +280,11 @@ docs/                GAME_DESIGN.md, PLAN.md
   and the manifest merger fails on two of the same class; authority <pkg>.peakrush.share, res/xml/peak_rush_share_paths.xml,
   androidx.core 1.13.1 added to plugin deps + export_plugin DEPENDENCIES; AAR rebuilt). Journal enlarged card has Share.
   Water: SteppingStones uses `world/obstacles/water.gdshader` (waves/depth/glints in local px). GroundPatch art follows the TerrainStrip slope.
+  Long journey: `JourneyData`/`LandmarkData` (data/, content/journeys/kungsleden.tres, ContentIndex.journeys, ContentDB.journeys()),
+  `Journey` (systems/: advance(profile, journeys, km) -> pages/tp/finished, km_from_steps, unread/mark_read, map_position;
+  profile.journeys/journey_pages/journey_seen/journeys_done, save v10). Km from GameState.claim_steps (steps x4) and
+  HikeRewards (8 km per finished hike). Screen `scenes/journey/` (journey.gd builds the layout, `JourneyMap` draws the map;
+  map_pos is stylised, spaced by stop: regenerate with a script rather than real coordinates). Menu "Journey" button
+  (New page! while unread), results line, steps-claim note, badge rule JOURNEYS. Story = Elsa's 1974 notebook (LM_* strings).
+  `HikeRewards` (systems/) now does all of record_result's sums; GameState keeps saving, badges and the daily (~325 lines).
+  Results breakdown shrinks its font past 5 lines (Results._fit_breakdown).

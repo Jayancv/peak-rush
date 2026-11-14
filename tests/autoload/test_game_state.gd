@@ -53,7 +53,8 @@ func test_tp_accumulates_and_stars_merge() -> void:
 	assert_eq(tp_after_first, 50 + 50 + photo_tp + challenge_tp + ContentDB.balance.tp_gold)
 	_finish(_t1, 95.0, true)
 	assert_eq(GameState.stars_mask(_t1.id), StarRating.ALL_STARS, "a dusk star earned on a later run is kept")
-	assert_eq(GameState.tp, tp_after_first + 50 + 25, "same photos again pay nothing extra")
+	# The second hike's km also reach the first hut on the long journey (Journey).
+	assert_eq(GameState.tp, tp_after_first + 50 + 25 + ContentDB.balance.journey_landmark_tp, "same photos again pay nothing extra")
 
 
 func test_missing_photos_withholds_the_photo_star() -> void:

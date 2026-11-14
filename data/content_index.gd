@@ -12,3 +12,5 @@ extends Resource
 @export var badges: BadgeCatalog
 ## Seasonal events on the calendar (SeasonalEvents picks today's).
 @export var events: Array[EventData] = []
+## Long journeys walked over weeks, in order (Journey).
+@export var journeys: Array[JourneyData] = []

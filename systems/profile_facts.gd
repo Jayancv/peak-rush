@@ -35,5 +35,5 @@ static func build(trails: Dictionary, profile: PlayerProfile, gear_owned: int, s
 		"trails_finished": finished, "stars": stars, "photos": photos, "perfect_photos": perfect,
 		"hikes": profile.hikes, "night_trails": night, "gear_owned": gear_owned,
 		"hike_minutes": int(profile.hike_seconds / 60.0), "finds": found, "animals": animals,
-		"real_steps": real_steps, "real_km": int(real_km),
+		"real_steps": real_steps, "real_km": int(real_km), "journeys_done": profile.journeys_done.size(),
 	}

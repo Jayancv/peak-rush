@@ -35,6 +35,7 @@ func _ready() -> void:
 		(continue_button if continue_button.visible else play_button).grab_focus()
 	_add_daily_button()
 	_add_steps_button()
+	_add_journey_button()
 	# Ad consent waits until ads matter (see Ads); this only catches players past the grace period.
 	_ask_consent.call_deferred()
 	_start_panning()
@@ -42,6 +43,29 @@ func _ready() -> void:
 	if OS.is_debug_build() and not _startup_logged:
 		_startup_logged = true
 		print("PERF startup_to_menu_ms=%d" % Time.get_ticks_msec())
+
+
+## "Journey" in the button row (after All trails): marked while a notebook page is unread.
+func _add_journey_button() -> void:
+	if ContentDB.journeys().is_empty():
+		return
+	var button: Button = Button.new()
+	button.name = "JourneyButton"
+	button.custom_minimum_size = play_button.custom_minimum_size
+	button.add_theme_font_size_override("font_size", play_button.get_theme_font_size("font_size"))
+	button.pressed.connect(func() -> void: SceneRouter.go_to(SceneRouter.JOURNEY))
+	play_button.get_parent().add_child(button)
+	play_button.get_parent().move_child(button, play_button.get_index() + 1)
+	var update: Callable = func() -> void:
+		if not is_instance_valid(button):
+			return
+		var fresh: bool = Journey.unread(GameState.profile) > 0
+		button.text = tr("MENU_JOURNEY_NEW") if fresh else tr("MENU_JOURNEY")
+		button.theme_type_variation = &"PrimaryButton" if fresh else &""
+	update.call()
+	# Claiming steps on this screen can open a new page.
+	GameState.progress_changed.connect(update)
+	UiMotion.intro([button], 0.35)
 
 
 ## "Daily" next to the profile button: highlighted until today's daily is done.

@@ -124,3 +124,7 @@ event_tokens_per_hike = 4
 event_token_tp = 5
 event_goal_tp = 150
 event_particles = 26
+journey_real_km_mult = 4.0
+journey_km_per_hike = 8.0
+journey_landmark_tp = 30
+journey_finish_tp = 300

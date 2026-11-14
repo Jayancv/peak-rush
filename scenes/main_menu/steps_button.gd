@@ -21,6 +21,8 @@ static func create(parent: Control, pills_on: Control) -> StepsButton:
 	b.add_theme_font_size_override("font_size", 26)
 	parent.add_child(b)
 	return b
+## "+21 km on Kungsleden" after a claim, when the steps walked the journey on.
+var _journey_note: String = ""
 
 
 func _ready() -> void:
@@ -59,6 +61,10 @@ func _claim() -> void:
 	disabled = true
 	theme_type_variation = &""
 	var ids: Array = (out.badges as Array).map(func(b: BadgeData) -> String: return String(b.id))
+	_journey_note = ""
+	var walked: Dictionary = out.get("journey", {})
+	if not walked.is_empty():
+		_journey_note = "  ·  " + tr("STEPS_JOURNEY") % [roundi(float(walked.added)), tr(walked.name_key)]
 	if UiMotion.reduced():
 		_set_claimed(tp)
 		_after_claim(ids)
@@ -72,7 +78,7 @@ func _claim() -> void:
 
 
 func _set_claimed(value: int) -> void:
-	text = tr("STEPS_CLAIMED") % value
+	text = tr("STEPS_CLAIMED") % value + _journey_note
 
 
 func _after_claim(badge_ids: Array) -> void:

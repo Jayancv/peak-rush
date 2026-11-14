@@ -26,6 +26,12 @@ var weekly: Dictionary = {}
 ## was paid (SeasonalEvents; save v9).
 var events: Dictionary = {}
 var events_done: Array[String] = []
+## The long journey (Journey; save v10): km walked per journey id, notebook pages unlocked
+## and opened ("kungsleden/alesjaure"), and the journeys finished.
+var journeys: Dictionary = {}
+var journey_pages: Array[String] = []
+var journey_seen: Array[String] = []
+var journeys_done: Array[String] = []
 
 
 static func slot_key(slot: CosmeticData.Slot) -> String:
@@ -118,6 +124,10 @@ func to_dict() -> Dictionary:
 		"weekly": weekly.duplicate(true),
 		"events": events.duplicate(),
 		"events_done": events_done.duplicate(),
+		"journeys": journeys.duplicate(),
+		"journey_pages": journey_pages.duplicate(),
+		"journey_seen": journey_seen.duplicate(),
+		"journeys_done": journeys_done.duplicate(),
 	}
 
 
@@ -141,6 +151,14 @@ func from_dict(data: Dictionary) -> void:
 		for k: Variant in saved_events:
 			events[str(k)] = maxi(int(saved_events[k]), 0)
 	events_done = TrailRecord.string_list(data.get("events_done", []))
+	journeys = {}
+	var saved_journeys: Variant = data.get("journeys", {})
+	if saved_journeys is Dictionary:
+		for k: Variant in saved_journeys:
+			journeys[str(k)] = maxf(float(saved_journeys[k]), 0.0)
+	journey_pages = TrailRecord.string_list(data.get("journey_pages", []))
+	journey_seen = TrailRecord.string_list(data.get("journey_seen", []))
+	journeys_done = TrailRecord.string_list(data.get("journeys_done", []))
 	var pick: Variant = data.get("daily_pick", {})
 	daily_pick = {}
 	if pick is Dictionary and pick.has("date") and pick.has("trail_id") and pick.has("twist"):

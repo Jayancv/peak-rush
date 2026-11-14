@@ -24,6 +24,8 @@ static func step(from_version: int, data: Dictionary) -> Dictionary:
 			return _v7_to_v8(data)
 		8:
 			return _v8_to_v9(data)
+		9:
+			return _v9_to_v10(data)
 	push_error("SaveMigrations: no step from version %d" % from_version)
 	return data
 
@@ -141,4 +143,16 @@ static func _v8_to_v9(data: Dictionary) -> Dictionary:
 			out.profile["events"] = {}
 		if not (out.profile.get("events_done") is Array):
 			out.profile["events_done"] = []
+	return out
+
+
+## v10: the long journey (Journey): nothing walked yet.
+static func _v9_to_v10(data: Dictionary) -> Dictionary:
+	var out: Dictionary = data.duplicate(true)
+	if out.get("profile") is Dictionary:
+		if not (out.profile.get("journeys") is Dictionary):
+			out.profile["journeys"] = {}
+		for key: String in ["journey_pages", "journey_seen", "journeys_done"]:
+			if not (out.profile.get(key) is Array):
+				out.profile[key] = []
 	return out

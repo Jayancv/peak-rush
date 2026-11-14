@@ -13,6 +13,8 @@
 [ext_resource type="Resource" path="res://content/profile/cosmetics.tres" id="p_cosmetics"]
 [ext_resource type="Resource" path="res://content/profile/badges.tres" id="p_badges"]
 [ext_resource type="Script" path="res://data/event_data.gd" id="event_script"]
+[ext_resource type="Script" path="res://data/journey_data.gd" id="journey_script"]
+[ext_resource type="Resource" path="res://content/journeys/kungsleden.tres" id="j_kungsleden"]
 [ext_resource type="Resource" path="res://content/events/autumn.tres" id="ev_autumn"]
 [ext_resource type="Resource" path="res://content/events/winter_lights.tres" id="ev_winter_lights"]
 [ext_resource type="Resource" path="res://content/events/spring_blossom.tres" id="ev_spring_blossom"]
@@ -25,3 +27,4 @@ gear = Array[ExtResource("gear_script")]([ExtResource("g_grip_boots"), ExtResour
 cosmetics = ExtResource("p_cosmetics")
 badges = ExtResource("p_badges")
 events = Array[ExtResource("event_script")]([ExtResource("ev_autumn"), ExtResource("ev_winter_lights"), ExtResource("ev_spring_blossom"), ExtResource("ev_midsummer")])
+journeys = Array[ExtResource("journey_script")]([ExtResource("j_kungsleden")])

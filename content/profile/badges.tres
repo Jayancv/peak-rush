@@ -153,6 +153,16 @@ amount = 200
 art = 3
 color = Color(0.5490, 0.2902, 0.4196, 1)
 
+[sub_resource type="Resource" id="notebook_finished"]
+script = ExtResource("2_badge")
+id = &"notebook_finished"
+name_key = "BADGE_NOTEBOOK"
+description_key = "BADGE_NOTEBOOK_DESC"
+rule = 12
+amount = 1
+art = 0
+color = Color(0.7843, 0.4706, 0.2353, 1)
+
 [resource]
 script = ExtResource("1_catalog")
-badges = Array[ExtResource("2_badge")]([SubResource("first_summit"), SubResource("seasoned"), SubResource("star_gazer"), SubResource("shining_trail"), SubResource("shutterbug"), SubResource("perfect_shot"), SubResource("night_owl"), SubResource("regular"), SubResource("kitted_out"), SubResource("long_haul"), SubResource("forager"), SubResource("wildlife_watcher"), SubResource("step_out"), SubResource("marathon_legs"), SubResource("long_walker")])
+badges = Array[ExtResource("2_badge")]([SubResource("first_summit"), SubResource("seasoned"), SubResource("star_gazer"), SubResource("shining_trail"), SubResource("shutterbug"), SubResource("perfect_shot"), SubResource("night_owl"), SubResource("regular"), SubResource("kitted_out"), SubResource("long_haul"), SubResource("forager"), SubResource("wildlife_watcher"), SubResource("step_out"), SubResource("marathon_legs"), SubResource("long_walker"), SubResource("notebook_finished")])

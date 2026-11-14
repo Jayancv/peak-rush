@@ -451,3 +451,54 @@ EVENT_DONE,complete!
 TOAST_EVENT_TOKEN,%s %d/%d
 RESULTS_EVENT,%s +%d  (%d/%d)
 RESULTS_EVENT_DONE,%s complete!  +%d
+JOURNEY_KUNGSLEDEN,Kungsleden
+JOURNEY_KUNGSLEDEN_INTRO,"Grandma Elsa's notebook, found in the attic. She walked Kungsleden in the summer of 1974 and never finished. Walk it with her."
+LM_ABISKO,Abisko
+LM_ABISKO_TITLE,"Abisko, 2 July 1974"
+LM_ABISKO_TEXT,"Kerstin and I got off the night train with packs heavier than we are. 440 kilometres to Hemavan. Papa says we'll be home in a week. The midnight sun won't set and neither of us can sleep, so I'm writing instead. This is where it starts."
+LM_ABISKOJAURE,Abiskojaure
+LM_ABISKOJAURE_TITLE,"Abiskojaure, 3 July"
+LM_ABISKOJAURE_TEXT,"First hut. My shoulders hate me. At two in the morning a reindeer walked straight through our camp as if it owned the valley, which I suppose it does. Kerstin named him Gustav. Gustav did not stay for coffee."
+LM_ALESJAURE,Alesjaure
+LM_ALESJAURE_TITLE,"Alesjaure, 5 July"
+LM_ALESJAURE_TEXT,"The hut warden rowed us across the lake and wouldn't take a single krona, only news from Kiruna. We had none. He laughed anyway. The water is so clear you can see stones three metres down. I filled my cup and drank the sky."
+LM_TJAKTJA,Tjäktja Pass
+LM_TJAKTJA_TITLE,"Tjäktja Pass, 6 July"
+LM_TJAKTJA_TEXT,"The highest point of the whole trail, 1,150 metres, and it snowed. In July! We sat in the little shelter eating crushed biscuits and Kerstin said it was the best day of her life. An hour later, in the sun, she said it again. Both were true."
+LM_SINGI,Singi
+LM_SINGI_TITLE,"Singi, 8 July"
+LM_SINGI_TEXT,"Kebnekaise is just over there, the highest mountain in Sweden. Kerstin wants to climb it. I want to sleep for a year. We compromised: we looked at it for a long time, and then we made pancakes."
+LM_SALTOLUOKTA,Saltoluokta
+LM_SALTOLUOKTA_TITLE,"Saltoluokta, 12 July"
+LM_SALTOLUOKTA_TEXT,"A real bed, a hot shower and a dinner with three courses. I nearly cried at the potatoes. 122 kilometres behind us. My boots are held together with tape and stubbornness, mostly stubbornness."
+LM_AKTSE,Aktse
+LM_AKTSE_TITLE,"Aktse, 15 July"
+LM_AKTSE_TEXT,"We climbed Skierfe to look down at the Rapa valley. The river splits into a hundred silver threads, like someone dropped a necklace. I have never seen anything so beautiful, or felt so small. It's a good kind of small."
+LM_KVIKKJOKK,Kvikkjokk
+LM_KVIKKJOKK_TITLE,"Kvikkjokk, 17 July"
+LM_KVIKKJOKK_TEXT,"Kerstin's knee has given up. The village doctor says no more walking, so she takes the bus home tomorrow. She made me promise to go on without her. I don't know if I can do this alone. I said yes anyway."
+LM_JAKKVIK,Jäkkvik
+LM_JAKKVIK_TITLE,"Jäkkvik, 23 July"
+LM_JAKKVIK_TEXT,"Six days alone. The first two I talked to myself the whole way. Now I just listen: wind, water, my own steps. I think I was always a little afraid of quiet. Out here quiet isn't empty. It's full."
+LM_AMMARNAS,Ammarnäs
+LM_AMMARNAS_TITLE,"Ammarnäs, 28 July"
+LM_AMMARNAS_TEXT,"There was a letter waiting at the post office. Mamma is ill and I must go home. 90 kilometres left and I can't walk them. I'm leaving the rest of these pages empty. One day someone will finish this trail for me. Leave a stone on the cairn at Hemavan, and tell me what you saw."
+LM_HEMAVAN,Hemavan
+LM_HEMAVAN_TITLE,Hemavan
+LM_HEMAVAN_TEXT,"The rest of this page is in your handwriting. You walked every kilometre she couldn't. On the cairn above the village you leave two stones: one for you, and one for Elsa. Somewhere, a notebook is finally finished."
+MENU_JOURNEY,Journey
+MENU_JOURNEY_NEW,Journey  ·  New page!
+JOURNEY_KM,%d / %d km
+JOURNEY_NEXT,Next: %s in %d km
+JOURNEY_AT_END,You reached the end of the trail.
+JOURNEY_HOW,Your real steps count four times over. Every finished hike adds %d km.
+JOURNEY_LOCKED,Walk %d km more to reach %s and read this page.
+JOURNEY_PAGE,Page %d of %d
+JOURNEY_MAP_NORTH,N
+JOURNEY_DONE_ALL,Every notebook is finished. More journeys come with new seasons.
+RESULTS_JOURNEY,+%d km on %s  (%d / %d km)
+RESULTS_JOURNEY_PAGE,new page: %s
+RESULTS_JOURNEY_DONE,You finished %s!  +%d
+STEPS_JOURNEY,+%d km on %s
+BADGE_NOTEBOOK,The Notebook
+BADGE_NOTEBOOK_DESC,Finish a long journey.
