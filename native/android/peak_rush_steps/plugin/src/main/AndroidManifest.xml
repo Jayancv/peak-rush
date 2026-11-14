@@ -12,7 +12,7 @@
     <application>
         <!-- Shares postcard pictures from the app's own files (sharePicture). -->
         <provider
-            android:name="androidx.core.content.FileProvider"
+            android:name="org.jcv.peakrush.steps.ShareFileProvider"
             android:authorities="${applicationId}.peakrush.share"
             android:exported="false"
             android:grantUriPermissions="true">

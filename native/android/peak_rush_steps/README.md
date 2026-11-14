@@ -18,9 +18,9 @@ The `native/` folder has a `.gdignore`, so Godot never imports or exports it.
 From this folder, in Git Bash:
 ```bash
 JAVA_HOME="/c/Program Files/Java/jdk-17" ANDROID_HOME="$LOCALAPPDATA/Android/Sdk" \
-JAVA_TOOL_OPTIONS=-Djavax.net.ssl.trustStoreType=Windows-ROOT \
 ./gradlew --no-daemon :plugin:copyAarToAddon
 ```
+(The certificate setting this PC needs is in `~/.gradle/gradle.properties`; see docs/RELEASE.md.)
 This writes `addons/peak_rush_steps/bin/peak_rush_steps-release.aar`. Versions follow Godot 4.7.2's
 build template (AGP 8.6.1, Kotlin 2.1.21, compileSdk 36). When Godot is upgraded, bump the `godot`
 `compileOnly` dependency to match.

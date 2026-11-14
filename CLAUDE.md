@@ -141,7 +141,8 @@ docs/                GAME_DESIGN.md, PLAN.md
   On this machine, git over HTTPS needs `-c http.sslBackend=schannel`.
   Android: SDK at `%LOCALAPPDATA%\Android\Sdk` (installed with the new `android sdk install pkg/ver` CLI; `sdkmanager` is deprecated),
   Godot uses JDK 17. Preset "Android" in `export_presets.cfg` (`org.jcv.peakrush`, arm64). `window/size/mode.mobile=3` gives immersive fullscreen.
-  Headless deploy: `godot --headless --path . --export-debug "Android" export/android/peak-rush-debug.apk`, then `adb install -r`.
+  Deploy: `GODOT=<exe> tools/deploy.sh` (exports only if stale, waits for the phone, installs; `--force`, `--install-only`,
+  `pair HOST:PORT CODE` / `connect HOST:PORT` for wireless debugging). Don't launch or drive the app on the phone.
   M7: `PerfProbe` (debug builds only) logs "PERF" lines every 5 s; read with `adb logcat -s godot`. Main menu logs startup ms.
   AudioManager synthesises all sounds on a WorkerThreadPool task at boot; loops asked for early start when ready.
   SynthSounds pads every buffer (TAIL_PAD) because the Android mixer reads past the end (it crashed the AudioTrack thread).
@@ -214,7 +215,7 @@ docs/                GAME_DESIGN.md, PLAN.md
   Daily: `DailyChallenge.is_done` keeps a daily done if the clock moves back <= 2 days. A save from a newer app is copied
   to save.v<N>-backup.json before use. Phone-only checks: docs/PHONE_CHECKLIST.md.
   M7.9 prep: version 1.0.0 (project.godot; presets' version/name empty, bump version/code per upload). Preset "Android Release" =
-  Gradle + AAB, keystore from GODOT_ANDROID_KEYSTORE_RELEASE_* env vars, Gradle needs JAVA_TOOL_OPTIONS=-Djavax.net.ssl.trustStoreType=Windows-ROOT
+  Gradle + AAB, keystore from GODOT_ANDROID_KEYSTORE_RELEASE_* env vars, Gradle's Windows-ROOT trust store + memory cap live in ~/.gradle/gradle.properties
   on this PC (docs/RELEASE.md). Store images: `godot --path . --resolution 1920x1080 tools/store_shots/store_shots.tscn` -> export/store/
   (fake progress in memory, autosave off). Listing text + rating/data-safety answers: docs/STORE_LISTING.md.
   Postcards: `PostcardArt` (scenes/journal) draws a scene per ViewpointData.motif (enum; new motifs at the END), night sky on
@@ -275,6 +276,7 @@ docs/                GAME_DESIGN.md, PLAN.md
   HikeTracker._start_event places `EventToken`s via TrailMoments.open_ground and WeatherFx.add_seasonal particles; paid in
   GameState.record_result (last_result.event); Daily card + results line + menu banner. Balance event_*.
   Share: `PostcardShare` (scenes/journal) renders card + name into user://share/postcard.png (headless: blank) and calls
-  PeakRushSteps.sharePicture (Kotlin, FileProvider authority <pkg>.peakrush.share, res/xml/peak_rush_share_paths.xml,
+  PeakRushSteps.sharePicture (Kotlin, `ShareFileProvider` subclass: Godot's template already declares androidx FileProvider,
+  and the manifest merger fails on two of the same class; authority <pkg>.peakrush.share, res/xml/peak_rush_share_paths.xml,
   androidx.core 1.13.1 added to plugin deps + export_plugin DEPENDENCIES; AAR rebuilt). Journal enlarged card has Share.
   Water: SteppingStones uses `world/obstacles/water.gdshader` (waves/depth/glints in local px). GroundPatch art follows the TerrainStrip slope.
