@@ -65,6 +65,7 @@ id = &"t08_ella_rock"
 name_key = "TRAIL_T08_NAME"
 season_id = &"s02_tea"
 scene_path = "res://content/seasons/s02_tea/trails/t08_ella_rock/trail.tscn"
+summit_line_key = "SUMMIT_LINE_T08"
 length_m = 3300
 daylight_seconds = 225.0
 par_time = 165.0

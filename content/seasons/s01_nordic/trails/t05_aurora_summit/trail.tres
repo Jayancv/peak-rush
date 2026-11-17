@@ -83,6 +83,7 @@ id = &"t05_aurora_summit"
 name_key = "TRAIL_T05_NAME"
 season_id = &"s01_nordic"
 scene_path = "res://content/seasons/s01_nordic/trails/t05_aurora_summit/trail.tscn"
+summit_line_key = "SUMMIT_LINE_T05"
 length_m = 7300
 daylight_seconds = 330.0
 par_time = 240.0

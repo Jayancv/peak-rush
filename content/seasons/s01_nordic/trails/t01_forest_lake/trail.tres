@@ -67,6 +67,7 @@ id = &"t01_forest_lake"
 name_key = "TRAIL_T01_NAME"
 season_id = &"s01_nordic"
 scene_path = "res://content/seasons/s01_nordic/trails/t01_forest_lake/trail.tscn"
+summit_line_key = "SUMMIT_LINE_T01"
 length_m = 3400
 daylight_seconds = 180.0
 par_time = 120.0

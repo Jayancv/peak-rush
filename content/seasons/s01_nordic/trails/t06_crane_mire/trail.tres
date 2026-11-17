@@ -83,6 +83,7 @@ id = &"t06_crane_mire"
 name_key = "TRAIL_T06_NAME"
 season_id = &"s01_nordic"
 scene_path = "res://content/seasons/s01_nordic/trails/t06_crane_mire/trail.tscn"
+summit_line_key = "SUMMIT_LINE_T06"
 length_m = 6200
 daylight_seconds = 320.0
 par_time = 240.0

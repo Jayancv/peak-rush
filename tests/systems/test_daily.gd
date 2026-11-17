@@ -138,6 +138,9 @@ func test_completing_today_pays_once_and_starts_a_streak() -> void:
 	r.finished = true
 	r.time_seconds = 1.0
 	r.finds = [&"x", &"y", &"z"] as Array[StringName]
+	# Meets every twist (the day's twist depends on the date): all photos taken, no falls, fast.
+	r.viewpoint_total = 1
+	r.photos = {"vp": StarRating.PhotoQuality.GOOD}
 	var out: Dictionary = GameState.record_result(r)
 	assert_true(out.daily.done)
 	assert_eq(int(out.daily.streak), 1)

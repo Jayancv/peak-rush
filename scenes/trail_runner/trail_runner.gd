@@ -100,6 +100,9 @@ func _load_trail() -> void:
 	hiker.stamina_changed.connect(_on_stamina_changed)
 	hiker.exhausted.connect(func() -> void: hud.show_toast("TOAST_EXHAUSTED"))
 	hiker.stumbled.connect(_on_stumbled)
+	hiker.landed.connect(func() -> void:
+		if hiker.last_air_seconds >= _balance.haptic_land_min_air:
+			Haptics.pulse(_balance.haptic_land_ms, _balance.haptic_land_strength))
 	hiker.fell.connect(_on_hiker_fell)
 	hiker.checkpoint_reached.connect(_on_checkpoint_reached)
 	hiker.reached_finish.connect(_on_reached_finish)
@@ -222,7 +225,7 @@ func _on_hiker_fell() -> void:
 	if _respawning:
 		return
 	_respawning = true
-	_vibrate(_balance.fall_vibrate_ms)
+	Haptics.pulse(_balance.fall_vibrate_ms)
 	camera.shake(_balance.shake_fall_px)
 	SceneRouter.cover(func() -> void:
 		hiker.respawn(_respawn_point)
@@ -261,7 +264,7 @@ func _on_reached_finish() -> void:
 
 
 func _on_stumbled() -> void:
-	_vibrate(_balance.stumble_vibrate_ms)
+	Haptics.pulse(_balance.stumble_vibrate_ms)
 	camera.shake(_balance.shake_stumble_px)
 
 
@@ -297,8 +300,4 @@ func _update_photo_count() -> void:
 			taken += 1
 	hud.set_photos(taken, trail.viewpoints.size())
 
-
-func _vibrate(ms: int) -> void:
-	if bool(GameState.settings.get("vibration", true)):
-		Input.vibrate_handheld(ms)
 

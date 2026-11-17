@@ -195,6 +195,7 @@ func _start_event(fx: WeatherFx) -> void:
 func _on_event_token() -> void:
 	event_tokens += 1
 	AudioManager.play_find()
+	Haptics.pulse(ContentDB.balance.haptic_find_ms)
 	var key: String = SeasonalEvents.key_for(event, GameState.today())
 	var total: int = mini(int(GameState.profile.events.get(key, 0)) + event_tokens, event.goal)
 	_hud.show_toast_text(tr("TOAST_EVENT_TOKEN") % [tr(event.token_key), total, event.goal])
@@ -207,6 +208,7 @@ func _on_shortcut(id: StringName) -> void:
 	var known: bool = GameState.record(_trail.id).get("shortcuts", []).has(String(id))
 	if not known:
 		AudioManager.play_find()
+		Haptics.pulse(ContentDB.balance.haptic_find_ms)
 		_hud.show_toast("TOAST_SHORTCUT")
 
 
@@ -221,6 +223,7 @@ func _on_find(id: StringName) -> void:
 		return
 	finds.append(id)
 	AudioManager.play_find()
+	Haptics.pulse(ContentDB.balance.haptic_find_ms)
 	var data: FindData = _trail.get_find(id)
 	var name_text: String = tr(data.name_key) if data != null else String(id)
 	var known: bool = GameState.record(_trail.id).get("finds", []).has(String(id))

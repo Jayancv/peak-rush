@@ -29,7 +29,8 @@ func play(hiker: Hiker, camera: HikerCamera, hud: Hud, trail: TrailData, seconds
 	if not UiMotion.reduced():
 		# Back and up, zoomed out: the climb laid out below.
 		camera.frame(hiker.global_position + Vector2(-balance.summit_pull_px, -balance.summit_rise_px), balance.summit_zoom)
-	hud.show_summit(tr(trail.name_key), TimeFormat.mmss(seconds_taken))
+	hud.show_summit(tr(trail.name_key), TimeFormat.mmss(seconds_taken), tr(trail.summit_line_key) if trail.summit_line_key != "" else "")
+	Haptics.pulse(balance.haptic_summit_ms)
 	get_tree().create_timer(balance.summit_seconds, false).timeout.connect(_finish)
 
 

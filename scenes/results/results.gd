@@ -179,8 +179,7 @@ func _thump() -> void:
 	var tween: Tween = create_tween()
 	for offset: Vector2 in [Vector2(6, 4), Vector2(-5, -3), Vector2(3, 2), Vector2.ZERO]:
 		tween.tween_property(card, "position", start + offset, 0.04)
-	if bool(GameState.settings.get("vibration", true)):
-		Input.vibrate_handheld(ContentDB.balance.stumble_vibrate_ms)
+	Haptics.pulse(ContentDB.balance.stumble_vibrate_ms)
 
 
 func _play(trail: TrailData) -> void:

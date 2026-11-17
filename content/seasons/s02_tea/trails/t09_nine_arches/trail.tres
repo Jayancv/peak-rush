@@ -65,6 +65,7 @@ id = &"t09_nine_arches"
 name_key = "TRAIL_T09_NAME"
 season_id = &"s02_tea"
 scene_path = "res://content/seasons/s02_tea/trails/t09_nine_arches/trail.tscn"
+summit_line_key = "SUMMIT_LINE_T09"
 length_m = 3900
 daylight_seconds = 250.0
 par_time = 185.0

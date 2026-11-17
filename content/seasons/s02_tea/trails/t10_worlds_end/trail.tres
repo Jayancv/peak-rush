@@ -65,6 +65,7 @@ id = &"t10_worlds_end"
 name_key = "TRAIL_T10_NAME"
 season_id = &"s02_tea"
 scene_path = "res://content/seasons/s02_tea/trails/t10_worlds_end/trail.tscn"
+summit_line_key = "SUMMIT_LINE_T10"
 length_m = 5000
 daylight_seconds = 265.0
 par_time = 195.0

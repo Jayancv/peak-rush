@@ -1,7 +1,8 @@
 extends Control
-## Title screen: a postcard-style title card over a slowly panning panorama, with
-## the hiker resting on a hill. "Continue" opens the next unfinished trail directly;
-## "All trails" opens trail select. The banner names the newest season.
+## Title screen, seen from inside a mountain hut (HutRoom): the title card in the window,
+## a slowly panning panorama outside lit by the real clock, seasonal weather, and the
+## player's keepsakes on the walls (HutWall). "Continue" opens the next unfinished trail
+## directly; "All trails" opens trail select. The banner names the newest season.
 
 ## Gentle pan of the scenery behind the menu (px/s at full parallax depth). UI motion, not gameplay.
 const PAN_SPEED: float = 22.0
@@ -18,6 +19,7 @@ const BANNER_RADIUS: int = 22
 @export var backdrop: Node
 
 var _next: TrailData
+var _hut: HutRoom
 static var _startup_logged: bool = false
 
 
@@ -29,6 +31,7 @@ func _ready() -> void:
 	gear_button.pressed.connect(func() -> void: SceneRouter.go_to(SceneRouter.GEAR))
 	profile_button.pressed.connect(func() -> void: SceneRouter.go_to(SceneRouter.PROFILE))
 	continue_button.pressed.connect(_on_continue)
+	_setup_hut()
 	_setup_banner()
 	_setup_continue()
 	if not DisplayServer.is_touchscreen_available():
@@ -62,10 +65,98 @@ func _add_journey_button() -> void:
 		var fresh: bool = Journey.unread(GameState.profile) > 0
 		button.text = tr("MENU_JOURNEY_NEW") if fresh else tr("MENU_JOURNEY")
 		button.theme_type_variation = &"PrimaryButton" if fresh else &""
+		if is_instance_valid(_hut):
+			_hut.notebook_fresh = fresh
 	update.call()
 	# Claiming steps on this screen can open a new page.
 	GameState.progress_changed.connect(update)
 	UiMotion.intro([button], 0.35)
+
+
+## The hut around the window: built in code and slotted under the UI.
+func _setup_hut() -> void:
+	var b: Balance = ContentDB.balance
+	var now: Dictionary = Time.get_datetime_dict_from_system()
+	var hour: float = float(now.hour) + float(now.minute) / 60.0
+	if HutRoom.hour_override >= 0.0:
+		hour = HutRoom.hour_override
+	if HutRoom.month_override > 0:
+		now.month = HutRoom.month_override
+	var ui_index: int = $SafeArea.get_index()
+	# The view outside takes the light of the real hour (multiplied over the landscape).
+	var outside: ColorRect = ColorRect.new()
+	outside.name = "OutsideLight"
+	outside.color = HutView.tint(hour, b)
+	var mul: CanvasItemMaterial = CanvasItemMaterial.new()
+	mul.blend_mode = CanvasItemMaterial.BLEND_MODE_MUL
+	outside.material = mul
+	outside.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	outside.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(outside)
+	move_child(outside, ui_index)
+	var weather: CPUParticles2D = HutWeather.create(HutView.weather(int(now.month)), get_viewport_rect().size)
+	if weather != null:
+		add_child(weather)
+		move_child(weather, ui_index + 1)
+	_hut = HutRoom.new()
+	_hut.name = "Hut"
+	_hut.phase = HutView.phase(hour, b)
+	_hut.show_notebook = not ContentDB.journeys().is_empty()
+	_hut.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(_hut)
+	move_child(_hut, $SafeArea.get_index())
+	var wall: HutWall = HutWall.new()
+	wall.name = "Keepsakes"
+	wall.room = _hut
+	wall.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_hut.add_child(wall)
+	var trails: Array[TrailData] = []
+	for s: SeasonData in ContentDB.seasons():
+		trails.append_array(s.trails)
+	var badges: Array[BadgeData] = []
+	for badge: BadgeData in ContentDB.badge_list():
+		if GameState.profile.badges.has(String(badge.id)):
+			badges.append(badge)
+	# Elsa's photo takes the first pin.
+	wall.fill(HutView.wall_postcards(GameState.trails, trails, b.hut_wall_postcards - 1),
+		HutView.shelf_finds(GameState.trails, trails, b.hut_shelf_slots), badges)
+	var scenery: Backdrop = backdrop as Backdrop
+	if scenery != null:
+		if _hut.phase == HutView.Phase.NIGHT:
+			scenery.sun_anchor.visible = false
+		else:
+			scenery.set_daylight(HutView.sun_progress(hour, b), HutView.tint(hour, b))
+			# The light rect already tints the sky; keep only the sun's place and the warm glow.
+			scenery.sky.modulate = Color.WHITE
+	_seat_hiker()
+
+
+## The player's hiker sits on the stool by the wall, in their own outfit, breathing slowly.
+## Physics is off (no floor in here); the sitting pose is set by hand.
+func _seat_hiker() -> void:
+	var hiker: Hiker = get_node_or_null("Hiker") as Hiker
+	if hiker == null:
+		return
+	hiker.process_mode = Node.PROCESS_MODE_DISABLED
+	# In front of the walls, still under the buttons.
+	move_child(hiker, _hut.get_index() + 1)
+	var light: float = _hut.room_light()
+	hiker.modulate = Color(light, light, light)
+	var pose: HikerVisual = hiker.visual
+	pose.front_leg.rotation = HikerVisual.SIT_FRONT_LEG
+	pose.back_leg.rotation = HikerVisual.SIT_BACK_LEG
+	pose.arm.rotation = HikerVisual.SIT_ARM
+	pose.position.y = HikerVisual.SIT_DROP
+	var place: Callable = func() -> void:
+		if is_instance_valid(_hut):
+			hiker.position = _hut.seat_point()
+	# The hut is full-screen: `resized` fires once layout gives it a size (and on rotation).
+	_hut.resized.connect(place)
+	place.call()
+	if not UiMotion.reduced():
+		var breath: Tween = create_tween().set_loops()
+		breath.tween_property(pose, "scale:y", 1.03, 1.3).set_trans(Tween.TRANS_SINE)
+		breath.tween_property(pose, "scale:y", 1.0, 1.3).set_trans(Tween.TRANS_SINE)
 
 
 ## "Daily" next to the profile button: highlighted until today's daily is done.

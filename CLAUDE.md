@@ -85,7 +85,7 @@ docs/                GAME_DESIGN.md, PLAN.md
 - At the end of each session, update **Current status** below and tick the boxes in `docs/PLAN.md`.
 
 ## Current status
-- Milestone: **M7.5 (trail depth) + polish (sounds, trail map, finds page, daily trail) built, 377 tests green; M7.6 automated part done (phone checklist, low-end phone, playtest open); M7.7 done**. M7 non-release part done. Release steps
+- Milestone: **M7.5 (trail depth) + polish (sounds, trail map, finds page, daily trail) built, 387 tests green; M7.6 automated part done (phone checklist, low-end phone, playtest open); M7.7 done**. M7 non-release part done. Release steps
   (keystore, AAB, stores, iOS, screenshots, 1.0.0) deliberately not started; low-end phone profiling still open.
   M5/M6 full-season phone playtest still open. Launch plan in PLAN.md: M7.6 stabilisation -> M7.7 launch features -> M7.8 ads -> M7.9 Google Play (Android first, free with ads, iOS after launch in M8).
 - Godot 4.7.2-stable (not on PATH; ask the user for the executable path if unknown); GUT 9.7.1.
@@ -295,3 +295,12 @@ docs/                GAME_DESIGN.md, PLAN.md
   (Find_elsa_*; placed via TrailMoments.open_ground ~45% along). Postcard sketch: `SketchView` + pencil_sketch.gdshader
   (reads the screen under an overlay ColorRect on the enlarged card); Season 1 = Elsa, later seasons = Kerstin.
   Translation CSV: write a line break inside a string as the two characters \n (Godot unescapes them).
+  Hut: the main menu builds `HutRoom` (scenes/main_menu: walls/stove/notebook drawn in code, notebook tap -> Journey) +
+  `HutWall` (keepsakes) + an OutsideLight ColorRect (MUL blend, HutView.tint by the real hour) + `HutWeather` particles,
+  all slotted under SafeArea; the menu's Hiker is moved above the hut and seated (process disabled, SIT_* pose set by hand)
+  on HutRoom.seat_point(). Keepsake taps: HutWall.target_at (Elsa photo/notebook -> Journey, cards -> Journal,
+  shelf -> Journal with Journal.open_finds, patches/hiker -> Profile). Elsa's photo always takes the first pin. `HutView` (systems/) = phase/tint/sun by hour, weather by month,
+  shelf_finds (traces first), wall_postcards (best first); Balance hut_*. HutRoom.hour_override/month_override pin the
+  clock for tools (store shots use 11:00 in July). `Haptics.pulse(ms, strength)` (scenes/ui) is the only way to vibrate
+  (checks settings.vibration); Balance haptic_*; Hiker.last_air_seconds gates landing taps. Android presets need
+  permissions/vibrate=true (a test checks). TrailData.summit_line_key -> Hud.show_summit third line (SUMMIT_LINE_T01..T11).

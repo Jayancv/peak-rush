@@ -84,6 +84,7 @@ func shoot_at(subject_screen: Vector2) -> int:
 	_show_result(q)
 	_pop_postcard(q)
 	AudioManager.play_shutter()
+	Haptics.pulse(ContentDB.balance.haptic_shutter_ms)
 	shot_taken.emit(viewpoint.viewpoint_id, q)
 	if not scoring.has_film():
 		get_tree().create_timer(EMPTY_ROLL_CLOSE_DELAY).timeout.connect(close)

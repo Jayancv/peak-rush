@@ -75,6 +75,7 @@ id = &"t02_archipelago_rocks"
 name_key = "TRAIL_T02_NAME"
 season_id = &"s01_nordic"
 scene_path = "res://content/seasons/s01_nordic/trails/t02_archipelago_rocks/trail.tscn"
+summit_line_key = "SUMMIT_LINE_T02"
 length_m = 3300
 daylight_seconds = 195.0
 par_time = 145.0

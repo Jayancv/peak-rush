@@ -10,6 +10,8 @@ const TOAST_SECONDS: float = 2.2
 const TITLE_FONT: Font = preload("res://shared_art/title_font.tres")
 ## Longer toasts (first-time hints) wrap at this width instead of running off a 4:3 screen.
 const TOAST_MAX_WIDTH: float = 760.0
+## The notebook line under the summit title: warm, like lamplight on paper.
+const SUMMIT_NOTE: Color = Color("#FFD98A")
 
 @export var stamina_bar: StaminaBar
 @export var sun_arc: SunArc
@@ -164,7 +166,7 @@ func set_photos(taken: int, total: int) -> void:
 
 
 ## The big "Summit!" title, the trail's name and the time, over the middle of the screen.
-func show_summit(trail_name: String, time_text: String) -> void:
+func show_summit(trail_name: String, time_text: String, line: String = "") -> void:
 	var center: CenterContainer = CenterContainer.new()
 	center.name = "Summit"
 	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -178,6 +180,18 @@ func show_summit(trail_name: String, time_text: String) -> void:
 	title.add_theme_font_override("font", TITLE_FONT)
 	box.add_child(title)
 	box.add_child(_summit_label(tr("SUMMIT_SUBTITLE") % [trail_name, time_text], 32))
+	if line != "":
+		# Her words, a beat after the title: the summit is where the story speaks.
+		var note: Label = _summit_label(line, 28)
+		note.add_theme_color_override("font_color", SUMMIT_NOTE)
+		note.add_theme_constant_override("line_spacing", -2)
+		note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		note.custom_minimum_size.x = 760.0
+		note.modulate.a = 0.0
+		box.add_child(note)
+		var fade: Tween = create_tween()
+		fade.tween_interval(1.1)
+		fade.tween_property(note, "modulate:a", 1.0, 0.6)
 	box.modulate.a = 0.0
 	# The bars and counters step aside: the view is the reward now.
 	var bars: Control = get_node_or_null("SafeArea") as Control

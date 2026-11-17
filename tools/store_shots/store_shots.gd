@@ -42,6 +42,9 @@ func _run() -> void:
 	_fake_progress()
 	# No test-ad cards or consent form in store shots.
 	Ads.use_provider(AdProvider.new())
+	# Store images show the hut in daylight, whatever the clock says.
+	HutRoom.hour_override = 11.0
+	HutRoom.month_override = 7
 	await _menu_shot(SceneRouter.MAIN_MENU, "raw/main_menu")
 	await _trail_shot(&"t01_forest_lake", 0.42, "raw/forest")
 	await _trail_shot(&"t04_fjord_ridge", 0.3, "raw/fjord")

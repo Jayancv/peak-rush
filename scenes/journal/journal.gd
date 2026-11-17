@@ -1,3 +1,4 @@
+class_name Journal
 extends Control
 ## The travel journal: per season, a passport page of trail stamps and a gallery of
 ## postcards earned at viewpoints (bordered bronze/silver/gold by best photo).
@@ -29,6 +30,8 @@ var _finds_grid: GridContainer
 var _finds_scroll: ScrollContainer
 var _page_buttons: Array[Button] = []
 var _showing_finds: bool = false
+## Set before going to the journal to open it on the Finds page (the hut's shelf does).
+static var open_finds: bool = false
 ## [collected, total] for the season's postcards and finds; the counter shows the open page's.
 var _postcard_count: Vector2i = Vector2i.ZERO
 var _find_count: Vector2i = Vector2i.ZERO
@@ -53,6 +56,10 @@ func _ready() -> void:
 	_build_finds_page()
 	if not ContentDB.seasons().is_empty():
 		show_season(ContentDB.seasons()[0])
+	if open_finds:
+		# Opened from the hut's shelf: straight to the finds.
+		open_finds = false
+		_show_page(true)
 
 
 ## Swaps the postcards heading for a Postcards / Finds switch and adds the finds grid.

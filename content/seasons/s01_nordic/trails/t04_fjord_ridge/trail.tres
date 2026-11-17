@@ -83,6 +83,7 @@ id = &"t04_fjord_ridge"
 name_key = "TRAIL_T04_NAME"
 season_id = &"s01_nordic"
 scene_path = "res://content/seasons/s01_nordic/trails/t04_fjord_ridge/trail.tscn"
+summit_line_key = "SUMMIT_LINE_T04"
 length_m = 5200
 daylight_seconds = 305.0
 par_time = 220.0

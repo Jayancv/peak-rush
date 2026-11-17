@@ -158,6 +158,24 @@ Peak Rush's heart: **every step you take in real life walks you deeper into a st
   stone; the Journal shows her margin note about each (FindData.Kind.TRACE).
 - **Her sketches:** an enlarged postcard can flip to "Elsa's sketch" (Season 1) or "Kerstin's sketch" (Season 2), a
   pencil drawing of the same view (a shader over the card), so a photo becomes "see what she saw".
+- **Summit lines:** each trail's summit title is followed by one line from Elsa's notebook (Season 1) or Kerstin's
+  letters (Season 2) (TrailData.summit_line_key).
+
+### 5.12 The hut (title screen) and phone feel
+- The title screen is seen from inside a mountain hut: log walls frame the window, and the menu's landscape is the view.
+- **Light by the real clock:** dawn, day, golden afternoon, dusk and night (stars, a moon, a lamp-dark room with the
+  stove glowing). **Weather by the real month:** snow Nov-Feb, blossom Mar-May, falling leaves Sep-Oct.
+- **Keepsakes:** an old sepia photo of Elsa ("Elsa, 1974") is always pinned first, then the player's best postcards;
+  finds on shelves on the right (Elsa's traces first) beside a brass lantern (lit at dusk and night); earned badges as
+  patches above the stove; Elsa's notebook on the window sill (glows with a "New page" label while a page is unread).
+  So a brand-new hut already looks lived in, with no empty placeholders.
+- **Everything is a door:** Elsa's photo and the notebook open the Journey, postcards the Journal, the shelf the
+  Journal's Finds page, badge patches and the hiker the Profile.
+- **The player's hiker** sits on a stool by the left wall in their own outfit, breathing slowly.
+- Night outside is moonlit blue (Balance.hut_night_tint), lighter than the trails' night.
+- **Haptics** (Vibration setting): short taps on the shutter, finds, event tokens, shortcuts, landings after a real
+  jump, and a longer one at the summit, alongside the stumble/fall buzz. Android needs `permissions/vibrate` in the
+  export presets (it was missing, so the stumble buzz never reached phones before).
 
 ## 6. Season 1 — Nordic Trails (launch content)
 | # | Trail | Biome / weather | Teaches / special | Viewpoints |

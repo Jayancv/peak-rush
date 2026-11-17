@@ -257,6 +257,10 @@ Ads must never interrupt a hike. Rewarded ads are opt-in; interstitials are rare
   11 notebook pages, Journey screen + map, results/steps lines, The Notebook badge, save v10; HikeRewards split out of GameState
 - [x] **Story pass:** opening scene (Elsa's attic, first launch), Elsa's traces as finds on every Season 1 trail,
   Elsa's / Kerstin's pencil sketches on postcards, second journey **The Pekoe Trail** (Kerstin's letters), journey tabs
+- [x] **The hut + phone feel** (GAME_DESIGN §5.12): title screen inside a hut (real-clock light, real-month weather,
+  keepsakes wall, glowing notebook), haptics on shutter/finds/landings/summit (+ Android vibrate permission), summit lines
+- [x] **Hut fixes (UX review):** tappable keepsakes, Elsa's photo + lantern instead of empty placeholders, hiker seated
+  by the wall, notebook on the sill with a New page label, lighter moonlit nights, roomier window on narrow phones
 - [x] **Seasonal events + share a postcard** (EventData/SeasonalEvents, EventToken, seasonal particles, save v9; PostcardShare + plugin sharePicture)
 - [x] **Stroll mode + racing** (research-led): Stroll switch, Gold times, ghost of your best run, one hidden shortcut per trail (save v8)
 - [x] **New moves** (GAME_DESIGN §4): hold to jump higher, double-tap hurry, ladders/scrambles, duck under low branches (+ Duck pad, hints, bot, tests)

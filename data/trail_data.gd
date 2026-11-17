@@ -34,6 +34,8 @@ extends Resource
 @export var sunrise: bool = false
 ## Caption of the third star on the results screen.
 @export var star3_key: String = "RESULTS_STAR_DUSK"
+## A line from Elsa's notebook (or Kerstin's letters) shown under the summit title.
+@export var summit_line_key: String = ""
 
 
 func find_ids() -> Array[StringName]:

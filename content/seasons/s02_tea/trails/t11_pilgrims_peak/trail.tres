@@ -65,6 +65,7 @@ id = &"t11_pilgrims_peak"
 name_key = "TRAIL_T11_NAME"
 season_id = &"s02_tea"
 scene_path = "res://content/seasons/s02_tea/trails/t11_pilgrims_peak/trail.tscn"
+summit_line_key = "SUMMIT_LINE_T11"
 length_m = 5600
 daylight_seconds = 285.0
 par_time = 210.0

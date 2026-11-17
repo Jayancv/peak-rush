@@ -56,6 +56,9 @@ var _input: HikerInput = HikerInput.new()
 ## Hurry, duck and climb (see HikerActions).
 var actions: HikerActions = HikerActions.new()
 var _was_on_floor: bool = false
+## Seconds in the air before the latest landing (read when `landed` fires).
+var last_air_seconds: float = 0.0
+var _air_seconds: float = 0.0
 var _surface_check_left: float = 0.0
 var _slide_zones: int = 0
 
@@ -311,10 +314,14 @@ func _update_floor_info(delta: float) -> void:
 			_read_surface()
 	else:
 		signed_grade = 0.0
+		_air_seconds += delta
 	if on_floor and not _was_on_floor:
 		if visual != null:
 			visual.squash(balance.land_squash)
+		last_air_seconds = _air_seconds
 		landed.emit()
+	if on_floor:
+		_air_seconds = 0.0
 	_was_on_floor = on_floor
 
 

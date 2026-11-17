@@ -65,6 +65,7 @@ id = &"t07_tea_terraces"
 name_key = "TRAIL_T07_NAME"
 season_id = &"s02_tea"
 scene_path = "res://content/seasons/s02_tea/trails/t07_tea_terraces/trail.tscn"
+summit_line_key = "SUMMIT_LINE_T07"
 length_m = 2700
 daylight_seconds = 165.0
 par_time = 120.0

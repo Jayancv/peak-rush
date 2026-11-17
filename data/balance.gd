@@ -160,6 +160,26 @@ extends Resource
 @export_group("Feedback")
 @export var stumble_vibrate_ms: int = 60
 @export var fall_vibrate_ms: int = 120
+## Small haptic taps (ms, and strength 0..1; Android ignores strength on old phones).
+@export var haptic_shutter_ms: int = 18
+@export var haptic_find_ms: int = 30
+@export var haptic_summit_ms: int = 160
+@export var haptic_land_ms: int = 14
+@export var haptic_land_strength: float = 0.35
+## Only landings after at least this long in the air buzz (not every little step down).
+@export var haptic_land_min_air: float = 0.4
+
+@export_group("Hut (title screen)")
+## Real-clock hours for the light outside the hut window.
+@export var hut_dawn_hour: float = 5.5
+@export var hut_day_hour: float = 8.0
+@export var hut_dusk_hour: float = 18.0
+@export var hut_night_hour: float = 20.5
+## The view at night: moonlit blue, lighter than the trails' night so the title screen stays inviting.
+@export var hut_night_tint: Color = Color("#8D98CB")
+## Keepsakes on show: finds on the shelf, postcards pinned to the wall.
+@export var hut_shelf_slots: int = 8
+@export var hut_wall_postcards: int = 3
 
 @export_group("Photos")
 ## Shots on the film roll each time photo mode opens at a viewpoint.
