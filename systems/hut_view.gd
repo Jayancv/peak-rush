@@ -70,7 +70,8 @@ static func shelf_finds(records: Dictionary, trails: Array[TrailData], limit: in
 
 
 ## The best photos for the wall, best quality first (ties: trail order), as
-## {"trail": TrailData, "viewpoint": ViewpointData, "quality": int}.
+## {"trail": TrailData, "viewpoint": ViewpointData, "quality": int, "order": int}.
+## "order" is the tie-break, because sort_custom isn't stable.
 static func wall_postcards(records: Dictionary, trails: Array[TrailData], limit: int) -> Array[Dictionary]:
 	var cards: Array[Dictionary] = []
 	for t: TrailData in trails:

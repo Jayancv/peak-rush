@@ -5,6 +5,13 @@ extends GutTest
 var _b: Balance = Balance.new()
 
 
+# These are statics, so a failing test must not leave them set for the rest of the run.
+func after_each() -> void:
+	HutRoom.hour_override = -1.0
+	HutRoom.month_override = 0
+	Journal.open_finds = false
+
+
 func _trails() -> Array[TrailData]:
 	var out: Array[TrailData] = []
 	for s: SeasonData in ContentDB.seasons():
@@ -99,7 +106,8 @@ func test_haptics_stay_quiet_when_vibration_is_off() -> void:
 	var before: bool = bool(GameState.settings.get("vibration", true))
 	GameState.set_setting("vibration", false)
 	Haptics.pulse(100)
-	assert_true(true, "no crash with vibration off")
+	Haptics.pulse(0)
+	pass_test("no crash with vibration off or a zero-length pulse")
 	GameState.set_setting("vibration", before)
 
 
