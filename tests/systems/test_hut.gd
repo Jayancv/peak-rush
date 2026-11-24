@@ -83,6 +83,25 @@ func test_the_menu_builds_the_hut_with_keepsakes() -> void:
 	GameState.from_dict(saved)
 
 
+func test_the_snow_takes_the_light_of_the_hour() -> void:
+	HutRoom.hour_override = 23.0
+	HutRoom.month_override = 12
+	var menu: Node = add_child_autofree((load(SceneRouter.MAIN_MENU) as PackedScene).instantiate())
+	var snow: Node = menu.get_node_or_null("Weather")
+	if UiMotion.reduced():
+		assert_null(snow, "no snow with reduce motion")
+		return
+	assert_not_null(snow)
+	assert_lt(snow.get_index(), menu.get_node("OutsideLight").get_index(), "under the light, so night snow isn't glowing white")
+
+
+func test_a_respawn_or_ladder_is_not_a_hard_landing() -> void:
+	var hiker: Hiker = add_child_autofree((load("res://actors/hiker/hiker.tscn") as PackedScene).instantiate())
+	hiker.set("_air_seconds", 2.0)
+	hiker.teleport(Vector2(100, 100))
+	assert_eq(float(hiker.get("_air_seconds")), 0.0, "a fall's air time is dropped on respawn")
+
+
 func test_every_trail_has_a_summit_line() -> void:
 	for t: TrailData in _trails():
 		assert_ne(t.summit_line_key, "", "%s has no summit line" % t.id)

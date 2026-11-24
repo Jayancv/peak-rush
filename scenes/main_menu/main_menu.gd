@@ -96,8 +96,9 @@ func _setup_hut() -> void:
 	move_child(outside, ui_index)
 	var weather: CPUParticles2D = HutWeather.create(HutView.weather(int(now.month)), get_viewport_rect().size)
 	if weather != null:
+		# Under the light rect, so the snow takes the hour's light too (moonlit, not glowing white).
 		add_child(weather)
-		move_child(weather, ui_index + 1)
+		move_child(weather, outside.get_index())
 	_hut = HutRoom.new()
 	_hut.name = "Hut"
 	_hut.phase = HutView.phase(hour, b)

@@ -200,6 +200,8 @@ func set_dusk(on: bool) -> void:
 func teleport(to: Vector2) -> void:
 	global_position = to
 	velocity = Vector2.ZERO
+	# A fall into water is air time too; the respawn landing mustn't buzz like a big jump.
+	_air_seconds = 0.0
 	reset_physics_interpolation()
 
 
@@ -314,7 +316,9 @@ func _update_floor_info(delta: float) -> void:
 			_read_surface()
 	else:
 		signed_grade = 0.0
-		_air_seconds += delta
+		# Climbing a ladder isn't being airborne: stepping off the top is no landing thump.
+		if state != State.CLIMB:
+			_air_seconds += delta
 	if on_floor and not _was_on_floor:
 		if visual != null:
 			visual.squash(balance.land_squash)

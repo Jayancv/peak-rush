@@ -249,7 +249,8 @@ func _gui_input(event: InputEvent) -> void:
 	if target == "":
 		return
 	accept_event()
-	if target == "finds":
+	# Flag the finds page only if the trip is really on: a tap mid-fade is refused, and a
+	# stale flag would open the next ordinary journal visit on the finds.
+	var finds: bool = target == "finds"
+	if SceneRouter.go_to(SceneRouter.JOURNAL if finds else target) and finds:
 		Journal.open_finds = true
-		target = SceneRouter.JOURNAL
-	SceneRouter.go_to(target)
