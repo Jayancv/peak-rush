@@ -60,6 +60,11 @@ func _rebuild() -> void:
 	circle.radius = radius
 	shape.shape = circle
 	_body.add_child(shape)
+	var shadow: ContactShadow = ContactShadow.new()
+	shadow.size = Vector2(radius * 2.4, radius * 0.5)
+	shadow.follow_ground = true
+	shadow.lift = radius
+	_body.add_child(shadow, false, Node.INTERNAL_MODE_FRONT)
 	_body.add_child(_boulder_art())
 	add_child(_body, false, Node.INTERNAL_MODE_BACK)
 	_body.position = Vector2(0, -radius)

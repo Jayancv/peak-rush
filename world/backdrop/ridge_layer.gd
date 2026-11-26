@@ -46,6 +46,11 @@ extends Polygon2D
 	set(v):
 		haze_amount = v
 		_queue()
+## Ridged peaks only: how dark the side facing away from the light (the right) is.
+@export_range(0.0, 0.6) var shade_amount: float = 0.2:
+	set(v):
+		shade_amount = v
+		_queue()
 
 @export_group("Trees")
 ## Pines for evergreen forest, birches (round crowns) for ruska autumn, or a mix.
@@ -97,6 +102,7 @@ const DEPTH: float = 2600.0
 
 var _trees: Polygon2D
 var _snow: Polygon2D
+var _shade: Polygon2D
 var _pending: bool = false
 
 
@@ -104,6 +110,7 @@ func _ready() -> void:
 	antialiased = true
 	_trees = _make_child("Trees")
 	_snow = _make_child("Snow")
+	_shade = _make_child("Shade")
 	_rebuild()
 
 
@@ -155,6 +162,15 @@ func _rebuild() -> void:
 	vertex_colors = cols
 	_build_trees()
 	_build_snow()
+	_build_shade()
+
+
+func _build_shade() -> void:
+	var faces: TreeArt.Batch = RidgeShade.faces(self) if ridged and shade_amount > 0.0 else TreeArt.Batch.new()
+	_shade.polygon = faces.pts
+	_shade.vertex_colors = faces.cols
+	_shade.polygons = faces.polys
+	_shade.color = Color.WHITE
 
 
 func _build_trees() -> void:

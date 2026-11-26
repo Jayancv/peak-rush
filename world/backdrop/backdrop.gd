@@ -25,6 +25,18 @@ func _ready() -> void:
 	add_to_group(GROUP)
 
 
+## Grass close to the camera, coloured from `level`'s ground. Only the trail runner asks
+## for it: menus that borrow the backdrop (the hut) must stay indoors.
+func add_foreground(level: Node) -> void:
+	var strips: Array[TerrainStrip] = []
+	for node: Node in get_tree().get_nodes_in_group(TerrainStrip.GROUP):
+		if level.is_ancestor_of(node):
+			strips.append(node as TerrainStrip)
+	var layer: ForegroundLayer = ForegroundLayer.create(strips, hash(level.scene_file_path))
+	if layer != null:
+		add_child(layer)
+
+
 func set_daylight(sun_progress: float, tint: Color) -> void:
 	if sky != null:
 		sky.modulate = Color.WHITE.lerp(tint, sky_tint_strength)

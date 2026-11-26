@@ -81,6 +81,8 @@ func _load_trail() -> void:
 		if level.is_ancestor_of(node):
 			_backdrop = node as Backdrop
 	weather_fx.add_world_fog(_weather_profile, level, _backdrop, camera)
+	if _backdrop != null:
+		_backdrop.add_foreground(level)
 	# Between the level and the hiker: footprints lie on the path, pebbles pass behind the boots.
 	var fx: TrailFx = TrailFx.new()
 	fx.name = "TrailFx"

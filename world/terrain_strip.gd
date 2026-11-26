@@ -89,6 +89,7 @@ const RIM_DARKEN: float = 0.3
 
 var _side_trees: Polygon2D
 var _fill: Polygon2D
+var _strata: Polygon2D
 var _rim: Line2D
 var _decor: Polygon2D
 var _shape: CollisionPolygon2D
@@ -181,6 +182,10 @@ func _build_children() -> void:
 	_fill.antialiased = true
 	# Fill, rim and decor all draw behind the edge line so the path stays on top.
 	_fill.show_behind_parent = true
+	_strata = Polygon2D.new()
+	_strata.name = "Strata"
+	_strata.show_behind_parent = true
+	_strata.antialiased = true
 	_rim = Line2D.new()
 	_rim.name = "Rim"
 	_rim.show_behind_parent = true
@@ -200,6 +205,7 @@ func _build_children() -> void:
 	body.add_child(_shape)
 	# Internal children aren't saved into the scene file, so they're always regenerated.
 	add_child(_fill, false, Node.INTERNAL_MODE_FRONT)
+	add_child(_strata, false, Node.INTERNAL_MODE_FRONT)
 	add_child(_rim, false, Node.INTERNAL_MODE_FRONT)
 	add_child(_decor, false, Node.INTERNAL_MODE_FRONT)
 	add_child(body, false, Node.INTERNAL_MODE_FRONT)
@@ -222,17 +228,17 @@ func _rebuild() -> void:
 	_rim.points = rim_points
 	_rim.width = width * 0.6
 	_rim.default_color = default_color.darkened(RIM_DARKEN)
-	_build_decor()
+	_apply(_strata, TerrainDecor.strata(self))
+	_apply(_decor, TerrainDecor.build(self))
 	_build_side_trees()
 	_built_points = points.duplicate()
 
 
-func _build_decor() -> void:
-	var batch: TreeArt.Batch = TerrainDecor.build(self)
-	_decor.polygon = batch.pts
-	_decor.vertex_colors = batch.cols
-	_decor.uv = batch.uvs
-	_decor.polygons = batch.polys
+static func _apply(poly: Polygon2D, batch: TreeArt.Batch) -> void:
+	poly.polygon = batch.pts
+	poly.vertex_colors = batch.cols
+	poly.uv = batch.uvs
+	poly.polygons = batch.polys
 
 
 ## Godot only passes a Polygon2D's UVs (the sway data) when it has a texture, so swaying
@@ -265,10 +271,7 @@ func _build_side_trees() -> void:
 		batch = TreeArt.along(edge_y_at, points[0].x, points[points.size() - 1].x, side_trees, side_tree_spacing,
 			side_tree_height, side_tree_color, side_tree_color_alt, side_tree_snow, decor_seed * 31 + 7,
 			TerrainDecor.clear_spans(self))
-	_side_trees.polygon = batch.pts
-	_side_trees.vertex_colors = batch.cols
-	_side_trees.uv = batch.uvs
-	_side_trees.polygons = batch.polys
+	_apply(_side_trees, batch)
 
 
 ## Height of the path edge at a given local x (points are left to right).

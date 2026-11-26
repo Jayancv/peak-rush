@@ -261,6 +261,8 @@ Ads must never interrupt a hike. Rewarded ads are opt-in; interstitials are rare
   keepsakes wall, glowing notebook), haptics on shutter/finds/landings/summit (+ Android vibrate permission), summit lines
 - [x] **Hut fixes (UX review):** tappable keepsakes, Elsa's photo + lantern instead of empty placeholders, hiker seated
   by the wall, notebook on the sill with a New page label, lighter moonlit nights, roomier window on narrow phones
+- [x] **Visual pass** (GAME_DESIGN §8): layered soil + stones + flowers under every path, contact shadows (hiker,
+  rocks, boulders, logs, benches), shaded mountain faces, soft sun/moon glow, a foreground grass layer on trails
 - [x] **Seasonal events + share a postcard** (EventData/SeasonalEvents, EventToken, seasonal particles, save v9; PostcardShare + plugin sharePicture)
 - [x] **Stroll mode + racing** (research-led): Stroll switch, Gold times, ghost of your best run, one hidden shortcut per trail (save v8)
 - [x] **New moves** (GAME_DESIGN §4): hold to jump higher, double-tap hurry, ladders/scrambles, duck under low branches (+ Duck pad, hints, bot, tests)

@@ -85,7 +85,7 @@ docs/                GAME_DESIGN.md, PLAN.md
 - At the end of each session, update **Current status** below and tick the boxes in `docs/PLAN.md`.
 
 ## Current status
-- Milestone: **M7.5 (trail depth) + polish (sounds, trail map, finds page, daily trail) built, 387 tests green; M7.6 automated part done (phone checklist, low-end phone, playtest open); M7.7 done**. M7 non-release part done. Release steps
+- Milestone: **M7.5 (trail depth) + polish (sounds, trail map, finds page, daily trail) built, 397 tests green; M7.6 automated part done (phone checklist, low-end phone, playtest open); M7.7 done**. M7 non-release part done. Release steps
   (keystore, AAB, stores, iOS, screenshots, 1.0.0) deliberately not started; low-end phone profiling still open.
   M5/M6 full-season phone playtest still open. Launch plan in PLAN.md: M7.6 stabilisation -> M7.7 launch features -> M7.8 ads -> M7.9 Google Play (Android first, free with ads, iOS after launch in M8).
 - Godot 4.7.2-stable (not on PATH; ask the user for the executable path if unknown); GUT 9.7.1.
@@ -304,3 +304,9 @@ docs/                GAME_DESIGN.md, PLAN.md
   clock for tools (store shots use 11:00 in July). `Haptics.pulse(ms, strength)` (scenes/ui) is the only way to vibrate
   (checks settings.vibration); Balance haptic_*; Hiker.last_air_seconds gates landing taps. Android presets need
   permissions/vibrate=true (a test checks). TrailData.summit_line_key -> Hud.show_summit third line (SUMMIT_LINE_T01..T11).
+  Visual pass: TerrainStrip has a "Strata" child (TerrainDecor.strata: TerrainDecor.BANDS soil layers keyed to world x so
+  neighbouring strips meet; soil_color(depth) also colours pebbles/stones). `ContactShadow` (world/fx; follow_ground =
+  raycast each tick, else fixed via ContactShadow.add_to) on the hiker (hiker.tscn "Shadow"), rocks, boulders, logs, benches.
+  `RidgeShade` (backdrop) = shaded right faces of ridged RidgeLayers (shade_amount). Sun Halo/Glow are radial-gradient Sprite2Ds.
+  `ForegroundLayer` (Parallax2D, scroll 1.45 x, 0 y, z 20) is built by Backdrop.add_foreground(level), which only the
+  TrailRunner calls; it hides while the camera zoom isn't 1. Level pieces stay at z_index <= 2 so it covers them.

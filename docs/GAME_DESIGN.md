@@ -206,6 +206,17 @@ Hill country inspired by Sri Lanka. Its first trail is open from the start, like
 ## 8. Art direction
 - **Flat and minimal**, with 4–5 layered parallax silhouettes, a limited palette per trail, and soft gradients. The time of day comes from tinting the whole scene with `CanvasModulate`.
 - The hiker is a simple, readable silhouette with a coloured backpack.
+- **Light comes from the upper left**, everywhere: tree crowns, stones and leaves are lighter on their left,
+  and ridged mountains have a cool shadow face on their right (it turns snow blue-grey and fades into the haze).
+- **The ground has depth.** Under the path the soil is drawn as wavy layers that darken with depth (each with a
+  thin seam), with stones set into it and small flowers among the grass. Colours come from each strip's
+  fill colours, so every trail and season matches without extra settings.
+- **Things stand on the ground:** the hiker, rocks, rolling boulders, fallen logs and benches cast a soft contact
+  shadow. The hiker's follows the slope and shrinks and fades when jumping.
+- **Foreground:** now and then a tuft of long grass (or a snowy rock) passes in front of the hiker along the bottom
+  of the screen, scrolling faster than the trail. Sparse, darker than the ground, never over the path, and it
+  steps aside when the camera zooms (summit, photos). Trails only; menus that borrow the backdrop stay clean.
+- The sun and moon glow is a smooth radial gradient, not flat rings.
 - Placeholder palette (Season 1):
   - Sky `#A8D8EA`
   - Far hills `#7FA6A0`

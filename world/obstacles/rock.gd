@@ -27,6 +27,7 @@ func _rebuild() -> void:
 	if not _ready_done:
 		return
 	ShapeUtil.clear_internal(self)
+	ContactShadow.add_to(self, size.x * 1.35, size.y * 0.3)
 	var outline: PackedVector2Array = ShapeUtil.dome(size)
 	ShapeUtil.add_poly(self, outline, STONE_DARK)
 	var inner: PackedVector2Array = ShapeUtil.dome(size * Vector2(0.86, 0.9))

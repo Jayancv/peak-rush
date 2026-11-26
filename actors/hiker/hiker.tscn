@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://actors/hiker/hiker.gd" id="1_hiker"]
 [ext_resource type="Script" path="res://actors/hiker/hiker_visual.gd" id="2_visual"]
+[ext_resource type="Script" path="res://world/fx/contact_shadow.gd" id="3_shadow"]
 
 [sub_resource type="CanvasItemMaterial" id="Material_additive"]
 blend_mode = 1
@@ -37,6 +38,11 @@ collision_layer = 2
 collision_mask = 1
 script = ExtResource("1_hiker")
 visual = NodePath("Visual")
+
+[node name="Shadow" type="Node2D" parent="."]
+script = ExtResource("3_shadow")
+size = Vector2(62, 13)
+follow_ground = true
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 position = Vector2(0, -35)

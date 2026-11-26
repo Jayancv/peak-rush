@@ -23,6 +23,7 @@ var _hint: PanelContainer
 
 func build() -> void:
 	var half: float = width * 0.5
+	ContactShadow.add_to(self, width * 1.15, 10.0)
 	for x: float in [-half + 8.0, half - 14.0]:
 		ShapeUtil.add_poly(self, PackedVector2Array([Vector2(x, -26), Vector2(x + 6, -26), Vector2(x + 6, 0), Vector2(x, 0)]), WOOD_DARK)
 		ShapeUtil.add_poly(self, PackedVector2Array([Vector2(x, -52), Vector2(x + 6, -52), Vector2(x + 6, -26), Vector2(x, -26)]), WOOD_DARK)

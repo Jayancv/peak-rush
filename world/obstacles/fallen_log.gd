@@ -49,6 +49,9 @@ func _rebuild() -> void:
 	if not _ready_done:
 		return
 	ShapeUtil.clear_internal(self)
+	var shadow: ContactShadow = ContactShadow.add_to(self, Vector2(length, end_drop).length() + 30.0, thickness * 0.5)
+	shadow.position = Vector2(length * 0.5, end_drop * 0.5 + thickness * 0.8)
+	shadow.rotation = atan2(end_drop, length)
 	_body = AnimatableBody2D.new()
 	# Moved directly every physics tick (sync_to_physics would ignore those moves).
 	_body.sync_to_physics = false
